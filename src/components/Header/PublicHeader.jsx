@@ -489,9 +489,12 @@ export default function PublicHeader() {
             borderLeft: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
             boxShadow: "0 8px 32px rgba(61, 40, 23, 0.12)",
             height: "auto",
-            maxHeight: { xs: "calc(100vh - 70px)", sm: "calc(100vh - 80px)" },
+            maxHeight: {
+              xs: "calc(100vh - 80px)", // leave 16px breathing room at bottom
+              sm: "calc(100vh - 88px)",
+            },
             top: { xs: "64px", sm: "72px" },
-            bottom: "auto",
+            bottom: "16px", // keep drawer floating above bottom edge
             overflowY: "auto",
           },
         }}
