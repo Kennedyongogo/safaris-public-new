@@ -23,6 +23,3 @@ dev-dist
 *.njsproj
 *.sln
 *.sw?
-
-# Large video files - should use external hosting or Git LFS
-public/videos/*.mp4
