@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Typography,
@@ -9,47 +9,44 @@ import {
   Fade,
   Slide,
 } from "@mui/material";
-import { CameraAlt, Terrain, Explore, ArrowForward } from "@mui/icons-material";
+import {
+  CameraAlt,
+  Terrain,
+  Explore,
+  ArrowForward,
+  ContactSupport,
+} from "@mui/icons-material";
 
 export default function HeroSection() {
   const navigate = useNavigate();
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const videoRefs = useRef([]);
-  const assetBase = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
-  const videos = [
-    // Remote sources to avoid shipping large MP4s in the repo
-    "https://cdn.pixabay.com/video/2017/10/25/12011-240232898_tiny.mp4",
-    "https://cdn.pixabay.com/video/2017/10/25/12006-240227793_tiny.mp4",
+  const images = [
+    "/images/rhinoceros-1837164_1280.jpg",
+    "/images/elephants-4275741_1280.jpg",
+    "/images/lion-5751867_1280.jpg",
   ];
 
   useEffect(() => {
     setIsVisible(true);
     const interval = setInterval(() => {
-      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % videos.length);
-    }, 10000); // Change video every 10 seconds
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); // Change image every 5 seconds
 
     return () => clearInterval(interval);
-  }, [videos.length]);
-
-  useEffect(() => {
-    // Play the current video and pause others
-    videoRefs.current.forEach((video, index) => {
-      if (video) {
-        if (index === currentVideoIndex) {
-          video.currentTime = 0; // Reset to start
-          video.play().catch((error) => {
-            console.log("Video play error:", error);
-          });
-        } else {
-          video.pause();
-        }
-      }
-    });
-  }, [currentVideoIndex]);
+  }, [images.length]);
 
   const handleBookSafari = () => {
     navigate("/plan");
+  };
+
+  const handleContactClick = () => {
+    const section = document.getElementById("contact-section");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      console.warn("Contact section not found");
+    }
   };
 
   return (
@@ -61,25 +58,17 @@ export default function HeroSection() {
         width: "100%",
         overflow: "hidden",
         marginTop: "-64px",
+        backgroundColor: "#000", // prevent white flash during transitions
       }}
     >
-      {/* Background Videos */}
-      {videos.map((video, index) => (
+      {/* Background Images */}
+      {images.map((image, index) => (
         <Box
-          key={index}
-          component="video"
-          ref={(el) => (videoRefs.current[index] = el)}
-          src={video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          crossOrigin="anonymous"
-          poster="/images/safari-about.jpg"
-          onError={() => {
-            console.warn("Hero video failed to load:", video);
-          }}
+          key={image}
+          component="img"
+          src={image}
+          alt="Akira Safaris hero"
+          onError={() => console.warn("Hero image failed to load:", image)}
           sx={{
             position: "absolute",
             width: "100%",
@@ -87,14 +76,30 @@ export default function HeroSection() {
             objectFit: "cover",
             objectPosition: "center",
             pointerEvents: "none",
-            opacity: currentVideoIndex === index ? 1 : 0,
-            zIndex: currentVideoIndex === index ? 0 : -1,
+            filter: "brightness(0.4) saturate(1.1)",
+            opacity: currentImageIndex === index ? 1 : 0,
+            zIndex: currentImageIndex === index ? 0 : -1,
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            transition: "opacity 1.5s ease-in-out",
           }}
         />
       ))}
+
+      {/* Gradient Overlay */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background:
+            "linear-gradient(135deg, rgba(33, 150, 243, 0.3) 0%, rgba(76, 175, 80, 0.2) 50%, rgba(255, 152, 0, 0.2) 100%)",
+          zIndex: 1,
+        }}
+      />
 
       {/* Floating Particles Animation */}
       <Box
@@ -231,6 +236,41 @@ export default function HeroSection() {
                 }}
               >
                 Book Your Safari
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                startIcon={<ContactSupport />}
+                onClick={handleContactClick}
+                sx={{
+                  px: 2,
+                  py: 0.75,
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  borderRadius: "50px",
+                  background:
+                    "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)",
+                  boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                  "& .MuiButton-startIcon": {
+                    marginRight: 0.5,
+                  },
+                  "&:hover": {
+                    transform: "translateY(-3px) scale(1.05)",
+                    boxShadow: "0 12px 40px rgba(184, 92, 56, 0.4)",
+                    background:
+                      "linear-gradient(45deg, #8B4225 30%, #B85C38 90%)",
+                  },
+                  "&:focus": {
+                    outline: "none",
+                  },
+                  "&:focus-visible": {
+                    outline: "none",
+                  },
+                }}
+              >
+                Contact Us
               </Button>
             </Box>
           </Box>

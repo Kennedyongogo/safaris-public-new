@@ -91,6 +91,12 @@ export default function PublicHeader() {
         color: "#B85C38", // Burnt orange/rust
       },
       {
+        label: "Contact",
+        icon: <ContactSupport />,
+        sectionId: "contact-section",
+        color: "#2D4A2D", // Dark forest green
+      },
+      {
         label: "Reviews",
         icon: <RateReview />,
         route: "/reviews",

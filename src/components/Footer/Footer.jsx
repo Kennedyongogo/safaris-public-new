@@ -63,7 +63,7 @@ export default function Footer() {
                 spacing={{ xs: 2, sm: 3, md: 5 }}
                 justifyContent="space-between"
               >
-                <Grid item xs={5} sm={5} md={4}>
+                <Grid item xs={12} sm={12} md={4}>
                   <Slide direction="up" in timeout={1200}>
                     <Box sx={{ textAlign: "left" }}>
                       <Box
@@ -215,19 +215,96 @@ export default function Footer() {
                         />
                       </Box>
 
-                      {/* Social Media Icons */}
+                      {/* Social Media Icons - mobile/tablet */}
+                      <Box sx={{ display: { xs: "block", md: "none" } }}>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            mb: { xs: 0.5, sm: 1 },
+                            fontWeight: 600,
+                            color: "text.primary",
+                            fontSize: { xs: "1rem", sm: "1.25rem" },
+                          }}
+                        >
+                          Follow Us
+                        </Typography>
+                        <Box sx={{ display: "flex", gap: { xs: 0.5, sm: 1 } }}>
+                          {[
+                            {
+                              icon: <Facebook />,
+                              color: "#1877f2",
+                              label: "Facebook",
+                            },
+                            {
+                              icon: <Twitter />,
+                              color: "#1da1f2",
+                              label: "Twitter",
+                            },
+                            {
+                              icon: <Instagram />,
+                              color: "#e4405f",
+                              label: "Instagram",
+                            },
+                            {
+                              icon: <LinkedIn />,
+                              color: "#0077b5",
+                              label: "LinkedIn",
+                            },
+                          ].map((social, index) => (
+                            <IconButton
+                              key={index}
+                              aria-label={social.label}
+                              sx={{
+                                color: social.color,
+                                background: "rgba(0,0,0,0.05)",
+                                border: "1px solid rgba(0,0,0,0.1)",
+                                transition:
+                                  "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                "&:hover": {
+                                  background: social.color,
+                                  color: "white",
+                                  transform: "translateY(-3px) scale(1.1)",
+                                  boxShadow: `0 8px 25px ${social.color}40`,
+                                },
+                              }}
+                            >
+                              {social.icon}
+                            </IconButton>
+                          ))}
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Slide>
+                </Grid>
+
+                {/* Social media right column on desktop */}
+                <Grid item xs={12} sm={12} md={4} sx={{ display: { xs: "none", md: "flex" } }}>
+                  <Slide direction="up" in timeout={1600}>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-end",
+                        textAlign: "right",
+                        gap: 1,
+                      }}
+                    >
                       <Typography
-                        variant="h6"
+                        variant="h5"
                         sx={{
-                          mb: { xs: 0.5, sm: 1 },
-                          fontWeight: 600,
-                          color: "text.primary",
-                          fontSize: { xs: "1rem", sm: "1.25rem" },
+                          fontWeight: 700,
+                          background:
+                            "linear-gradient(45deg, #6B4E3D, #3D2817)", // Medium to dark brown
+                          backgroundClip: "text",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          fontSize: { xs: "1.1rem", sm: "1.4rem" },
                         }}
                       >
                         Follow Us
                       </Typography>
-                      <Box sx={{ display: "flex", gap: { xs: 0.5, sm: 1 } }}>
+                      <Box sx={{ display: "flex", gap: 1 }}>
                         {[
                           {
                             icon: <Facebook />,
@@ -257,8 +334,7 @@ export default function Footer() {
                               color: social.color,
                               background: "rgba(0,0,0,0.05)",
                               border: "1px solid rgba(0,0,0,0.1)",
-                              transition:
-                                "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                               "&:hover": {
                                 background: social.color,
                                 color: "white",
@@ -275,266 +351,7 @@ export default function Footer() {
                   </Slide>
                 </Grid>
 
-                <Grid item xs={7} sm={7} md={8}>
-                  {/* Contact Us Column */}
-                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Box sx={{ ml: "auto" }}>
-                      <Slide direction="up" in timeout={1600}>
-                        <Box
-                          sx={{
-                            textAlign: "right",
-                            width: { xs: "100%", sm: "420px" },
-                            maxWidth: "460px",
-                          }}
-                        >
-                          <Typography
-                            variant="h5"
-                            sx={{
-                              mb: { xs: 1, sm: 1.5 },
-                              fontWeight: 700,
-                              background:
-                                "linear-gradient(45deg, #6B4E3D, #3D2817)", // Medium to dark brown
-                              backgroundClip: "text",
-                              WebkitBackgroundClip: "text",
-                              WebkitTextFillColor: "transparent",
-                              fontSize: { xs: "1.3rem", sm: "1.5rem" },
-                              textAlign: "right",
-                            }}
-                          >
-                            Contact Us
-                          </Typography>
-
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: { xs: 0.5, sm: 0.75 },
-                              alignItems: "flex-end",
-                            }}
-                          >
-                            {/* Physical Address */}
-                            <Box
-                              sx={{
-                                p: { xs: 1, sm: 1.25 },
-                                background: "rgba(0,0,0,0.03)",
-                                border: "1px solid rgba(0,0,0,0.1)",
-                                borderRadius: "10px",
-                                transition: "all 0.3s ease",
-                                textAlign: "right",
-                                "&:hover": {
-                                  background: "rgba(0,0,0,0.05)",
-                                  transform: "translateY(-1px)",
-                                },
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: { xs: 0.5, sm: 1 },
-                                  mb: { xs: 0.25, sm: 0.5 },
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                <Box
-                                  sx={{
-                                    color: "#6B7D47", // Olive green
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    width: { xs: 24, sm: 28 },
-                                    height: { xs: 24, sm: 28 },
-                                    borderRadius: "50%",
-                                    background: "rgba(107, 125, 71, 0.1)",
-                                  }}
-                                >
-                                  <LocationOn
-                                    sx={{
-                                      fontSize: { xs: "14px", sm: "16px" },
-                                    }}
-                                  />
-                                </Box>
-                                <Typography
-                                  variant="subtitle2"
-                                  sx={{
-                                    fontWeight: 600,
-                                    color: "text.primary",
-                                    fontSize: { xs: "0.95rem", sm: "1rem" },
-                                  }}
-                                >
-                                  Physical Address
-                                </Typography>
-                              </Box>
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  color: "text.primary",
-                                  lineHeight: 1.4,
-                                  fontSize: { xs: "0.95rem", sm: "1rem" },
-                                  textAlign: "right",
-                                }}
-                              >
-                                Meghon Plaza, Bungoma Town,
-                                <br />
-                                along Moi Avenue
-                              </Typography>
-                            </Box>
-
-                            {/* Postal Address */}
-                            <Box
-                              sx={{
-                                p: { xs: 1, sm: 1.25 },
-                                background: "rgba(0,0,0,0.03)",
-                                border: "1px solid rgba(0,0,0,0.1)",
-                                borderRadius: "10px",
-                                transition: "all 0.3s ease",
-                                textAlign: "right",
-                                "&:hover": {
-                                  background: "rgba(0,0,0,0.05)",
-                                  transform: "translateY(-1px)",
-                                },
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: { xs: 0.5, sm: 1 },
-                                  mb: { xs: 0.25, sm: 0.5 },
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                <Box
-                                  sx={{
-                                    color: "#B85C38", // Burnt orange/rust
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    width: { xs: 24, sm: 28 },
-                                    height: { xs: 24, sm: 28 },
-                                    borderRadius: "50%",
-                                    background: "rgba(184, 92, 56, 0.1)",
-                                  }}
-                                >
-                                  <LocationOn
-                                    sx={{
-                                      fontSize: { xs: "14px", sm: "16px" },
-                                    }}
-                                  />
-                                </Box>
-                                <Typography
-                                  variant="subtitle2"
-                                  sx={{
-                                    fontWeight: 600,
-                                    color: "text.primary",
-                                    fontSize: { xs: "0.95rem", sm: "1rem" },
-                                  }}
-                                >
-                                  Postal Address
-                                </Typography>
-                              </Box>
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  color: "text.primary",
-                                  lineHeight: 1.4,
-                                  fontSize: { xs: "0.95rem", sm: "1rem" },
-                                  textAlign: "right",
-                                }}
-                              >
-                                P.O. Box 2072-50200
-                              </Typography>
-                            </Box>
-
-                            {/* Contact Info */}
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: { xs: 0.5, sm: 1 },
-                                alignItems: "flex-end",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: { xs: 0.5, sm: 1 },
-                                  flexDirection: "row-reverse",
-                                }}
-                              >
-                                <Box
-                                  sx={{
-                                    color: "#6B4E3D", // Medium brown
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    width: { xs: 20, sm: 24 },
-                                    height: { xs: 20, sm: 24 },
-                                    borderRadius: "50%",
-                                    background: "rgba(107, 78, 61, 0.1)",
-                                  }}
-                                >
-                                  <Phone
-                                    sx={{
-                                      fontSize: { xs: "12px", sm: "14px" },
-                                    }}
-                                  />
-                                </Box>
-                                <Typography
-                                  variant="body2"
-                                  sx={{
-                                    color: "text.primary",
-                                    fontSize: { xs: "0.95rem", sm: "1rem" },
-                                  }}
-                                >
-                                  +254 731 913293
-                                </Typography>
-                              </Box>
-
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: { xs: 0.5, sm: 1 },
-                                  flexDirection: "row-reverse",
-                                }}
-                              >
-                                <Box
-                                  sx={{
-                                    color: "#B85C38", // Burnt orange/rust
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    width: { xs: 20, sm: 24 },
-                                    height: { xs: 20, sm: 24 },
-                                    borderRadius: "50%",
-                                    background: "rgba(184, 92, 56, 0.1)",
-                                  }}
-                                >
-                                  <Email
-                                    sx={{
-                                      fontSize: { xs: "12px", sm: "14px" },
-                                    }}
-                                  />
-                                </Box>
-                                <Typography
-                                  variant="body2"
-                                  sx={{
-                                    color: "text.primary",
-                                    fontSize: { xs: "0.95rem", sm: "1rem" },
-                                  }}
-                                >
-                                  david@akirasafaris.co.ke
-                                </Typography>
-                              </Box>
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Slide>
-                    </Box>
-                  </Box>
-                </Grid>
+                {/* Contact column removed */}
               </Grid>
 
               {/* Copyright Section */}
@@ -552,13 +369,13 @@ export default function Footer() {
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: { xs: "row", sm: "row" },
-                      flexWrap: "wrap",
+                      flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: { xs: 1, sm: 1.5 },
+                      gap: { xs: 1, sm: 1.25 },
                       textAlign: "center",
-                      py: 0.25,
+                      pt: 0.4,
+                      pb: 0.2,
                     }}
                   >
                     <Typography
@@ -566,7 +383,7 @@ export default function Footer() {
                       sx={{
                         color: "text.primary",
                         fontWeight: 500,
-                        fontSize: { xs: "0.75rem", sm: "1rem" },
+                        fontSize: { xs: "0.85rem", sm: "0.95rem" },
                       }}
                     >
                       © {new Date().getFullYear()} Akira Safaris. All rights
@@ -574,14 +391,14 @@ export default function Footer() {
                     </Typography>
                     <Box
                       sx={{
-                        py: { xs: 0.25, sm: 0.4 },
-                        px: { xs: 0.75, sm: 1 },
+                        py: { xs: 0.35, sm: 0.45 },
+                        px: { xs: 0.9, sm: 1.1 },
                         background: "rgba(128, 128, 128, 0.15)", // subtle grey
                         backdropFilter: "blur(10px)",
                         border: "1px solid rgba(128, 128, 128, 0.35)",
                         borderRadius: "12px",
                         textAlign: "center",
-                        minWidth: { xs: "auto", sm: "auto" },
+                        minWidth: "auto",
                         boxShadow: "0 6px 24px rgba(0, 0, 0, 0.12)",
                         cursor: "pointer",
                         transition: "all 0.25s ease",
@@ -598,7 +415,7 @@ export default function Footer() {
                         sx={{
                           color: "text.primary",
                           fontWeight: 700,
-                          fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                          fontSize: { xs: "0.78rem", sm: "0.9rem" },
                         }}
                       >
                         developed by Carlvyne Technologies ltd

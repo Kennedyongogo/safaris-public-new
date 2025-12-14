@@ -6,6 +6,7 @@ import ServicesSection from "../components/Home/ServicesSection";
 import ImageCarouselSection from "../components/Home/ImageCarouselSection";
 import BackgroundImageSection from "../components/Home/BackgroundImageSection";
 import CharityMap from "../components/Home/CharityMap";
+import ContactSection from "../components/Home/ContactSection";
 import Footer from "../components/Footer/Footer";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
       
       {/* Charity Map Section */}
       <CharityMap />
+      <ContactSection />
 
       <Footer />
     </Box>
