@@ -63,7 +63,7 @@ export default function Footer() {
                 spacing={{ xs: 2, sm: 3, md: 5 }}
                 justifyContent="space-between"
               >
-                <Grid item xs={12} md={4}>
+                <Grid item xs={5} sm={5} md={4}>
                   <Slide direction="up" in timeout={1200}>
                     <Box sx={{ textAlign: "left" }}>
                       <Box
@@ -275,7 +275,7 @@ export default function Footer() {
                   </Slide>
                 </Grid>
 
-                <Grid item xs={12} md={8}>
+                <Grid item xs={7} sm={7} md={8}>
                   {/* Contact Us Column */}
                   <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                     <Box sx={{ ml: "auto" }}>
@@ -549,52 +549,61 @@ export default function Footer() {
                       },
                     }}
                   />
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      textAlign: "center",
-                      py: 0.25,
-                      color: "text.primary",
-                      fontWeight: 500,
-                      fontSize: { xs: "0.75rem", sm: "1rem" },
-                    }}
-                  >
-                    © {new Date().getFullYear()} Akira Safaris. All rights
-                    reserved.
-                  </Typography>
                   <Box
                     sx={{
-                      mt: 0.25,
-                      py: { xs: 0.25, sm: 0.4 },
-                      px: { xs: 0.75, sm: 1 },
-                      background: "rgba(128, 128, 128, 0.15)", // subtle grey
-                      backdropFilter: "blur(10px)",
-                      border: "1px solid rgba(128, 128, 128, 0.35)",
-                      borderRadius: "12px",
+                      display: "flex",
+                      flexDirection: { xs: "row", sm: "row" },
+                      flexWrap: "wrap",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: { xs: 1, sm: 1.5 },
                       textAlign: "center",
-                      width: "30%",
-                      mx: "auto",
-                      boxShadow: "0 6px 24px rgba(0, 0, 0, 0.12)",
-                      cursor: "pointer",
-                      transition: "all 0.25s ease",
-                      "&:hover": {
-                        background: "rgba(128, 128, 128, 0.25)",
-                        boxShadow: "0 10px 32px rgba(0, 0, 0, 0.16)",
-                        backdropFilter: "blur(14px)",
-                        transform: "translateY(-2px)",
-                      },
+                      py: 0.25,
                     }}
                   >
                     <Typography
-                      variant="body2"
+                      variant="body1"
                       sx={{
                         color: "text.primary",
-                        fontWeight: 700,
-                        fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                        fontWeight: 500,
+                        fontSize: { xs: "0.75rem", sm: "1rem" },
                       }}
                     >
-                      developed by Carlvyne Technologies ltd
+                      © {new Date().getFullYear()} Akira Safaris. All rights
+                      reserved.
                     </Typography>
+                    <Box
+                      sx={{
+                        py: { xs: 0.25, sm: 0.4 },
+                        px: { xs: 0.75, sm: 1 },
+                        background: "rgba(128, 128, 128, 0.15)", // subtle grey
+                        backdropFilter: "blur(10px)",
+                        border: "1px solid rgba(128, 128, 128, 0.35)",
+                        borderRadius: "12px",
+                        textAlign: "center",
+                        minWidth: { xs: "auto", sm: "auto" },
+                        boxShadow: "0 6px 24px rgba(0, 0, 0, 0.12)",
+                        cursor: "pointer",
+                        transition: "all 0.25s ease",
+                        "&:hover": {
+                          background: "rgba(128, 128, 128, 0.25)",
+                          boxShadow: "0 10px 32px rgba(0, 0, 0, 0.16)",
+                          backdropFilter: "blur(14px)",
+                          transform: "translateY(-2px)",
+                        },
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "text.primary",
+                          fontWeight: 700,
+                          fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                        }}
+                      >
+                        developed by Carlvyne Technologies ltd
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
               </Fade>

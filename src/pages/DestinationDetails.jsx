@@ -156,6 +156,12 @@ export default function DestinationDetails() {
     );
   }
 
+  const wildlifeItems =
+    destination?.wildlife
+      ?.split(",")
+      .map((item) => item.trim())
+      .filter(Boolean) || [];
+
   return (
     <Box
       sx={{
@@ -403,15 +409,26 @@ export default function DestinationDetails() {
                     >
                       Wildlife
                     </Typography>
-                    <Chip
-                      label={destination.wildlife}
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: "1rem",
-                        backgroundColor: "#B85C38", // Burnt orange/rust
-                        color: "white",
-                      }}
-                    />
+                    <Box component="ul" sx={{ pl: 2, mb: 0 }}>
+                      {(wildlifeItems.length ? wildlifeItems : [destination.wildlife]).map(
+                        (item, index) => (
+                          <Typography
+                            key={index}
+                            component="li"
+                            variant="body1"
+                            sx={{
+                              mb: 0.5,
+                              color: "text.secondary",
+                              lineHeight: 1.7,
+                              fontSize: { xs: "1.05rem", md: "1.1rem" },
+                              fontWeight: 600,
+                            }}
+                          >
+                            {item}
+                          </Typography>
+                        )
+                      )}
+                    </Box>
                   </CardContent>
                 </Card>
 

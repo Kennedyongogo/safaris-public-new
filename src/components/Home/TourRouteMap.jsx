@@ -640,6 +640,11 @@ const TourRouteMap = () => {
                   sx={{
                     borderColor: "#5D4037",
                     color: "#5D4037",
+                    px: { xs: 1.25, sm: 2 },
+                    py: { xs: 0.45, sm: 0.65 },
+                    fontSize: { xs: "0.9rem", md: "1rem" },
+                    whiteSpace: "nowrap",
+                    minWidth: 0,
                     "&:hover": {
                       borderColor: "#4E342E",
                       backgroundColor: "rgba(93, 64, 55, 0.04)",
@@ -678,6 +683,11 @@ const TourRouteMap = () => {
                   sx={{
                     backgroundColor: "#5D4037",
                     color: "white",
+                    px: { xs: 1.25, sm: 2 },
+                    py: { xs: 0.45, sm: 0.65 },
+                    fontSize: { xs: "0.9rem", md: "1rem" },
+                    whiteSpace: "nowrap",
+                    minWidth: 0,
                     "&:hover": {
                       backgroundColor: "#4E342E",
                     },
