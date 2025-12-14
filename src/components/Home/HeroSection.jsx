@@ -18,9 +18,10 @@ export default function HeroSection() {
   const videoRefs = useRef([]);
   const assetBase = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
   const videos = [
-    "126210-735676459_large.mp4",
-    "199221-909835682_large.mp4",
-  ].map((file) => `${assetBase}/videos/${file}`);
+    // Remote sources to avoid shipping large MP4s in the repo
+    "https://cdn.pixabay.com/video/2017/10/25/12011-240232898_tiny.mp4",
+    "https://cdn.pixabay.com/video/2017/10/25/12006-240227793_tiny.mp4",
+  ];
 
   useEffect(() => {
     setIsVisible(true);
