@@ -16,10 +16,11 @@ export default function HeroSection() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const videoRefs = useRef([]);
+  const assetBase = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
   const videos = [
-    "/videos/126210-735676459_large.mp4",
-    "/videos/199221-909835682_large.mp4",
-  ];
+    "126210-735676459_large.mp4",
+    "199221-909835682_large.mp4",
+  ].map((file) => `${assetBase}/videos/${file}`);
 
   useEffect(() => {
     setIsVisible(true);
