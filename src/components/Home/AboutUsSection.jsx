@@ -152,7 +152,7 @@ export default function AboutUsSection() {
                     transition: "all 0.3s ease",
                   }}
                 >
-                  Learn More About Us
+                  Learn More
                 </Button>
               </Box>
             </Grid>

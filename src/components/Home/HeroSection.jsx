@@ -199,6 +199,7 @@ export default function HeroSection() {
                 display: "flex",
                 gap: 3,
                 flexWrap: "wrap",
+                flexDirection: { xs: "column", sm: "row" }, // stack on small, row on larger
                 mb: { xs: 6, sm: 5, md: 4 },
               }}
             >
@@ -241,7 +242,7 @@ export default function HeroSection() {
                 variant="contained"
                 color="primary"
                 size="large"
-                startIcon={<ContactSupport />}
+                endIcon={<ContactSupport />}
                 onClick={handleContactClick}
                 sx={{
                   px: 2,
@@ -253,8 +254,8 @@ export default function HeroSection() {
                     "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)",
                   boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
                   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                  "& .MuiButton-startIcon": {
-                    marginRight: 0.5,
+                  "& .MuiButton-endIcon": {
+                    marginLeft: 0.5,
                   },
                   "&:hover": {
                     transform: "translateY(-3px) scale(1.05)",
