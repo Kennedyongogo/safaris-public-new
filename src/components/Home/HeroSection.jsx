@@ -189,13 +189,14 @@ export default function HeroSection() {
                 endIcon={<ArrowForward />}
                 onClick={handleBookSafari}
                 sx={{
-                  px: 2,
+                  px: { xs: 2, sm: 3, md: 3.5 },
                   py: 0.75,
                   fontSize: "1.1rem",
                   fontWeight: 600,
                   borderRadius: "50px",
                   whiteSpace: "nowrap",
                   width: { xs: "90%", sm: "auto" },
+                  minWidth: { xs: "auto", sm: 220, md: 240, lg: 260 },
                   maxWidth: { xs: 320, sm: "none" },
                   background:
                     "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)", // Rust to light rust
