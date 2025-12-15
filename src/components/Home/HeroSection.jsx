@@ -13,6 +13,14 @@ export default function HeroSection() {
     "/images/lion-5751867_1280.jpg",
   ];
 
+  // Preload all images for smooth transitions
+  useEffect(() => {
+    images.forEach((imageSrc) => {
+      const img = new Image();
+      img.src = imageSrc;
+    });
+  }, []);
+
   useEffect(() => {
     setIsVisible(true);
     const interval = setInterval(() => {
@@ -24,6 +32,21 @@ export default function HeroSection() {
 
   const handleBookSafari = () => {
     navigate("/plan");
+  };
+
+  // Map country names to destination IDs (matching ServicesSection dummyDestinations)
+  const countryToIdMap = {
+    Kenya: 1,
+    Uganda: 2,
+    Tanzania: 3,
+    Rwanda: 4,
+  };
+
+  const handleCountryClick = (country) => {
+    const destinationId = countryToIdMap[country];
+    if (destinationId) {
+      navigate(`/destination/${destinationId}`, { state: { from: "hero" } });
+    }
   };
 
   return (
@@ -39,32 +62,41 @@ export default function HeroSection() {
       }}
     >
       {/* Background Images */}
-      {images.map((image, index) => (
-        <Box
-          key={image}
-          component="img"
-          src={image}
-          alt="Akira Safaris hero"
-          onError={() => console.warn("Hero image failed to load:", image)}
-          sx={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center",
-            pointerEvents: "none",
-            filter: "brightness(0.4) saturate(1.1)",
-            opacity: currentImageIndex === index ? 1 : 0,
-            zIndex: currentImageIndex === index ? 0 : -1,
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            transition: "opacity 1.5s ease-in-out",
-          }}
-        />
-      ))}
+      {images.map((image, index) => {
+        const isActive = currentImageIndex === index;
+        
+        return (
+          <Box
+            key={`${image}-${index}`}
+            component="img"
+            src={image}
+            alt="Akira Safaris hero"
+            onError={() => console.warn("Hero image failed to load:", image)}
+            sx={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              pointerEvents: "none",
+              filter: "brightness(0.45) saturate(1.15) contrast(1.05)",
+              opacity: isActive ? 1 : 0,
+              zIndex: isActive ? 1 : 0,
+              top: 0,
+              left: 0,
+              transform: isActive
+                ? "scale(1)"
+                : "scale(1.01)",
+              transition: "opacity 2.5s ease-in-out, transform 2.5s ease-in-out",
+              willChange: "opacity, transform",
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+            }}
+          />
+        );
+      })}
 
-      {/* Gradient Overlay */}
+      {/* Gradient Overlay - Earth Tones */}
       <Box
         sx={{
           position: "absolute",
@@ -73,12 +105,12 @@ export default function HeroSection() {
           right: 0,
           bottom: 0,
           background:
-            "linear-gradient(135deg, rgba(33, 150, 243, 0.3) 0%, rgba(76, 175, 80, 0.2) 50%, rgba(255, 152, 0, 0.2) 100%)",
+            "linear-gradient(135deg, rgba(61, 40, 23, 0.4) 0%, rgba(107, 78, 61, 0.35) 30%, rgba(184, 92, 56, 0.25) 70%, rgba(107, 125, 71, 0.2) 100%)",
           zIndex: 1,
         }}
       />
 
-      {/* Floating Particles Animation */}
+      {/* Enhanced Floating Particles Animation */}
       <Box
         sx={{
           position: "absolute",
@@ -94,8 +126,9 @@ export default function HeroSection() {
             left: "10%",
             width: "4px",
             height: "4px",
-            background: "rgba(255, 255, 255, 0.6)",
+            background: "rgba(224, 216, 192, 0.7)", // Light beige
             borderRadius: "50%",
+            boxShadow: "0 0 8px rgba(224, 216, 192, 0.5)",
             animation: "float 6s ease-in-out infinite",
           },
           "&::after": {
@@ -105,12 +138,32 @@ export default function HeroSection() {
             right: "15%",
             width: "6px",
             height: "6px",
-            background: "rgba(107, 78, 61, 0.8)", // Medium brown
+            background: "rgba(184, 92, 56, 0.6)", // Rust
             borderRadius: "50%",
+            boxShadow: "0 0 10px rgba(184, 92, 56, 0.4)",
             animation: "float 8s ease-in-out infinite reverse",
           },
         }}
       />
+      
+      {/* Additional floating particles */}
+      {[...Array(3)].map((_, i) => (
+        <Box
+          key={i}
+          sx={{
+            position: "absolute",
+            top: `${20 + i * 25}%`,
+            left: `${15 + i * 20}%`,
+            width: "3px",
+            height: "3px",
+            background: "rgba(107, 125, 71, 0.5)", // Olive green
+            borderRadius: "50%",
+            boxShadow: "0 0 6px rgba(107, 125, 71, 0.3)",
+            animation: `float ${7 + i * 2}s ease-in-out infinite ${i * 0.5}s`,
+            zIndex: 2,
+          }}
+        />
+      ))}
 
       {/* Content Overlay */}
       <Box
@@ -138,19 +191,20 @@ export default function HeroSection() {
               variant="h1"
               sx={{
                 fontSize: {
-                  xs: "2rem",
-                  sm: "2.5rem",
-                  md: "3.5rem",
-                  lg: "4rem",
+                  xs: "2.2rem",
+                  sm: "2.8rem",
+                  md: "3.8rem",
+                  lg: "4.5rem",
                 },
-                fontWeight: 700,
-                mb: 2,
-                textShadow: "3px 3px 6px rgba(0,0,0,0.4)",
-                background: "linear-gradient(45deg, #E0D8C0 30%, #7B8D57 90%)", // Light beige to olive green
+                fontWeight: 800,
+                mb: 0.5,
+                textShadow: "4px 4px 12px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.3)",
+                background: "linear-gradient(135deg, #E0D8C0 0%, #F5F1E8 30%, #7B8D57 70%, #6B7D47 100%)",
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 lineHeight: 1.1,
+                letterSpacing: { xs: "0.02em", md: "0.03em" },
               }}
             >
               Akira Safaris
@@ -158,17 +212,115 @@ export default function HeroSection() {
             <Typography
               variant="h4"
               sx={{
-                mb: 4,
-                textShadow: "3px 3px 6px rgba(0,0,0,0.35)",
-                opacity: 0.97,
-                fontWeight: 700,
-                fontSize: { xs: "1.4rem", sm: "1.7rem", md: "2rem" },
-                color: "#6B7D47", // Richer olive to match title
-                px: { xs: 0, sm: 0 }, // preserve padding feel if size grows
+                mb: 1,
+                textShadow: "2px 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3)",
+                opacity: 0.98,
+                fontWeight: 600,
+                fontSize: { xs: "1.5rem", sm: "1.8rem", md: "2.2rem" },
+                color: "#E8E0D1", // Light beige for better contrast
+                px: { xs: 0, sm: 0 },
+                letterSpacing: "0.02em",
               }}
             >
               Discover the Wild Heart of Africa
             </Typography>
+            
+            {/* Trust Indicators */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: { xs: 1, sm: 2, md: 3 },
+                mb: { xs: 0.75, sm: 1 },
+                flexWrap: "wrap",
+                justifyContent: { xs: "center", sm: "flex-start" },
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  color: "#E0D8C0",
+                  textShadow: "2px 2px 4px rgba(0,0,0,0.4)",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: { xs: "1.1rem", sm: "1.3rem" },
+                    fontWeight: 700,
+                    color: "#B85C38", // Rust accent
+                  }}
+                >
+                  15+
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "0.8rem", sm: "1rem" },
+                    fontWeight: 500,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Years Experience
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  color: "#E0D8C0",
+                  textShadow: "2px 2px 4px rgba(0,0,0,0.4)",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: { xs: "1.1rem", sm: "1.3rem" },
+                    fontWeight: 700,
+                    color: "#B85C38",
+                  }}
+                >
+                  4
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "0.8rem", sm: "1rem" },
+                    fontWeight: 500,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Countries
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  color: "#E0D8C0",
+                  textShadow: "2px 2px 4px rgba(0,0,0,0.4)",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: { xs: "1.1rem", sm: "1.3rem" },
+                    fontWeight: 700,
+                    color: "#B85C38",
+                  }}
+                >
+                  1000+
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "0.8rem", sm: "1rem" },
+                    fontWeight: 500,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Happy Travelers
+                </Typography>
+              </Box>
+            </Box>
 
             {/* Call-to-action row with destinations */}
             <Box
@@ -225,6 +377,7 @@ export default function HeroSection() {
               {["Kenya", "Uganda", "Tanzania", "Rwanda"].map((country) => (
                 <Box
                   key={country}
+                  onClick={() => handleCountryClick(country)}
                   sx={{
                     px: 2,
                     py: 0.75,
@@ -242,6 +395,7 @@ export default function HeroSection() {
                     textAlign: "center",
                     letterSpacing: 0.3,
                     textTransform: "uppercase",
+                    cursor: "pointer",
                     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:hover": {
                       transform: "translateY(-3px) scale(1.05)",
@@ -257,6 +411,43 @@ export default function HeroSection() {
 
           </Box>
         </Fade>
+      </Box>
+
+      {/* Scroll Indicator */}
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: { xs: "20px", md: "30px" },
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 1,
+          color: "#E0D8C0",
+          animation: "bounce 2s ease-in-out infinite",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: "0.75rem",
+            fontWeight: 500,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            textShadow: "2px 2px 4px rgba(0,0,0,0.4)",
+          }}
+        >
+          Explore
+        </Typography>
+        <Box
+          sx={{
+            width: "2px",
+            height: "30px",
+            background: "linear-gradient(to bottom, rgba(224, 216, 192, 0.8), rgba(224, 216, 192, 0.2))",
+            borderRadius: "2px",
+          }}
+        />
       </Box>
 
       <style>
@@ -280,6 +471,15 @@ export default function HeroSection() {
             50% { 
               transform: translateY(-20px) rotate(180deg);
               opacity: 1;
+            }
+          }
+          
+          @keyframes bounce {
+            0%, 100% { 
+              transform: translateX(-50%) translateY(0);
+            }
+            50% { 
+              transform: translateX(-50%) translateY(-10px);
             }
           }
         `}

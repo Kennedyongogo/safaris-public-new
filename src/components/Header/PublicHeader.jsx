@@ -73,7 +73,7 @@ export default function PublicHeader() {
         color: "#6B4E3D", // Medium brown
       },
       {
-        label: "Tour",
+        label: "Itineraries",
         icon: <Explore />,
         route: "/tour",
         color: "#B85C38", // Burnt orange/rust

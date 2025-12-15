@@ -30,43 +30,51 @@ const MotionBox = motion(Box);
 const dummyDestinations = [
   {
     id: 1,
-    title: "Maasai Mara National Reserve",
+    title: "Kenya",
     description:
-      "Experience the Great Migration and witness the Big Five in their natural habitat. Home to over 1.5 million wildebeest, zebras, and gazelles.",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800",
-    location: "Narok County, Kenya",
-    duration: "3-5 Days",
-    bestTime: "July - October",
-    wildlife: "Big Five, Great Migration",
-    highlights: ["Game Drives", "Hot Air Balloon Safari", "Cultural Visits"],
+      "Experience the world-famous Great Migration in Maasai Mara, witness the Big Five, and explore diverse landscapes from savannah plains to snow-capped mountains. Kenya offers unparalleled wildlife viewing and rich cultural experiences.",
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    location: "East Africa",
+    duration: "5-14 Days",
+    bestTime: "July - October, January - March",
+    wildlife: "Big Five, Great Migration, Wildebeest, Elephants",
+    highlights: ["Maasai Mara", "Amboseli", "Samburu", "Tsavo"],
   },
   {
     id: 2,
-    title: "Amboseli National Park",
+    title: "Uganda",
     description:
-      "Famous for its large elephant herds and stunning views of Mount Kilimanjaro. A photographer's paradise with diverse wildlife and breathtaking landscapes.",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-    location: "Kajiado County, Kenya",
-    duration: "2-4 Days",
-    bestTime: "June - September",
-    wildlife: "Elephants, Lions, Cheetahs",
-    highlights: [
-      "Elephant Viewing",
-      "Mount Kilimanjaro Views",
-      "Bird Watching",
-    ],
+      "Discover the Pearl of Africa with mountain gorilla trekking in Bwindi, chimpanzee encounters, and diverse ecosystems. Home to half of the world's remaining mountain gorillas and the source of the Nile.",
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    location: "East Africa",
+    duration: "7-14 Days",
+    bestTime: "June - September, December - February",
+    wildlife: "Mountain Gorillas, Chimpanzees, Big Five, Primates",
+    highlights: ["Bwindi Impenetrable", "Queen Elizabeth", "Murchison Falls"],
   },
   {
     id: 3,
-    title: "Samburu National Reserve",
+    title: "Tanzania",
     description:
-      "Discover unique wildlife species found only in northern Kenya, including the Grevy's zebra, Somali ostrich, and reticulated giraffe.",
-    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800",
-    location: "Samburu County, Kenya",
-    duration: "3-4 Days",
-    bestTime: "January - March, July - October",
-    wildlife: "Grevy's Zebra, Reticulated Giraffe",
-    highlights: ["Special Five", "River Safaris", "Cultural Experiences"],
+      "Home to the Serengeti's Great Migration, Ngorongoro Crater, and Mount Kilimanjaro. Experience vast wilderness areas, incredible wildlife concentrations, and pristine beaches of Zanzibar.",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    location: "East Africa",
+    duration: "7-14 Days",
+    bestTime: "June - October, December - March",
+    wildlife: "Big Five, Great Migration, Wildebeest, Zebras",
+    highlights: ["Serengeti", "Ngorongoro", "Kilimanjaro", "Zanzibar"],
+  },
+  {
+    id: 4,
+    title: "Rwanda",
+    description:
+      "The Land of a Thousand Hills offers intimate gorilla trekking experiences, golden monkey encounters, and rich cultural heritage. Experience one of Africa's most successful conservation stories.",
+    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+    location: "East Africa",
+    duration: "4-10 Days",
+    bestTime: "June - September, December - February",
+    wildlife: "Mountain Gorillas, Golden Monkeys, Big Five",
+    highlights: ["Volcanoes National Park", "Nyungwe Forest", "Akagera"],
   },
 ];
 
@@ -82,8 +90,11 @@ export default function DestinationDetails() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Determine where user came from based on location state or referrer
-  const cameFromDestinations = location.state?.from === "/destinations" || 
-    document.referrer.includes("/destinations");
+  const cameFrom = location.state?.from || 
+    (document.referrer.includes("/destinations") ? "/destinations" : "/");
+  const cameFromDestinations = cameFrom === "/destinations";
+  const cameFromHero = cameFrom === "hero";
+  const cameFromServices = cameFrom === "services";
 
   useEffect(() => {
     // Using dummy data for now
@@ -208,8 +219,14 @@ export default function DestinationDetails() {
               if (cameFromDestinations) {
                 // Navigate back to destinations page
                 navigate("/destinations");
+              } else if (cameFromHero) {
+                // Navigate to home and scroll to top (hero section)
+                navigate("/");
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }, 100);
               } else {
-                // Navigate to home and scroll to destinations section
+                // Navigate to home and scroll to destinations section (from services)
                 navigate("/");
                 setTimeout(() => {
                   const section = document.getElementById("mission-section");
@@ -233,7 +250,11 @@ export default function DestinationDetails() {
               },
             }}
           >
-            {cameFromDestinations ? "Back to Destinations" : "Back to Home"}
+            {cameFromDestinations 
+              ? "Back to Destinations" 
+              : cameFromHero 
+              ? "Back to Home" 
+              : "Back to Home"}
           </Button>
 
           <Paper

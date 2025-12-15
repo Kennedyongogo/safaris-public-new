@@ -29,6 +29,12 @@ import {
   CheckCircle,
   ArrowBack,
   ArrowForward,
+  Hotel,
+  Restaurant,
+  DirectionsCar,
+  CameraAlt,
+  WbSunny,
+  Info,
 } from "@mui/icons-material";
 import "ol/ol.css";
 import Map from "ol/Map";
@@ -63,6 +69,11 @@ const tourExperiences = [
         ],
         duration: "1 Day",
         activities: ["Airport Transfer", "Hotel Check-in", "Safari Briefing"],
+        accommodation: "4-star hotel in Nairobi city center",
+        meals: "Dinner included",
+        transportation: "Airport pickup in air-conditioned vehicle",
+        highlights: ["Welcome briefing", "City orientation", "Rest after long flight"],
+        tips: "Arrive well-rested and ready for your safari adventure. Exchange currency at the airport or hotel.",
       },
       {
         stage: 2,
@@ -75,6 +86,12 @@ const tourExperiences = [
         ],
         duration: "3 Days",
         activities: ["Game Drives", "Big Five Safari", "Wildlife Photography", "Sunset Viewing"],
+        accommodation: "Luxury tented camp in the heart of Maasai Mara",
+        meals: "All meals included (breakfast, lunch, dinner)",
+        transportation: "4x4 safari vehicle with pop-up roof for game viewing",
+        highlights: ["Big Five sightings", "Great Migration (seasonal)", "Hot air balloon safari (optional)", "Maasai cultural visit"],
+        wildlife: "Lions, elephants, cheetahs, leopards, rhinos, wildebeest, zebras, giraffes, hippos, crocodiles",
+        tips: "Best time: July-October for migration. Bring binoculars, camera, and warm layers for early morning drives.",
       },
       {
         stage: 3,
@@ -87,6 +104,12 @@ const tourExperiences = [
         ],
         duration: "1 Day",
         activities: ["Flamingo Watching", "Rhino Tracking", "Bird Watching", "Game Drive"],
+        accommodation: "Lodge overlooking Lake Nakuru",
+        meals: "Breakfast, lunch, and dinner included",
+        transportation: "4x4 safari vehicle",
+        highlights: ["Pink flamingo spectacle", "Rhino sanctuary", "Baboon cliff viewpoint", "Over 400 bird species"],
+        wildlife: "Black and white rhinos, flamingos, pelicans, waterbucks, buffaloes, baboons, leopards",
+        tips: "Perfect for bird enthusiasts. The pink lake is most vibrant during dry season. Bring a good camera for bird photography.",
       },
       {
         stage: 4,
@@ -99,6 +122,12 @@ const tourExperiences = [
         ],
         duration: "2 Days",
         activities: ["Elephant Viewing", "Kilimanjaro Views", "Game Drives", "Cultural Visits"],
+        accommodation: "Luxury safari lodge with Kilimanjaro views",
+        meals: "All meals included with bush breakfast option",
+        transportation: "4x4 safari vehicle",
+        highlights: ["Mount Kilimanjaro backdrop", "Large elephant herds", "Maasai village visit", "Observation Hill"],
+        wildlife: "Elephants, lions, cheetahs, hyenas, wildebeest, zebras, giraffes, buffaloes, hippos",
+        tips: "Best views of Kilimanjaro at sunrise and sunset. Clear weather is essential for mountain views. Great for elephant photography.",
       },
       {
         stage: 5,
@@ -111,6 +140,11 @@ const tourExperiences = [
         ],
         duration: "1 Day",
         activities: ["Hotel Check-out", "Optional City Tour", "Airport Transfer"],
+        accommodation: "N/A - Departure day",
+        meals: "Breakfast included",
+        transportation: "Transfer to Jomo Kenyatta International Airport",
+        highlights: ["Giraffe Centre visit (optional)", "Karen Blixen Museum (optional)", "Souvenir shopping", "Farewell"],
+        tips: "Allow 3 hours before flight departure. Optional activities depend on flight schedule. Don't forget to check out of your accommodation.",
       },
     ],
   },
@@ -450,7 +484,7 @@ const TourRouteMap = () => {
                 fontSize: { xs: "2rem", sm: "2.55rem", md: "2.85rem" },
               }}
             >
-              Explore Our Tour Routes
+              Tour Itinerary
             </Typography>
             <Typography
               variant="body1"
@@ -461,7 +495,7 @@ const TourRouteMap = () => {
                 lineHeight: 1.7,
               }}
             >
-              Discover detailed routes, experiences, and images from start to finish
+              Discover detailed day-by-day itineraries, experiences, and images from airport pickup to departure
             </Typography>
           </Box>
 
@@ -880,12 +914,23 @@ const TourRouteMap = () => {
                         variant="h6"
                         sx={{
                           fontWeight: 700,
-                          mb: 2,
+                          mb: 1,
                           color: "#5D4037",
                           fontSize: { xs: "1.3rem", md: "1.45rem" },
                         }}
                       >
-                        Experience Images
+                        What to Expect
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "text.secondary",
+                          mb: 2,
+                          fontSize: { xs: "0.9rem", md: "1rem" },
+                          fontStyle: "italic",
+                        }}
+                      >
+                        Preview images of your experience at this stage
                       </Typography>
                       <ImageList
                         cols={2}
@@ -991,6 +1036,182 @@ const TourRouteMap = () => {
 
                       <Divider sx={{ my: 2 }} />
 
+                      {/* Accommodation */}
+                      {currentTour.route[selectedStage].accommodation && (
+                        <>
+                          <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2, gap: 1.5 }}>
+                            <Hotel sx={{ color: "#5D4037", fontSize: 24, mt: 0.5 }} />
+                            <Box>
+                              <Typography
+                                variant="subtitle2"
+                                sx={{
+                                  fontWeight: 700,
+                                  color: "#5D4037",
+                                  mb: 0.5,
+                                  fontSize: { xs: "0.95rem", md: "1rem" },
+                                }}
+                              >
+                                Accommodation
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "text.secondary",
+                                  fontSize: { xs: "0.95rem", md: "1.05rem" },
+                                }}
+                              >
+                                {currentTour.route[selectedStage].accommodation}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Divider sx={{ my: 1.5 }} />
+                        </>
+                      )}
+
+                      {/* Meals */}
+                      {currentTour.route[selectedStage].meals && (
+                        <>
+                          <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2, gap: 1.5 }}>
+                            <Restaurant sx={{ color: "#5D4037", fontSize: 24, mt: 0.5 }} />
+                            <Box>
+                              <Typography
+                                variant="subtitle2"
+                                sx={{
+                                  fontWeight: 700,
+                                  color: "#5D4037",
+                                  mb: 0.5,
+                                  fontSize: { xs: "0.95rem", md: "1rem" },
+                                }}
+                              >
+                                Meals Included
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "text.secondary",
+                                  fontSize: { xs: "0.95rem", md: "1.05rem" },
+                                }}
+                              >
+                                {currentTour.route[selectedStage].meals}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Divider sx={{ my: 1.5 }} />
+                        </>
+                      )}
+
+                      {/* Transportation */}
+                      {currentTour.route[selectedStage].transportation && (
+                        <>
+                          <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2, gap: 1.5 }}>
+                            <DirectionsCar sx={{ color: "#5D4037", fontSize: 24, mt: 0.5 }} />
+                            <Box>
+                              <Typography
+                                variant="subtitle2"
+                                sx={{
+                                  fontWeight: 700,
+                                  color: "#5D4037",
+                                  mb: 0.5,
+                                  fontSize: { xs: "0.95rem", md: "1rem" },
+                                }}
+                              >
+                                Transportation
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "text.secondary",
+                                  fontSize: { xs: "0.95rem", md: "1.05rem" },
+                                }}
+                              >
+                                {currentTour.route[selectedStage].transportation}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Divider sx={{ my: 1.5 }} />
+                        </>
+                      )}
+
+                      {/* Highlights */}
+                      {currentTour.route[selectedStage].highlights && (
+                        <>
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              fontWeight: 700,
+                              mb: 1.5,
+                              color: "#5D4037",
+                              fontSize: { xs: "1.2rem", md: "1.3rem" },
+                            }}
+                          >
+                            Key Highlights
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 1,
+                              mb: 2,
+                            }}
+                          >
+                            {currentTour.route[selectedStage].highlights.map((highlight, idx) => (
+                              <Box key={idx} sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
+                                <CheckCircle
+                                  sx={{
+                                    color: "#6B7D47",
+                                    fontSize: 20,
+                                    mt: 0.25,
+                                  }}
+                                />
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    color: "text.primary",
+                                    fontSize: { xs: "0.95rem", md: "1.05rem" },
+                                  }}
+                                >
+                                  {highlight}
+                                </Typography>
+                              </Box>
+                            ))}
+                          </Box>
+                          <Divider sx={{ my: 1.5 }} />
+                        </>
+                      )}
+
+                      {/* Wildlife */}
+                      {currentTour.route[selectedStage].wildlife && (
+                        <>
+                          <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2, gap: 1.5 }}>
+                            <CameraAlt sx={{ color: "#5D4037", fontSize: 24, mt: 0.5 }} />
+                            <Box>
+                              <Typography
+                                variant="subtitle2"
+                                sx={{
+                                  fontWeight: 700,
+                                  color: "#5D4037",
+                                  mb: 0.5,
+                                  fontSize: { xs: "0.95rem", md: "1rem" },
+                                }}
+                              >
+                                Wildlife to Spot
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "text.secondary",
+                                  fontSize: { xs: "0.95rem", md: "1.05rem" },
+                                }}
+                              >
+                                {currentTour.route[selectedStage].wildlife}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Divider sx={{ my: 1.5 }} />
+                        </>
+                      )}
+
+                      {/* Activities */}
                       <Typography
                         variant="h6"
                         sx={{
@@ -1000,7 +1221,7 @@ const TourRouteMap = () => {
                           fontSize: { xs: "1.2rem", md: "1.3rem" },
                         }}
                       >
-                        Activities & Highlights
+                        Activities & Experiences
                       </Typography>
                       <Box
                         sx={{
@@ -1029,6 +1250,46 @@ const TourRouteMap = () => {
                           )
                         )}
                       </Box>
+
+                      {/* Travel Tips */}
+                      {currentTour.route[selectedStage].tips && (
+                        <>
+                          <Divider sx={{ my: 2.5 }} />
+                          <Box
+                            sx={{
+                              bgcolor: "#F5F1E8",
+                              borderRadius: 2,
+                              p: 2,
+                              border: "1px solid rgba(107, 78, 61, 0.2)",
+                            }}
+                          >
+                            <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.5, mb: 1 }}>
+                              <Info sx={{ color: "#B85C38", fontSize: 24, mt: 0.25 }} />
+                              <Typography
+                                variant="subtitle2"
+                                sx={{
+                                  fontWeight: 700,
+                                  color: "#5D4037",
+                                  fontSize: { xs: "1rem", md: "1.1rem" },
+                                }}
+                              >
+                                Travel Tips & Recommendations
+                              </Typography>
+                            </Box>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "text.primary",
+                                fontSize: { xs: "0.95rem", md: "1.05rem" },
+                                lineHeight: 1.7,
+                                pl: 4.5,
+                              }}
+                            >
+                              {currentTour.route[selectedStage].tips}
+                            </Typography>
+                          </Box>
+                        </>
+                      )}
                     </Grid>
                   </Grid>
                 </CardContent>

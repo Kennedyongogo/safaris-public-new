@@ -419,8 +419,8 @@ export default function ServicesSection() {
   // };
 
   const handleViewMore = (destination) => {
-    // Navigate to destination details page (from home page)
-    navigate(`/destination/${destination.id}`, { state: { from: "/" } });
+    // Navigate to destination details page (from services section)
+    navigate(`/destination/${destination.id}`, { state: { from: "services" } });
   };
 
   // Commented out dialog handlers - using page navigation instead
