@@ -1,21 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Typography,
-  Box,
-  Container,
-  Tooltip,
-  Button,
-  Fade,
-  Slide,
-} from "@mui/material";
-import {
-  CameraAlt,
-  Terrain,
-  Explore,
-  ArrowForward,
-  ContactSupport,
-} from "@mui/icons-material";
+import { Typography, Box, Button, Fade } from "@mui/material";
+import { ArrowForward } from "@mui/icons-material";
 
 export default function HeroSection() {
   const navigate = useNavigate();
@@ -38,15 +24,6 @@ export default function HeroSection() {
 
   const handleBookSafari = () => {
     navigate("/plan");
-  };
-
-  const handleContactClick = () => {
-    const section = document.getElementById("contact-section");
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      console.warn("Contact section not found");
-    }
   };
 
   return (
@@ -193,13 +170,15 @@ export default function HeroSection() {
               Discover the Wild Heart of Africa
             </Typography>
 
-            {/* Enhanced Call-to-Action Button */}
+            {/* Call-to-action row with destinations */}
             <Box
               sx={{
                 display: "flex",
-                gap: 3,
-                flexWrap: "wrap",
-                flexDirection: { xs: "column", sm: "row" }, // stack on small, row on larger
+                flexDirection: { xs: "column", sm: "row" },
+                gap: { xs: 1.25, sm: 2, md: 2.25 },
+                flexWrap: { xs: "nowrap", lg: "nowrap" },
+                alignItems: "center",
+                justifyContent: { xs: "center", sm: "center", md: "flex-start" },
                 mb: { xs: 6, sm: 5, md: 4 },
               }}
             >
@@ -215,6 +194,9 @@ export default function HeroSection() {
                   fontSize: "1.1rem",
                   fontWeight: 600,
                   borderRadius: "50px",
+                  whiteSpace: "nowrap",
+                  width: { xs: "90%", sm: "auto" },
+                  maxWidth: { xs: 320, sm: "none" },
                   background:
                     "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)", // Rust to light rust
                   boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
@@ -238,149 +220,43 @@ export default function HeroSection() {
               >
                 Book Your Safari
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                endIcon={<ContactSupport />}
-                onClick={handleContactClick}
-                sx={{
-                  px: 2,
-                  py: 0.75,
-                  fontSize: "1.1rem",
-                  fontWeight: 600,
-                  borderRadius: "50px",
-                  background:
-                    "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)",
-                  boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
-                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                  "& .MuiButton-endIcon": {
-                    marginLeft: 0.5,
-                  },
-                  "&:hover": {
-                    transform: "translateY(-3px) scale(1.05)",
-                    boxShadow: "0 12px 40px rgba(184, 92, 56, 0.4)",
-                    background:
-                      "linear-gradient(45deg, #8B4225 30%, #B85C38 90%)",
-                  },
-                  "&:focus": {
-                    outline: "none",
-                  },
-                  "&:focus-visible": {
-                    outline: "none",
-                  },
-                }}
-              >
-                Contact Us
-              </Button>
+
+              {["Kenya", "Uganda", "Tanzania", "Rwanda"].map((country) => (
+                <Box
+                  key={country}
+                  sx={{
+                    px: 2,
+                    py: 0.75,
+                    fontSize: "1.1rem",
+                    fontWeight: 600,
+                    borderRadius: "50px",
+                    whiteSpace: "nowrap",
+                    width: { xs: "90%", sm: "auto" },
+                    maxWidth: { xs: 320, sm: "none" },
+                    background: "rgba(255, 255, 255, 0.08)",
+                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
+                    backdropFilter: "blur(6px)",
+                    color: "#E0D8C0",
+                    textAlign: "center",
+                    letterSpacing: 0.3,
+                    textTransform: "uppercase",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      transform: "translateY(-3px) scale(1.05)",
+                      boxShadow: "0 12px 40px rgba(0,0,0,0.45)",
+                      borderColor: "rgba(184, 92, 56, 0.6)",
+                    },
+                  }}
+                >
+                  {country}
+                </Box>
+              ))}
             </Box>
+
           </Box>
         </Fade>
       </Box>
-
-      {/* Enhanced Feature Icons */}
-      <Slide direction="up" in={isVisible} timeout={1500}>
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            display: "flex",
-            justifyContent: "center",
-            gap: 4,
-            p: 2.5,
-            backgroundColor: "rgba(0,0,0,0.6)",
-            backdropFilter: "blur(10px)",
-            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
-          }}
-        >
-          <Tooltip title="Safari Tours" arrow>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 1,
-                color: "white",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                cursor: "pointer",
-                  "&:hover": {
-                  transform: "translateY(-8px) scale(1.1)",
-                  "& .icon": {
-                    color: "#6B4E3D", // Medium brown
-                    transform: "rotate(360deg)",
-                  },
-                },
-              }}
-            >
-              <CameraAlt
-                className="icon"
-                sx={{ fontSize: 28, transition: "all 0.4s ease" }}
-              />
-              <Typography sx={{ fontWeight: 500, fontSize: "0.8rem" }}>
-                Safari Tours
-              </Typography>
-            </Box>
-          </Tooltip>
-          <Tooltip title="Wildlife Viewing" arrow>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 1,
-                color: "white",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                cursor: "pointer",
-                  "&:hover": {
-                  transform: "translateY(-8px) scale(1.1)",
-                  "& .icon": {
-                    color: "#6B7D47", // Olive green
-                    transform: "rotate(360deg)",
-                  },
-                },
-              }}
-            >
-              <Terrain
-                className="icon"
-                sx={{ fontSize: 28, transition: "all 0.4s ease" }}
-              />
-              <Typography sx={{ fontWeight: 500, fontSize: "0.8rem" }}>
-                Wildlife Viewing
-              </Typography>
-            </Box>
-          </Tooltip>
-          <Tooltip title="Adventure Tours" arrow>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 1,
-                color: "white",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                cursor: "pointer",
-                "&:hover": {
-                  transform: "translateY(-8px) scale(1.1)",
-                  "& .icon": {
-                    color: "#ff9800",
-                    transform: "rotate(360deg)",
-                  },
-                },
-              }}
-            >
-              <Explore
-                className="icon"
-                sx={{ fontSize: 28, transition: "all 0.4s ease" }}
-              />
-              <Typography sx={{ fontWeight: 500, fontSize: "0.8rem" }}>
-                Adventure Tours
-              </Typography>
-            </Box>
-          </Tooltip>
-        </Box>
-      </Slide>
 
       <style>
         {`

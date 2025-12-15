@@ -481,21 +481,20 @@ export default function PublicHeader() {
         onClose={() => setMobileMenuOpen(false)}
         sx={{
           "& .MuiDrawer-paper": {
-            width: { xs: "280px", sm: "320px" },
+            width: { xs: "260px", sm: "300px" },
             backgroundColor: "background.default", // Light beige
             backgroundImage:
               "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%)",
             backdropFilter: "blur(20px)",
             borderLeft: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
             boxShadow: "0 8px 32px rgba(61, 40, 23, 0.12)",
-            height: "auto",
+            height: "auto", // shrink to content by default
             maxHeight: {
-              xs: "calc(100vh - 80px)", // leave 16px breathing room at bottom
-              sm: "calc(100vh - 88px)",
-            },
+              xs: "calc(100vh - 72px)",
+              sm: "calc(100vh - 80px)",
+            }, // cap height on small screens
             top: { xs: "64px", sm: "72px" },
-            bottom: "16px", // keep drawer floating above bottom edge
-            overflowY: "auto",
+            overflowY: "auto", // always allow scroll if items overflow
           },
         }}
       >
@@ -538,8 +537,8 @@ export default function PublicHeader() {
               <Close fontSize="small" />
             </IconButton>
           </Box>
-          <Divider sx={{ mb: 2, borderColor: "rgba(107, 78, 61, 0.2)" }} />
-          <List sx={{ py: 0 }}>
+          <Divider sx={{ mb: 1.5, borderColor: "rgba(107, 78, 61, 0.2)" }} />
+          <List dense sx={{ py: 0, gap: 0.5, display: "flex", flexDirection: "column" }}>
             {navItems.map((item, index) => {
               const isActiveItem =
                 item.route
@@ -547,6 +546,7 @@ export default function PublicHeader() {
                   : activeSection === item.sectionId && location.pathname === "/";
               return (
                 <ListItem
+                  dense
                   key={item.label}
                   onClick={() => {
                     setMobileMenuOpen(false);
@@ -556,9 +556,8 @@ export default function PublicHeader() {
                   sx={{
                     cursor: "pointer",
                     borderRadius: "12px",
-                    mb: 1,
-                    py: 1.5,
-                    px: 2,
+                    py: 1,
+                    px: 1.5,
                     transition: "all 0.3s ease",
                     backgroundColor: isActiveItem
                       ? `${item.color}20`
@@ -589,7 +588,7 @@ export default function PublicHeader() {
                   <ListItemIcon
                     sx={{
                       color: isActiveItem ? item.color : item.color,
-                      minWidth: 36,
+                      minWidth: 32,
                       "& .icon": {
                         transition: "all 0.3s ease",
                       },
@@ -603,7 +602,7 @@ export default function PublicHeader() {
                   <ListItemText
                     primary={item.label}
                     primaryTypographyProps={{
-                      fontSize: { xs: "0.95rem", sm: "1.1rem" },
+                        fontSize: { xs: "0.9rem", sm: "1rem" },
                       fontWeight: isActiveItem ? 700 : 600,
                       color: isActiveItem ? item.color : "text.primary",
                     }}
