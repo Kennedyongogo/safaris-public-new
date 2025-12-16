@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import TourRouteMap from "../components/Home/TourRouteMap";
+import PackagesWithItinerary from "../components/Home/PackagesWithItinerary";
 
 export default function Tour() {
   return (
@@ -28,7 +28,7 @@ export default function Tour() {
         },
       }}
     >
-      <TourRouteMap />
+      <PackagesWithItinerary />
     </Box>
   );
 }

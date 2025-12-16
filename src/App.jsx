@@ -23,7 +23,6 @@ const DestinationDetails = lazy(() => import("./pages/DestinationDetails"));
 const Destinations = lazy(() => import("./pages/Destinations"));
 const CampLodges = lazy(() => import("./pages/CampLodges"));
 const CampLodgeDetail = lazy(() => import("./pages/CampLodgeDetail"));
-const Packages = lazy(() => import("./pages/Packages"));
 const Tour = lazy(() => import("./pages/Tour"));
 
 function ScrollToTop() {
@@ -145,15 +144,6 @@ function App() {
               element={
                 <>
                   <CampLodgeDetail />
-                  <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/packages"
-              element={
-                <>
-                  <Packages />
                   <Footer />
                 </>
               }

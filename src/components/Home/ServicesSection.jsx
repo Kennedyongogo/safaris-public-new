@@ -768,27 +768,6 @@ export default function ServicesSection() {
                     </Grid>
                   ))}
                 </Grid>
-
-                {/* View All Destinations Button */}
-                <Box sx={{ textAlign: "center", mt: 1 }}>
-                  <Button
-                    variant="contained"
-                    size="medium"
-                    onClick={() => navigate("/destinations")}
-                    sx={{
-                      backgroundColor: "#B85C38", // Burnt orange/rust
-                      color: "white",
-                      fontWeight: 600,
-                      px: 2,
-                      py: 0.5,
-                      "&:hover": {
-                        backgroundColor: "#8B4225", // Dark rust
-                      },
-                    }}
-                  >
-                    View All Destinations
-                  </Button>
-                </Box>
               </Box>
             )}
           </Box>

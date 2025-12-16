@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import {
   Construction,
-  ContactSupport,
   Home,
   Menu as MenuIcon,
   Close,
@@ -29,8 +28,6 @@ import {
   LocalHospital,
   Groups,
   RateReview,
-  Place,
-  Inventory,
   Explore,
   Cabin,
   Hotel,
@@ -54,23 +51,10 @@ export default function PublicHeader() {
         color: "#6B4E3D", // Medium brown
       },
       {
-        label: "Destinations",
-        icon: <Place />,
-        sectionId: "mission-section",
-        route: "/destinations",
-        color: "#6B7D47", // Olive green
-      },
-      {
         label: "About Us",
         icon: <Groups />,
         route: "/team",
         color: "#B85C38", // Burnt orange/rust
-      },
-      {
-        label: "Packages",
-        icon: <Inventory />,
-        route: "/packages",
-        color: "#6B4E3D", // Medium brown
       },
       {
         label: "Itineraries",
@@ -89,12 +73,6 @@ export default function PublicHeader() {
         icon: <LocalHospital />,
         route: "/plan",
         color: "#B85C38", // Burnt orange/rust
-      },
-      {
-        label: "Contact",
-        icon: <ContactSupport />,
-        sectionId: "contact-section",
-        color: "#2D4A2D", // Dark forest green
       },
       {
         label: "Reviews",

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import TravelPackages from "../components/Home/TravelPackages";
+import PackagesWithItinerary from "../components/Home/PackagesWithItinerary";
 
 export default function Packages() {
   return (
@@ -28,7 +28,7 @@ export default function Packages() {
         },
       }}
     >
-      <TravelPackages />
+      <PackagesWithItinerary />
     </Box>
   );
 }
