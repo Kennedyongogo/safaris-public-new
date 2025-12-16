@@ -16,65 +16,64 @@ import {
   MenuItem,
   Paper,
   CircularProgress,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { Send } from "@mui/icons-material";
 
-const africanDestinations = [
-  "South Africa",
-  "Krüger National Park & Sabi Sand Game Reserve",
-  "Cape Town",
-  "Garden Route",
-  "Indian Ocean Islands (Mauritius, Seychelles, ...)",
-  "Rwanda (Gorillas & Chimps)",
-  "Botswana (Okavango Delta)",
-  "Namibia",
-  "Kenya",
-  "Madagascar",
-  "Somewhere else",
+const eastAfricaDestinations = [
+  "Kenya (Maasai Mara, Amboseli, Nakuru, Laikipia)",
+  "Tanzania (Serengeti, Ngorongoro, Zanzibar)",
+  "Uganda (Gorilla Trekking, Chimpanzees)",
+  "Rwanda (Gorilla Trekking, Nyungwe Forest)",
+  "Mountain Trekking (Mount Kenya, Kilimanjaro)",
+  "I'm open to your suggestions for the best itinerary.",
 ];
 
 const travelReasons = [
-  "Big 5 Safari",
-  "Honeymoon",
+  "Great Migration & Big 5 Safari",
+  "Primate Trekking (Gorillas & Chimps)",
+  "Mountain Climbing & Trekking",
+  "Honeymoon & Romance",
   "Family Safari",
+  "Bush & Beach Combination",
+  "Adventure & Active Travel (Hiking, Cycling)",
+  "Photography & Wildlife Focus",
+  "Cultural & Community Experience",
   "Special Occasion",
-  "Bush & Beach",
-  "Trip with friends",
-  "Adventure",
-  "Wellness",
-  "Local Tribe Experience",
-  "Photographic Safari",
+  "Trip with Friends",
 ];
 
 const budgetOptions = [
   {
-    value: "rustic",
-    label: "Rustic Escape",
-    range: "0€ - 499€",
+    value: "classic",
+    label: "Classic Explorer: $300 - $599",
+    range: "",
     description:
-      "Great for budget-friendly adventures and authentic local experiences",
+      "Great for comfortable lodges and focused wildlife experiences.",
   },
   {
-    value: "comfort",
-    label: "Comfort Explorer",
-    range: "500€ - 999€",
-    description: "Perfect balance of comfort, style, and value",
+    value: "signature",
+    label: "Signature Safari: $600 - $999",
+    range: "",
+    description:
+      "Perfect for premium lodges, private guides, and exclusive activities.",
   },
   {
-    value: "luxury",
-    label: "Luxury Retreat",
-    range: "1.000€ +",
+    value: "ultimate",
+    label: "Ultimate Luxury: $1,000 +",
+    range: "",
     description:
-      "For premium experiences, top-tier stays, and personalized service",
+      "For exceptional boutique properties, helicopter safaris, and fully bespoke service.",
+  },
+  {
+    value: "trekking",
+    label: "Mountain Trekking Package",
+    range: "",
+    description:
+      "Please inquire for detailed all-inclusive climbing package quotes for Kilimanjaro or Mount Kenya.",
   },
 ];
 
 export default function Plan() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -187,7 +186,7 @@ export default function Plan() {
                 fontFamily: "serif",
               }}
             >
-              GET A TRIP QUOTE
+              AKIRA SAFARIS - TRIP QUOTE FORM
             </Typography>
             <Typography
               variant="h5"
@@ -199,7 +198,7 @@ export default function Plan() {
                 fontFamily: "serif",
               }}
             >
-              Your dream safari in Africa starts here!
+              AKIRA SAFARIS - YOUR EAST AFRICA ADVENTURE AWAITS
             </Typography>
             <Typography
               variant="body1"
@@ -211,15 +210,20 @@ export default function Plan() {
                 lineHeight: 1.7,
               }}
             >
-              We are thrilled to plan your next adventure! Whether you're
-              dreaming of an exhilarating safari experience amidst the majestic
-              wildlife, a serene beach getaway with powdery sands and
-              crystal-clear waters, or an immersive city escape filled with
-              culture and history, we've got you covered. Just let us know your
-              preferred destination and travel dates, along with any specific
-              activities or attractions you're interested in, and we'll tailor a
-              perfect itinerary to match your desires. Get ready to embark on an
-              unforgettable journey!
+              Craft your dream journey through the heart of Africa with us!
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                maxWidth: "900px",
+                mx: "auto",
+                color: "text.secondary",
+                fontSize: { xs: "1rem", md: "1.1rem" },
+                lineHeight: 1.7,
+                mt: 1,
+              }}
+            >
+              We are thrilled to plan your next adventure! Whether you're dreaming of summiting Mount Kilimanjaro, trekking the scenic peaks of Mount Kenya, witnessing the Great Migration across the Serengeti, coming face-to-face with majestic gorillas in the misty mountains, relaxing on the pristine beaches of Zanzibar, or exploring the vibrant cultures and stunning landscapes of East Africa, we've got you covered. Just let us know your preferred destination and travel dates, along with any specific experiences you're seeking, and we'll tailor a perfect itinerary to match your desires. Get ready to embark on an unforgettable journey with Akira Safaris!
             </Typography>
           </Box>
 
@@ -230,12 +234,18 @@ export default function Plan() {
               <Typography
                 variant="h6"
                 sx={{
-                  mb: 2,
+                  mb: 0.5,
                   fontWeight: 600,
                   color: "#3D2817", // Dark brown from palette
                 }}
               >
                 Personal Information
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ mb: 2, color: "text.secondary" }}
+              >
+                *Required fields marked with *
               </Typography>
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>
@@ -334,12 +344,22 @@ export default function Plan() {
               <Typography
                 variant="h6"
                 sx={{
+                  mb: 1,
+                  fontWeight: 700,
+                  color: "#3D2817",
+                }}
+              >
+                Trip Inspiration & Planning
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
                   mb: 2,
                   fontWeight: 600,
                   color: "#3D2817", // Dark brown from palette
                 }}
               >
-                Do you know where you want to go? *
+                Do you know where you want to go in East Africa? *
               </Typography>
               <RadioGroup
                 value={formData.knowDestination}
@@ -350,12 +370,12 @@ export default function Plan() {
                 <FormControlLabel
                   value="yes"
                   control={<Radio />}
-                  label="Yes, I do."
+                  label="Yes, I have a specific destination in mind."
                 />
                 <FormControlLabel
                   value="no"
                   control={<Radio />}
-                  label="No, please support me in planning my trip."
+                  label="No, I'd love your expert recommendations."
                 />
               </RadioGroup>
             </Box>
@@ -371,10 +391,10 @@ export default function Plan() {
                     color: "#3D2817", // Dark brown from palette
                   }}
                 >
-                  Where in Africa would you like to travel to?
+                  Which East African countries and experiences are you interested in? (Select all that apply)
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  {africanDestinations.map((destination) => (
+                  {eastAfricaDestinations.map((destination) => (
                     <FormControlLabel
                       key={destination}
                       control={
@@ -403,7 +423,7 @@ export default function Plan() {
                     color: "#3D2817", // Dark brown from palette
                   }}
                 >
-                  Why do you want to travel to Africa?
+                  What is the primary purpose of your trip? *
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                   {travelReasons.map((reason) => (
@@ -438,8 +458,7 @@ export default function Plan() {
                   color: "#3D2817", // Dark brown from palette
                 }}
               >
-                Interested to book Daniel as your Private Safari Guide for South
-                Africa?
+                Interested to book Daniel as your Private Safari Guide for South Africa?
               </Typography>
               <RadioGroup
                 value={formData.privateGuide}
@@ -501,6 +520,7 @@ export default function Plan() {
                     handleInputChange("arrivalDate", e.target.value)
                   }
                   InputLabelProps={{ shrink: true }}
+                  helperText="mm/dd/yyyy"
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       backgroundColor: "white",
@@ -519,6 +539,7 @@ export default function Plan() {
                     handleInputChange("departureDate", e.target.value)
                   }
                   InputLabelProps={{ shrink: true }}
+                  helperText="mm/dd/yyyy"
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       backgroundColor: "white",
@@ -530,8 +551,8 @@ export default function Plan() {
               <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
-                  label="When would you like to travel?"
-                  placeholder="Enter your preferred month"
+                  label="When would you like to travel? (If flexible)"
+                  placeholder="Enter your preferred month/season"
                   value={formData.preferredMonth}
                   onChange={(e) =>
                     handleInputChange("preferredMonth", e.target.value)
@@ -562,10 +583,28 @@ export default function Plan() {
                   }}
                 />
               </Grid>
+              <Grid size={{ xs: 12 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    mb: 1,
+                    fontWeight: 600,
+                    color: "#3D2817",
+                  }}
+                >
+                  Travel Party
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ mb: 1.5, color: "text.secondary" }}
+                >
+                  Who will be travelling with you (including you!)? *
+                </Typography>
+              </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
-                  label="Who will be travelling with you (including you!)? *"
+                  label="Number of travelers (Adults)"
                   type="number"
                   placeholder="Number of travelers"
                   required
@@ -584,7 +623,7 @@ export default function Plan() {
               <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
-                  label="Number of children"
+                  label="Number of children (Ages, if applicable)"
                   type="number"
                   placeholder="Number of children"
                   value={formData.numberOfChildren}
@@ -612,7 +651,7 @@ export default function Plan() {
                 }}
               >
                 Do you have a budget in mind (per person, per day), excluding
-                flight and transportation costs? *
+                international flights? *
               </Typography>
               <RadioGroup
                 value={formData.budget}
@@ -626,7 +665,7 @@ export default function Plan() {
                     label={
                       <Box>
                         <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                          {option.label}: {option.range}
+                          {option.label}
                         </Typography>
                         <Typography
                           variant="body2"
@@ -651,13 +690,13 @@ export default function Plan() {
                   color: "#3D2817", // Dark brown from palette
                 }}
               >
-                Is there anything else that we need to know?
+                Special Requirements
               </Typography>
               <TextField
                 fullWidth
                 multiline
                 rows={4}
-                placeholder="Enter your comments"
+                placeholder="Enter your comments (e.g., interests, trekking experience, mobility, dietary needs)"
                 value={formData.comments}
                 onChange={(e) => handleInputChange("comments", e.target.value)}
                 sx={{
@@ -680,7 +719,7 @@ export default function Plan() {
                     }
                   />
                 }
-                label="I want to subscribe to the newsletter."
+                label="I want to subscribe to the Akira Safaris newsletter for inspiration and special offers."
               />
               <Box sx={{ mt: 1 }}>
                 <FormControlLabel
@@ -695,7 +734,7 @@ export default function Plan() {
                   }
                   label={
                     <Typography variant="body2">
-                      I agree to the terms & conditions.{" "}
+                      I agree to the Akira Safaris terms & conditions.{" "}
                       <Typography
                         component="span"
                         sx={{
@@ -745,7 +784,7 @@ export default function Plan() {
                   transition: "all 0.3s ease",
                 }}
               >
-                {loading ? "Submitting..." : "Submit"}
+                {loading ? "Submitting..." : "Submit My Trip Request"}
               </Button>
             </Box>
           </Box>
@@ -781,7 +820,7 @@ export default function Plan() {
                       color: "#3D2817", // Dark brown from palette
                     }}
                   >
-                    Share Your Ideal Travel Experience
+                    Share Your Dream
                   </Typography>
                   <Typography
                     variant="body1"
@@ -791,10 +830,9 @@ export default function Plan() {
                       lineHeight: 1.7,
                     }}
                   >
-                    Tell us about your perfect getaway, detailing the
-                    destinations, activities, and experiences you've always
-                    dreamed of. This will help us craft a personalized adventure
-                    that turns your travel vision into reality.
+                    Tell us about your perfect East African getaway. Your dreams
+                    guide us in crafting a personalized adventure that turns
+                    your vision into reality.
                   </Typography>
                 </Box>
               </Grid>
@@ -827,7 +865,7 @@ export default function Plan() {
                       color: "#3D2817", // Dark brown from palette
                     }}
                   >
-                    Let David Craft Your Perfect Journey
+                    Let Our Experts Craft Your Journey
                   </Typography>
                   <Typography
                     variant="body1"
@@ -837,10 +875,9 @@ export default function Plan() {
                       lineHeight: 1.7,
                     }}
                   >
-                    David, our travel expert with hands-on experience, is here
-                    to help you create a personalized adventure just for you.
-                    Let his insights transform your dream trip into an
-                    unforgettable reality.
+                    Your dedicated Akira Safaris consultant, with deep regional
+                    expertise, will design a detailed itinerary tailored just
+                    for you.
                   </Typography>
                 </Box>
               </Grid>
@@ -873,7 +910,7 @@ export default function Plan() {
                       color: "#3D2817", // Dark brown from palette
                     }}
                   >
-                    Finalize Your Plans & Pack Your Bags
+                    Confirm & Embark
                   </Typography>
                   <Typography
                     variant="body1"
@@ -883,10 +920,101 @@ export default function Plan() {
                       lineHeight: 1.7,
                     }}
                   >
-                    Once you've reviewed and approved your customized itinerary,
-                    it's time to get excited—your adventure awaits! Confirm the
-                    details and start packing for an unforgettable journey.
+                    Review and approve your customized plan. Then, all that's
+                    left is to pack your bags and get ready for the adventure of
+                    a lifetime!
                   </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+
+          {/* Mountain Trekking Specific Information */}
+          <Box
+            sx={{
+              mt: { xs: 4, sm: 5, md: 6 },
+              p: { xs: 2, sm: 2.5, md: 3 },
+              borderRadius: 3,
+              border: "1px solid rgba(107, 78, 61, 0.2)",
+              background: "linear-gradient(135deg, rgba(245, 241, 232, 0.6) 0%, rgba(255, 255, 255, 1) 100%)",
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 700,
+                color: "#3D2817",
+                mb: 2,
+              }}
+            >
+              Mountain Trekking Specific Information
+            </Typography>
+
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: "#B85C38", mb: 1 }}>
+                  For Mount Kenya Treks:
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
+                  Technical routes available: Nelion, Batian peaks
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
+                  Trek duration: 3-7 days depending on route
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
+                  Fitness level required: Good to excellent
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
+                  Best seasons: January-February, July-September
+                </Typography>
+                <Typography variant="body1" sx={{ color: "text.primary" }}>
+                  Altitude: Up to 5,199m (Batian peak)
+                </Typography>
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 6 }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: "#B85C38", mb: 1 }}>
+                  For Mount Kilimanjaro Treks:
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
+                  Route options: Marangu, Machame, Lemosho, Rongai
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
+                  Trek duration: 5-9 days depending on route
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
+                  Fitness level required: Moderate to good
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
+                  Best seasons: January-March, June-October
+                </Typography>
+                <Typography variant="body1" sx={{ color: "text.primary" }}>
+                  Altitude: 5,895m (Uhuru peak)
+                </Typography>
+              </Grid>
+
+              <Grid size={{ xs: 12 }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: "#3D2817", mb: 1.5 }}>
+                  Trekking Package Inclusions:
+                </Typography>
+                <Box component="ul" sx={{ pl: 3, mb: 0 }}>
+                  {[
+                    "Professional mountain guides",
+                    "Porters and cooks",
+                    "Quality mountain equipment",
+                    "Park fees and permits",
+                    "Emergency evacuation insurance",
+                    "Pre-trek briefing and training advice",
+                  ].map((item) => (
+                    <Typography
+                      key={item}
+                      component="li"
+                      variant="body1"
+                      sx={{ mb: 0.75, color: "text.primary" }}
+                    >
+                      {item}
+                    </Typography>
+                  ))}
                 </Box>
               </Grid>
             </Grid>
