@@ -84,25 +84,28 @@ export default function TeamMemberDetail() {
       
       <Box 
         sx={{ 
+          pt: 0.75,
+          pb: 0.75,
+          px: 0,
           minHeight: "auto", 
           position: "relative",
           zIndex: 1,
           background: "transparent",
         }}
       >
-        <Container maxWidth="lg" sx={{ py: { xs: 1, sm: 1.5, md: 2 }, px: { xs: 0.25, sm: 0.375 }, position: "relative", zIndex: 1 }}>
+        <Container maxWidth="xl" sx={{ pt: { xs: 0.375, sm: 0.375, md: 0.375 }, px: { xs: 1.5, sm: 1.5, md: 1.5 }, position: "relative", zIndex: 1 }}>
           <MotionBox
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             {/* Back button outside card */}
-            <Box sx={{ mb: 1.5 }}>
-              <Button
+            <Button
                 variant="contained"
                 startIcon={<ArrowBack />}
                 onClick={handleBack}
                 sx={{ 
+                  mb: 0.5,
                   background: "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)",
                   color: "white",
                   fontWeight: 600,
@@ -124,15 +127,14 @@ export default function TeamMemberDetail() {
               >
                 Back to Team
               </Button>
-            </Box>
 
             <Paper
               elevation={3}
               sx={{
                 p: { xs: 1.5, sm: 2, md: 2.5 },
                 borderRadius: { xs: 3, md: 4 },
-                background: "#ffffff",
-                border: "1px solid #e0e0e0",
+                background: "#FFFFFF",
+                border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
               }}
             >
               {/* Header Section */}
@@ -267,8 +269,8 @@ export default function TeamMemberDetail() {
                 sx={{ 
                   p: { xs: 1.5, sm: 2 }, 
                   borderRadius: { xs: 3, md: 4 },
-                  background: "#ffffff",
-                  border: "1px solid #e0e0e0",
+                  background: "#FFFFFF",
+                  border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
                   textAlign: "center",
                 }}
               >

@@ -112,11 +112,11 @@ export default function Team() {
           }}
         >
           {/* Company Profile Section */}
-          <Box sx={{ mb: { xs: 4, sm: 5, md: 6 } }}>
+          <Box sx={{ mb: { xs: 2, sm: 2.5, md: 3 } }}>
             <Paper
               elevation={2}
               sx={{
-                p: { xs: 1.5, sm: 2, md: 2.5 },
+                p: { xs: 1, sm: 1.25, md: 1.5 },
                 borderRadius: { xs: 2, md: 3 },
                 background: "linear-gradient(135deg, rgba(245, 241, 232, 0.5) 0%, rgba(255, 255, 255, 1) 100%)",
                 border: "1px solid rgba(107, 78, 61, 0.2)",
@@ -160,7 +160,7 @@ export default function Team() {
                 variant="h4"
                 sx={{
                   fontWeight: 600,
-                  mb: 3,
+                  mb: 1.5,
                   color: "#6B4E3D",
                   fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
                   textAlign: "center",
@@ -173,7 +173,7 @@ export default function Team() {
                 variant="h5"
                 sx={{
                   fontWeight: 500,
-                  mb: 4,
+                  mb: 2,
                   color: "#B85C38",
                   fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   textAlign: "center",
@@ -186,208 +186,163 @@ export default function Team() {
               <Typography
                 variant="body1"
                 sx={{
-                  mb: 4,
+                  mb: 2.5,
                   color: "text.primary",
                   fontSize: { xs: "0.875rem", md: "1rem" },
-                  lineHeight: 1.8,
+                  lineHeight: 1.6,
                   textAlign: "center",
                   maxWidth: "900px",
                   mx: "auto",
                 }}
               >
-                At Akira Safaris we do not sell tours we craft personal, expert-led journeys into East Africa's most iconic wilderness. Born around campfires and living-room couches, our company grew from a simple passion: sharing the Africa we know and love with friends from every corner of the globe.
+                At Akira Safaris, we don't sell tours—we design deeply personal journeys into East Africa's wild heart. Built on genuine hospitality and local expertise, our safaris are shaped by human connection, storytelling, and a lifelong love for Africa.
               </Typography>
 
-              {/* Genesis Section */}
-              <Box sx={{ mb: 4 }}>
+              {/* Our Story Section */}
+              <Box sx={{ mb: 2.5 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 2,
+                    mb: 1,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
                 >
-                  🔥 OUR GENESIS – FROM COUCH-SURFERS TO SAFARI GUIDES
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    mb: 2,
-                    color: "text.primary",
-                    fontSize: { xs: "0.875rem", md: "1rem" },
-                    lineHeight: 1.8,
-                  }}
-                >
-                  It began with Couchsurfing & Host A Sister. We opened our doors, shared meals, stories and laughter. Guests soon asked: "Can you show us the Africa you know?"
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    mb: 2,
-                    color: "text.primary",
-                    fontSize: { xs: "0.875rem", md: "1rem" },
-                    lineHeight: 1.8,
-                  }}
-                >
-                  What started as weekend road-trips became our calling. We guided those first travellers into the Mara, Amboseli, the Rift Valley. Their wonder confirmed what we felt all along the best travel is built on authentic human connection.
+                  Our Story
                 </Typography>
                 <Typography
                   variant="body1"
                   sx={{
                     color: "text.primary",
                     fontSize: { xs: "0.875rem", md: "1rem" },
-                    lineHeight: 1.8,
-                    fontWeight: 500,
+                    lineHeight: 1.6,
                   }}
                 >
-                  Today Akira Safaris is that same hospitality, scaled. You arrive as a client; you leave as family carrying the spirit of Endless Discoveries home with you.
+                  Akira Safaris began around shared meals, campfires, and Couchsurfing guests who asked to experience "the Africa we know." What started as simple road trips grew into expertly guided journeys through the Mara, Amboseli, and the Rift Valley. Today, that same warmth remains—only now, it's refined, responsible, and intentionally small-scale. You arrive as a guest and leave as family.
                 </Typography>
               </Box>
 
               {/* What We Do Section */}
-              <Box sx={{ mb: 4 }}>
+              <Box sx={{ mb: 2.5 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 2,
+                    mb: 1,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
                 >
-                  🏕️ WHAT WE DO – BOUTIQUE, PRIVATE, CARBON-POSITIVE
+                  What We Do
                 </Typography>
                 <Box component="ul" sx={{ pl: 3, mb: 0 }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 1.5, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>100 % private vehicles & guides</strong> – no mixed groups, no fixed timetable
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Private, tailor-made safaris with dedicated vehicles and guides
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 1.5, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Tailor-made itineraries</strong> – luxury tented camps, family safaris, photographic expeditions, detox retreats
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Bespoke itineraries—luxury camps, family travel, photography, wellness retreats
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 1.5, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Carbon-positive promise</strong> – we offset 110 % of your trip's footprint and plant 10 indigenous trees in your name
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Carbon-positive travel—110% footprint offset and 10 indigenous trees planted per guest
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Deep cultural immersion</strong> – spend an evening in a Maasai manyatta, learn fire-making, hear origin myths under the stars
+                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Cultural immersion—Maasai traditions, fireside stories, and life beyond the game drive
                   </Typography>
                 </Box>
               </Box>
 
-              {/* Why Choose Akira Section */}
-              <Box sx={{ mb: 4 }}>
+              {/* Why Akira Safaris Section */}
+              <Box sx={{ mb: 2.5 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 2,
+                    mb: 1,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
                 >
-                  🌄 WHY CHOOSE AKIRA?
+                  Why Akira Safaris
                 </Typography>
-                <Grid container spacing={2}>
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                    <Typography variant="body1" sx={{ mb: 1, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                      <strong>🌍 Locally Rooted</strong> – Our team lives on the ground; safari is our lifestyle, not our side-hustle.
-                    </Typography>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                    <Typography variant="body1" sx={{ mb: 1, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                      <strong>🦁 Bespoke & Private</strong> – Every route is built around your pace, passions and budget.
-                    </Typography>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                    <Typography variant="body1" sx={{ mb: 1, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                      <strong>✨ Boutique Care</strong> – Dedicated travel concierge from first email to touchdown home.
-                    </Typography>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                    <Typography variant="body1" sx={{ mb: 1, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                      <strong>🤝 Travel with Purpose</strong> – Community levies, fair-guide wages, plastic-free camps.
-                    </Typography>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                    <Typography variant="body1" sx={{ mb: 1, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                      <strong>🌅 Endless Discoveries</strong> – We open the door to hidden moments: a leopard in a sausage-tree, sunrise balloon silence, river-crossing thunder.
-                    </Typography>
-                  </Grid>
-                </Grid>
+                <Box component="ul" sx={{ pl: 3, mb: 0 }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Locally rooted—we live here; this is our home
+                  </Typography>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Truly bespoke—your pace, interests, and budget lead the way
+                  </Typography>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Boutique care—a personal concierge from planning to return
+                  </Typography>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Purpose-driven travel—fair wages, community support, plastic-free camps
+                  </Typography>
+                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Endless discoveries—rare wildlife moments and hidden places most never see
+                  </Typography>
+                </Box>
               </Box>
 
               {/* Signature Experiences Section */}
-              <Box sx={{ mb: 4 }}>
+              <Box sx={{ mb: 2.5 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 2,
+                    mb: 1,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
                 >
-                  🌱 SIGNATURE EXPERIENCES
+                  Signature Experiences
                 </Typography>
                 <Box component="ul" sx={{ pl: 3, mb: 0 }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 1.5, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Migration Detox Retreat</strong> – 6 days phone-free during the Great Migration (co-branded with One Fire Collective)
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Migration Detox Retreat – Phone-free Great Migration journey
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 1.5, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Classic Kenya Highlights</strong> – Mara, Nakuru, Amboseli in 7 days; 10 % cheaper than big-group operators
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Classic Kenya Highlights – Mara, Nakuru & Amboseli in 7 days
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 1.5, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Gorilla & Chimp Flex-Trek</strong> – Uganda primate habituation, permit-guaranteed
+                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Gorilla & Chimp Flex-Trek – Permit-guaranteed primate encounters
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Photographic Safari</strong> – off-road permits, professional editing session, 50 edited images delivered before you fly home
+                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                    Photographic Safaris – Off-road access with professional image delivery
                   </Typography>
                 </Box>
               </Box>
 
               {/* Our Commitment Section */}
-              <Box sx={{ mb: 4 }}>
+              <Box sx={{ mb: 2.5 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 2,
+                    mb: 1,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
                 >
-                  📜 OUR COMMITMENT
+                  Our Commitment
                 </Typography>
                 <Typography
                   variant="body1"
                   sx={{
-                    mb: 2,
                     color: "text.primary",
                     fontSize: { xs: "0.875rem", md: "1rem" },
-                    lineHeight: 1.8,
+                    lineHeight: 1.6,
                   }}
                 >
-                  We reject cookie-cutter tourism. Each safari is:
+                  Every Akira Safari is locally designed, ethically operated, and personally delivered. Your guide is more than a driver—they're your storyteller, cultural bridge, and trusted companion through Africa's most unforgettable landscapes.
                 </Typography>
-                <Box component="ul" sx={{ pl: 3, mb: 0 }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 1.5, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Designed by locals</strong> who know the secret water-holes and the best sundowner hills
-                  </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 1.5, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Operated with fairness</strong>—guides, camps and communities earn real value
-                  </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.8 }}>
-                    <strong>Delivered with warmth</strong>—your driver is also your storyteller, medic, and new Kenyan friend
-                  </Typography>
-                </Box>
               </Box>
 
               {/* Ready to Start Section */}
               <Box
                 sx={{
-                  mt: 4,
-                  p: { xs: 1, sm: 1.5, md: 2 },
+                  mt: 2.5,
+                  p: { xs: 1, sm: 1.25, md: 1.5 },
                   background: "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.05) 100%)",
                   borderRadius: { xs: 2, md: 3 },
                   border: "1px solid rgba(184, 92, 56, 0.2)",
@@ -398,7 +353,7 @@ export default function Team() {
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 2,
+                    mb: 1.5,
                     color: "#3D2817",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
@@ -410,10 +365,10 @@ export default function Team() {
                   sx={{
                     color: "text.primary",
                     fontSize: { xs: "0.875rem", md: "1rem" },
-                    lineHeight: 1.8,
+                    lineHeight: 1.6,
                     maxWidth: "700px",
                     mx: "auto",
-                    mb: 3,
+                    mb: 2,
                   }}
                 >
                   Tell us your dreams, fears, bucket-list shots and dietary quirks. We'll turn them into a day-by-day adventure that fits you—and the planet—perfectly.

@@ -31,6 +31,7 @@ import {
   Explore,
   Cabin,
   Hotel,
+  Article,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -79,6 +80,12 @@ export default function PublicHeader() {
         icon: <RateReview />,
         route: "/reviews",
         color: "#2D4A2D", // Dark forest green
+      },
+      {
+        label: "Blog",
+        icon: <Article />,
+        route: "/blog",
+        color: "#6B4E3D", // Medium brown
       },
     ],
     []

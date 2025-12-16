@@ -985,6 +985,14 @@ const PackagesWithItinerary = () => {
                                 fontSize: "0.95rem",
                                 fontWeight: 700,
                                 py: 0.75,
+                                outline: "none",
+                                "&:focus": {
+                                  outline: "none",
+                                },
+                                "&:focus-visible": {
+                                  outline: "none",
+                                  boxShadow: "none",
+                                },
                                 "&:hover": {
                                   borderColor: "#4E342E",
                                   backgroundColor: "#5D4037",
@@ -1009,6 +1017,14 @@ const PackagesWithItinerary = () => {
                                 fontSize: "0.95rem",
                                 fontWeight: 700,
                                 py: 0.75,
+                                outline: "none",
+                                "&:focus": {
+                                  outline: "none",
+                                },
+                                "&:focus-visible": {
+                                  outline: "none",
+                                  boxShadow: "none",
+                                },
                                 "&:hover": {
                                   backgroundColor: "#4E342E",
                                 },
@@ -1033,6 +1049,14 @@ const PackagesWithItinerary = () => {
                 sx={{
                   mb: 2,
                   color: "#5D4037",
+                  outline: "none",
+                  "&:focus": {
+                    outline: "none",
+                  },
+                  "&:focus-visible": {
+                    outline: "none",
+                    boxShadow: "none",
+                  },
                   "&:hover": {
                     backgroundColor: "rgba(93, 64, 55, 0.1)",
                   },
@@ -1089,6 +1113,14 @@ const PackagesWithItinerary = () => {
                   sx={{
                     backgroundColor: "#5D4037",
                     color: "white",
+                    outline: "none",
+                    "&:focus": {
+                      outline: "none",
+                    },
+                    "&:focus-visible": {
+                      outline: "none",
+                      boxShadow: "none",
+                    },
                     "&:hover": {
                       backgroundColor: "#4E342E",
                     },
@@ -1174,6 +1206,15 @@ const PackagesWithItinerary = () => {
                     sx={{
                       borderColor: "#5D4037",
                       color: "#5D4037",
+                      whiteSpace: "nowrap",
+                      outline: "none",
+                      "&:focus": {
+                        outline: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
                       "&:hover": {
                         borderColor: "#4E342E",
                         backgroundColor: "rgba(93, 64, 55, 0.04)",
@@ -1183,7 +1224,7 @@ const PackagesWithItinerary = () => {
                     Previous Stage
                   </Button>
 
-                  <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
+                  <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600, whiteSpace: "nowrap" }}>
                     Stage {selectedStage + 1} of {selectedPackage?.route.length}
                   </Typography>
 
@@ -1195,6 +1236,15 @@ const PackagesWithItinerary = () => {
                     sx={{
                       backgroundColor: "#5D4037",
                       color: "white",
+                      whiteSpace: "nowrap",
+                      outline: "none",
+                      "&:focus": {
+                        outline: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
                       "&:hover": {
                         backgroundColor: "#4E342E",
                       },

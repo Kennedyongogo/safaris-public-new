@@ -24,6 +24,8 @@ const Destinations = lazy(() => import("./pages/Destinations"));
 const CampLodges = lazy(() => import("./pages/CampLodges"));
 const CampLodgeDetail = lazy(() => import("./pages/CampLodgeDetail"));
 const Tour = lazy(() => import("./pages/Tour"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -153,6 +155,24 @@ function App() {
               element={
                 <>
                   <Tour />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/blog"
+              element={
+                <>
+                  <Blog />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/blog/:slug"
+              element={
+                <>
+                  <BlogDetail />
                   <Footer />
                 </>
               }
