@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -23,89 +23,15 @@ import {
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { LocationOn, CalendarToday, Send } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
 const MotionBox = motion(Box);
-
-// Hardcoded reviews data
-const reviews = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    rating: 5,
-    comment: "An absolutely incredible safari experience! The guides were knowledgeable and the wildlife sightings were breathtaking. Every moment was perfectly organized.",
-    date: "March 15, 2024",
-    destination: "Maasai Mara National Reserve",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    rating: 5,
-    comment: "The best vacation of my life! Every moment was perfectly organized and the landscapes were stunning. Highly recommend to everyone!",
-    date: "February 28, 2024",
-    destination: "Amboseli National Park",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-  },
-  {
-    id: 3,
-    name: "Emma Williams",
-    rating: 4.5,
-    comment: "Amazing wildlife encounters and excellent service. Highly recommend for anyone wanting to experience Africa's natural beauty.",
-    date: "January 20, 2024",
-    destination: "Samburu National Reserve",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-  },
-  {
-    id: 4,
-    name: "David Thompson",
-    rating: 5,
-    comment: "Unforgettable moments watching the Big Five in their natural habitat. The photography opportunities were incredible!",
-    date: "December 10, 2023",
-    destination: "Tsavo National Park",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-  },
-  {
-    id: 5,
-    name: "Lisa Anderson",
-    rating: 4.5,
-    comment: "A truly magical experience! The sunrise game drives and sunset views were absolutely spectacular.",
-    date: "November 22, 2023",
-    destination: "Lake Nakuru National Park",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop",
-  },
-  {
-    id: 6,
-    name: "James Wilson",
-    rating: 5,
-    comment: "Outstanding service from start to finish. The team made sure we saw everything we wanted and more!",
-    date: "October 15, 2023",
-    destination: "Maasai Mara National Reserve",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-  },
-  {
-    id: 7,
-    name: "Maria Garcia",
-    rating: 4.5,
-    comment: "Beautiful landscapes and amazing wildlife. The guides were professional and very knowledgeable about the area.",
-    date: "September 8, 2023",
-    destination: "Amboseli National Park",
-    avatar: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&h=100&fit=crop",
-  },
-  {
-    id: 8,
-    name: "Robert Brown",
-    rating: 5,
-    comment: "Exceeded all expectations! The attention to detail and personalized service made this trip unforgettable.",
-    date: "August 20, 2023",
-    destination: "Samburu National Reserve",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
-  },
-];
 
 export default function Reviews() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   
+  const [reviews, setReviews] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -116,6 +42,20 @@ export default function Reviews() {
     recommend: false,
   });
   const [loading, setLoading] = useState(false);
+  const [listLoading, setListLoading] = useState(false);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    try {
+      return new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (err) {
+      return dateString;
+    }
+  };
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -124,15 +64,56 @@ export default function Reviews() {
     }));
   };
 
+  const fetchReviews = async () => {
+    try {
+      setListLoading(true);
+      const res = await fetch("/api/reviews/approved?limit=100");
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Failed to load reviews");
+      }
+
+      setReviews(data.data || []);
+    } catch (err) {
+      console.error("Error loading reviews:", err);
+      setReviews([]);
+    } finally {
+      setListLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Review submitted:", formData);
-      setLoading(false);
-      // Reset form
+
+    try {
+      const response = await fetch("/api/reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to submit review");
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Thank you!",
+        text: "Your review was submitted and is awaiting approval.",
+        confirmButtonColor: "#B85C38",
+      });
+
       setFormData({
         name: "",
         email: "",
@@ -142,8 +123,19 @@ export default function Reviews() {
         rating: 0,
         recommend: false,
       });
-      // You can add a success message here
-    }, 1000);
+      // Refresh list (will show once approved)
+      fetchReviews();
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Submission failed",
+        text: err.message || "Please try again.",
+        confirmButtonColor: "#B85C38",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -251,7 +243,41 @@ export default function Reviews() {
               spacing={{ xs: 2, sm: 2.5, md: 3 }}
               justifyContent="center"
             >
-              {reviews.map((review, index) => (
+              {listLoading && (
+                <Grid size={{ xs: 12 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      py: 6,
+                    }}
+                  >
+                    <CircularProgress sx={{ color: "#B85C38" }} />
+                  </Box>
+                </Grid>
+              )}
+              {!listLoading && reviews.length === 0 && (
+                <Grid size={{ xs: 12 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      py: 4,
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{ color: "text.secondary", fontWeight: 600 }}
+                    >
+                      No reviews available yet.
+                    </Typography>
+                  </Box>
+                </Grid>
+              )}
+              {!listLoading &&
+                reviews.map((review, index) => (
                 <Grid
                   size={{
                     xs: 12,
@@ -369,7 +395,7 @@ export default function Reviews() {
                                 fontWeight: 600,
                               }}
                             >
-                              {review.destination}
+                          {review.location || "—"}
                             </Typography>
                           </Box>
                           <Box
@@ -393,7 +419,7 @@ export default function Reviews() {
                                 fontWeight: 600,
                               }}
                             >
-                              {review.date}
+                              {formatDate(review.createdAt)}
                             </Typography>
                           </Box>
                         </Box>
@@ -405,7 +431,7 @@ export default function Reviews() {
             </Grid>
 
             {/* Review Submission Form */}
-            <Box sx={{ mt: { xs: 4, sm: 5, md: 6 } }}>
+            <Box sx={{ mt: { xs: 2, sm: 2.5, md: 3 } }}>
               <Paper
                 elevation={3}
                 sx={{

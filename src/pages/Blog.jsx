@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -30,7 +30,6 @@ import {
   AccessTime,
   Tag,
 } from "@mui/icons-material";
-import { blogPosts, blogCategories } from "../data/blogPosts";
 
 const MotionBox = motion(Box);
 
@@ -43,11 +42,46 @@ export default function Blog() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [page, setPage] = useState(1);
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const postsPerPage = 6;
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch("/api/blogs/public");
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Failed to load blogs");
+        }
+        const normalized = (data.data || []).map((post) => ({
+          ...post,
+          tags: Array.isArray(post.tags)
+            ? post.tags
+            : typeof post.tags === "string"
+            ? post.tags.split(",").map((t) => t.trim()).filter(Boolean)
+            : [],
+          author: post.authorName || post.author || "Unknown",
+          featuredImage: post.featuredImage || "/placeholder.jpg",
+          readTime: post.readTime ? `${post.readTime} min` : "—",
+        }));
+        setBlogs(normalized);
+      } catch (err) {
+        setError(err.message || "Error loading blogs");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   // Filter and search posts
   const filteredPosts = useMemo(() => {
-    let filtered = blogPosts;
+    let filtered = blogs;
 
     // Filter by category
     if (selectedCategory !== "All") {
@@ -66,7 +100,7 @@ export default function Blog() {
     }
 
     return filtered;
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, blogs]);
 
   // Pagination
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
@@ -84,7 +118,15 @@ export default function Blog() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const featuredPosts = blogPosts.filter((post) => post.featured).slice(0, 2);
+  const featuredPosts = blogs.filter((post) => post.featured).slice(0, 2);
+
+  const categories = useMemo(() => {
+    const set = new Set(["All"]);
+    blogs.forEach((b) => {
+      if (b.category) set.add(b.category);
+    });
+    return Array.from(set);
+  }, [blogs]);
 
   return (
     <Box
@@ -252,7 +294,7 @@ export default function Blog() {
                   }}
                   label="Category"
                 >
-                  {blogCategories.map((category) => (
+                  {categories.map((category) => (
                     <MenuItem key={category} value={category}>
                       {category}
                     </MenuItem>
@@ -270,7 +312,13 @@ export default function Blog() {
                 fontWeight: 600,
               }}
             >
-              {filteredPosts.length} article{filteredPosts.length !== 1 ? "s" : ""} found
+              {loading
+                ? "Loading articles..."
+                : filteredPosts.length === 0 && !error
+                ? "No articles found"
+                : `${filteredPosts.length} article${
+                    filteredPosts.length !== 1 ? "s" : ""
+                  } found`}
             </Typography>
 
               {/* Featured Posts Section */}
@@ -425,7 +473,19 @@ export default function Blog() {
             )}
 
               {/* All Posts Grid */}
-            {filteredPosts.length === 0 ? (
+            {error ? (
+              <Box sx={{ p: 4, textAlign: "center" }}>
+                <Typography variant="h6" sx={{ color: "text.secondary", mb: 1 }}>
+                  {error}
+                </Typography>
+              </Box>
+            ) : loading ? (
+              <Box sx={{ p: 4, textAlign: "center" }}>
+                <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                  Loading...
+                </Typography>
+              </Box>
+            ) : filteredPosts.length === 0 ? (
               <Box
                 sx={{
                   p: 4,

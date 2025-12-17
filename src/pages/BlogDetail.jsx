@@ -31,11 +31,6 @@ import {
   ArrowForward,
   Person,
 } from "@mui/icons-material";
-import {
-  getPostBySlug,
-  getRelatedPosts,
-  blogPosts,
-} from "../data/blogPosts";
 
 const MotionBox = motion(Box);
 
@@ -47,22 +42,78 @@ export default function BlogDetail() {
 
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState([]);
 
+  const buildImageUrl = (path) => {
+    if (!path) return "/placeholder.jpg";
+    if (path.startsWith("http")) return path;
+    if (path.startsWith("/")) return path;
+    return `/${path}`;
+  };
+
   useEffect(() => {
-    const foundPost = getPostBySlug(slug);
-    if (foundPost) {
-      setPost(foundPost);
-      const related = getRelatedPosts(
-        foundPost.id,
-        foundPost.category,
-        3
-      );
-      setRelatedPosts(related);
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
+    const fetchPost = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        setPost(null);
+        setRelatedPosts([]);
+
+        const res = await fetch(`/api/blogs/public/${slug}`);
+        const data = await res.json();
+        if (!res.ok || !data.success || !data.data) {
+          throw new Error(data.message || "Blog post not found");
+        }
+
+        const normalized = {
+          ...data.data,
+          tags: Array.isArray(data.data.tags)
+            ? data.data.tags
+            : typeof data.data.tags === "string"
+            ? data.data.tags.split(",").map((t) => t.trim()).filter(Boolean)
+            : [],
+          author: data.data.authorName || data.data.author || "Unknown",
+          authorImage: buildImageUrl(data.data.authorImage),
+          featuredImage: buildImageUrl(data.data.featuredImage),
+          readTime: data.data.readTime ? `${data.data.readTime} min` : "—",
+        };
+
+        setPost(normalized);
+
+        // fetch related (same category, exclude current)
+        const relRes = await fetch("/api/blogs/public");
+        const relData = await relRes.json();
+        if (relRes.ok && relData.success && Array.isArray(relData.data)) {
+          const relNormalized = relData.data
+            .filter(
+              (p) =>
+                p.slug !== normalized.slug &&
+                p.category === normalized.category
+            )
+            .slice(0, 3)
+            .map((p) => ({
+              ...p,
+              tags: Array.isArray(p.tags)
+                ? p.tags
+                : typeof p.tags === "string"
+                ? p.tags.split(",").map((t) => t.trim()).filter(Boolean)
+                : [],
+              author: p.authorName || p.author || "Unknown",
+              authorImage: buildImageUrl(p.authorImage),
+              featuredImage: buildImageUrl(p.featuredImage),
+              readTime: p.readTime ? `${p.readTime} min` : "—",
+            }));
+          setRelatedPosts(relNormalized);
+        }
+      } catch (err) {
+        setError(err.message || "Failed to load blog post");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPost();
   }, [slug]);
 
   const handleShare = (platform) => {
@@ -188,11 +239,11 @@ export default function BlogDetail() {
     );
   }
 
-  if (!post) {
+  if (error || !post) {
     return (
       <Container maxWidth="md" sx={{ py: 8 }}>
         <Alert severity="error" sx={{ mb: 3 }}>
-          Blog post not found
+          {error || "Blog post not found"}
         </Alert>
         <Button
           startIcon={<ArrowBack />}
