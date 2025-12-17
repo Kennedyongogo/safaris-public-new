@@ -71,7 +71,7 @@ export default function Footer() {
                           display: "flex",
                           alignItems: "center",
                           gap: { xs: 1, sm: 2 },
-                          mb: { xs: 1, sm: 1.5 },
+                          mb: { xs: 0.5, sm: 0.75 },
                         }}
                       >
                         <Box
@@ -96,10 +96,11 @@ export default function Footer() {
                           }}
                         >
                           <img
-                            src="/IMG-20251210-WA0070.jpg"
+                            src="/images/WhatsApp_Image_2025-12-14_at_10.56.47_AM-removebg-preview%20(1).png"
                             alt="Akira Safaris Logo"
                             style={{
-                              height: "32px",
+                              height: "44px",
+                              maxHeight: "48px",
                               width: "auto",
                               filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
                             }}

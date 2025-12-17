@@ -241,10 +241,11 @@ export default function PublicHeader() {
                 onClick={() => navigate("/")}
               >
                 <img
-                  src="/IMG-20251210-WA0070.jpg"
+                  src="/images/WhatsApp_Image_2025-12-14_at_10.56.47_AM-removebg-preview%20(1).png"
                   alt="Akira Safaris Logo"
                   style={{
-                    height: scrolled ? "56px" : "64px",
+                    height: scrolled ? "64px" : "72px",
+                    maxHeight: "72px",
                     width: "auto",
                     transition: "height 0.4s ease",
                     filter: scrolled
@@ -252,11 +253,16 @@ export default function PublicHeader() {
                       : "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
                   }}
                 />
-                <Box sx={{ ml: 2, display: { xs: "none", sm: "block" } }}>
+                <Box
+                  sx={{
+                    ml: { xs: 1.2, sm: 2 },
+                    display: { xs: "block", sm: "block" },
+                  }}
+                >
                   <Typography
                     sx={{
                       fontWeight: "700",
-                      fontSize: { sm: "1.1rem", md: "1.25rem" },
+                      fontSize: { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
                       color: scrolled ? "primary.main" : "white",
                       lineHeight: 1.2,
                       transition: "all 0.3s ease",

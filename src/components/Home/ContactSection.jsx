@@ -105,13 +105,13 @@ export default function ContactSection() {
                   {
                     icon: <Email sx={{ fontSize: 22 }} />,
                     label: "Email",
-                    value: "david@akirasafaris.co.ke",
+                    value: "info@akirasafaris.co.ke",
                     color: "#B85C38",
                   },
                   {
                     icon: <LocationOn sx={{ fontSize: 22 }} />,
                     label: "Visit",
-                    value: "Meghon Plaza, Bungoma Town, along Moi Avenue",
+                    value: "Nairobi, Kenya",
                     color: "#6B7D47",
                   },
                 ].map((item) => (
@@ -158,6 +158,7 @@ export default function ContactSection() {
                           fontWeight: 800,
                           color: "text.primary",
                           letterSpacing: 0.15,
+                          textAlign: "center",
                         }}
                       >
                         {item.label}
@@ -168,6 +169,7 @@ export default function ContactSection() {
                           color: "text.primary",
                           lineHeight: 1.6,
                           fontWeight: 600,
+                          textAlign: "center",
                         }}
                       >
                         {item.value}
