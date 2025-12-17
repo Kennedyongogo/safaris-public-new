@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -44,6 +44,9 @@ export default function BlogDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState([]);
+  const [likeLoading, setLikeLoading] = useState(false);
+  const hasIncrementedView = useRef(false);
+  const prevSlugRef = useRef(null);
 
   const buildImageUrl = (path) => {
     if (!path) return "/placeholder.jpg";
@@ -53,6 +56,14 @@ export default function BlogDetail() {
   };
 
   useEffect(() => {
+    // reset guard on slug change
+    if (prevSlugRef.current !== slug) {
+      hasIncrementedView.current = false;
+      prevSlugRef.current = slug;
+    }
+    if (hasIncrementedView.current) return;
+    hasIncrementedView.current = true;
+
     const fetchPost = async () => {
       try {
         setLoading(true);
@@ -77,6 +88,8 @@ export default function BlogDetail() {
           authorImage: buildImageUrl(data.data.authorImage),
           featuredImage: buildImageUrl(data.data.featuredImage),
           readTime: data.data.readTime ? `${data.data.readTime} min` : "—",
+          likes: data.data.likes ?? 0,
+          views: data.data.views ?? 0,
         };
 
         setPost(normalized);
@@ -106,6 +119,20 @@ export default function BlogDetail() {
             }));
           setRelatedPosts(relNormalized);
         }
+
+        // increment view count (best-effort)
+        try {
+          const viewRes = await fetch(`/api/blogs/public/${slug}/view`, { method: "POST" });
+          const viewData = await viewRes.json();
+          if (viewRes.ok && viewData.success && viewData.data?.views !== undefined) {
+            setPost((prev) => (prev ? { ...prev, views: viewData.data.views } : prev));
+          } else {
+            // fallback increment locally
+            setPost((prev) => (prev ? { ...prev, views: (prev.views ?? 0) + 1 } : prev));
+          }
+        } catch (_) {
+          setPost((prev) => (prev ? { ...prev, views: (prev.views ?? 0) + 1 } : prev));
+        }
       } catch (err) {
         setError(err.message || "Failed to load blog post");
       } finally {
@@ -125,6 +152,24 @@ export default function BlogDetail() {
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
     };
     window.open(shareUrls[platform], "_blank", "width=600,height=400");
+  };
+
+  const handleLike = async () => {
+    if (!post) return;
+    try {
+      setLikeLoading(true);
+      const res = await fetch(`/api/blogs/public/${post.slug}/like`, { method: "POST" });
+      const data = await res.json();
+      if (res.ok && data.success && data.data?.likes !== undefined) {
+        setPost((prev) => (prev ? { ...prev, likes: data.data.likes } : prev));
+      } else {
+        setPost((prev) => (prev ? { ...prev, likes: (prev.likes ?? 0) + 1 } : prev));
+      }
+    } catch (_) {
+      setPost((prev) => (prev ? { ...prev, likes: (prev.likes ?? 0) + 1 } : prev));
+    } finally {
+      setLikeLoading(false);
+    }
   };
 
   const formatMarkdown = (content) => {
@@ -302,24 +347,25 @@ export default function BlogDetail() {
           transition={{ duration: 0.5 }}
         >
           {/* Back Button */}
-          <Button
-            startIcon={<ArrowBack />}
-            onClick={() => navigate("/blog")}
-            sx={{
-              mb: 0.75,
-              backgroundColor: "#B85C38",
-              color: "white",
-              fontWeight: 600,
-              outline: "none",
-              "&:focus": { outline: "none", boxShadow: "none" },
-              "&:focus-visible": { outline: "none", boxShadow: "none" },
-              "&:hover": {
-                backgroundColor: "#8B4225",
-              },
-            }}
-          >
-            Back to Blog
-          </Button>
+          <Box sx={{ mb: 0.75, mt: 0.75 }}>
+            <Button
+              startIcon={<ArrowBack />}
+              onClick={() => navigate("/blog")}
+              sx={{
+                backgroundColor: "#B85C38",
+                color: "white",
+                fontWeight: 600,
+                outline: "none",
+                "&:focus": { outline: "none", boxShadow: "none" },
+                "&:focus-visible": { outline: "none", boxShadow: "none" },
+                "&:hover": {
+                  backgroundColor: "#8B4225",
+                },
+              }}
+            >
+              Back to Blog
+            </Button>
+          </Box>
 
           <Paper
             elevation={3}
@@ -456,7 +502,7 @@ export default function BlogDetail() {
                   </Box>
 
                   {/* Share Buttons */}
-                  <Box sx={{ ml: "auto", display: "flex", gap: 1 }}>
+                  <Box sx={{ ml: "auto", display: "flex", gap: 1, flexWrap: "wrap" }}>
                     <Typography
                       variant="body2"
                       sx={{
@@ -473,6 +519,9 @@ export default function BlogDetail() {
                       onClick={() => handleShare("facebook")}
                       sx={{
                         color: "#1877F2",
+                        outline: "none",
+                        "&:focus": { outline: "none" },
+                        "&:focus-visible": { outline: "none" },
                         "&:hover": { backgroundColor: "rgba(24, 119, 242, 0.1)" },
                       }}
                     >
@@ -482,6 +531,9 @@ export default function BlogDetail() {
                       onClick={() => handleShare("twitter")}
                       sx={{
                         color: "#1DA1F2",
+                        outline: "none",
+                        "&:focus": { outline: "none" },
+                        "&:focus-visible": { outline: "none" },
                         "&:hover": { backgroundColor: "rgba(29, 161, 242, 0.1)" },
                       }}
                     >
@@ -491,11 +543,31 @@ export default function BlogDetail() {
                       onClick={() => handleShare("linkedin")}
                       sx={{
                         color: "#0077B5",
+                        outline: "none",
+                        "&:focus": { outline: "none" },
+                        "&:focus-visible": { outline: "none" },
                         "&:hover": { backgroundColor: "rgba(0, 119, 181, 0.1)" },
                       }}
                     >
                       <LinkedIn />
                     </IconButton>
+                    <Button
+                      variant="outlined"
+                      size={isMobile ? "small" : "medium"}
+                      onClick={handleLike}
+                      disabled={likeLoading}
+                      sx={{
+                        borderColor: "#6B4E3D",
+                        color: "#6B4E3D",
+                        fontWeight: 700,
+                        ml: { xs: 0, sm: 1 },
+                        "&:hover": { borderColor: "#B85C38", backgroundColor: "rgba(107, 78, 61, 0.08)" },
+                        "&:focus": { outline: "none" },
+                        "&:focus-visible": { outline: "none" },
+                      }}
+                    >
+                      {likeLoading ? "Liking..." : `👍 ${post.likes ?? 0}`}
+                    </Button>
                   </Box>
                 </Box>
               </Box>

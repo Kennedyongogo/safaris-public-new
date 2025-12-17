@@ -121,12 +121,9 @@ export default function Blog() {
   const featuredPosts = blogs.filter((post) => post.featured).slice(0, 2);
 
   const categories = useMemo(() => {
-    const set = new Set(["All"]);
-    blogs.forEach((b) => {
-      if (b.category) set.add(b.category);
-    });
-    return Array.from(set);
-  }, [blogs]);
+    // fixed list aligned with backend enum, always available in filter
+    return ["All", "Wildlife", "Travel Tips", "Conservation", "Photography", "Guides", "Other"];
+  }, []);
 
   return (
     <Box
