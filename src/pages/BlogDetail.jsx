@@ -33,6 +33,7 @@ import {
 } from "@mui/icons-material";
 
 const MotionBox = motion(Box);
+const MotionButton = motion(Button);
 
 export default function BlogDetail() {
   const { slug } = useParams();
@@ -156,6 +157,10 @@ export default function BlogDetail() {
 
   const handleLike = async () => {
     if (!post) return;
+    // optimistic like for snappy UX
+    setPost((prev) =>
+      prev ? { ...prev, likes: (prev.likes ?? 0) + 1 } : prev
+    );
     try {
       setLikeLoading(true);
       const res = await fetch(`/api/blogs/public/${post.slug}/like`, { method: "POST" });
@@ -551,11 +556,17 @@ export default function BlogDetail() {
                     >
                       <LinkedIn />
                     </IconButton>
-                    <Button
+                    <MotionButton
                       variant="outlined"
                       size={isMobile ? "small" : "medium"}
                       onClick={handleLike}
                       disabled={likeLoading}
+                    disableRipple
+                    disableFocusRipple
+                      key={post?.likes}
+                      whileTap={{ scale: 0.94 }}
+                      animate={{ scale: [1, 1.12, 1] }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
                       sx={{
                         borderColor: "#6B4E3D",
                         color: "#6B4E3D",
@@ -566,8 +577,8 @@ export default function BlogDetail() {
                         "&:focus-visible": { outline: "none" },
                       }}
                     >
-                      {likeLoading ? "Liking..." : `👍 ${post.likes ?? 0}`}
-                    </Button>
+                      {`👍 ${post.likes ?? 0}`}
+                    </MotionButton>
                   </Box>
                 </Box>
               </Box>
