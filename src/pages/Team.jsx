@@ -9,15 +9,11 @@ import {
   CardContent,
   Paper,
   Button,
-  IconButton,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
 import ArrowForward from "@mui/icons-material/ArrowForward";
-import { teamMembers } from "../data/teamMembers";
 
 export default function Team() {
   const navigate = useNavigate();
@@ -31,6 +27,44 @@ export default function Team() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(1); // Start at 1 since we begin with "A"
   const [highlightId, setHighlightId] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [membersError, setMembersError] = useState(null);
+  const [membersLoading, setMembersLoading] = useState(false);
+
+  const buildImageUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith("http")) return path;
+    if (path.startsWith("/")) return path;
+    return `/${path}`;
+  };
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        setMembersLoading(true);
+        setMembersError(null);
+        const res = await fetch("/api/admin-users/public?limit=100");
+        const data = await res.json();
+        if (!res.ok || !data.success || !Array.isArray(data.data)) {
+          throw new Error(data.message || "Failed to load team");
+        }
+        const normalized = data.data.map((m) => ({
+          id: m.id,
+          name: m.full_name,
+          role: m.position || m.role || "Team Member",
+          description: m.description,
+          image: buildImageUrl(m.profile_image),
+        }));
+        setMembers(normalized);
+      } catch (err) {
+        setMembersError(err.message || "Failed to load team");
+      } finally {
+        setMembersLoading(false);
+      }
+    };
+
+    fetchMembers();
+  }, []);
 
   // When coming back from detail, scroll to the originating card
   useEffect(() => {
@@ -439,8 +473,32 @@ export default function Team() {
           </Box>
 
           {/* Team Members Grid - 3 cards per row */}
+          {membersError && (
+            <Typography
+              variant="body1"
+              sx={{ color: "error.main", textAlign: "center", mb: 2 }}
+            >
+              {membersError}
+            </Typography>
+          )}
+          {!membersError && membersLoading && (
+            <Typography
+              variant="body1"
+              sx={{ color: "text.secondary", textAlign: "center", mb: 2 }}
+            >
+              Loading team...
+            </Typography>
+          )}
+          {!membersError && !membersLoading && members.length === 0 && (
+            <Typography
+              variant="body1"
+              sx={{ color: "text.secondary", textAlign: "center", mb: 2 }}
+            >
+              Team coming soon.
+            </Typography>
+          )}
           <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
-            {teamMembers.map((member) => (
+            {members.map((member) => (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} key={member.id}>
                 <Card
                   data-member-id={member.id}
@@ -470,7 +528,7 @@ export default function Team() {
                   <Box
                     sx={{
                       width: "100%",
-                      height: { xs: "300px", sm: "350px", md: "400px" },
+                      height: { xs: "240px", sm: "280px", md: "320px" },
                       overflow: "hidden",
                       backgroundColor: "#f5f5f5",
                       display: "flex",
@@ -585,50 +643,10 @@ export default function Team() {
                       sx={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "space-between",
+                        justifyContent: "flex-end",
                         mt: "auto",
                       }}
                     >
-                      {/* Social Media Icons */}
-                      <Box sx={{ display: "flex", gap: 1 }}>
-                        <IconButton
-                          size="small"
-                          sx={{
-                            backgroundColor: "#1877f2",
-                            color: "#fff",
-                            width: 32,
-                            height: 32,
-                            "&:hover": { backgroundColor: "#166fe5" },
-                            "&:focus": { outline: "none" },
-                            "&:focus-visible": { outline: "none", boxShadow: "none" },
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Add Facebook link here
-                          }}
-                        >
-                          <FacebookIcon sx={{ fontSize: "1rem" }} />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          sx={{
-                            backgroundColor: "#E4405F",
-                            color: "#fff",
-                            width: 32,
-                            height: 32,
-                            "&:hover": { backgroundColor: "#d73755" },
-                            "&:focus": { outline: "none" },
-                            "&:focus-visible": { outline: "none", boxShadow: "none" },
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Add Instagram link here
-                          }}
-                        >
-                          <InstagramIcon sx={{ fontSize: "1rem" }} />
-                        </IconButton>
-                      </Box>
-
                       {/* More About Button */}
                       <Button
                         variant="contained"

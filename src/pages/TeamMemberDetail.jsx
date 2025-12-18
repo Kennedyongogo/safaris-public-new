@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -18,21 +18,62 @@ import {
   Twitter,
   Google,
 } from "@mui/icons-material";
-import { teamMembers } from "../data/teamMembers";
 
 const MotionBox = motion(Box);
 
 export default function TeamMemberDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const teamMember = teamMembers.find((member) => String(member.id) === String(id));
+  const [member, setMember] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const buildImageUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith("http")) return path;
+    if (path.startsWith("/")) return path;
+    return `/${path}`;
+  };
+
+  useEffect(() => {
+    const fetchMember = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch(`/api/admin-users/public/${id}`);
+        const data = await res.json();
+        if (!res.ok || !data.success || !data.data) {
+          throw new Error(data.message || "Team member not found");
+        }
+        const m = data.data;
+        setMember({
+          id: m.id,
+          name: m.full_name,
+          full_name: m.full_name,
+          position: m.position || m.role || "Team Member",
+          description: m.description,
+          image: buildImageUrl(m.profile_image),
+          facebook_link: m.facebook_link,
+          whatsapp_link: m.whatsapp_link,
+          twitter_link: m.twitter_link,
+          google_link: m.google_link,
+        });
+      } catch (err) {
+        setError(err.message || "Failed to load team member");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMember();
+  }, [id]);
 
   const handleBack = () => {
     navigate("/team", { state: { scrollToId: id, highlightId: id } });
   };
 
   const handleSocialClick = (platform) => {
-    const socialLink = teamMember?.[`${platform}_link`];
+    const socialLink = member?.[`${platform}_link`];
     
     // Only open link if it exists, otherwise do nothing
     if (socialLink) {
@@ -40,11 +81,25 @@ export default function TeamMemberDetail() {
     }
   };
 
-  if (!teamMember) {
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 2 }}>
+        <Typography variant="body1" sx={{ mb: 1.5, color: "text.secondary" }}>
+          Loading team member...
+        </Typography>
+        <Button variant="outlined" onClick={handleBack}>
+          <ArrowBack sx={{ mr: 1 }} />
+          Back to Team
+        </Button>
+      </Container>
+    );
+  }
+
+  if (error || !member) {
     return (
       <Container maxWidth="lg" sx={{ py: 2 }}>
         <Alert severity="error" sx={{ mb: 1.5 }}>
-          Team member not found
+          {error || "Team member not found"}
         </Alert>
         <Button variant="outlined" onClick={handleBack}>
           <ArrowBack sx={{ mr: 1 }} />
@@ -105,6 +160,7 @@ export default function TeamMemberDetail() {
                 startIcon={<ArrowBack />}
                 onClick={handleBack}
                 sx={{ 
+                  mt: 0.5,
                   mb: 0.5,
                   background: "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)",
                   color: "white",
@@ -160,11 +216,11 @@ export default function TeamMemberDetail() {
                       }
                     }}
                   >
-                    {teamMember.image ? (
+                    {member?.image ? (
                       <Box
                         component="img"
-                        src={teamMember.image}
-                        alt={teamMember.name}
+                        src={member.image}
+                        alt={member.name}
                         sx={{
                           width: "100%",
                           height: "100%",
@@ -172,13 +228,15 @@ export default function TeamMemberDetail() {
                         }}
                         onError={(e) => {
                           e.target.style.display = "none";
-                          e.target.nextSibling.style.display = "flex";
+                          if (e.target.nextSibling) {
+                            e.target.nextSibling.style.display = "flex";
+                          }
                         }}
                       />
                     ) : null}
                     <Box
                       sx={{
-                        display: teamMember.image ? "none" : "flex",
+                        display: member?.image ? "none" : "flex",
                         flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
@@ -213,7 +271,7 @@ export default function TeamMemberDetail() {
                       mb: 0,
                     }}
                   >
-                    {teamMember.name}
+                    {member?.name}
                   </Typography>
 
                   {/* Position */}
@@ -227,26 +285,26 @@ export default function TeamMemberDetail() {
                       mb: 1.5,
                     }}
                   >
-                    {teamMember.position || "Team Member"}
+                    {member?.position || "Team Member"}
                   </Typography>
 
                   {/* Description */}
-                  {teamMember.description && (
+                  {member?.description && (
                     <Typography
                       variant="body1"
                       sx={{
                         lineHeight: 1.8,
                         color: "text.primary",
-                        fontSize: { xs: "0.65rem", sm: "0.7rem", md: "0.75rem" },
+                        fontSize: { xs: "0.9rem", sm: "1rem", md: "1.05rem" },
                         textAlign: "left",
                       }}
                     >
-                      {teamMember.description}
+                      {member.description}
                     </Typography>
                   )}
 
                   {/* No description message */}
-                  {!teamMember.description && (
+                  {!member?.description && (
                     <Typography
                       variant="body1"
                       sx={{
@@ -288,7 +346,7 @@ export default function TeamMemberDetail() {
                   }}
                 >
                   <Share sx={{ fontSize: { xs: "1.2rem", md: "1.35rem" } }} />
-                  Connect with {teamMember?.full_name}
+                  Connect with {member?.full_name || member?.name}
                 </Typography>
                 
                 <Box sx={{ display: "flex", justifyContent: "center", gap: 1, flexWrap: "wrap" }}>

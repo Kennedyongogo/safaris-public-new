@@ -1,5 +1,109 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Image Carousel Component
+const ImageCarousel = ({ images, alt, height = 240 }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+        setIsTransitioning(false);
+      }, 300);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [images]);
+
+  if (!images || images.length === 0) {
+    return (
+      <Box
+        sx={{
+          height,
+          backgroundColor: "#f5f5f5",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography variant="body2" color="text.secondary">
+          No image available
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        height,
+        overflow: "hidden",
+        cursor: "pointer",
+        "&:hover .carousel-image": {
+          transform: "scale(1.05)",
+        },
+      }}
+    >
+      {images.map((image, index) => (
+        <Box
+          key={index}
+          component="img"
+          src={image}
+          alt={`${alt} - Image ${index + 1}`}
+          className="carousel-image"
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: index === currentImageIndex ? 1 : 0,
+            transition: "opacity 0.5s ease-in-out, transform 0.3s ease",
+            zIndex: index === currentImageIndex ? 1 : 0,
+          }}
+          onError={(e) => {
+            e.target.src = "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop";
+          }}
+        />
+      ))}
+
+      {/* Image indicators */}
+      {images.length > 1 && (
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 8,
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: 0.5,
+            zIndex: 2,
+          }}
+        >
+          {images.map((_, index) => (
+            <Box
+              key={index}
+              sx={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                backgroundColor: index === currentImageIndex ? "#B85C38" : "rgba(255, 255, 255, 0.7)",
+                transition: "background-color 0.3s ease",
+              }}
+            />
+          ))}
+        </Box>
+      )}
+    </Box>
+  );
+};
 import {
   Box,
   Typography,
@@ -49,81 +153,47 @@ import { Style, Icon } from "ol/style";
 
 const MotionBox = motion(Box);
 
-// Sample camps and lodges data with coordinates
-export const campsAndLodges = [
-  {
-    id: 1,
-    name: "Namiri Plains",
-    location: "Serengeti National Park, Tanzania",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-    description: "An elegant and contemporary safari camp, exuding style and exclusivity in Tanzania's eastern Serengeti, renowned as big cat country.",
-    destination: "Tanzania",
-    campType: ["Remote", "Romantic"],
-    openMonths: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    latitude: -2.1540,
-    longitude: 34.6857,
-  },
-  {
-    id: 2,
-    name: "Naboisho Camp",
-    location: "Mara Naboisho Conservancy, Kenya",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-    description: "A luxurious haven within the wildlife-rich conservation success story that is the Mara Naboisho Conservancy.",
-    destination: "Kenya",
-    campType: ["Family Friendly", "Private"],
-    openMonths: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    latitude: -1.4069,
-    longitude: 35.0111,
-  },
-  {
-    id: 3,
-    name: "Sayari Camp",
-    location: "Serengeti National Park, Tanzania",
-    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&fit=crop",
-    description: "Our original flagship property, Sayari is a stylish permanent camp holding prime position close to the Mara River in the northern Serengeti.",
-    destination: "Tanzania",
-    campType: ["Romantic", "Spa & Wellness"],
-    openMonths: ["June", "July", "August", "September", "October", "November"],
-    latitude: -1.5833,
-    longitude: 35.0167,
-  },
-  {
-    id: 4,
-    name: "Oliver's Camp",
-    location: "Tarangire National Park, Tanzania",
-    image: "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=800&h=600&fit=crop",
-    description: "In the secluded southern reaches of Tarangire, Oliver's Camp offers an exclusive and authentic wilderness experience.",
-    destination: "Tanzania",
-    campType: ["Remote", "Family Friendly"],
-    openMonths: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    latitude: -3.8333,
-    longitude: 36.0833,
-  },
-  {
-    id: 5,
-    name: "Encounter Mara Camp",
-    location: "Mara Naboisho Conservancy, Kenya",
-    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
-    description: "Set in the exclusive Mara Naboisho Conservancy, Encounter Mara offers a classic tented camp experience amidst staggering densities of wildlife.",
-    destination: "Kenya",
-    campType: ["Family Friendly", "Private"],
-    openMonths: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    latitude: -1.3500,
-    longitude: 35.0167,
-  },
-  {
-    id: 6,
-    name: "Rekero Camp",
-    location: "Masai Mara Reserve, Kenya",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-    description: "Overlooking a migration crossing point on the Talek River, Rekero Camp holds an enviable position within the Masai Mara.",
-    destination: "Kenya",
-    campType: ["Romantic", "Spa & Wellness"],
-    openMonths: ["June", "July", "August", "September", "October", "November"],
-    latitude: -1.4833,
-    longitude: 35.1167,
-  },
-];
+// Map Tooltip Component
+const MapTooltip = ({ lodge, position }) => {
+  if (!lodge) return null;
+
+  return (
+    <Box
+      sx={{
+        position: "fixed",
+        left: position.containerX + position.x + 15,
+        top: position.containerY + position.y - 10,
+        backgroundColor: "rgba(61, 40, 23, 0.95)",
+        color: "white",
+        padding: "8px 12px",
+        borderRadius: "6px",
+        fontSize: "0.875rem",
+        fontWeight: 600,
+        boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+        pointerEvents: "none",
+        zIndex: 10000,
+        whiteSpace: "nowrap",
+        border: "1px solid rgba(184, 92, 56, 0.5)",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          left: "-8px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          width: 0,
+          height: 0,
+          borderTop: "6px solid transparent",
+          borderBottom: "6px solid transparent",
+          borderRight: "8px solid rgba(61, 40, 23, 0.95)",
+        },
+      }}
+    >
+      {lodge.name}
+    </Box>
+  );
+};
+
+// Will be populated from API
 
 const destinations = ["Tanzania", "Kenya", "Uganda"];
 const campTypes = ["Remote", "Family Friendly", "Romantic", "Private", "Spa & Wellness"];
@@ -169,10 +239,16 @@ export default function CampLodges() {
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [showMap, setShowMap] = useState(false);
   const [baseLayer, setBaseLayer] = useState("osm");
+  const [lodges, setLodges] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const vectorLayerRef = useRef(null);
   const [mapInitialized, setMapInitialized] = useState(false);
+  const [hoveredLodge, setHoveredLodge] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const mapContainerRef = useRef(null);
 
   const handleDestinationChange = (destination) => {
     setSelectedDestinations((prev) =>
@@ -204,22 +280,62 @@ export default function CampLodges() {
     setSelectedMonths([]);
   };
 
-  const filteredLodges = campsAndLodges.filter((lodge) => {
-    const matchesDestination =
-      selectedDestinations.length === 0 || selectedDestinations.includes(lodge.destination);
-    const matchesCampType =
-      selectedCampTypes.length === 0 ||
-      selectedCampTypes.some((type) => lodge.campType.includes(type));
-    const matchesMonth =
-      selectedMonths.length === 0 ||
-      selectedMonths.some((month) => lodge.openMonths.includes(month));
-    return matchesDestination && matchesCampType && matchesMonth;
-  });
+  const filteredLodges = useMemo(() => {
+    return lodges.filter((lodge) => {
+      const matchesDestination =
+        selectedDestinations.length === 0 || selectedDestinations.includes(lodge.destination);
+      const matchesCampType =
+        selectedCampTypes.length === 0 ||
+        selectedCampTypes.some((type) => lodge.campType.includes(type));
+      const matchesMonth =
+        selectedMonths.length === 0 ||
+        selectedMonths.some((month) => lodge.openMonths.includes(month));
+      return matchesDestination && matchesCampType && matchesMonth;
+    });
+  }, [lodges, selectedDestinations, selectedCampTypes, selectedMonths]);
 
   const hasActiveFilters =
     selectedDestinations.length > 0 ||
     selectedCampTypes.length > 0 ||
     selectedMonths.length > 0;
+
+  // Fetch lodges from API
+  useEffect(() => {
+    const fetchLodges = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch("/api/lodges/public");
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || "Failed to load lodges");
+        }
+
+        // Transform API data to match expected structure
+        const normalizedLodges = (data.data || []).map((lodge) => ({
+          ...lodge,
+          // Ensure images array exists and has at least one image
+          images: Array.isArray(lodge.images) && lodge.images.length > 0 ? lodge.images : [lodge.image].filter(Boolean),
+          // Ensure campType is array
+          campType: Array.isArray(lodge.campType) ? lodge.campType : [],
+          // Ensure openMonths is array
+          openMonths: Array.isArray(lodge.openMonths) ? lodge.openMonths : [],
+          // Use first image as the main image if available
+          image: lodge.images && lodge.images.length > 0 ? lodge.images[0] : lodge.image,
+        }));
+
+        setLodges(normalizedLodges);
+      } catch (err) {
+        setError(err.message || "Failed to load lodges");
+        console.error("Error fetching lodges:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLodges();
+  }, []);
 
   const handleViewDetails = (lodge) => {
     navigate(`/camp-lodges/${lodge.id}`, { state: { lodge } });
@@ -317,13 +433,35 @@ export default function CampLodges() {
       }
     });
 
-    // Add hover interaction for cursor change
+    // Add hover interaction for cursor change and tooltip
     map.on("pointermove", (event) => {
       const feature = map.forEachFeatureAtPixel(
         event.pixel,
         (feature) => feature
       );
+
       map.getTarget().style.cursor = feature ? "pointer" : "";
+
+      if (feature) {
+        const properties = feature.get("properties");
+        if (properties?.type === "lodge") {
+          setHoveredLodge(properties);
+          // Position tooltip relative to map container
+          const mapRect = mapContainerRef.current?.getBoundingClientRect();
+          if (mapRect) {
+            setTooltipPosition({
+              x: event.pixel[0],
+              y: event.pixel[1],
+              containerX: mapRect.left,
+              containerY: mapRect.top
+            });
+          }
+        } else {
+          setHoveredLodge(null);
+        }
+      } else {
+        setHoveredLodge(null);
+      }
     });
 
     mapInstance.current = map;
@@ -658,31 +796,71 @@ export default function CampLodges() {
                   </Box>
                   {/* Map Container */}
                   <Box
-                    ref={mapRef}
+                    ref={(el) => {
+                      mapRef.current = el;
+                      mapContainerRef.current = el;
+                    }}
                     sx={{
                       width: "100%",
                       height: { xs: "400px", sm: "500px", md: "600px" },
                       borderRadius: 1,
                       overflow: "hidden",
                       border: "1px solid rgba(107, 78, 61, 0.2)",
+                      position: "relative",
                     }}
                   />
                 </Paper>
+
+                {/* Map Tooltip */}
+                <MapTooltip lodge={hoveredLodge} position={tooltipPosition} />
               </Box>
+            )}
+
+            {/* Results Count */}
+            {!showMap && (
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "text.secondary",
+                  mb: 2,
+                  fontWeight: 600,
+                }}
+              >
+                {loading
+                  ? "Loading camps and lodges..."
+                  : error
+                  ? "Error loading camps and lodges"
+                  : filteredLodges.length === 0
+                  ? "No camps or lodges found"
+                  : `${filteredLodges.length} camp${filteredLodges.length !== 1 ? "s" : ""} and lodge${filteredLodges.length !== 1 ? "s" : ""} found`}
+              </Typography>
             )}
 
             {/* Lodges Grid - 3 cards per row */}
             {!showMap && (
               <>
-                {filteredLodges.length === 0 ? (
-              <Box textAlign="center" py={4}>
-                <Typography color="text.secondary" variant="body1">
-                  No camps or lodges found matching your filters.
-                </Typography>
-              </Box>
-            ) : (
-              <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }} justifyContent="center">
-                {filteredLodges.map((lodge, index) => (
+                {loading ? (
+                  <Box textAlign="center" py={8}>
+                    <CircularProgress sx={{ color: "#6B4E3D" }} />
+                    <Typography variant="body2" sx={{ mt: 2, color: "text.secondary" }}>
+                      Loading camps and lodges...
+                    </Typography>
+                  </Box>
+                ) : error ? (
+                  <Box textAlign="center" py={4}>
+                    <Typography color="error" variant="body1">
+                      {error}
+                    </Typography>
+                  </Box>
+                ) : filteredLodges.length === 0 ? (
+                  <Box textAlign="center" py={4}>
+                    <Typography color="text.secondary" variant="body1">
+                      No camps or lodges found matching your filters.
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }} justifyContent="center">
+                    {filteredLodges.map((lodge, index) => (
                   <Grid size={{ xs: 12, sm: 6, md: 4 }} key={lodge.id}>
                     <Box id={`lodge-${lodge.id}`}>
                     <MotionBox
@@ -702,18 +880,10 @@ export default function CampLodges() {
                           },
                         }}
                       >
-                        <CardMedia
-                          component="img"
-                          height="240"
-                          image={lodge.image}
+                        <ImageCarousel
+                          images={lodge.images || [lodge.image].filter(Boolean)}
                           alt={lodge.name}
-                          sx={{
-                            objectFit: "cover",
-                          }}
-                          onError={(e) => {
-                            e.target.src =
-                              "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop";
-                          }}
+                          height={240}
                         />
                         <CardContent sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
                           <Typography
@@ -803,8 +973,8 @@ export default function CampLodges() {
                     </MotionBox>
                     </Box>
                   </Grid>
-                ))}
-              </Grid>
+                    ))}
+                  </Grid>
                 )}
               </>
             )}

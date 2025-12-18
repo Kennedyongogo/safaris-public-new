@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -12,6 +12,8 @@ import {
   CardMedia,
   CardContent,
   Divider,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -22,20 +24,82 @@ import {
   CalendarToday,
   CheckCircle,
 } from "@mui/icons-material";
-import { campsAndLodges } from "./CampLodges";
 
 export default function CampLodgeDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const [lodge, setLodge] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const lodge = useMemo(() => {
-    const fromState = location.state?.lodge;
-    if (fromState?.id) return fromState;
-    return campsAndLodges.find((item) => String(item.id) === String(id));
+  const buildImageUrl = (path) => {
+    if (!path) return "/placeholder.jpg";
+    if (path.startsWith("http")) return path;
+    if (path.startsWith("/")) return path;
+    return `/${path}`;
+  };
+
+  useEffect(() => {
+    const fetchLodge = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Check if lodge data was passed via state (from list page)
+        const fromState = location.state?.lodge;
+        if (fromState?.id) {
+          setLodge(fromState);
+          setLoading(false);
+          return;
+        }
+
+        // Fetch from API
+        const response = await fetch(`/api/lodges/public/${id}`);
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.data) {
+          throw new Error(data.message || "Lodge not found");
+        }
+
+        // Normalize the data
+        const normalizedLodge = {
+          ...data.data,
+          images: Array.isArray(data.data.images) && data.data.images.length > 0
+            ? data.data.images
+            : [data.data.image].filter(Boolean),
+          campType: Array.isArray(data.data.campType) ? data.data.campType : [],
+          openMonths: Array.isArray(data.data.openMonths) ? data.data.openMonths : [],
+          image: data.data.images && data.data.images.length > 0 ? data.data.images[0] : data.data.image,
+        };
+
+        setLodge(normalizedLodge);
+      } catch (err) {
+        setError(err.message || "Failed to load lodge");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLodge();
   }, [id, location.state]);
 
-  if (!lodge) {
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "60vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error || !lodge) {
     return (
       <Container maxWidth="md" sx={{ py: 6 }}>
         <Paper
@@ -49,6 +113,9 @@ export default function CampLodgeDetail() {
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
             Lodge not found
           </Typography>
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error || "This lodge could not be found."}
+          </Alert>
           <Button
             variant="contained"
             startIcon={<ArrowBack />}
@@ -69,7 +136,7 @@ export default function CampLodgeDetail() {
 
   const gallery = Array.isArray(lodge.images) && lodge.images.length > 0
     ? lodge.images
-    : [lodge.image, lodge.image, lodge.image].filter(Boolean);
+    : [lodge.image].filter(Boolean);
 
   const campTypes = lodge.campType || [];
   const openMonths = lodge.openMonths || [];
@@ -98,6 +165,7 @@ export default function CampLodgeDetail() {
           startIcon={<ArrowBack />}
           onClick={() => navigate("/camp-lodges")}
           sx={{
+            mt: 0.5,
             mb: 0.5,
             backgroundColor: "#B85C38",
             color: "white",
@@ -135,7 +203,7 @@ export default function CampLodgeDetail() {
           >
             <Box
               component="img"
-              src={lodge.image}
+              src={buildImageUrl(lodge.image)}
               alt={lodge.name}
               sx={{ width: "100%", height: "100%", objectFit: "cover" }}
               onError={(e) => {
@@ -510,12 +578,12 @@ export default function CampLodgeDetail() {
                   >
                     <CardMedia
                       component="img"
-                      image={img}
+                      image={buildImageUrl(img)}
                       alt={`${lodge.name} gallery ${idx + 1}`}
                       sx={{ height: 180, objectFit: "cover" }}
                       onError={(e) => {
                         e.target.src =
-                          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop";
+                          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600&h=400&fit=crop";
                       }}
                     />
                   </Card>
