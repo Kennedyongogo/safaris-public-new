@@ -205,16 +205,16 @@ export default function PublicHeader() {
         elevation={0}
         sx={{
           backgroundColor: scrolled
-            ? "rgba(245, 241, 232, 0.95)" // Light beige with transparency
-            : "rgba(61, 40, 23, 0.3)", // Dark brown with transparency
-          backdropFilter: scrolled ? "blur(20px)" : "blur(10px)",
+            ? "rgba(245, 241, 232, 0.95)" // Light beige with transparency when scrolled
+            : "transparent", // Completely transparent when on hero section
+          backdropFilter: scrolled ? "blur(20px)" : "none", // No blur on hero section
           boxShadow: scrolled
             ? "0 8px 32px rgba(61, 40, 23, 0.12)"
-            : "0 4px 20px rgba(0, 0, 0, 0.1)",
+            : "none", // No shadow on hero section
           transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           borderBottom: scrolled
-            ? "1px solid rgba(107, 78, 61, 0.2)" // Medium brown border
-            : "1px solid rgba(255, 255, 255, 0.1)",
+            ? "1px solid rgba(107, 78, 61, 0.2)" // Medium brown border when scrolled
+            : "none", // No border on hero section
         }}
       >
         <Toolbar sx={{ px: { xs: 2, sm: 3, md: 4 }, py: 1 }}>
@@ -315,14 +315,14 @@ export default function PublicHeader() {
                             : "white",
                         fontSize: {
                           md: "0.875rem",
-                          lg: "0.8rem",
-                          xl: "0.85rem",
+                          lg: "0.925rem",
+                          xl: "0.975rem",
                         },
                         fontWeight: isActiveItem ? 700 : 600,
                         px: { md: 2, lg: 1.5, xl: 2 },
                         py: { md: 1.2, lg: 1, xl: 1.2 },
                         borderRadius: "25px",
-                        textTransform: "none",
+                        textTransform: "uppercase",
                         transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                         position: "relative",
                         overflow: "hidden",
@@ -355,31 +355,27 @@ export default function PublicHeader() {
                           },
                         },
                         "&:hover": {
-                          backgroundColor: scrolled
-                            ? `${item.color}15`
-                            : "rgba(255, 255, 255, 0.15)",
-                          transform: "translateY(-3px) scale(1.05)",
-                          boxShadow: scrolled
-                            ? `0 8px 25px ${item.color}30`
-                            : "0 8px 25px rgba(255, 255, 255, 0.2)",
+                          backgroundColor: "transparent",
+                          transform: "none",
+                          boxShadow: "none",
                           "& .icon": {
                             color: item.color,
-                            transform: "rotate(360deg)",
                           },
                         },
-                        "&::before": {
-                          content: '""',
-                          position: "absolute",
-                          top: 0,
-                          left: "-100%",
-                          width: "100%",
-                          height: "100%",
-                          background: `linear-gradient(90deg, transparent, ${item.color}20, transparent)`,
-                          transition: "left 0.5s ease",
-                        },
-                        "&:hover::before": {
-                          left: "100%",
-                        },
+                        "&:hover::after": !isActiveItem
+                          ? {
+                              content: '""',
+                              position: "absolute",
+                              bottom: 0,
+                              left: "50%",
+                              transform: "translateX(-50%)",
+                              width: "60%",
+                              height: "3px",
+                              backgroundColor: item.color,
+                              borderRadius: "2px 2px 0 0",
+                              transition: "all 0.3s ease-out",
+                            }
+                          : {},
                         "&::after": isActiveItem
                           ? {
                               content: '""',

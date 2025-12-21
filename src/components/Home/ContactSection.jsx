@@ -1,58 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Container,
   Grid,
   Typography,
-  TextField,
-  Button,
-  Paper,
   Stack,
   Divider,
 } from "@mui/material";
-import { LocationOn, Email, Phone, Send } from "@mui/icons-material";
+import { LocationOn, Email, Phone } from "@mui/icons-material";
 
 export default function ContactSection() {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const handleChange = (field) => (event) => {
-    setFormValues((prev) => ({ ...prev, [field]: event.target.value }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Contact form submission", formValues);
-  };
 
   return (
     <Box
       id="contact-section"
       sx={{
         position: "relative",
-        pt: { xs: 0.5, sm: 0.75, md: 1 },
+        pt: { xs: 0, sm: 0, md: 0 },
         pb: { xs: 1, sm: 1.5, md: 2 },
         px: 0,
+        background: "#FFFFFF",
       }}
     >
       <Container
         maxWidth="xl"
         sx={{
           px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0.75, sm: 0.75, md: 0.75 },
+          pt: { xs: 0, sm: 0, md: 0 },
         }}
       >
-        <Paper
-          elevation={3}
+        <Box
           sx={{
             py: { xs: 0.75, sm: 1, md: 1.25 },
             px: { xs: 1.25, sm: 1.25, md: 1.25 },
-            borderRadius: { xs: 3, md: 4 },
-            border: "1px solid #e0e0e0",
-            background: "white",
           }}
         >
           <Stack spacing={{ xs: 2.5, md: 3.5 }}>
@@ -180,98 +160,8 @@ export default function ContactSection() {
               </Stack>
             </Stack>
 
-            <Paper
-              elevation={0}
-              sx={{
-                p: { xs: 2, sm: 2.25, md: 2.75 },
-                borderRadius: 3,
-                border: "1px solid rgba(107, 78, 61, 0.18)",
-                background: "linear-gradient(135deg, #fff, #f7f3ec)",
-                width: "100%",
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 1,
-                  fontWeight: 800,
-                  color: "#3D2817",
-                  textAlign: "center",
-                }}
-              >
-                Send us a message
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ mb: 3, color: "text.secondary", textAlign: "center" }}
-              >
-                Share a few details and we will respond with itinerary ideas and
-                next steps.
-              </Typography>
-
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 2,
-                }}
-              >
-                <TextField
-                  label="Name"
-                  variant="outlined"
-                  fullWidth
-                  required
-                  value={formValues.name}
-                  onChange={handleChange("name")}
-                />
-                <TextField
-                  label="Email"
-                  type="email"
-                  variant="outlined"
-                  fullWidth
-                  required
-                  value={formValues.email}
-                  onChange={handleChange("email")}
-                />
-                <TextField
-                  label="Message"
-                  variant="outlined"
-                  fullWidth
-                  required
-                  multiline
-                  minRows={4}
-                  value={formValues.message}
-                  onChange={handleChange("message")}
-                />
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  endIcon={<Send />}
-                  sx={{
-                    alignSelf: "center",
-                    px: 3,
-                    py: 1.25,
-                    fontWeight: 700,
-                    borderRadius: "12px",
-                    background:
-                      "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)",
-                    boxShadow: "0 10px 30px rgba(184, 92, 56, 0.35)",
-                    "&:hover": {
-                      background:
-                        "linear-gradient(45deg, #8B4225 30%, #B85C38 90%)",
-                      boxShadow: "0 12px 36px rgba(139, 66, 37, 0.35)",
-                    },
-                  }}
-                >
-                  Submit
-                </Button>
-              </Box>
-            </Paper>
           </Stack>
-        </Paper>
+        </Box>
       </Container>
     </Box>
   );

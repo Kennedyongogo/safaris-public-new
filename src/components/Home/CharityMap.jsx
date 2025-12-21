@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Paper,
   Container,
   Button,
 } from "@mui/material";
@@ -14,32 +13,26 @@ const CharityMap = () => {
   return (
     <Box
       sx={{
-        pt: { xs: 0.5, sm: 0.75, md: 1 },
+        pt: { xs: 0, sm: 0, md: 0 },
         pb: { xs: 1, sm: 1.5, md: 2 },
         position: "relative",
         zIndex: 1,
-        background: "transparent",
+        background: "#FFFFFF",
       }}
     >
       <Container
         maxWidth="xl"
         sx={{
           px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0.75, sm: 0.75, md: 0.75 },
+          pt: { xs: 0, sm: 0, md: 0 },
           position: "relative",
           zIndex: 1,
         }}
       >
-        <Paper
-          elevation={3}
+        <Box
           sx={{
             py: { xs: 1, sm: 1.25, md: 1.5 },
             px: { xs: 1.5, sm: 1.5, md: 1.5 },
-            borderRadius: { xs: 3, md: 4 },
-            background: "white",
-            border: "1px solid #e0e0e0",
-            minHeight: "auto",
-            height: "auto",
           }}
         >
           {/* Header Section */}
@@ -336,7 +329,7 @@ const CharityMap = () => {
               View Camps and Lodges
             </Button>
           </Box>
-        </Paper>
+        </Box>
       </Container>
     </Box>
   );

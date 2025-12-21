@@ -50,8 +50,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
+      <Router style={{ margin: 0, padding: 0 }}>
         <ScrollToTop />
         <PublicHeader />
         <Suspense

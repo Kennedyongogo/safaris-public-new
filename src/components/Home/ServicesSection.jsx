@@ -15,7 +15,6 @@ import {
   useMediaQuery,
   useTheme,
   Button,
-  Paper,
   Container,
 } from "@mui/material";
 import {
@@ -434,7 +433,7 @@ export default function ServicesSection() {
     <Box
       id="mission-section"
       sx={{
-        pt: { xs: 0.09375, sm: 0.09375, md: 0.09375 },
+        pt: { xs: 0, sm: 0, md: 0 },
         pb: { xs: 0.5, sm: 0.75, md: 1 },
         px: 0,
         bgcolor: "background.paper",
@@ -461,20 +460,14 @@ export default function ServicesSection() {
           position: "relative",
           zIndex: 1,
           px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0.09375, sm: 0.09375, md: 0.09375 },
+          pt: { xs: 0, sm: 0, md: 0 },
         }}
       >
-        <Paper
-          elevation={3}
+        <Box
           sx={{
             pt: { xs: 1.5, sm: 2, md: 2.5 },
             pb: { xs: 0.5, sm: 0.75, md: 1 },
             px: { xs: 1.5, sm: 1.5, md: 1.5 },
-            borderRadius: { xs: 3, md: 4 },
-            background: "#FFFFFF",
-            border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
-            minHeight: "auto",
-            height: "auto",
           }}
         >
           <Fade in={isVisible} timeout={1000}>
@@ -771,7 +764,7 @@ export default function ServicesSection() {
               </Box>
             )}
           </Box>
-        </Paper>
+        </Box>
       </Container>
     </Box>
   );

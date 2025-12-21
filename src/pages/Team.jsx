@@ -160,7 +160,7 @@ export default function Team() {
                 variant="h3"
                 sx={{
                   fontWeight: 700,
-                  mb: 1,
+                  mb: 0.25,
                   color: "#3D2817",
                   fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
                   textAlign: "center",
@@ -194,7 +194,7 @@ export default function Team() {
                 variant="h4"
                 sx={{
                   fontWeight: 600,
-                  mb: 1.5,
+                  mb: 0.5,
                   color: "#6B4E3D",
                   fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
                   textAlign: "center",
@@ -207,7 +207,7 @@ export default function Team() {
                 variant="h5"
                 sx={{
                   fontWeight: 500,
-                  mb: 2,
+                  mb: 0.5,
                   color: "#B85C38",
                   fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   textAlign: "center",
@@ -220,7 +220,7 @@ export default function Team() {
               <Typography
                 variant="body1"
                 sx={{
-                  mb: 2.5,
+                  mb: 1,
                   color: "text.primary",
                   fontSize: { xs: "0.875rem", md: "1rem" },
                   lineHeight: 1.6,
@@ -233,14 +233,15 @@ export default function Team() {
               </Typography>
 
               {/* Our Story Section */}
-              <Box sx={{ mb: 2.5 }}>
+              <Box sx={{ mb: 1 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 1,
+                    mb: 0.25,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    textAlign: "center",
                   }}
                 >
                   Our Story
@@ -251,6 +252,7 @@ export default function Team() {
                     color: "text.primary",
                     fontSize: { xs: "0.875rem", md: "1rem" },
                     lineHeight: 1.6,
+                    textAlign: "center",
                   }}
                 >
                   Akira Safaris began around shared meals, campfires, and Couchsurfing guests who asked to experience "the Africa we know." What started as simple road trips grew into expertly guided journeys through the Mara, Amboseli, and the Rift Valley. Today, that same warmth remains—only now, it's refined, responsible, and intentionally small-scale. You arrive as a guest and leave as family.
@@ -258,104 +260,108 @@ export default function Team() {
               </Box>
 
               {/* What We Do Section */}
-              <Box sx={{ mb: 2.5 }}>
+              <Box sx={{ mb: 1 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 1,
+                    mb: 0.25,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    textAlign: "center",
                   }}
                 >
                   What We Do
                 </Typography>
-                <Box component="ul" sx={{ pl: 3, mb: 0 }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                <Box component="ul" sx={{ textAlign: "center", mb: 0, listStylePosition: "inside" }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Private, tailor-made safaris with dedicated vehicles and guides
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Bespoke itineraries—luxury camps, family travel, photography, wellness retreats
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Carbon-positive travel—110% footprint offset and 10 indigenous trees planted per guest
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Cultural immersion—Maasai traditions, fireside stories, and life beyond the game drive
                   </Typography>
                 </Box>
               </Box>
 
               {/* Why Akira Safaris Section */}
-              <Box sx={{ mb: 2.5 }}>
+              <Box sx={{ mb: 1 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 1,
+                    mb: 0.25,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    textAlign: "center",
                   }}
                 >
                   Why Akira Safaris
                 </Typography>
-                <Box component="ul" sx={{ pl: 3, mb: 0 }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                <Box component="ul" sx={{ textAlign: "center", mb: 0, listStylePosition: "inside" }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Locally rooted—we live here; this is our home
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Truly bespoke—your pace, interests, and budget lead the way
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Boutique care—a personal concierge from planning to return
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Purpose-driven travel—fair wages, community support, plastic-free camps
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Endless discoveries—rare wildlife moments and hidden places most never see
                   </Typography>
                 </Box>
               </Box>
 
               {/* Signature Experiences Section */}
-              <Box sx={{ mb: 2.5 }}>
+              <Box sx={{ mb: 1 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 1,
+                    mb: 0.25,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    textAlign: "center",
                   }}
                 >
                   Signature Experiences
                 </Typography>
-                <Box component="ul" sx={{ pl: 3, mb: 0 }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                <Box component="ul" sx={{ textAlign: "center", mb: 0, listStylePosition: "inside" }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Migration Detox Retreat – Phone-free Great Migration journey
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Classic Kenya Highlights – Mara, Nakuru & Amboseli in 7 days
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.75, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Gorilla & Chimp Flex-Trek – Permit-guaranteed primate encounters
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6 }}>
+                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
                     Photographic Safaris – Off-road access with professional image delivery
                   </Typography>
                 </Box>
               </Box>
 
               {/* Our Commitment Section */}
-              <Box sx={{ mb: 2.5 }}>
+              <Box sx={{ mb: 1 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 1,
+                    mb: 0.25,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    textAlign: "center",
                   }}
                 >
                   Our Commitment
@@ -366,6 +372,7 @@ export default function Team() {
                     color: "text.primary",
                     fontSize: { xs: "0.875rem", md: "1rem" },
                     lineHeight: 1.6,
+                    textAlign: "center",
                   }}
                 >
                   Every Akira Safari is locally designed, ethically operated, and personally delivered. Your guide is more than a driver—they're your storyteller, cultural bridge, and trusted companion through Africa's most unforgettable landscapes.
@@ -375,8 +382,8 @@ export default function Team() {
               {/* Ready to Start Section */}
               <Box
                 sx={{
-                  mt: 2.5,
-                  p: { xs: 1, sm: 1.25, md: 1.5 },
+                  mt: 1.25,
+                  p: { xs: 0.5, sm: 0.625, md: 0.75 },
                   background: "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.05) 100%)",
                   borderRadius: { xs: 2, md: 3 },
                   border: "1px solid rgba(184, 92, 56, 0.2)",
@@ -387,7 +394,7 @@ export default function Team() {
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 1.5,
+                    mb: 0.75,
                     color: "#3D2817",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
@@ -402,7 +409,7 @@ export default function Team() {
                     lineHeight: 1.6,
                     maxWidth: "700px",
                     mx: "auto",
-                    mb: 2,
+                    mb: 1,
                   }}
                 >
                   Tell us your dreams, fears, bucket-list shots and dietary quirks. We'll turn them into a day-by-day adventure that fits you—and the planet—perfectly.

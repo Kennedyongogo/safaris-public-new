@@ -57,7 +57,7 @@ export default function HeroSection() {
         height: { xs: "100vh", md: "100vh" },
         width: "100%",
         overflow: "hidden",
-        marginTop: "-64px",
+        marginTop: "-80px",
         backgroundColor: "#000", // prevent white flash during transitions
       }}
     >
@@ -79,7 +79,7 @@ export default function HeroSection() {
               objectFit: "cover",
               objectPosition: "center",
               pointerEvents: "none",
-              filter: "brightness(0.45) saturate(1.15) contrast(1.05)",
+              filter: "brightness(0.7) saturate(1.1) contrast(1.1)",
               opacity: isActive ? 1 : 0,
               zIndex: isActive ? 1 : 0,
               top: 0,
@@ -96,19 +96,6 @@ export default function HeroSection() {
         );
       })}
 
-      {/* Gradient Overlay - Earth Tones */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            "linear-gradient(135deg, rgba(61, 40, 23, 0.4) 0%, rgba(107, 78, 61, 0.35) 30%, rgba(184, 92, 56, 0.25) 70%, rgba(107, 125, 71, 0.2) 100%)",
-          zIndex: 1,
-        }}
-      />
 
       {/* Enhanced Floating Particles Animation */}
       <Box

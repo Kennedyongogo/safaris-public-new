@@ -10,7 +10,6 @@ import {
   Divider,
   Fade,
   Slide,
-  Paper,
 } from "@mui/material";
 import {
   Facebook,
@@ -27,9 +26,9 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        background: "transparent",
-        pt: { xs: 0.25, sm: 0.375, md: 0.5 },
-        pb: 1,
+        background: "#F5F1E8",
+        pt: { xs: 0, sm: 0, md: 0 },
+        pb: 0.4,
         mt: "auto",
         position: "relative",
         overflow: "hidden",
@@ -38,29 +37,23 @@ export default function Footer() {
       <Container
         maxWidth="xl"
         sx={{
-          px: { xs: 1.5, sm: 1.5, md: 1.5 },
+          px: { xs: 0.75, sm: 0.75, md: 0.75 },
           pt: 0,
           position: "relative",
           zIndex: 1,
         }}
       >
-          <Paper
-          elevation={3}
-          sx={{
-            py: { xs: 1.5, sm: 2, md: 2.5 },
-            px: { xs: 1.5, sm: 1.5, md: 1.5 },
-            borderRadius: { xs: 3, md: 4 },
-            background: "#FFFFFF",
-            border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
-            minHeight: "auto",
-            height: "auto",
-          }}
-        >
+          <Box
+            sx={{
+              py: { xs: 0.75, sm: 0.875, md: 1 },
+              px: { xs: 0.75, sm: 0.75, md: 0.75 },
+            }}
+          >
           <Fade in timeout={1000}>
             <Box>
               <Grid
                 container
-                spacing={{ xs: 2, sm: 3, md: 5 }}
+                spacing={{ xs: 1, sm: 1.5, md: 2 }}
                 justifyContent="space-between"
               >
                 <Grid item xs={12} sm={12} md={4}>
@@ -70,7 +63,7 @@ export default function Footer() {
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          gap: { xs: 1, sm: 2 },
+                          gap: { xs: 0.75, sm: 1.5 },
                           mb: { xs: 0.5, sm: 0.75 },
                         }}
                       >
@@ -166,7 +159,7 @@ export default function Footer() {
                           mb: { xs: 1, sm: 2 },
                           display: "flex",
                           flexWrap: "wrap",
-                          gap: { xs: 0.5, sm: 1 },
+                          gap: { xs: 0.25, sm: 0.5 },
                         }}
                       >
                         <Chip
@@ -373,10 +366,10 @@ export default function Footer() {
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: { xs: 1, sm: 1.25 },
+                      gap: { xs: 0.75, sm: 0.875 },
                       textAlign: "center",
-                      pt: 0.4,
-                      pb: 0.2,
+                      pt: 0.15,
+                      pb: 0.05,
                     }}
                   >
                     <Typography
@@ -392,8 +385,8 @@ export default function Footer() {
                     </Typography>
                     <Box
                       sx={{
-                        py: { xs: 0.35, sm: 0.45 },
-                        px: { xs: 0.9, sm: 1.1 },
+                        py: { xs: 0.15, sm: 0.18 },
+                        px: { xs: 0.45, sm: 0.5 },
                         background: "rgba(128, 128, 128, 0.15)", // subtle grey
                         backdropFilter: "blur(10px)",
                         border: "1px solid rgba(128, 128, 128, 0.35)",
@@ -427,7 +420,7 @@ export default function Footer() {
               </Fade>
             </Box>
           </Fade>
-        </Paper>
+        </Box>
       </Container>
     </Box>
   );

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
-  Paper,
   Card,
   CardContent,
   Typography,
@@ -87,71 +86,64 @@ export default function BackgroundImageSection() {
   return (
     <Box
       sx={{
-        pt: { xs: 0.125, sm: 0.1875, md: 0.25 },
+        pt: { xs: 0, sm: 0, md: 0 },
         pb: { xs: 0.5, sm: 0.75, md: 1 },
         position: "relative",
         zIndex: 1,
         background: "transparent",
       }}
     >
-      <Container
-        maxWidth="xl"
+      {/* Full Width Background Images */}
+      <Box
         sx={{
-          px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0.375, sm: 0.375, md: 0.375 },
-          position: "relative",
-          zIndex: 1,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 0,
+          overflow: "hidden",
         }}
       >
-        <Paper
-          elevation={3}
-          sx={{
-            py: { xs: 1.5, sm: 2, md: 2.5 },
-            px: { xs: 1.5, sm: 1.5, md: 1.5 },
-            borderRadius: { xs: 3, md: 4 },
-            background: "#FFFFFF",
-            border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
-            minHeight: { xs: "400px", sm: "500px", md: "600px" },
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {/* Background Images Container */}
+        {backgroundImages.map((imageUrl, index) => (
           <Box
+            key={index}
+            component="img"
+            src={imageUrl}
+            alt={`Background ${index + 1}`}
             sx={{
               position: "absolute",
               top: 0,
               left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 0,
-              overflow: "hidden",
-              borderRadius: { xs: 3, md: 4 },
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              opacity: index === currentImageIndex ? 1 : 0,
+              transition: "opacity 1s ease-in-out",
             }}
-          >
-            {backgroundImages.map((imageUrl, index) => (
-              <Box
-                key={index}
-                component="img"
-                src={imageUrl}
-                alt={`Background ${index + 1}`}
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  opacity: index === currentImageIndex ? 1 : 0,
-                  transition: "opacity 1s ease-in-out",
-                }}
-                onError={(e) => {
-                  e.target.src =
-                    "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&h=600&fit=crop";
-                }}
-              />
-            ))}
-          </Box>
+            onError={(e) => {
+              e.target.src =
+                "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&h=600&fit=crop";
+            }}
+          />
+        ))}
+      </Box>
+
+      <Container
+        maxWidth="xl"
+        sx={{
+          px: { xs: 1.5, sm: 1.5, md: 1.5 },
+          pt: { xs: 0, sm: 0, md: 0 },
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <Box
+          sx={{
+            minHeight: { xs: "400px", sm: "500px", md: "600px" },
+            position: "relative",
+          }}
+        >
 
           {/* Single Testimonial Card Overlay - Centered and Transitioning */}
           <Box
@@ -316,7 +308,7 @@ export default function BackgroundImageSection() {
               </Box>
             ))}
           </Box>
-        </Paper>
+        </Box>
       </Container>
     </Box>
   );

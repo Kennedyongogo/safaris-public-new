@@ -5,7 +5,6 @@ import {
   Typography,
   Container,
   Grid,
-  Paper,
   Button,
   useMediaQuery,
   useTheme,
@@ -29,32 +28,26 @@ export default function AboutUsSection() {
     <Box
       id="about-section"
       sx={{
-        pt: { xs: 0.5, sm: 0.75, md: 1 },
+        pt: { xs: 0, sm: 0, md: 0 },
         pb: { xs: 1, sm: 1.5, md: 2 },
         position: "relative",
         zIndex: 1,
-        background: "transparent",
+        background: "#FFFFFF",
       }}
     >
       <Container
         maxWidth="xl"
         sx={{
           px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0.75, sm: 0.75, md: 0.75 },
+          pt: { xs: 0, sm: 0, md: 0 },
           position: "relative",
           zIndex: 1,
         }}
       >
-        <Paper
-          elevation={3}
+        <Box
           sx={{
             py: { xs: 1, sm: 1.25, md: 1.5 },
             px: { xs: 1.25, sm: 1.25, md: 1.5 },
-            borderRadius: { xs: 2, md: 3 },
-            background: "#FFFFFF",
-            border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
-            minHeight: "auto",
-            height: "auto",
           }}
         >
           <Grid container spacing={2}>
@@ -157,7 +150,7 @@ export default function AboutUsSection() {
               </Box>
             </Grid>
           </Grid>
-        </Paper>
+        </Box>
       </Container>
     </Box>
   );
