@@ -84,62 +84,61 @@ export default function CampLodgeDetail() {
     fetchLodge();
   }, [id, location.state]);
 
-  if (loading) {
+  // Show basic loading indicator only if no lodge data at all
+  const showLoading = loading && !lodge;
+
+  if (error && !lodge) {
     return (
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "60vh",
+          pt: 0.75,
+          pb: 0.75,
+          px: 0,
+          bgcolor: "#F5F1E8",
+          background:
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
         }}
       >
-        <CircularProgress />
+        <Container maxWidth="md" sx={{ py: 6 }}>
+          <Paper
+            elevation={3}
+            sx={{
+              p: { xs: 2, sm: 3 },
+              borderRadius: { xs: 2, sm: 3 },
+              border: "1px solid rgba(107, 78, 61, 0.2)",
+            }}
+          >
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+              Lodge not found
+            </Typography>
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error || "This lodge could not be found."}
+            </Alert>
+            <Button
+              variant="contained"
+              startIcon={<ArrowBack />}
+              onClick={() => navigate("/camp-lodges")}
+              sx={{
+                backgroundColor: "#B85C38",
+                color: "white",
+                fontWeight: 600,
+                "&:hover": { backgroundColor: "#8B4225" },
+              }}
+            >
+              Back to Camps & Lodges
+            </Button>
+          </Paper>
+        </Container>
       </Box>
     );
   }
 
-  if (error || !lodge) {
-    return (
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        <Paper
-          elevation={3}
-          sx={{
-            p: { xs: 2, sm: 3 },
-            borderRadius: { xs: 2, sm: 3 },
-            border: "1px solid rgba(107, 78, 61, 0.2)",
-          }}
-        >
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
-            Lodge not found
-          </Typography>
-          <Alert severity="error" sx={{ mb: 3 }}>
-            {error || "This lodge could not be found."}
-          </Alert>
-          <Button
-            variant="contained"
-            startIcon={<ArrowBack />}
-            onClick={() => navigate("/camp-lodges")}
-            sx={{
-              backgroundColor: "#B85C38",
-              color: "white",
-              fontWeight: 600,
-              "&:hover": { backgroundColor: "#8B4225" },
-            }}
-          >
-            Back to Camps & Lodges
-          </Button>
-        </Paper>
-      </Container>
-    );
-  }
-
-  const gallery = Array.isArray(lodge.images) && lodge.images.length > 0
+  const gallery = Array.isArray(lodge?.images) && lodge.images.length > 0
     ? lodge.images
-    : [lodge.image].filter(Boolean);
+    : [lodge?.image].filter(Boolean);
 
-  const campTypes = lodge.campType || [];
-  const openMonths = lodge.openMonths || [];
+  const campTypes = lodge?.campType || [];
+  const openMonths = lodge?.openMonths || [];
 
   return (
     <Box
@@ -161,23 +160,31 @@ export default function CampLodgeDetail() {
           pt: { xs: 0.375, sm: 0.375, md: 0.375 },
         }}
       >
-        <Button
-          startIcon={<ArrowBack />}
-          onClick={() => navigate("/camp-lodges")}
-          sx={{
-            mt: 0.5,
-            mb: 0.5,
-            backgroundColor: "#B85C38",
-            color: "white",
-            fontWeight: 600,
-            "&:hover": { backgroundColor: "#8B4225", color: "white" },
-            outline: "none",
-            "&:focus": { outline: "none", boxShadow: "none" },
-            "&:focus-visible": { outline: "none", boxShadow: "none" },
-          }}
-        >
-          Back to Camps & Lodges
-        </Button>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 0.5, mb: 0.5 }}>
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate("/camp-lodges")}
+            sx={{
+              backgroundColor: "#B85C38",
+              color: "white",
+              fontWeight: 600,
+              "&:hover": { backgroundColor: "#8B4225", color: "white" },
+              outline: "none",
+              "&:focus": { outline: "none", boxShadow: "none" },
+              "&:focus-visible": { outline: "none", boxShadow: "none" },
+            }}
+          >
+            Back to Camps & Lodges
+          </Button>
+          {showLoading && (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <CircularProgress size={20} sx={{ color: "#B85C38" }} />
+              <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 500 }}>
+                Loading details...
+              </Typography>
+            </Box>
+          )}
+        </Box>
 
         <Paper
           elevation={3}
@@ -203,8 +210,8 @@ export default function CampLodgeDetail() {
           >
             <Box
               component="img"
-              src={buildImageUrl(lodge.image)}
-              alt={lodge.name}
+              src={buildImageUrl(lodge?.image)}
+              alt={lodge?.name || "Camp Lodge"}
               sx={{ width: "100%", height: "100%", objectFit: "cover" }}
               onError={(e) => {
                 e.target.src =
@@ -231,12 +238,12 @@ export default function CampLodgeDetail() {
                   textShadow: "0 2px 8px rgba(0,0,0,0.5)",
                 }}
               >
-                {lodge.name}
+                {lodge?.name || "Loading..."}
               </Typography>
               <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 0.5 }}>
                 <Chip
                   icon={<LocationOn />}
-                  label={lodge.location}
+                  label={lodge?.location || "Loading..."}
                   sx={{
                     backgroundColor: "#B85C38",
                     color: "white",
@@ -246,7 +253,7 @@ export default function CampLodgeDetail() {
                 />
                 <Chip
                   icon={<MapIcon />}
-                  label={lodge.destination}
+                  label={lodge?.destination || "Loading..."}
                   variant="outlined"
                   sx={{
                     fontWeight: 600,
@@ -320,7 +327,7 @@ export default function CampLodgeDetail() {
                 fontWeight: 600,
               }}
             >
-              {lodge.description}
+              {lodge?.description || "Loading camp description..."}
             </Typography>
 
             <Grid container spacing={2} sx={{ mb: 2 }}>
@@ -579,7 +586,7 @@ export default function CampLodgeDetail() {
                     <CardMedia
                       component="img"
                       image={buildImageUrl(img)}
-                      alt={`${lodge.name} gallery ${idx + 1}`}
+                      alt={`${lodge?.name || 'Camp'} gallery ${idx + 1}`}
                       sx={{ height: 180, objectFit: "cover" }}
                       onError={(e) => {
                         e.target.src =
@@ -595,9 +602,10 @@ export default function CampLodgeDetail() {
               variant="contained"
               size="large"
               startIcon={<NaturePeople />}
+              disabled={!lodge?.id}
               onClick={() =>
                 navigate("/plan", {
-                  state: { from: "camp-lodge-detail", lodgeId: lodge.id },
+                  state: { from: "camp-lodge-detail", lodgeId: lodge?.id },
                 })
               }
               sx={{

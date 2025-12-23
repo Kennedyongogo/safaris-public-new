@@ -18,6 +18,7 @@ import {
   ImageListItem,
   Divider,
   IconButton,
+  CircularProgress,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -55,359 +56,7 @@ import { Style, Stroke, Fill, Circle as CircleStyle, Text } from "ol/style";
 
 const MotionBox = motion(Box);
 
-// Package data with detailed itineraries
-const packagesWithItineraries = [
-  {
-    id: 1,
-    title: "Classic Kenya Safari Adventure",
-    description:
-      "Experience the best of Kenya's wildlife and landscapes. This comprehensive safari takes you through Maasai Mara, Lake Nakuru, and Amboseli for an unforgettable adventure.",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800",
-    duration: "8 Days / 7 Nights",
-    price: "$2,500",
-    pricePerPerson: "per person",
-    groupSize: "2-6 People",
-    rating: 4.8,
-    highlights: ["Big Five Safari", "Great Migration", "Hot Air Balloon", "Cultural Visits", "All Meals"],
-    included: ["Accommodation", "Meals", "Transport", "Park Fees", "Guide"],
-    type: "All-inclusive",
-    route: [
-      {
-        stage: 1,
-        name: "Nairobi Arrival",
-        description: "Welcome to Kenya! Arrive at Jomo Kenyatta International Airport where you'll be greeted by our representative. Transfer to your hotel in Nairobi for overnight stay and briefing about your safari adventure.",
-        coordinates: [36.8219, -1.2921], // Nairobi
-        images: [
-          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Airport Transfer", "Hotel Check-in", "Safari Briefing"],
-        accommodation: "4-star hotel in Nairobi city center",
-        meals: "Dinner included",
-        transportation: "Airport pickup in air-conditioned vehicle",
-        highlights: ["Welcome briefing", "City orientation", "Rest after long flight"],
-        tips: "Arrive well-rested and ready for your safari adventure. Exchange currency at the airport or hotel.",
-      },
-      {
-        stage: 2,
-        name: "Maasai Mara National Reserve",
-        description: "Journey to the world-famous Maasai Mara, home to the Big Five and the Great Migration. Enjoy morning and afternoon game drives in search of lions, elephants, cheetahs, and the spectacular wildebeest migration.",
-        coordinates: [35.4167, -1.4167], // Maasai Mara
-        images: [
-          "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=800&h=600&fit=crop",
-        ],
-        duration: "3 Days",
-        activities: ["Game Drives", "Big Five Safari", "Wildlife Photography", "Sunset Viewing"],
-        accommodation: "Luxury tented camp in the heart of Maasai Mara",
-        meals: "All meals included (breakfast, lunch, dinner)",
-        transportation: "4x4 safari vehicle with pop-up roof for game viewing",
-        highlights: ["Big Five sightings", "Great Migration (seasonal)", "Hot air balloon safari (optional)", "Maasai cultural visit"],
-        wildlife: "Lions, elephants, cheetahs, leopards, rhinos, wildebeest, zebras, giraffes, hippos, crocodiles",
-        tips: "Best time: July-October for migration. Bring binoculars, camera, and warm layers for early morning drives.",
-      },
-      {
-        stage: 3,
-        name: "Lake Nakuru National Park",
-        description: "Visit the famous pink lake, home to thousands of flamingos and over 400 bird species. This alkaline lake is also a sanctuary for both black and white rhinos, making it a prime location for rhino spotting.",
-        coordinates: [36.0833, -0.3667], // Lake Nakuru
-        images: [
-          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Flamingo Watching", "Rhino Tracking", "Bird Watching", "Game Drive"],
-        accommodation: "Lodge overlooking Lake Nakuru",
-        meals: "Breakfast, lunch, and dinner included",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Pink flamingo spectacle", "Rhino sanctuary", "Baboon cliff viewpoint", "Over 400 bird species"],
-        wildlife: "Black and white rhinos, flamingos, pelicans, waterbucks, buffaloes, baboons, leopards",
-        tips: "Perfect for bird enthusiasts. The pink lake is most vibrant during dry season. Bring a good camera for bird photography.",
-      },
-      {
-        stage: 4,
-        name: "Amboseli National Park",
-        description: "Experience breathtaking views of Mount Kilimanjaro while observing large herds of elephants. Amboseli is renowned for its elephant population and offers some of the best opportunities to see these majestic creatures up close.",
-        coordinates: [37.2500, -2.6500], // Amboseli
-        images: [
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&fit=crop",
-        ],
-        duration: "2 Days",
-        activities: ["Elephant Viewing", "Kilimanjaro Views", "Game Drives", "Cultural Visits"],
-        accommodation: "Luxury safari lodge with Kilimanjaro views",
-        meals: "All meals included with bush breakfast option",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Mount Kilimanjaro backdrop", "Large elephant herds", "Maasai village visit", "Observation Hill"],
-        wildlife: "Elephants, lions, cheetahs, hyenas, wildebeest, zebras, giraffes, buffaloes, hippos",
-        tips: "Best views of Kilimanjaro at sunrise and sunset. Clear weather is essential for mountain views. Great for elephant photography.",
-      },
-      {
-        stage: 5,
-        name: "Nairobi Departure",
-        description: "After breakfast, transfer back to Nairobi. Visit the Giraffe Centre or Karen Blixen Museum if time permits, then proceed to the airport for your departure flight, taking with you unforgettable memories of Kenya.",
-        coordinates: [36.8219, -1.2921], // Nairobi
-        images: [
-          "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Hotel Check-out", "Optional City Tour", "Airport Transfer"],
-        accommodation: "N/A - Departure day",
-        meals: "Breakfast included",
-        transportation: "Transfer to Jomo Kenyatta International Airport",
-        highlights: ["Giraffe Centre visit (optional)", "Karen Blixen Museum (optional)", "Souvenir shopping", "Farewell"],
-        tips: "Allow 3 hours before flight departure. Optional activities depend on flight schedule. Don't forget to check out of your accommodation.",
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "Amboseli & Tsavo Adventure",
-    description:
-      "Discover elephants with Mount Kilimanjaro views and explore the vast Tsavo wilderness. Perfect for wildlife photography enthusiasts.",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-    duration: "4 Days / 3 Nights",
-    price: "$1,800",
-    pricePerPerson: "per person",
-    groupSize: "2-8 People",
-    rating: 4.7,
-    highlights: ["Elephant Viewing", "Kilimanjaro Views", "Bird Watching", "Sunset Drives"],
-    included: ["Accommodation", "Meals", "Transport", "Park Fees"],
-    type: "Full board",
-    route: [
-      {
-        stage: 1,
-        name: "Nairobi to Amboseli",
-        description: "Depart from Nairobi and drive to Amboseli National Park, arriving in time for lunch. Afternoon game drive with spectacular views of Mount Kilimanjaro.",
-        coordinates: [37.2500, -2.6500], // Amboseli
-        images: [
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Road Transfer", "Afternoon Game Drive", "Kilimanjaro Views"],
-        accommodation: "Luxury safari lodge with Kilimanjaro views",
-        meals: "Lunch and dinner included",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Mount Kilimanjaro backdrop", "Elephant herds", "First game drive"],
-        tips: "Best views of Kilimanjaro at sunrise and sunset. Clear weather is essential.",
-      },
-      {
-        stage: 2,
-        name: "Amboseli National Park",
-        description: "Full day in Amboseli with morning and afternoon game drives. Experience large elephant herds against the backdrop of Africa's highest peak.",
-        coordinates: [37.2500, -2.6500], // Amboseli
-        images: [
-          "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=800&h=600&fit=crop",
-        ],
-        duration: "2 Days",
-        activities: ["Morning Game Drive", "Afternoon Game Drive", "Elephant Viewing", "Photography"],
-        accommodation: "Luxury safari lodge",
-        meals: "All meals included",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Elephant photography", "Kilimanjaro sunrise", "Observation Hill", "Maasai village visit"],
-        wildlife: "Elephants, lions, cheetahs, hyenas, wildebeest, zebras, giraffes, buffaloes",
-        tips: "Early morning drives offer the best lighting for photography. Bring a telephoto lens.",
-      },
-      {
-        stage: 3,
-        name: "Tsavo East National Park",
-        description: "Transfer to Tsavo East, one of Kenya's largest parks. Game drives in search of the famous red elephants and diverse wildlife.",
-        coordinates: [38.7500, -2.9833], // Tsavo East
-        images: [
-          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Game Drive", "Wildlife Viewing", "Photography", "Sunset Viewing"],
-        accommodation: "Safari lodge in Tsavo East",
-        meals: "All meals included",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Red elephants", "Diverse landscapes", "Bird watching", "Sunset photography"],
-        wildlife: "Red elephants, lions, leopards, buffaloes, giraffes, zebras, cheetahs, hyenas",
-        tips: "Tsavo is hot and dry. Stay hydrated and wear light clothing. The red elephants are unique to this region.",
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: "Samburu Special Five Safari",
-    description:
-      "Explore northern Kenya's unique wildlife including Grevy's zebra, Somali ostrich, and reticulated giraffe. A truly unique safari experience.",
-    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800",
-    duration: "3 Days / 2 Nights",
-    price: "$1,200",
-    pricePerPerson: "per person",
-    groupSize: "2-6 People",
-    rating: 4.9,
-    highlights: ["Special Five", "River Safaris", "Cultural Experiences", "Game Drives"],
-    included: ["Accommodation", "Meals", "Transport", "Park Fees", "Guide"],
-    type: "All-inclusive",
-    route: [
-      {
-        stage: 1,
-        name: "Nairobi to Samburu",
-        description: "Drive north to Samburu National Reserve, crossing the equator. Arrive in time for lunch and afternoon game drive in search of the Special Five.",
-        coordinates: [37.5167, 0.5167], // Samburu
-        images: [
-          "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Road Transfer", "Equator Crossing", "Afternoon Game Drive"],
-        accommodation: "Luxury tented camp by Ewaso Nyiro River",
-        meals: "Lunch and dinner included",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Equator crossing", "First Special Five sightings", "River views"],
-        tips: "The drive is scenic but long. Bring snacks and stay comfortable.",
-      },
-      {
-        stage: 2,
-        name: "Samburu National Reserve",
-        description: "Full day exploring Samburu in search of the Special Five: Grevy's zebra, Somali ostrich, reticulated giraffe, gerenuk, and Beisa oryx.",
-        coordinates: [37.5167, 0.5167], // Samburu
-        images: [
-          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-        ],
-        duration: "2 Days",
-        activities: ["Game Drives", "Special Five Tracking", "River Safari", "Cultural Visit"],
-        accommodation: "Luxury tented camp",
-        meals: "All meals included",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Special Five wildlife", "Samburu culture", "River activities", "Desert landscapes"],
-        wildlife: "Grevy's zebra, Somali ostrich, reticulated giraffe, gerenuk, Beisa oryx, elephants, lions, leopards",
-        tips: "Samburu is hot and arid. The Special Five are unique to this region. Early morning and late afternoon are best for wildlife viewing.",
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "Tanzania Northern Circuit Safari",
-    description:
-      "Explore Tanzania's most iconic national parks and witness the Great Migration. Experience Serengeti, Ngorongoro Crater, and Tarangire.",
-    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
-    duration: "10 Days / 9 Nights",
-    price: "$3,200",
-    pricePerPerson: "per person",
-    groupSize: "2-6 People",
-    rating: 4.9,
-    highlights: ["Great Migration", "Big Five", "Ngorongoro Crater", "Serengeti"],
-    included: ["Accommodation", "Meals", "Transport", "Park Fees", "Guide"],
-    type: "All-inclusive",
-    route: [
-      {
-        stage: 1,
-        name: "Arusha Arrival",
-        description: "Arrive at Kilimanjaro International Airport and transfer to Arusha, the gateway to Tanzania's northern safari circuit. Check into your lodge and enjoy a welcome dinner while your guide briefs you on the adventure ahead.",
-        coordinates: [36.6833, -3.3667], // Arusha
-        images: [
-          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Airport Transfer", "Lodge Check-in", "Welcome Briefing"],
-        accommodation: "Luxury lodge in Arusha",
-        meals: "Dinner included",
-        transportation: "Airport pickup in air-conditioned vehicle",
-        highlights: ["Welcome briefing", "Lodge orientation", "Rest after flight"],
-        tips: "Arusha is at a higher altitude. Take it easy on arrival to acclimatize.",
-      },
-      {
-        stage: 2,
-        name: "Tarangire National Park",
-        description: "Drive to Tarangire, famous for its massive elephant herds and ancient baobab trees. The park is home to over 550 bird species and offers excellent game viewing opportunities, especially during the dry season when animals gather around the Tarangire River.",
-        coordinates: [36.0000, -3.8333], // Tarangire
-        images: [
-          "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=800&h=600&fit=crop",
-        ],
-        duration: "2 Days",
-        activities: ["Game Drives", "Elephant Watching", "Bird Watching", "Baobab Photography"],
-        accommodation: "Luxury tented camp in Tarangire",
-        meals: "All meals included",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Massive elephant herds", "Ancient baobab trees", "Over 550 bird species", "Tarangire River"],
-        wildlife: "Elephants, lions, leopards, buffaloes, giraffes, zebras, wildebeest, over 550 bird species",
-        tips: "Best viewing during dry season (June-October). The baobab trees make for stunning photography.",
-      },
-      {
-        stage: 3,
-        name: "Serengeti National Park",
-        description: "Enter the legendary Serengeti, one of the world's most famous wildlife sanctuaries. Witness the Great Migration of over 1.5 million wildebeest and zebras. Experience thrilling game drives in search of the Big Five and enjoy the vast, endless plains that define the Serengeti.",
-        coordinates: [34.8333, -2.3333], // Serengeti
-        images: [
-          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-        ],
-        duration: "3 Days",
-        activities: ["Great Migration Viewing", "Big Five Safari", "Game Drives", "Hot Air Balloon Safari (Optional)"],
-        accommodation: "Luxury tented camp in central Serengeti",
-        meals: "All meals included",
-        transportation: "4x4 safari vehicle with pop-up roof",
-        highlights: ["Great Migration spectacle", "Big Five sightings", "Endless plains", "Hot air balloon (optional)"],
-        wildlife: "Lions, elephants, leopards, rhinos, buffaloes, cheetahs, wildebeest, zebras, giraffes, hyenas",
-        tips: "Migration location varies by season. Your guide will track the herds. Early morning drives are best for predator activity.",
-      },
-      {
-        stage: 4,
-        name: "Ngorongoro Crater",
-        description: "Descend into the Ngorongoro Crater, a UNESCO World Heritage Site and one of Africa's most spectacular natural wonders. This collapsed volcano is home to an incredible density of wildlife, including the rare black rhino, making it one of the best places in Africa to see the Big Five in a single day.",
-        coordinates: [35.5833, -3.1667], // Ngorongoro
-        images: [
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&h=600&fit=crop",
-        ],
-        duration: "2 Days",
-        activities: ["Crater Descent", "Big Five Safari", "Rhino Tracking", "Picnic Lunch in Crater"],
-        accommodation: "Luxury lodge on crater rim",
-        meals: "All meals included with picnic lunch in crater",
-        transportation: "4x4 safari vehicle",
-        highlights: ["UNESCO World Heritage Site", "Black rhino sightings", "Big Five in one day", "Crater floor picnic"],
-        wildlife: "Black rhinos, lions, elephants, leopards, buffaloes, hippos, zebras, wildebeest, hyenas, flamingos",
-        tips: "The crater rim can be cold in the morning. Bring warm layers. The crater floor is warmer and perfect for game viewing.",
-      },
-      {
-        stage: 5,
-        name: "Lake Manyara National Park",
-        description: "Visit Lake Manyara, known for its tree-climbing lions and large flocks of flamingos. The park's diverse habitats range from the alkaline lake to the groundwater forest, providing opportunities to see a wide variety of wildlife in a compact area.",
-        coordinates: [35.8333, -3.5000], // Lake Manyara
-        images: [
-          "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Game Drive", "Tree-Climbing Lions", "Flamingo Watching", "Forest Walk"],
-        accommodation: "Lodge near Lake Manyara",
-        meals: "All meals included",
-        transportation: "4x4 safari vehicle",
-        highlights: ["Tree-climbing lions", "Flamingo flocks", "Groundwater forest", "Diverse habitats"],
-        wildlife: "Tree-climbing lions, elephants, hippos, flamingos, baboons, blue monkeys, over 400 bird species",
-        tips: "Lake Manyara is compact but diverse. The tree-climbing lions are a unique sight. Best viewing in the morning.",
-      },
-      {
-        stage: 6,
-        name: "Arusha Departure",
-        description: "After breakfast, enjoy a leisurely morning before transferring back to Arusha or Kilimanjaro Airport for your departure flight. Reflect on the incredible wildlife encounters and breathtaking landscapes you've experienced.",
-        coordinates: [36.6833, -3.3667], // Arusha
-        images: [
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=600&fit=crop",
-        ],
-        duration: "1 Day",
-        activities: ["Lodge Check-out", "Airport Transfer"],
-        accommodation: "N/A - Departure day",
-        meals: "Breakfast included",
-        transportation: "Transfer to Kilimanjaro International Airport",
-        highlights: ["Farewell", "Souvenir shopping (optional)", "Airport transfer"],
-        tips: "Allow 3 hours before flight departure. Optional souvenir shopping in Arusha if time permits.",
-      },
-    ],
-  },
-];
+// Package data will be fetched from API
 
 const chipStyleByType = {
   "All-inclusive": {
@@ -436,9 +85,13 @@ const PackagesWithItinerary = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [packages, setPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [selectedStage, setSelectedStage] = useState(0);
   const [viewMode, setViewMode] = useState("packages"); // "packages" or "itinerary"
+  const [loadingPackage, setLoadingPackage] = useState(null); // Track which package is being loaded
 
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -446,6 +99,31 @@ const PackagesWithItinerary = () => {
   const [mapInitialized, setMapInitialized] = useState(false);
   const [popupData, setPopupData] = useState(null);
   const [popupPosition, setPopupPosition] = useState(null);
+
+  // Fetch packages from API
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch('/api/packages/public?limit=50'); // Get more packages
+        const result = await response.json();
+
+        if (result.success) {
+          setPackages(result.data);
+        } else {
+          throw new Error(result.message || 'Failed to load packages');
+        }
+      } catch (err) {
+        setError(err.message || 'Failed to load packages');
+        console.error('Error fetching packages:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPackages();
+  }, []);
 
   // Initialize Map
   useEffect(() => {
@@ -490,11 +168,11 @@ const PackagesWithItinerary = () => {
 
       if (feature && feature.get("type") === "stage") {
         const stageIndex = feature.get("stageIndex");
-        if (selectedPackage && selectedPackage.route[stageIndex]) {
-          const stageData = selectedPackage.route[stageIndex];
+        if (selectedPackage && selectedPackage.routeStages && selectedPackage.routeStages[stageIndex]) {
+          const stageData = selectedPackage.routeStages[stageIndex];
           setSelectedStage(stageIndex);
           setPopupData(stageData);
-          
+
           // Convert map coordinates to pixel coordinates for popup positioning
           const pixel = map.getPixelFromCoordinate(
             feature.getGeometry().getCoordinates()
@@ -530,15 +208,15 @@ const PackagesWithItinerary = () => {
 
   // Update Map when package/stage changes
   useEffect(() => {
-    if (!mapInitialized || !vectorSourceRef.current || !mapInstance.current || !selectedPackage) return;
+    if (!mapInitialized || !vectorSourceRef.current || !mapInstance.current || !selectedPackage || !selectedPackage.routeStages) return;
 
     const vectorSource = vectorSourceRef.current;
     vectorSource.clear();
 
-    const route = selectedPackage.route;
+    const route = selectedPackage.routeStages;
     if (route.length === 0) return;
 
-    const routeCoordinates = route.map((stage) => fromLonLat(stage.coordinates));
+    const routeCoordinates = route.map((stage) => fromLonLat([parseFloat(stage.longitude), parseFloat(stage.latitude)]));
     const routeLine = new LineString(routeCoordinates);
     const routeFeature = new Feature({
       geometry: routeLine,
@@ -558,7 +236,7 @@ const PackagesWithItinerary = () => {
     vectorSource.addFeature(routeFeature);
 
     route.forEach((stage, index) => {
-      const point = new Point(fromLonLat(stage.coordinates));
+      const point = new Point(fromLonLat([parseFloat(stage.longitude), parseFloat(stage.latitude)]));
       const feature = new Feature({
         geometry: point,
         type: "stage",
@@ -601,10 +279,45 @@ const PackagesWithItinerary = () => {
     }
   }, [selectedPackage, selectedStage, mapInitialized]);
 
-  const handlePackageSelect = (pkg) => {
-    setSelectedPackage(pkg);
-    setSelectedStage(0);
-    setViewMode("itinerary");
+  const handlePackageSelect = async (pkg) => {
+    // Prevent multiple clicks on the same package
+    if (loadingPackage === pkg.id) return;
+
+    try {
+      setLoadingPackage(pkg.id);
+
+      // Immediately switch to itinerary view for better UX
+      setSelectedPackage(pkg);
+      setSelectedStage(0);
+      setViewMode("itinerary");
+
+      // If we already have route stages, we're done
+      if (pkg.routeStages && pkg.routeStages.length > 0) {
+        setLoadingPackage(null);
+        return;
+      }
+
+      // Otherwise, fetch the detailed package with route stages
+      const response = await fetch(`/api/packages/public/${pkg.id}`);
+      const result = await response.json();
+
+      if (result.success) {
+        // The API returns the complete package with routeStages included
+        setSelectedPackage(result.data);
+        // selectedStage and viewMode are already set
+      } else {
+        throw new Error(result.message || 'Failed to load package details');
+      }
+    } catch (err) {
+      console.error('Error fetching package details:', err);
+      // If API fails, keep the basic package data but set routeStages to empty array
+      setSelectedPackage({
+        ...pkg,
+        routeStages: []
+      });
+    } finally {
+      setLoadingPackage(null);
+    }
   };
 
   const handleBackToPackages = () => {
@@ -617,11 +330,11 @@ const PackagesWithItinerary = () => {
     setSelectedStage(stageIndex);
     setPopupData(null);
     setPopupPosition(null);
-    if (mapInstance.current && selectedPackage?.route[stageIndex]) {
-      const stage = selectedPackage.route[stageIndex];
+    if (mapInstance.current && selectedPackage?.routeStages?.[stageIndex]) {
+      const stage = selectedPackage.routeStages[stageIndex];
       const view = mapInstance.current.getView();
       view.animate({
-        center: fromLonLat(stage.coordinates),
+        center: fromLonLat([parseFloat(stage.longitude), parseFloat(stage.latitude)]),
         zoom: 8,
         duration: 1000,
       });
@@ -629,7 +342,7 @@ const PackagesWithItinerary = () => {
   };
 
   const handleNextStage = () => {
-    if (selectedPackage && selectedStage < selectedPackage.route.length - 1) {
+    if (selectedPackage?.routeStages && selectedStage < selectedPackage.routeStages.length - 1) {
       handleStageChange(selectedStage + 1);
     }
   };
@@ -640,8 +353,9 @@ const PackagesWithItinerary = () => {
     }
   };
 
-  const handleBookNow = (packageId) => {
-    navigate("/plan", { state: { packageId } });
+  const handleBookNow = (pkg) => {
+    // Use package ID for booking
+    navigate("/plan", { state: { packageId: pkg.id } });
   };
 
   return (
@@ -657,8 +371,8 @@ const PackagesWithItinerary = () => {
       <Container
         maxWidth="xl"
         sx={{
-          px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0.75, sm: 0.75, md: 0.75 },
+          px: { xs: 0.75, sm: 0.75, md: 0.75 },
+          pt: { xs: 0.375, sm: 0.375, md: 0.375 },
           position: "relative",
           zIndex: 1,
         }}
@@ -666,8 +380,8 @@ const PackagesWithItinerary = () => {
         <Paper
           elevation={3}
           sx={{
-            py: { xs: 1, sm: 1.25, md: 1.5 },
-            px: { xs: 1.5, sm: 1.5, md: 1.5 },
+            py: { xs: 0.5, sm: 0.625, md: 0.75 },
+            px: { xs: 0.75, sm: 0.75, md: 0.75 },
             borderRadius: { xs: 3, md: 4 },
             background: "white",
             border: "1px solid #e0e0e0",
@@ -675,15 +389,28 @@ const PackagesWithItinerary = () => {
             height: "auto",
           }}
         >
-          {viewMode === "packages" ? (
+          {loading ? (
+            <Box display="flex" justifyContent="center" alignItems="center" py={8}>
+              <CircularProgress />
+            </Box>
+          ) : error ? (
+            <Box textAlign="center" py={4}>
+              <Typography variant="h6" color="error" gutterBottom>
+                Failed to load packages
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {error}
+              </Typography>
+            </Box>
+          ) : viewMode === "packages" ? (
             <>
               {/* Header Section */}
-              <Box sx={{ mb: { xs: 1, sm: 1.25, md: 1.5 }, textAlign: "center" }}>
+              <Box sx={{ mb: { xs: 0.5, sm: 0.625, md: 0.75 }, textAlign: "center" }}>
                 <Typography
                   variant="h2"
                   sx={{
                     fontWeight: 700,
-                    mb: { xs: 0.5, md: 0.75 },
+                    mb: { xs: 0.25, md: 0.375 },
                     color: "#5D4037",
                     fontSize: { xs: "2rem", sm: "2.4rem", md: "2.8rem" },
                   }}
@@ -693,7 +420,7 @@ const PackagesWithItinerary = () => {
                 <Typography
                   variant="body1"
                   sx={{
-                    mb: { xs: 0.5, md: 0.75 },
+                    mb: { xs: 0.25, md: 0.375 },
                     color: "text.primary",
                     fontSize: { xs: "1.05rem", md: "1.15rem" },
                     lineHeight: 1.7,
@@ -706,8 +433,8 @@ const PackagesWithItinerary = () => {
               </Box>
 
               {/* Package Cards */}
-              <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }} justifyContent="center">
-                {packagesWithItineraries.map((pkg, index) => (
+              <Grid container spacing={{ xs: 1, sm: 1.25, md: 1.5 }} justifyContent="center">
+                {packages.map((pkg, index) => (
                   <Grid
                     size={{
                       xs: 12,
@@ -727,13 +454,11 @@ const PackagesWithItinerary = () => {
                           display: "flex",
                           flexDirection: "column",
                           transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                          cursor: "pointer",
                           "&:hover": {
                             transform: "translateY(-8px)",
                             boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
                           },
                         }}
-                        onClick={() => handlePackageSelect(pkg)}
                       >
                         <Box
                           sx={{
@@ -975,6 +700,7 @@ const PackagesWithItinerary = () => {
                               variant="outlined"
                               size="small"
                               fullWidth
+                              disabled={loadingPackage === pkg.id}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handlePackageSelect(pkg);
@@ -1000,7 +726,7 @@ const PackagesWithItinerary = () => {
                                 },
                               }}
                             >
-                              View Itinerary
+                              {loadingPackage === pkg.id ? "Loading..." : "View Itinerary"}
                             </Button>
                             <Button
                               variant="contained"
@@ -1008,7 +734,7 @@ const PackagesWithItinerary = () => {
                               fullWidth
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleBookNow(pkg.id);
+                                handleBookNow(pkg);
                               }}
                               endIcon={<ArrowForward />}
                               sx={{
@@ -1040,7 +766,7 @@ const PackagesWithItinerary = () => {
                 ))}
               </Grid>
             </>
-          ) : (
+          ) : selectedPackage ? (
             <>
               {/* Back Button */}
               <Button
@@ -1066,7 +792,7 @@ const PackagesWithItinerary = () => {
               </Button>
 
               {/* Package Header */}
-              <Box sx={{ mb: { xs: 2, md: 3 } }}>
+              <Box sx={{ mb: { xs: 1, md: 1.5 } }}>
                 <Typography
                   variant="h2"
                   sx={{
@@ -1076,7 +802,12 @@ const PackagesWithItinerary = () => {
                     fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.6rem" },
                   }}
                 >
-                  {selectedPackage?.title}
+                  {selectedPackage.title}
+                  {loadingPackage === selectedPackage.id && (
+                    <Typography component="span" sx={{ ml: 2, fontSize: "0.8em", color: "text.secondary" }}>
+                      (Loading details...)
+                    </Typography>
+                  )}
                 </Typography>
                 <Box
                   sx={{
@@ -1090,26 +821,26 @@ const PackagesWithItinerary = () => {
                   <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                     <AttachMoney sx={{ color: "#5D4037" }} />
                     <Typography variant="h6" sx={{ color: "#5D4037", fontWeight: 700 }}>
-                      {selectedPackage?.price} {selectedPackage?.pricePerPerson}
+                      {selectedPackage.price} {selectedPackage.pricePerPerson}
                     </Typography>
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                     <Schedule sx={{ color: "#5D4037" }} />
                     <Typography variant="body1" sx={{ color: "text.secondary", fontWeight: 600 }}>
-                      {selectedPackage?.duration}
+                      {selectedPackage.duration}
                     </Typography>
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                     <People sx={{ color: "#5D4037" }} />
                     <Typography variant="body1" sx={{ color: "text.secondary", fontWeight: 600 }}>
-                      {selectedPackage?.groupSize}
+                      {selectedPackage.groupSize}
                     </Typography>
                   </Box>
                 </Box>
                 <Button
                   variant="contained"
                   endIcon={<ArrowForward />}
-                  onClick={() => handleBookNow(selectedPackage?.id)}
+                  onClick={() => handleBookNow(selectedPackage)}
                   sx={{
                     backgroundColor: "#5D4037",
                     color: "white",
@@ -1131,7 +862,7 @@ const PackagesWithItinerary = () => {
               </Box>
 
               {/* Timeline Navigation */}
-              <Box sx={{ mt: 3, mb: 3 }}>
+              <Box sx={{ mt: 1.5, mb: 1.5 }}>
                 <Typography
                   variant="h6"
                   sx={{
@@ -1143,51 +874,61 @@ const PackagesWithItinerary = () => {
                 >
                   Tour Timeline
                 </Typography>
-                <Stepper
-                  activeStep={selectedStage}
-                  orientation={isMobile ? "vertical" : "horizontal"}
-                  sx={{
-                    "& .MuiStepIcon-root": {
-                      color: "#d0d0d0",
-                      "&.Mui-active": {
-                        color: "#5D4037",
+
+                {selectedPackage?.routeStages && Array.isArray(selectedPackage.routeStages) && selectedPackage.routeStages.length > 0 ? (
+                  <Stepper
+                    activeStep={selectedStage}
+                    orientation={isMobile ? "vertical" : "horizontal"}
+                    sx={{
+                      "& .MuiStepIcon-root": {
+                        color: "#d0d0d0",
+                        "&.Mui-active": {
+                          color: "#5D4037",
+                        },
+                        "&.Mui-completed": {
+                          color: "#B85C38",
+                        },
                       },
-                      "&.Mui-completed": {
-                        color: "#B85C38",
-                      },
-                    },
-                  }}
-                >
-                  {selectedPackage?.route.map((stage, index) => (
-                    <Step key={index}>
-                      <StepButton onClick={() => handleStageChange(index)}>
-                        <StepLabel>
-                          <Box>
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                fontWeight: index === selectedStage ? 700 : 500,
-                                color: index === selectedStage ? "#5D4037" : "text.secondary",
-                                fontSize: { xs: "0.95rem", sm: "1rem" },
-                              }}
-                            >
-                              {stage.name}
-                            </Typography>
-                            <Typography
-                              variant="caption"
-                              sx={{
-                                color: "text.secondary",
-                                fontSize: { xs: "0.8rem", sm: "0.85rem" },
-                              }}
-                            >
-                              {stage.duration}
-                            </Typography>
-                          </Box>
-                        </StepLabel>
-                      </StepButton>
-                    </Step>
-                  ))}
-                </Stepper>
+                    }}
+                  >
+                      {selectedPackage.routeStages.map((stage, index) => (
+                        <Step key={index}>
+                          <StepButton onClick={() => handleStageChange(index)}>
+                            <StepLabel>
+                              <Box>
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    fontWeight: index === selectedStage ? 700 : 500,
+                                    color: index === selectedStage ? "#5D4037" : "text.secondary",
+                                    fontSize: { xs: "0.95rem", sm: "1rem" },
+                                  }}
+                                >
+                                  {stage.name}
+                                </Typography>
+                                <Typography
+                                  variant="caption"
+                                  sx={{
+                                    color: "text.secondary",
+                                    fontSize: { xs: "0.8rem", sm: "0.85rem" },
+                                  }}
+                                >
+                                  {stage.duration}
+                                </Typography>
+                              </Box>
+                            </StepLabel>
+                          </StepButton>
+                        </Step>
+                      ))}
+                    </Stepper>
+                  ) : (
+                    <Box sx={{ textAlign: "center", py: 4 }}>
+                      <CircularProgress size={24} sx={{ mb: 2 }} />
+                      <Typography variant="body2" color="text.secondary">
+                        Loading itinerary details...
+                      </Typography>
+                    </Box>
+                  )}
 
                 <Box
                   sx={{
@@ -1225,14 +966,14 @@ const PackagesWithItinerary = () => {
                   </Button>
 
                   <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600, whiteSpace: "nowrap" }}>
-                    Stage {selectedStage + 1} of {selectedPackage?.route.length}
+                    Stage {selectedStage + 1} of {selectedPackage?.routeStages?.length || 0}
                   </Typography>
 
                   <Button
                     variant="contained"
                     endIcon={<ArrowForward />}
                     onClick={handleNextStage}
-                    disabled={selectedStage === (selectedPackage?.route.length || 0) - 1}
+                    disabled={selectedStage === ((selectedPackage?.routeStages?.length || 0) - 1)}
                     sx={{
                       backgroundColor: "#5D4037",
                       color: "white",
@@ -1258,7 +999,7 @@ const PackagesWithItinerary = () => {
               {/* Map Container */}
               <Box
                 sx={{
-                  mb: { xs: 2, md: 3 },
+                  mb: { xs: 1, md: 1.5 },
                   borderRadius: 2,
                   overflow: "hidden",
                   border: "1px solid #e0e0e0",
@@ -1409,7 +1150,7 @@ const PackagesWithItinerary = () => {
               </Box>
 
               {/* Stage Details Panel */}
-              {selectedPackage?.route[selectedStage] && (
+              {selectedPackage?.routeStages && selectedPackage.routeStages.length > 0 && selectedPackage.routeStages[selectedStage] && (
                 <Box
                   sx={{
                     borderRadius: 2,
@@ -1434,12 +1175,12 @@ const PackagesWithItinerary = () => {
                             What to Expect
                           </Typography>
                           <ImageList cols={2} rowHeight={160} sx={{ m: 0, mb: 2 }}>
-                            {selectedPackage.route[selectedStage].images.map((image, index) => (
+                            {selectedPackage.routeStages[selectedStage].images.map((image, index) => (
                               <ImageListItem key={index}>
                                 <Box
                                   component="img"
                                   src={image}
-                                  alt={`${selectedPackage.route[selectedStage].name} - Image ${index + 1}`}
+                                  alt={`${selectedPackage.routeStages[selectedStage].name} - Image ${index + 1}`}
                                   sx={{
                                     width: "100%",
                                     height: "100%",
@@ -1463,7 +1204,7 @@ const PackagesWithItinerary = () => {
                                 fontSize: { xs: "1.45rem", md: "1.7rem" },
                               }}
                             >
-                              Stage {selectedPackage.route[selectedStage].stage}: {selectedPackage.route[selectedStage].name}
+                              Stage {selectedPackage.routeStages[selectedStage].stage}: {selectedPackage.routeStages[selectedStage].name}
                             </Typography>
                           </Box>
 
@@ -1474,7 +1215,7 @@ const PackagesWithItinerary = () => {
                           <Box sx={{ display: "flex", alignItems: "center", mb: 2, gap: 1 }}>
                             <AccessTime sx={{ color: "text.secondary", fontSize: 20 }} />
                             <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
-                              Duration: {selectedPackage.route[selectedStage].duration}
+                              Duration: {selectedPackage.routeStages[selectedStage].duration}
                             </Typography>
                           </Box>
 
@@ -1487,14 +1228,14 @@ const PackagesWithItinerary = () => {
                               fontSize: { xs: "1.05rem", md: "1.15rem" },
                             }}
                           >
-                            {selectedPackage.route[selectedStage].description}
+                            {selectedPackage.routeStages[selectedStage].description}
                           </Typography>
 
                           <Box sx={{ my: 2, ml: { xs: 0, md: "calc(-50% - 12px - 32px)" }, mr: { xs: 0, md: -4 }, width: { xs: "100%", md: "calc(200% + 24px + 64px)" } }}>
                             <Divider />
                           </Box>
 
-                          {selectedPackage.route[selectedStage].accommodation && (
+                          {selectedPackage.routeStages[selectedStage].accommodation && (
                             <>
                               <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2, gap: 1.5 }}>
                                 <Hotel sx={{ color: "#5D4037", fontSize: 24, mt: 0.5 }} />
@@ -1503,7 +1244,7 @@ const PackagesWithItinerary = () => {
                                     Accommodation
                                   </Typography>
                                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    {selectedPackage.route[selectedStage].accommodation}
+                                    {selectedPackage.routeStages[selectedStage].accommodation}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -1513,7 +1254,7 @@ const PackagesWithItinerary = () => {
                             </>
                           )}
 
-                          {selectedPackage.route[selectedStage].meals && (
+                          {selectedPackage.routeStages[selectedStage].meals && (
                             <>
                               <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2, gap: 1.5 }}>
                                 <Restaurant sx={{ color: "#5D4037", fontSize: 24, mt: 0.5 }} />
@@ -1522,7 +1263,7 @@ const PackagesWithItinerary = () => {
                                     Meals Included
                                   </Typography>
                                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    {selectedPackage.route[selectedStage].meals}
+                                    {selectedPackage.routeStages[selectedStage].meals}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -1532,13 +1273,13 @@ const PackagesWithItinerary = () => {
                             </>
                           )}
 
-                          {selectedPackage.route[selectedStage].highlights && (
+                          {selectedPackage.routeStages[selectedStage].highlights && (
                             <>
                               <Typography variant="h6" sx={{ fontWeight: 700, mb: 1.5, color: "#5D4037" }}>
                                 Key Highlights
                               </Typography>
                               <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mb: 2 }}>
-                                {selectedPackage.route[selectedStage].highlights.map((highlight, idx) => (
+                                {selectedPackage.routeStages[selectedStage].highlights.map((highlight, idx) => (
                                   <Box key={idx} sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
                                     <CheckCircle sx={{ color: "#6B7D47", fontSize: 20, mt: 0.25 }} />
                                     <Typography variant="body2">{highlight}</Typography>
@@ -1551,7 +1292,7 @@ const PackagesWithItinerary = () => {
                             </>
                           )}
 
-                          {selectedPackage.route[selectedStage].wildlife && (
+                          {selectedPackage.routeStages[selectedStage].wildlife && (
                             <>
                               <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2, gap: 1.5 }}>
                                 <CameraAlt sx={{ color: "#5D4037", fontSize: 24, mt: 0.5 }} />
@@ -1560,7 +1301,7 @@ const PackagesWithItinerary = () => {
                                     Wildlife to Spot
                                   </Typography>
                                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    {selectedPackage.route[selectedStage].wildlife}
+                                    {selectedPackage.routeStages[selectedStage].wildlife}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -1570,7 +1311,7 @@ const PackagesWithItinerary = () => {
                             </>
                           )}
 
-                          {selectedPackage.route[selectedStage].transportation && (
+                          {selectedPackage.routeStages[selectedStage].transportation && (
                             <>
                               <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2, gap: 1.5 }}>
                                 <DirectionsCar sx={{ color: "#5D4037", fontSize: 24, mt: 0.5 }} />
@@ -1579,7 +1320,7 @@ const PackagesWithItinerary = () => {
                                     Transportation
                                   </Typography>
                                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    {selectedPackage.route[selectedStage].transportation}
+                                    {selectedPackage.routeStages[selectedStage].transportation}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -1593,7 +1334,7 @@ const PackagesWithItinerary = () => {
                             Activities & Experiences
                           </Typography>
                           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                            {selectedPackage.route[selectedStage].activities.map((activity, index) => (
+                            {selectedPackage.routeStages[selectedStage].activities.map((activity, index) => (
                               <Chip
                                 key={index}
                                 icon={<CheckCircle sx={{ fontSize: 16 }} />}
@@ -1611,7 +1352,7 @@ const PackagesWithItinerary = () => {
                       </Grid>
 
                       {/* Travel Tips - Full Width and Centered */}
-                      {selectedPackage.route[selectedStage].tips && (
+                      {selectedPackage.routeStages[selectedStage].tips && (
                         <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
                           <Box
                             sx={{
@@ -1630,7 +1371,7 @@ const PackagesWithItinerary = () => {
                               </Typography>
                             </Box>
                             <Typography variant="body2" sx={{ color: "text.primary", lineHeight: 1.7, pl: 4.5 }}>
-                              {selectedPackage.route[selectedStage].tips}
+                              {selectedPackage.routeStages[selectedStage].tips}
                             </Typography>
                           </Box>
                         </Box>
@@ -1640,6 +1381,15 @@ const PackagesWithItinerary = () => {
                 </Box>
               )}
             </>
+          ) : (
+            <Box sx={{ textAlign: "center", py: 6 }}>
+              <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+                No Package Selected
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Please select a package to view its itinerary.
+              </Typography>
+            </Box>
           )}
         </Paper>
       </Container>

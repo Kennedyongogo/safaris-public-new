@@ -206,15 +206,15 @@ export default function PublicHeader() {
         sx={{
           backgroundColor: scrolled
             ? "rgba(245, 241, 232, 0.95)" // Light beige with transparency when scrolled
-            : "transparent", // Completely transparent when on hero section
-          backdropFilter: scrolled ? "blur(20px)" : "none", // No blur on hero section
-          boxShadow: scrolled
+            : location.pathname === "/" ? "transparent" : "rgba(245, 241, 232, 0.95)", // Transparent only on home hero section
+          backdropFilter: scrolled || location.pathname !== "/" ? "blur(20px)" : "none",
+          boxShadow: scrolled || location.pathname !== "/"
             ? "0 8px 32px rgba(61, 40, 23, 0.12)"
-            : "none", // No shadow on hero section
+            : "none",
           transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-          borderBottom: scrolled
-            ? "1px solid rgba(107, 78, 61, 0.2)" // Medium brown border when scrolled
-            : "none", // No border on hero section
+          borderBottom: scrolled || location.pathname !== "/"
+            ? "1px solid rgba(107, 78, 61, 0.2)"
+            : "none",
         }}
       >
         <Toolbar sx={{ px: { xs: 2, sm: 3, md: 4 }, py: 1 }}>
@@ -244,11 +244,11 @@ export default function PublicHeader() {
                   src="/images/WhatsApp_Image_2025-12-14_at_10.56.47_AM-removebg-preview%20(1).png"
                   alt="Akira Safaris Logo"
                   style={{
-                    height: scrolled ? "64px" : "72px",
+                    height: (scrolled || location.pathname !== "/") ? "64px" : "72px",
                     maxHeight: "72px",
                     width: "auto",
                     transition: "height 0.4s ease",
-                    filter: scrolled
+                    filter: (scrolled || location.pathname !== "/")
                       ? "none"
                       : "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
                   }}
@@ -263,13 +263,13 @@ export default function PublicHeader() {
                     sx={{
                       fontWeight: "700",
                       fontSize: { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
-                      color: scrolled ? "primary.main" : "white",
+                      color: (scrolled || location.pathname !== "/") ? "primary.main" : "white",
                       lineHeight: 1.2,
                       transition: "all 0.3s ease",
-                      textShadow: scrolled
+                      textShadow: (scrolled || location.pathname !== "/")
                         ? "none"
                         : "2px 2px 4px rgba(0,0,0,0.3)",
-                      background: scrolled
+                      background: (scrolled || location.pathname !== "/")
                         ? "linear-gradient(45deg, #6B4E3D, #3D2817)" // Medium to dark brown
                         : "linear-gradient(45deg, #ffffff, #F5F1E8)", // White to light beige
                       backgroundClip: "text",
@@ -310,7 +310,7 @@ export default function PublicHeader() {
                       sx={{
                         color: isActiveItem
                           ? item.color
-                          : scrolled
+                          : (scrolled || location.pathname !== "/")
                             ? "text.primary"
                             : "white",
                         fontSize: {
@@ -328,14 +328,14 @@ export default function PublicHeader() {
                         overflow: "hidden",
                         whiteSpace: "nowrap",
                         backgroundColor: isActiveItem
-                          ? scrolled
+                          ? (scrolled || location.pathname !== "/")
                             ? `${item.color}20`
                             : `${item.color}30`
                           : "transparent",
                         "&:focus": {
                           outline: "none",
                           backgroundColor: isActiveItem
-                            ? scrolled
+                            ? (scrolled || location.pathname !== "/")
                               ? `${item.color}20`
                               : `${item.color}30`
                             : "transparent",
@@ -391,11 +391,11 @@ export default function PublicHeader() {
                           : {},
                         "& .icon": {
                           transition: "all 0.4s ease",
-                          color: isActiveItem
+                        color: isActiveItem
+                          ? item.color
+                          : (scrolled || location.pathname !== "/")
                             ? item.color
-                            : scrolled
-                              ? item.color
-                              : "white",
+                            : "white",
                         },
                       }}
                     >
@@ -414,20 +414,20 @@ export default function PublicHeader() {
                   display: { xs: "flex", md: "none" },
                   color: mobileMenuOpen
                     ? "#6B4E3D" // Medium brown
-                    : scrolled
+                    : (scrolled || location.pathname !== "/")
                       ? "primary.main"
                       : "white",
                   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   borderRadius: "12px",
                   backgroundColor: mobileMenuOpen
-                    ? scrolled
+                    ? (scrolled || location.pathname !== "/")
                       ? "rgba(107, 78, 61, 0.2)" // Medium brown with transparency
                       : "rgba(107, 78, 61, 0.3)"
                     : "transparent",
                   "&:focus": {
                     outline: "none",
                     backgroundColor: mobileMenuOpen
-                      ? scrolled
+                      ? (scrolled || location.pathname !== "/")
                         ? "rgba(107, 78, 61, 0.2)"
                         : "rgba(107, 78, 61, 0.3)"
                       : "transparent",
@@ -438,16 +438,16 @@ export default function PublicHeader() {
                   },
                   "&:hover": {
                     backgroundColor: mobileMenuOpen
-                      ? scrolled
+                      ? (scrolled || location.pathname !== "/")
                         ? "rgba(107, 78, 61, 0.25)"
                         : "rgba(107, 78, 61, 0.35)"
-                      : scrolled
+                      : (scrolled || location.pathname !== "/")
                         ? "rgba(107, 78, 61, 0.1)"
                         : "rgba(255, 255, 255, 0.15)",
                     transform: mobileMenuOpen
                       ? "scale(1.05)"
                       : "rotate(90deg) scale(1.1)",
-                    boxShadow: scrolled
+                    boxShadow: (scrolled || location.pathname !== "/")
                       ? "0 8px 25px rgba(107, 78, 61, 0.3)"
                       : "0 8px 25px rgba(255, 255, 255, 0.2)",
                   },
@@ -603,7 +603,7 @@ export default function PublicHeader() {
 
       <Toolbar
         sx={{
-          height: scrolled ? "72px" : "80px",
+          height: (scrolled || location.pathname !== "/") ? "72px" : "80px",
           transition: "height 0.4s ease",
         }}
       />

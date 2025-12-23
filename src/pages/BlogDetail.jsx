@@ -163,7 +163,7 @@ export default function BlogDetail() {
     );
     try {
       setLikeLoading(true);
-      const res = await fetch(`/api/blogs/public/${post.slug}/like`, { method: "POST" });
+      const res = await fetch(`/api/blogs/public/${post?.slug}/like`, { method: "POST" });
       const data = await res.json();
       if (res.ok && data.success && data.data?.likes !== undefined) {
         setPost((prev) => (prev ? { ...prev, likes: data.data.likes } : prev));
@@ -274,41 +274,40 @@ export default function BlogDetail() {
     return elements;
   };
 
-  if (loading) {
+  // Show basic loading indicator only if no post data at all
+  const showLoading = loading && !post;
+
+  if (error && !post) {
     return (
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "60vh",
+          pt: 0.75,
+          pb: 0.75,
+          px: 0,
+          bgcolor: "#F5F1E8",
+          background:
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
         }}
       >
-        <CircularProgress />
+        <Container maxWidth="md" sx={{ py: 8 }}>
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error || "Blog post not found"}
+          </Alert>
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate("/blog")}
+            variant="contained"
+            sx={{
+              backgroundColor: "#6B4E3D",
+              "&:hover": {
+                backgroundColor: "#B85C38",
+              },
+            }}
+          >
+            Back to Blog
+          </Button>
+        </Container>
       </Box>
-    );
-  }
-
-  if (error || !post) {
-    return (
-      <Container maxWidth="md" sx={{ py: 8 }}>
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {error || "Blog post not found"}
-        </Alert>
-        <Button
-          startIcon={<ArrowBack />}
-          onClick={() => navigate("/blog")}
-          variant="contained"
-          sx={{
-            backgroundColor: "#6B4E3D",
-            "&:hover": {
-              backgroundColor: "#B85C38",
-            },
-          }}
-        >
-          Back to Blog
-        </Button>
-      </Container>
     );
   }
 
@@ -352,7 +351,7 @@ export default function BlogDetail() {
           transition={{ duration: 0.5 }}
         >
           {/* Back Button */}
-          <Box sx={{ mb: 0.75, mt: 0.75 }}>
+          <Box sx={{ mb: 0.75, mt: 0.75, display: "flex", alignItems: "center", gap: 2 }}>
             <Button
               startIcon={<ArrowBack />}
               onClick={() => navigate("/blog")}
@@ -370,6 +369,14 @@ export default function BlogDetail() {
             >
               Back to Blog
             </Button>
+            {showLoading && (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <CircularProgress size={20} sx={{ color: "#B85C38" }} />
+                <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 500 }}>
+                  Loading post...
+                </Typography>
+              </Box>
+            )}
           </Box>
 
           <Paper
@@ -394,8 +401,8 @@ export default function BlogDetail() {
             >
               <Box
                 component="img"
-                src={post.featuredImage}
-                alt={post.title}
+                src={post?.featuredImage || "/placeholder.jpg"}
+                alt={post?.title || "Blog Post"}
                 sx={{
                   width: "100%",
                   height: "100%",
@@ -409,7 +416,7 @@ export default function BlogDetail() {
               {/* Category and Meta */}
               <Box sx={{ mb: 2 }}>
                 <Chip
-                  label={post.category}
+                  label={post?.category || "Article"}
                   sx={{
                     mb: 2,
                     backgroundColor: "#B85C38",
@@ -419,18 +426,18 @@ export default function BlogDetail() {
                     px: 1,
                   }}
                 />
-                <Typography
-                  variant="h3"
-                  sx={{
-                    fontWeight: 800,
-                    mb: 2,
-                    color: "#3D2817",
-                    fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.6rem" },
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {post.title}
-                </Typography>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 800,
+                  mb: 2,
+                  color: "#3D2817",
+                  fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.6rem" },
+                  lineHeight: 1.2,
+                }}
+              >
+                {post?.title || "Loading..."}
+              </Typography>
 
                 {/* Author and Date Info */}
                 <Box
@@ -446,8 +453,8 @@ export default function BlogDetail() {
                 >
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                     <Avatar
-                      src={post.authorImage}
-                      alt={post.author}
+                      src={post?.authorImage}
+                      alt={post?.author || "Author"}
                       sx={{ width: 48, height: 48 }}
                     />
                     <Box>
@@ -459,7 +466,7 @@ export default function BlogDetail() {
                           fontSize: "0.95rem",
                         }}
                       >
-                        {post.author}
+                        {post?.author || "Loading..."}
                       </Typography>
                       <Box
                         sx={{
@@ -480,14 +487,14 @@ export default function BlogDetail() {
                             fontSize: "0.85rem",
                           }}
                         >
-                          {new Date(post.publishDate).toLocaleDateString(
+                          {post?.publishDate ? new Date(post.publishDate).toLocaleDateString(
                             "en-US",
                             {
                               month: "long",
                               day: "numeric",
                               year: "numeric",
                             }
-                          )}
+                          ) : "Loading..."}
                         </Typography>
                         <AccessTime
                           sx={{ fontSize: 14, color: "#6B4E3D", ml: 1 }}
@@ -500,7 +507,7 @@ export default function BlogDetail() {
                             fontSize: "0.85rem",
                           }}
                         >
-                          {post.readTime}
+                          {post?.readTime || "—"}
                         </Typography>
                       </Box>
                     </Box>
@@ -577,7 +584,7 @@ export default function BlogDetail() {
                         "&:focus-visible": { outline: "none" },
                       }}
                     >
-                      {`👍 ${post.likes ?? 0}`}
+                      {`👍 ${post?.likes ?? 0}`}
                     </MotionButton>
                   </Box>
                 </Box>
@@ -616,7 +623,11 @@ export default function BlogDetail() {
                   },
                 }}
               >
-                {formatMarkdown(post.content)}
+                {post?.content ? formatMarkdown(post.content) : (
+                  <Typography variant="body1" sx={{ color: "text.secondary", fontStyle: "italic" }}>
+                    Loading content...
+                  </Typography>
+                )}
               </Box>
 
               {/* Tags */}
@@ -633,7 +644,7 @@ export default function BlogDetail() {
                   Tags
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                  {post.tags.map((tag, index) => (
+                  {post?.tags?.map((tag, index) => (
                     <Chip
                       key={index}
                       label={tag}
@@ -647,14 +658,18 @@ export default function BlogDetail() {
                         },
                       }}
                     />
-                  ))}
+                  )) || (
+                    <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: "italic" }}>
+                      Loading tags...
+                    </Typography>
+                  )}
                 </Box>
               </Box>
 
               <Divider sx={{ my: 4 }} />
 
               {/* Related Posts */}
-              {relatedPosts.length > 0 && (
+              {(relatedPosts?.length > 0) && (
                 <Box>
                   <Typography
                     variant="h5"

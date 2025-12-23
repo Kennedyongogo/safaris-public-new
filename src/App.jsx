@@ -5,7 +5,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import { ThemeProvider, CssBaseline, LinearProgress } from "@mui/material";
+import { ThemeProvider, CssBaseline, LinearProgress, Box, Typography, CircularProgress } from "@mui/material";
 import { theme } from "./theme";
 import "./App.css";
 import React, { useState, useEffect, Suspense, lazy } from "react";
@@ -55,18 +55,80 @@ function App() {
         <PublicHeader />
         <Suspense
           fallback={
-            <LinearProgress
+            <Box
               sx={{
                 position: "fixed",
-                top: 0,
+                top: "72px", // Below header
                 left: 0,
                 right: 0,
-                zIndex: 1400,
-                "& .MuiLinearProgress-bar": {
-                  transition: "transform 0.2s ease",
+                bottom: 0,
+                bgcolor: "#F5F1E8",
+                background:
+                  "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 1399,
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background:
+                    "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+                  zIndex: -1,
                 },
               }}
-            />
+            >
+              <Box sx={{ mb: 3, position: "relative", zIndex: 1 }}>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontWeight: 700,
+                    color: "#3D2817",
+                    mb: 2,
+                    textAlign: "center",
+                  }}
+                >
+                  Akira Safaris
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#B85C38",
+                    textAlign: "center",
+                    fontWeight: 500,
+                  }}
+                >
+                  Crafting Your African Adventure
+                </Typography>
+              </Box>
+              <Box sx={{ position: "relative", zIndex: 1 }}>
+                <CircularProgress
+                  size={60}
+                  thickness={4}
+                  sx={{
+                    color: "#B85C38",
+                    mb: 2,
+                  }}
+                />
+              </Box>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "#6B4E3D",
+                  textAlign: "center",
+                  fontWeight: 500,
+                  position: "relative",
+                  zIndex: 1,
+                }}
+              >
+                Loading your experience...
+              </Typography>
+            </Box>
           }
         >
           <Routes>
