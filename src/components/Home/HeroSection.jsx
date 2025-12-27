@@ -160,11 +160,13 @@ export default function HeroSection() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
           color: "white",
           zIndex: 3,
           px: { xs: 2, sm: 4, md: 6 },
           maxWidth: "1400px",
           margin: "0 auto",
+          textAlign: "center",
         }}
       >
         <Fade in={isVisible} timeout={1000}>
@@ -209,105 +211,9 @@ export default function HeroSection() {
                 letterSpacing: "0.02em",
               }}
             >
-              Discover the Wild Heart of Africa
+              Endless Discovery
             </Typography>
             
-            {/* Trust Indicators */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: { xs: 1, sm: 2, md: 3 },
-                mb: { xs: 0.75, sm: 1 },
-                flexWrap: "wrap",
-                justifyContent: { xs: "center", sm: "flex-start" },
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  color: "#E0D8C0",
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.4)",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: "1.1rem", sm: "1.3rem" },
-                    fontWeight: 700,
-                    color: "#B85C38", // Rust accent
-                  }}
-                >
-                  15+
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: { xs: "0.8rem", sm: "1rem" },
-                    fontWeight: 500,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  Years Experience
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  color: "#E0D8C0",
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.4)",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: "1.1rem", sm: "1.3rem" },
-                    fontWeight: 700,
-                    color: "#B85C38",
-                  }}
-                >
-                  4
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: { xs: "0.8rem", sm: "1rem" },
-                    fontWeight: 500,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  Countries
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  color: "#E0D8C0",
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.4)",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: "1.1rem", sm: "1.3rem" },
-                    fontWeight: 700,
-                    color: "#B85C38",
-                  }}
-                >
-                  1000+
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: { xs: "0.8rem", sm: "1rem" },
-                    fontWeight: 500,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  Happy Travelers
-                </Typography>
-              </Box>
-            </Box>
 
             {/* Call-to-action row with destinations */}
             <Box
@@ -317,49 +223,10 @@ export default function HeroSection() {
                 gap: { xs: 1.25, sm: 2, md: 2.25 },
                 flexWrap: { xs: "nowrap", lg: "nowrap" },
                 alignItems: "center",
-                justifyContent: { xs: "center", sm: "center", md: "flex-start" },
+                justifyContent: "center",
                 mb: { xs: 6, sm: 5, md: 4 },
               }}
             >
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                endIcon={<ArrowForward />}
-                onClick={handleBookSafari}
-                sx={{
-                  px: { xs: 2, sm: 3, md: 3.5 },
-                  py: 0.75,
-                  fontSize: "1.1rem",
-                  fontWeight: 600,
-                  borderRadius: "50px",
-                  whiteSpace: "nowrap",
-                  width: { xs: "90%", sm: "auto" },
-                  minWidth: { xs: "auto", sm: 220, md: 240, lg: 260 },
-                  maxWidth: { xs: 320, sm: "none" },
-                  background:
-                    "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)", // Rust to light rust
-                  boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
-                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                  "& .MuiButton-endIcon": {
-                    marginLeft: 0.5,
-                  },
-                  "&:hover": {
-                    transform: "translateY(-3px) scale(1.05)",
-                    boxShadow: "0 12px 40px rgba(184, 92, 56, 0.4)",
-                    background:
-                      "linear-gradient(45deg, #8B4225 30%, #B85C38 90%)", // Dark rust to rust
-                  },
-                  "&:focus": {
-                    outline: "none",
-                  },
-                  "&:focus-visible": {
-                    outline: "none",
-                  },
-                }}
-              >
-                Book Your Safari
-              </Button>
 
               {["Kenya", "Uganda", "Tanzania", "Rwanda"].map((country) => (
                 <Box

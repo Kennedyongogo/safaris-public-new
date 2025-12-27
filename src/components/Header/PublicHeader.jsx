@@ -217,12 +217,12 @@ export default function PublicHeader() {
             : "none",
         }}
       >
-        <Toolbar sx={{ px: { xs: 2, sm: 3, md: 4 }, py: 1 }}>
+        <Toolbar sx={{ px: { xs: 1, sm: 1.5, md: 2 }, py: 1 }}>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               width: "100%",
             }}
           >
@@ -247,7 +247,9 @@ export default function PublicHeader() {
                     height: (scrolled || location.pathname !== "/") ? "64px" : "72px",
                     maxHeight: "72px",
                     width: "auto",
-                    transition: "height 0.4s ease",
+                    transition: "all 0.4s ease",
+                    transform: "scale(2.0)",
+                    transformOrigin: "left center",
                     filter: (scrolled || location.pathname !== "/")
                       ? "none"
                       : "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
@@ -255,7 +257,7 @@ export default function PublicHeader() {
                 />
                 <Box
                   sx={{
-                    ml: { xs: 1.2, sm: 2 },
+                    ml: { xs: 3, sm: 4 },
                     display: { xs: "block", sm: "block" },
                   }}
                 >
@@ -277,7 +279,7 @@ export default function PublicHeader() {
                       WebkitTextFillColor: "transparent",
                     }}
                   >
-                    Akira Safaris
+                    AKIRA SAFARIS
                   </Typography>
                 </Box>
               </Box>
@@ -289,6 +291,7 @@ export default function PublicHeader() {
                 display: { xs: "none", md: "flex" },
                 gap: 1,
                 alignItems: "center",
+                marginLeft: "auto",
               }}
             >
               {navItems.map((item, index) => {
