@@ -157,7 +157,6 @@ export default function Plan() {
             "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
-          minHeight: "100vh",
           "&::before": {
             content: '""',
             position: "absolute",
@@ -266,7 +265,7 @@ export default function Plan() {
               </Box>
 
               {/* Current Question */}
-              <Box sx={{ px: { xs: 2, md: 4 }, pb: 4 }}>
+              <Box sx={{ px: { xs: 2, md: 4 }, pb: 2 }}>
                 {currentField ? (
                   <Box sx={{ maxWidth: 800, mx: "auto" }}>
                     <Typography variant="h6" sx={{ mb: 3, color: "#6B4E3D", fontWeight: 600, textAlign: "center" }}>
@@ -483,68 +482,6 @@ export default function Plan() {
                         )}
                       </Box>
                     </Box>
-
-                    {/* Navigation Buttons */}
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, mt: 4 }}>
-                      <Button
-                        variant="outlined"
-                        onClick={handleBack}
-                        disabled={isFirstStep}
-                        sx={{
-                          px: 4,
-                          py: 1.5,
-                          color: '#6B4E3D',
-                          borderColor: '#6B4E3D',
-                          '&:hover': {
-                            borderColor: '#B85C38',
-                            backgroundColor: 'rgba(184, 92, 56, 0.1)',
-                          },
-                          '&:disabled': {
-                            color: '#ccc',
-                            borderColor: '#ccc',
-                          },
-                        }}
-                      >
-                        Back
-                      </Button>
-
-                      {isLastStep ? (
-                        <Button
-                          variant="contained"
-                          onClick={handleSubmit}
-                          disabled={loading}
-                          sx={{
-                            px: 6,
-                            py: 1.5,
-                            background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
-                            "&:hover": {
-                              background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
-                            },
-                            fontSize: "1.1rem",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {loading ? 'Submitting...' : (currentForm.submit_button_text || 'Submit Form')}
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="contained"
-                          onClick={handleNext}
-                          sx={{
-                            px: 6,
-                            py: 1.5,
-                            background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
-                            "&:hover": {
-                              background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
-                            },
-                            fontSize: "1.1rem",
-                            fontWeight: 600,
-                          }}
-                        >
-                          Next
-                        </Button>
-                      )}
-                    </Box>
                   </Box>
                 ) : (
                   <Box sx={{ textAlign: "center", py: 6 }}>
@@ -552,6 +489,74 @@ export default function Plan() {
                       No form fields available at the moment.
                     </Typography>
                   </Box>
+                )}
+              </Box>
+
+              {/* Navigation Buttons - positioned at card edges */}
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                mt: 2,
+                mx: { xs: -1.5, sm: -1.5, md: -1.5 },
+                px: { xs: 1.5, sm: 1.5, md: 1.5 }
+              }}>
+                <Button
+                  variant="outlined"
+                  onClick={handleBack}
+                  disabled={isFirstStep}
+                  sx={{
+                    px: 2,
+                    py: 0.5,
+                    color: '#6B4E3D',
+                    borderColor: '#6B4E3D',
+                    '&:hover': {
+                      borderColor: '#B85C38',
+                      backgroundColor: 'rgba(184, 92, 56, 0.1)',
+                    },
+                    '&:disabled': {
+                      color: '#ccc',
+                      borderColor: '#ccc',
+                    },
+                  }}
+                >
+                  Back
+                </Button>
+
+                {isLastStep ? (
+                  <Button
+                    variant="contained"
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    sx={{
+                      px: 3,
+                      py: 0.5,
+                      background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
+                      "&:hover": {
+                        background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
+                      },
+                      fontSize: "1.1rem",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {loading ? 'Submitting...' : (currentForm.submit_button_text || 'Submit Form')}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    sx={{
+                      px: 3,
+                      py: 0.5,
+                      background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
+                      "&:hover": {
+                        background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
+                      },
+                      fontSize: "1.1rem",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Next
+                  </Button>
                 )}
               </Box>
             </Paper>
@@ -573,7 +578,6 @@ export default function Plan() {
             "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
-          minHeight: "100vh",
           "&::before": {
             content: '""',
             position: "absolute",
@@ -652,7 +656,6 @@ export default function Plan() {
             "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
-          minHeight: "100vh",
           "&::before": {
             content: '""',
             position: "absolute",
