@@ -1,131 +1,681 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
-  Typography,
   Container,
-  Grid,
-  TextField,
+  Typography,
+  Card,
+  CardContent,
   Button,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Checkbox,
+  CircularProgress,
+  Alert,
+  Grid,
+  Paper,
+  TextField,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Paper,
-  CircularProgress,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+  Checkbox,
+  Stack,
 } from "@mui/material";
-import { Send } from "@mui/icons-material";
+import { Description, Assignment } from "@mui/icons-material";
+import { motion } from "framer-motion";
+import axios from "axios";
 
-const eastAfricaDestinations = [
-  "Kenya (Maasai Mara, Amboseli, Nakuru, Laikipia)",
-  "Tanzania (Serengeti, Ngorongoro, Zanzibar)",
-  "Uganda (Gorilla Trekking, Chimpanzees)",
-  "Rwanda (Gorilla Trekking, Nyungwe Forest)",
-  "Mountain Trekking (Mount Kenya, Kilimanjaro)",
-  "I'm open to your suggestions for the best itinerary.",
-];
-
-const travelReasons = [
-  "Great Migration & Big 5 Safari",
-  "Primate Trekking (Gorillas & Chimps)",
-  "Mountain Climbing & Trekking",
-  "Honeymoon & Romance",
-  "Family Safari",
-  "Bush & Beach Combination",
-  "Adventure & Active Travel (Hiking, Cycling)",
-  "Photography & Wildlife Focus",
-  "Cultural & Community Experience",
-  "Special Occasion",
-  "Trip with Friends",
-];
-
-const budgetOptions = [
-  {
-    value: "classic",
-    label: "Classic Explorer: $300 - $599",
-    range: "",
-    description:
-      "Great for comfortable lodges and focused wildlife experiences.",
-  },
-  {
-    value: "signature",
-    label: "Signature Safari: $600 - $999",
-    range: "",
-    description:
-      "Perfect for premium lodges, private guides, and exclusive activities.",
-  },
-  {
-    value: "ultimate",
-    label: "Ultimate Luxury: $1,000 +",
-    range: "",
-    description:
-      "For exceptional boutique properties, helicopter safaris, and fully bespoke service.",
-  },
-  {
-    value: "trekking",
-    label: "Mountain Trekking Package",
-    range: "",
-    description:
-      "Please inquire for detailed all-inclusive climbing package quotes for Kilimanjaro or Mount Kenya.",
-  },
-];
+const MotionBox = motion(Box);
 
 export default function Plan() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    countryCode: "",
-    phone: "",
-    knowDestination: "",
-    destinations: [],
-    travelReasons: [],
-    privateGuide: "",
-    timeFrame: "",
-    arrivalDate: "",
-    departureDate: "",
-    preferredMonth: "",
-    travelDays: "",
-    numberOfTravelers: "",
-    numberOfChildren: "",
-    budget: "",
-    comments: "",
-    newsletter: false,
-    terms: false,
-  });
+  const [forms, setForms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedForm, setSelectedForm] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState({});
+  const [visibleFields, setVisibleFields] = useState([]);
 
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    fetchForms();
+  }, []);
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
+  // Helper function to check if a field should be visible based on conditional logic
+  const shouldShowField = (field) => {
+    if (!field.conditional_logic) return true;
+
+    const { depends_on_field, show_when_value, hide_when_value } = field.conditional_logic;
+    const dependentValue = formData[depends_on_field];
+
+    // If hide_when_value is specified and matches, hide the field
+    if (hide_when_value && dependentValue === hide_when_value) {
+      return false;
+    }
+
+    // If show_when_value is specified, only show when it matches
+    if (show_when_value) {
+      return dependentValue === show_when_value;
+    }
+
+    // If no specific conditions, show by default
+    return true;
+  };
+
+  // Update visible fields when form data changes
+  useEffect(() => {
+    if (selectedForm?.fields) {
+      const visible = selectedForm.fields.filter(field => shouldShowField(field));
+      setVisibleFields(visible);
+      // Reset to first step when visible fields change
+      setCurrentStep(0);
+    }
+  }, [selectedForm, formData]);
+
+  // Handle form input changes
+  const handleInputChange = (fieldName, value) => {
+    setFormData(prev => ({
       ...prev,
-      [field]: value,
+      [fieldName]: value
     }));
   };
 
-  const handleCheckboxChange = (field, value, checked) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: checked
-        ? [...prev[field], value]
-        : prev[field].filter((item) => item !== value),
-    }));
+  // Navigation functions
+  const handleNext = () => {
+    if (currentStep < visibleFields.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Trip quote submitted:", formData);
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      await axios.post(`/api/forms/public/${selectedForm.slug}/submit`, formData);
+      // Handle success - maybe show success message or redirect
+      alert('Form submitted successfully!');
+      setSelectedForm(null);
+      setCurrentStep(0);
+      setFormData({});
+    } catch (error) {
+      console.error('Form submission error:', error);
+      alert('Error submitting form. Please try again.');
+    } finally {
       setLoading(false);
-      // Reset form or show success message
-    }, 1000);
+    }
   };
+
+  // Get current field to display
+  const currentField = visibleFields[currentStep];
+  const isFirstStep = currentStep === 0;
+  const isLastStep = currentStep === visibleFields.length - 1;
+
+  const fetchForms = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axios.get('/api/forms/public');
+      setForms(response.data.data || []);
+    } catch (err) {
+      setError(err.message || 'Failed to load forms');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Reset form state when selecting a new form
+  const selectForm = (form) => {
+    setSelectedForm(form);
+    setCurrentStep(0);
+    setFormData({});
+    setVisibleFields([]);
+  };
+
+  // If there's only one form and no selection needed, select it automatically
+  if (forms.length === 1 && !selectedForm) {
+    const singleForm = forms[0];
+    // Automatically select the single form to trigger the step-by-step logic
+    setTimeout(() => selectForm(singleForm), 0);
+    return null; // Return null while selecting
+  }
+
+  // Render the step-by-step form if a form is selected
+  if (selectedForm) {
+    const currentForm = selectedForm;
+    return (
+      <Box
+        sx={{
+          pt: 1.5,
+          pb: 1.5,
+          px: 0,
+          bgcolor: "#F5F1E8",
+          background:
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          position: "relative",
+          overflow: "hidden",
+          minHeight: "100vh",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+            zIndex: 0,
+          },
+        }}
+      >
+        <Container
+          maxWidth="xl"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+            px: { xs: 1.5, sm: 1.5, md: 1.5 },
+            pt: { xs: 0.75, sm: 0.75, md: 0.75 },
+          }}
+        >
+          <MotionBox
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Paper
+              elevation={3}
+              sx={{
+                py: { xs: 1.5, sm: 2, md: 2.5 },
+                px: { xs: 1.5, sm: 1.5, md: 1.5 },
+                borderRadius: { xs: 3, md: 4 },
+                background: "#FFFFFF",
+                border: "1px solid rgba(107, 78, 61, 0.2)",
+                minHeight: "auto",
+                height: "auto",
+                overflow: "hidden",
+              }}
+            >
+              {/* Header */}
+              <Box sx={{ textAlign: "center", mb: 4 }}>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    mb: 1,
+                    fontWeight: 800,
+                    fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.8rem" },
+                    background:
+                      "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)",
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    position: "relative",
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      bottom: "-12px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: { xs: "80px", sm: "100px", md: "120px" },
+                      height: "4px",
+                      background: "linear-gradient(45deg, #6B4E3D, #B85C38)",
+                      borderRadius: "2px",
+                    },
+                  }}
+                >
+                  {currentForm.title}
+                </Typography>
+                {currentForm.description && (
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      mt: 3,
+                      fontWeight: 500,
+                      fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
+                      color: "text.secondary",
+                      maxWidth: "800px",
+                      mx: "auto",
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    {currentForm.description}
+                  </Typography>
+                )}
+              </Box>
+
+              {/* Progress Indicator */}
+              <Box sx={{ px: { xs: 2, md: 4 }, mb: 3 }}>
+                <Box sx={{ maxWidth: 800, mx: "auto" }}>
+                  <Typography variant="body2" sx={{ mb: 1, color: "#6B4E3D", textAlign: "center" }}>
+                    Question {currentStep + 1} of {visibleFields.length}
+                  </Typography>
+                  <Box sx={{ width: '100%', height: 8, bgcolor: '#e0e0e0', borderRadius: 4 }}>
+                    <Box
+                      sx={{
+                        width: `${((currentStep + 1) / visibleFields.length) * 100}%`,
+                        height: '100%',
+                        bgcolor: '#B85C38',
+                        borderRadius: 4,
+                        transition: 'width 0.3s ease-in-out'
+                      }}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+
+              {/* Current Question */}
+              <Box sx={{ px: { xs: 2, md: 4 }, pb: 4 }}>
+                {currentField ? (
+                  <Box sx={{ maxWidth: 800, mx: "auto" }}>
+                    <Typography variant="h6" sx={{ mb: 3, color: "#6B4E3D", fontWeight: 600, textAlign: "center" }}>
+                      Please answer the following question:
+                    </Typography>
+
+                    <Box sx={{ mb: 4 }}>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          mb: 2,
+                          fontWeight: 600,
+                          color: "#2c3e50",
+                          textAlign: "center",
+                        }}
+                      >
+                        {currentStep + 1}. {currentField.label}
+                        {currentField.is_required && (
+                          <Typography component="span" sx={{ color: "#d32f2f", ml: 0.5 }}>
+                            *
+                          </Typography>
+                        )}
+                      </Typography>
+
+                      {/* Render current field based on type */}
+                      <Box sx={{ maxWidth: 600, mx: "auto" }}>
+                        {currentField.field_type === 'text' || currentField.field_type === 'email' || currentField.field_type === 'tel' || currentField.field_type === 'number' ? (
+                          <TextField
+                            fullWidth
+                            type={currentField.field_type}
+                            placeholder={currentField.placeholder || `Enter ${currentField.label.toLowerCase()}`}
+                            variant="outlined"
+                            required={currentField.is_required}
+                            value={formData[currentField.field_name] || ''}
+                            onChange={(e) => handleInputChange(currentField.field_name, e.target.value)}
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                backgroundColor: '#f9f9f9',
+                                '& fieldset': {
+                                  borderColor: 'rgba(107, 78, 61, 0.3)',
+                                },
+                                '&:hover fieldset': {
+                                  borderColor: '#6B4E3D',
+                                },
+                                '&.Mui-focused fieldset': {
+                                  borderColor: '#B85C38',
+                                },
+                              },
+                            }}
+                          />
+                        ) : currentField.field_type === 'textarea' ? (
+                          <TextField
+                            fullWidth
+                            multiline
+                            rows={4}
+                            placeholder={currentField.placeholder || `Enter ${currentField.label.toLowerCase()}`}
+                            variant="outlined"
+                            required={currentField.is_required}
+                            value={formData[currentField.field_name] || ''}
+                            onChange={(e) => handleInputChange(currentField.field_name, e.target.value)}
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                backgroundColor: '#f9f9f9',
+                                '& fieldset': {
+                                  borderColor: 'rgba(107, 78, 61, 0.3)',
+                                },
+                                '&:hover fieldset': {
+                                  borderColor: '#6B4E3D',
+                                },
+                                '&.Mui-focused fieldset': {
+                                  borderColor: '#B85C38',
+                                },
+                              },
+                            }}
+                          />
+                        ) : currentField.field_type === 'select' ? (
+                          <FormControl fullWidth required={currentField.is_required}>
+                            <InputLabel>Select {currentField.label.toLowerCase()}</InputLabel>
+                            <Select
+                              label={`Select ${currentField.label.toLowerCase()}`}
+                              value={formData[currentField.field_name] || ''}
+                              onChange={(e) => handleInputChange(currentField.field_name, e.target.value)}
+                              sx={{
+                                backgroundColor: '#f9f9f9',
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: 'rgba(107, 78, 61, 0.3)',
+                                },
+                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: '#6B4E3D',
+                                },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: '#B85C38',
+                                },
+                              }}
+                            >
+                              <MenuItem value="">
+                                <em>Choose an option</em>
+                              </MenuItem>
+                              {currentField.options?.map((option) => (
+                                <MenuItem key={option.id} value={option.option_value}>
+                                  {option.option_label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        ) : currentField.field_type === 'radio' ? (
+                          <FormControl component="fieldset" required={currentField.is_required}>
+                            <RadioGroup
+                              value={formData[currentField.field_name] || ''}
+                              onChange={(e) => handleInputChange(currentField.field_name, e.target.value)}
+                            >
+                              {currentField.options?.map((option) => (
+                                <FormControlLabel
+                                  key={option.id}
+                                  value={option.option_value}
+                                  control={
+                                    <Radio
+                                      sx={{
+                                        color: 'rgba(107, 78, 61, 0.3)',
+                                        '&.Mui-checked': {
+                                          color: '#B85C38',
+                                        },
+                                      }}
+                                    />
+                                  }
+                                  label={option.option_label}
+                                />
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+                        ) : currentField.field_type === 'checkbox' ? (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                required={currentField.is_required}
+                                checked={formData[currentField.field_name] || false}
+                                onChange={(e) => handleInputChange(currentField.field_name, e.target.checked)}
+                                sx={{
+                                  color: 'rgba(107, 78, 61, 0.3)',
+                                  '&.Mui-checked': {
+                                    color: '#B85C38',
+                                  },
+                                }}
+                              />
+                            }
+                            label={currentField.label}
+                          />
+                        ) : currentField.field_type === 'checkbox_group' ? (
+                          <FormControl component="fieldset" required={currentField.is_required}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                              {currentField.options?.map((option) => (
+                                <FormControlLabel
+                                  key={option.id}
+                                  control={
+                                    <Checkbox
+                                      checked={formData[currentField.field_name]?.includes(option.option_value) || false}
+                                      onChange={(e) => {
+                                        const currentValues = formData[currentField.field_name] || [];
+                                        let newValues;
+                                        if (e.target.checked) {
+                                          newValues = [...currentValues, option.option_value];
+                                        } else {
+                                          newValues = currentValues.filter(val => val !== option.option_value);
+                                        }
+                                        handleInputChange(currentField.field_name, newValues);
+                                      }}
+                                      sx={{
+                                        color: 'rgba(107, 78, 61, 0.3)',
+                                        '&.Mui-checked': {
+                                          color: '#B85C38',
+                                        },
+                                      }}
+                                    />
+                                  }
+                                  label={option.option_label}
+                                />
+                              ))}
+                            </Box>
+                          </FormControl>
+                        ) : currentField.field_type === 'date' ? (
+                          <TextField
+                            fullWidth
+                            type="date"
+                            label={currentField.label}
+                            InputLabelProps={{ shrink: true }}
+                            required={currentField.is_required}
+                            value={formData[currentField.field_name] || ''}
+                            onChange={(e) => handleInputChange(currentField.field_name, e.target.value)}
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                backgroundColor: '#f9f9f9',
+                                '& fieldset': {
+                                  borderColor: 'rgba(107, 78, 61, 0.3)',
+                                },
+                                '&:hover fieldset': {
+                                  borderColor: '#6B4E3D',
+                                },
+                                '&.Mui-focused fieldset': {
+                                  borderColor: '#B85C38',
+                                },
+                              },
+                            }}
+                          />
+                        ) : (
+                          <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: 'italic' }}>
+                            Unsupported field type: {currentField.field_type}
+                          </Typography>
+                        )}
+
+                        {currentField.help_text && (
+                          <Typography variant="caption" sx={{ color: "text.secondary", mt: 1, display: 'block', textAlign: 'center' }}>
+                            {currentField.help_text}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+
+                    {/* Navigation Buttons */}
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, mt: 4 }}>
+                      <Button
+                        variant="outlined"
+                        onClick={handleBack}
+                        disabled={isFirstStep}
+                        sx={{
+                          px: 4,
+                          py: 1.5,
+                          color: '#6B4E3D',
+                          borderColor: '#6B4E3D',
+                          '&:hover': {
+                            borderColor: '#B85C38',
+                            backgroundColor: 'rgba(184, 92, 56, 0.1)',
+                          },
+                          '&:disabled': {
+                            color: '#ccc',
+                            borderColor: '#ccc',
+                          },
+                        }}
+                      >
+                        Back
+                      </Button>
+
+                      {isLastStep ? (
+                        <Button
+                          variant="contained"
+                          onClick={handleSubmit}
+                          disabled={loading}
+                          sx={{
+                            px: 6,
+                            py: 1.5,
+                            background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
+                            "&:hover": {
+                              background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
+                            },
+                            fontSize: "1.1rem",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {loading ? 'Submitting...' : (currentForm.submit_button_text || 'Submit Form')}
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          onClick={handleNext}
+                          sx={{
+                            px: 6,
+                            py: 1.5,
+                            background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
+                            "&:hover": {
+                              background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
+                            },
+                            fontSize: "1.1rem",
+                            fontWeight: 600,
+                          }}
+                        >
+                          Next
+                        </Button>
+                      )}
+                    </Box>
+                  </Box>
+                ) : (
+                  <Box sx={{ textAlign: "center", py: 6 }}>
+                    <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                      No form fields available at the moment.
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+            </Paper>
+          </MotionBox>
+        </Container>
+      </Box>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          pt: 1.5,
+          pb: 1.5,
+          px: 0,
+          bgcolor: "#F5F1E8",
+          background:
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          position: "relative",
+          overflow: "hidden",
+          minHeight: "100vh",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+            zIndex: 0,
+          },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Box sx={{ position: "relative", zIndex: 1, mb: 3 }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              color: "#3D2817",
+              mb: 2,
+              textAlign: "center",
+            }}
+          >
+            Akira Safaris
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#B85C38",
+              textAlign: "center",
+              fontWeight: 500,
+            }}
+          >
+            Crafting Your African Adventure
+          </Typography>
+        </Box>
+        <Box sx={{ position: "relative", zIndex: 1 }}>
+          <CircularProgress
+            size={60}
+            thickness={4}
+            sx={{
+              color: "#B85C38",
+              mb: 2,
+            }}
+          />
+        </Box>
+        <Typography
+          variant="body1"
+          sx={{
+            color: "#6B4E3D",
+            textAlign: "center",
+            fontWeight: 500,
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          Loading your forms...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box
+        sx={{
+          pt: 1.5,
+          pb: 1.5,
+          px: 0,
+          bgcolor: "#F5F1E8",
+          background:
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          position: "relative",
+          overflow: "hidden",
+          minHeight: "100vh",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+            zIndex: 0,
+          },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Container maxWidth="md" sx={{ position: "relative", zIndex: 1 }}>
+          <Alert severity="error">{error}</Alert>
+        </Container>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -133,12 +683,12 @@ export default function Plan() {
         pt: 1.5,
         pb: 1.5,
         px: 0,
-        bgcolor: "#F5F1E8", // Light beige from palette
+        bgcolor: "#F5F1E8",
         background:
           "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
         position: "relative",
         overflow: "hidden",
-        minHeight: "auto",
+        minHeight: "100vh",
         "&::before": {
           content: '""',
           position: "absolute",
@@ -147,7 +697,7 @@ export default function Plan() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
           zIndex: 0,
         },
       }}
@@ -161,865 +711,269 @@ export default function Plan() {
           pt: { xs: 0.75, sm: 0.75, md: 0.75 },
         }}
       >
-        <Paper
-          elevation={3}
-          sx={{
-            py: { xs: 1.5, sm: 2, md: 2.5 },
-            px: { xs: 1.5, sm: 1.5, md: 1.5 },
-            borderRadius: { xs: 3, md: 4 },
-            background: "#FFFFFF",
-            border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
-            minHeight: "auto",
-            height: "auto",
-            overflow: "hidden",
-          }}
+        <MotionBox
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          {/* Header */}
-          <Box sx={{ textAlign: "center", mb: 4 }}>
-            <Typography
-              variant="h2"
-              sx={{
-                mb: 1,
-                fontWeight: 700,
-                fontSize: { xs: "1.9rem", sm: "2.3rem", md: "2.7rem" },
-                color: "#3D2817", // Dark brown from palette
-                fontFamily: "serif",
-              }}
-            >
-              AKIRA SAFARIS - TRIP QUOTE FORM
-            </Typography>
-            <Typography
-              variant="h5"
-              sx={{
-                mb: 1.5,
-                fontWeight: 500,
-                fontSize: { xs: "1.15rem", sm: "1.3rem", md: "1.45rem" },
-                color: "#3D2817", // Dark brown from palette
-                fontFamily: "serif",
-              }}
-            >
-              AKIRA SAFARIS - YOUR EAST AFRICA ADVENTURE AWAITS
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                maxWidth: "900px",
-                mx: "auto",
-                color: "text.secondary",
-                fontSize: { xs: "1rem", md: "1.1rem" },
-                lineHeight: 1.7,
-              }}
-            >
-              Craft your dream journey through the heart of Africa with us!
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                maxWidth: "900px",
-                mx: "auto",
-                color: "text.secondary",
-                fontSize: { xs: "1rem", md: "1.1rem" },
-                lineHeight: 1.7,
-                mt: 1,
-              }}
-            >
-              We are thrilled to plan your next adventure! Whether you're dreaming of summiting Mount Kilimanjaro, trekking the scenic peaks of Mount Kenya, witnessing the Great Migration across the Serengeti, coming face-to-face with majestic gorillas in the misty mountains, relaxing on the pristine beaches of Zanzibar, or exploring the vibrant cultures and stunning landscapes of East Africa, we've got you covered. Just let us know your preferred destination and travel dates, along with any specific experiences you're seeking, and we'll tailor a perfect itinerary to match your desires. Get ready to embark on an unforgettable journey with Akira Safaris!
-            </Typography>
-          </Box>
-
-          {/* Form */}
-          <Box component="form" onSubmit={handleSubmit}>
-            {/* Personal Information */}
-            <Box sx={{ mb: 4 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 0.5,
-                  fontWeight: 600,
-                  color: "#3D2817", // Dark brown from palette
-                }}
-              >
-                Personal Information
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ mb: 2, color: "text.secondary" }}
-              >
-                *Required fields marked with *
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    fullWidth
-                    label="First name"
-                    required
-                    value={formData.firstName}
-                    onChange={(e) =>
-                      handleInputChange("firstName", e.target.value)
-                    }
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "white",
-                        borderRadius: 2,
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    fullWidth
-                    label="Last name"
-                    required
-                    value={formData.lastName}
-                    onChange={(e) =>
-                      handleInputChange("lastName", e.target.value)
-                    }
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "white",
-                        borderRadius: 2,
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "white",
-                        borderRadius: 2,
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 3 }}>
-                  <FormControl fullWidth>
-                    <InputLabel>Country Code</InputLabel>
-                    <Select
-                      value={formData.countryCode}
-                      onChange={(e) =>
-                        handleInputChange("countryCode", e.target.value)
-                      }
-                      label="Country Code"
-                      sx={{
-                        backgroundColor: "white",
-                        borderRadius: 2,
-                      }}
-                    >
-                      <MenuItem value="+1">+1 (US/CA)</MenuItem>
-                      <MenuItem value="+44">+44 (UK)</MenuItem>
-                      <MenuItem value="+27">+27 (ZA)</MenuItem>
-                      <MenuItem value="+254">+254 (KE)</MenuItem>
-                      <MenuItem value="+255">+255 (TZ)</MenuItem>
-                      <MenuItem value="+256">+256 (UG)</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 3 }}>
-                  <TextField
-                    fullWidth
-                    label="Phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "white",
-                        borderRadius: 2,
-                      },
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-
-            {/* Do you know where you want to go? */}
-            <Box sx={{ mb: 4 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 1,
-                  fontWeight: 700,
-                  color: "#3D2817",
-                }}
-              >
-                Trip Inspiration & Planning
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 2,
-                  fontWeight: 600,
-                  color: "#3D2817", // Dark brown from palette
-                }}
-              >
-                Do you know where you want to go in East Africa? *
-              </Typography>
-              <RadioGroup
-                value={formData.knowDestination}
-                onChange={(e) =>
-                  handleInputChange("knowDestination", e.target.value)
-                }
-              >
-                <FormControlLabel
-                  value="yes"
-                  control={<Radio />}
-                  label="Yes, I have a specific destination in mind."
-                />
-                <FormControlLabel
-                  value="no"
-                  control={<Radio />}
-                  label="No, I'd love your expert recommendations."
-                />
-              </RadioGroup>
-            </Box>
-
-            {/* Where in Africa & Why travel */}
-            <Grid container spacing={3} sx={{ mb: 4 }}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    mb: 2,
-                    fontWeight: 600,
-                    color: "#3D2817", // Dark brown from palette
-                  }}
-                >
-                  Which East African countries and experiences are you interested in? (Select all that apply)
-                </Typography>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  {eastAfricaDestinations.map((destination) => (
-                    <FormControlLabel
-                      key={destination}
-                      control={
-                        <Checkbox
-                          checked={formData.destinations.includes(destination)}
-                          onChange={(e) =>
-                            handleCheckboxChange(
-                              "destinations",
-                              destination,
-                              e.target.checked
-                            )
-                          }
-                        />
-                      }
-                      label={destination}
-                    />
-                  ))}
-                </Box>
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    mb: 2,
-                    fontWeight: 600,
-                    color: "#3D2817", // Dark brown from palette
-                  }}
-                >
-                  What is the primary purpose of your trip? *
-                </Typography>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  {travelReasons.map((reason) => (
-                    <FormControlLabel
-                      key={reason}
-                      control={
-                        <Checkbox
-                          checked={formData.travelReasons.includes(reason)}
-                          onChange={(e) =>
-                            handleCheckboxChange(
-                              "travelReasons",
-                              reason,
-                              e.target.checked
-                            )
-                          }
-                        />
-                      }
-                      label={reason}
-                    />
-                  ))}
-                </Box>
-              </Grid>
-            </Grid>
-
-            {/* Private Guide Question */}
-            <Box sx={{ mb: 4 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 2,
-                  fontWeight: 600,
-                  color: "#3D2817", // Dark brown from palette
-                }}
-              >
-                Interested to book Daniel as your Private Safari Guide for South Africa?
-              </Typography>
-              <RadioGroup
-                value={formData.privateGuide}
-                onChange={(e) =>
-                  handleInputChange("privateGuide", e.target.value)
-                }
-              >
-                <FormControlLabel
-                  value="yes"
-                  control={<Radio />}
-                  label="That would be great! Tell me more about it."
-                />
-                <FormControlLabel
-                  value="no"
-                  control={<Radio />}
-                  label="Maybe next time!"
-                />
-              </RadioGroup>
-            </Box>
-
-            {/* Time Frame */}
-            <Box sx={{ mb: 4 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 2,
-                  fontWeight: 600,
-                  color: "#3D2817", // Dark brown from palette
-                }}
-              >
-                Do you have a specific time frame for your upcoming trip? *
-              </Typography>
-              <RadioGroup
-                value={formData.timeFrame}
-                onChange={(e) => handleInputChange("timeFrame", e.target.value)}
-              >
-                <FormControlLabel
-                  value="yes"
-                  control={<Radio />}
-                  label="Yes, I have set dates."
-                />
-                <FormControlLabel
-                  value="no"
-                  control={<Radio />}
-                  label="No, I am flexible with my dates."
-                />
-              </RadioGroup>
-            </Box>
-
-            {/* Date and Travel Information */}
-            <Grid container spacing={2} sx={{ mb: 4 }}>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  fullWidth
-                  label="When is your arrival date?"
-                  type="date"
-                  value={formData.arrivalDate}
-                  onChange={(e) =>
-                    handleInputChange("arrivalDate", e.target.value)
-                  }
-                  InputLabelProps={{ shrink: true }}
-                  helperText="mm/dd/yyyy"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "white",
-                      borderRadius: 2,
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  fullWidth
-                  label="When is your departure date?"
-                  type="date"
-                  value={formData.departureDate}
-                  onChange={(e) =>
-                    handleInputChange("departureDate", e.target.value)
-                  }
-                  InputLabelProps={{ shrink: true }}
-                  helperText="mm/dd/yyyy"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "white",
-                      borderRadius: 2,
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  fullWidth
-                  label="When would you like to travel? (If flexible)"
-                  placeholder="Enter your preferred month/season"
-                  value={formData.preferredMonth}
-                  onChange={(e) =>
-                    handleInputChange("preferredMonth", e.target.value)
-                  }
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "white",
-                      borderRadius: 2,
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  fullWidth
-                  label="How many days would you like to travel?"
-                  type="number"
-                  placeholder="Enter a number"
-                  value={formData.travelDays}
-                  onChange={(e) =>
-                    handleInputChange("travelDays", e.target.value)
-                  }
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "white",
-                      borderRadius: 2,
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid size={{ xs: 12 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    mb: 1,
-                    fontWeight: 600,
-                    color: "#3D2817",
-                  }}
-                >
-                  Travel Party
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ mb: 1.5, color: "text.secondary" }}
-                >
-                  Who will be travelling with you (including you!)? *
-                </Typography>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Number of travelers (Adults)"
-                  type="number"
-                  placeholder="Number of travelers"
-                  required
-                  value={formData.numberOfTravelers}
-                  onChange={(e) =>
-                    handleInputChange("numberOfTravelers", e.target.value)
-                  }
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "white",
-                      borderRadius: 2,
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Number of children (Ages, if applicable)"
-                  type="number"
-                  placeholder="Number of children"
-                  value={formData.numberOfChildren}
-                  onChange={(e) =>
-                    handleInputChange("numberOfChildren", e.target.value)
-                  }
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "white",
-                      borderRadius: 2,
-                    },
-                  }}
-                />
-              </Grid>
-            </Grid>
-
-            {/* Budget */}
-            <Box sx={{ mb: 4 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 2,
-                  fontWeight: 600,
-                  color: "#3D2817", // Dark brown from palette
-                }}
-              >
-                Do you have a budget in mind (per person, per day), excluding
-                international flights? *
-              </Typography>
-              <RadioGroup
-                value={formData.budget}
-                onChange={(e) => handleInputChange("budget", e.target.value)}
-              >
-                {budgetOptions.map((option) => (
-                  <FormControlLabel
-                    key={option.value}
-                    value={option.value}
-                    control={<Radio />}
-                    label={
-                      <Box>
-                        <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                          {option.label}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "text.secondary", fontSize: "1rem" }}
-                        >
-                          {option.description}
-                        </Typography>
-                      </Box>
-                    }
-                  />
-                ))}
-              </RadioGroup>
-            </Box>
-
-            {/* Comments */}
-            <Box sx={{ mb: 4 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 2,
-                  fontWeight: 600,
-                  color: "#3D2817", // Dark brown from palette
-                }}
-              >
-                Special Requirements
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                placeholder="Enter your comments (e.g., interests, trekking experience, mobility, dietary needs)"
-                value={formData.comments}
-                onChange={(e) => handleInputChange("comments", e.target.value)}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    backgroundColor: "white",
-                    borderRadius: 2,
-                  },
-                }}
-              />
-            </Box>
-
-            {/* Checkboxes */}
-            <Box sx={{ mb: 4 }}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={formData.newsletter}
-                    onChange={(e) =>
-                      handleInputChange("newsletter", e.target.checked)
-                    }
-                  />
-                }
-                label="I want to subscribe to the Akira Safaris newsletter for inspiration and special offers."
-              />
-              <Box sx={{ mt: 1 }}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={formData.terms}
-                      onChange={(e) =>
-                        handleInputChange("terms", e.target.checked)
-                      }
-                      required
-                    />
-                  }
-                  label={
-                    <Typography variant="body2">
-                      I agree to the Akira Safaris terms & conditions.{" "}
-                      <Typography
-                        component="span"
-                        sx={{
-                          color: "primary.main",
-                          textDecoration: "underline",
-                          cursor: "pointer",
-                        }}
-                      >
-                        View terms of use
-                      </Typography>
-                    </Typography>
-                  }
-                />
-              </Box>
-            </Box>
-
-            {/* Submit Button */}
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                endIcon={
-                  loading ? (
-                    <CircularProgress size={20} color="inherit" />
-                  ) : (
-                    <Send />
-                  )
-                }
-                disabled={loading || !formData.terms}
-                sx={{
-                  backgroundColor: "#B85C38", // Burnt orange/rust
-                  color: "white",
-                  px: { xs: 4, sm: 5, md: 6 },
-                  py: { xs: 1.25, sm: 1.5 },
-                  borderRadius: 2,
-                  fontSize: { xs: "0.875rem", md: "1rem" },
-                  fontWeight: 600,
-                  textTransform: "none",
-                  "&:hover": {
-                    backgroundColor: "#8B4225", // Dark rust
-                  },
-                  "&:disabled": {
-                    backgroundColor: "#ccc",
-                    color: "white",
-                  },
-                  transition: "all 0.3s ease",
-                }}
-              >
-                {loading ? "Submitting..." : "Submit My Trip Request"}
-              </Button>
-            </Box>
-          </Box>
-
-          {/* Steps Section */}
-          <Box sx={{ mt: { xs: 4, sm: 5, md: 6 } }}>
-            <Grid container spacing={{ xs: 3, sm: 4, md: 5 }}>
-              {/* Step 1 */}
-              <Grid size={{ xs: 12, md: 4 }}>
-                <Box
-                  sx={{
-                    textAlign: "center",
-                    p: { xs: 2, sm: 2.5, md: 3 },
-                  }}
-                >
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      mb: 2,
-                      fontWeight: 700,
-                      fontSize: { xs: "2.35rem", sm: "2.85rem", md: "3.35rem" },
-                      color: "#B85C38", // Burnt orange/rust
-                    }}
-                  >
-                    01
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      mb: 2,
-                      fontWeight: 600,
-                      fontSize: { xs: "1.3rem", sm: "1.45rem", md: "1.7rem" },
-                      color: "#3D2817", // Dark brown from palette
-                    }}
-                  >
-                    Share Your Dream
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: "text.secondary",
-                      fontSize: { xs: "1rem", md: "1.1rem" },
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    Tell us about your perfect East African getaway. Your dreams
-                    guide us in crafting a personalized adventure that turns
-                    your vision into reality.
-                  </Typography>
-                </Box>
-              </Grid>
-
-              {/* Step 2 */}
-              <Grid size={{ xs: 12, md: 4 }}>
-                <Box
-                  sx={{
-                    textAlign: "center",
-                    p: { xs: 2, sm: 2.5, md: 3 },
-                  }}
-                >
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      mb: 2,
-                      fontWeight: 700,
-                      fontSize: { xs: "2.35rem", sm: "2.85rem", md: "3.35rem" },
-                      color: "#B85C38", // Burnt orange/rust
-                    }}
-                  >
-                    02
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      mb: 2,
-                      fontWeight: 600,
-                      fontSize: { xs: "1.3rem", sm: "1.45rem", md: "1.7rem" },
-                      color: "#3D2817", // Dark brown from palette
-                    }}
-                  >
-                    Let Our Experts Craft Your Journey
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: "text.secondary",
-                      fontSize: { xs: "1rem", md: "1.1rem" },
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    Your dedicated Akira Safaris consultant, with deep regional
-                    expertise, will design a detailed itinerary tailored just
-                    for you.
-                  </Typography>
-                </Box>
-              </Grid>
-
-              {/* Step 3 */}
-              <Grid size={{ xs: 12, md: 4 }}>
-                <Box
-                  sx={{
-                    textAlign: "center",
-                    p: { xs: 2, sm: 2.5, md: 3 },
-                  }}
-                >
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      mb: 2,
-                      fontWeight: 700,
-                      fontSize: { xs: "2.35rem", sm: "2.85rem", md: "3.35rem" },
-                      color: "#B85C38", // Burnt orange/rust
-                    }}
-                  >
-                    03
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      mb: 2,
-                      fontWeight: 600,
-                      fontSize: { xs: "1.3rem", sm: "1.45rem", md: "1.7rem" },
-                      color: "#3D2817", // Dark brown from palette
-                    }}
-                  >
-                    Confirm & Embark
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: "text.secondary",
-                      fontSize: { xs: "1rem", md: "1.1rem" },
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    Review and approve your customized plan. Then, all that's
-                    left is to pack your bags and get ready for the adventure of
-                    a lifetime!
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-
-          {/* Mountain Trekking Specific Information */}
-          <Box
+          <Paper
+            elevation={3}
             sx={{
-              mt: { xs: 4, sm: 5, md: 6 },
-              p: { xs: 2, sm: 2.5, md: 3 },
-              borderRadius: 3,
+              py: { xs: 1.5, sm: 2, md: 2.5 },
+              px: { xs: 1.5, sm: 1.5, md: 1.5 },
+              borderRadius: { xs: 3, md: 4 },
+              background: "#FFFFFF",
               border: "1px solid rgba(107, 78, 61, 0.2)",
-              background: "linear-gradient(135deg, rgba(245, 241, 232, 0.6) 0%, rgba(255, 255, 255, 1) 100%)",
+              minHeight: "auto",
+              height: "auto",
+              overflow: "hidden",
             }}
           >
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 700,
-                color: "#3D2817",
-                mb: 2,
-              }}
-            >
-              Mountain Trekking Specific Information
+            {/* Header */}
+            <Box sx={{ textAlign: "center", mb: 4 }}>
+              <Typography
+                variant="h2"
+                sx={{
+                  mb: 1,
+                  fontWeight: 800,
+                  fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.8rem" },
+                  background:
+                    "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  position: "relative",
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    bottom: "-12px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: { xs: "80px", sm: "100px", md: "120px" },
+                    height: "4px",
+                    background: "linear-gradient(45deg, #6B4E3D, #B85C38)",
+                    borderRadius: "2px",
+                  },
+                }}
+              >
+                Plan Your Adventure
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  mt: 3,
+                  fontWeight: 500,
+                  fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
+                  color: "text.secondary",
+                  maxWidth: "800px",
+                  mx: "auto",
+                  lineHeight: 1.7,
+                }}
+              >
+                Fill out our safari planning form to get started on your adventure
+              </Typography>
+            </Box>
+
+        {forms.length === 0 ? (
+          <Card sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="h6" color="text.secondary">
+              No forms available at the moment
             </Typography>
+          </Card>
+        ) : (
+          <Grid container spacing={3}>
+            {forms.map((form) => (
+              <Grid item xs={12} sm={6} md={4} key={form.id}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                    },
+                  }}
+                  onClick={() => selectForm(form)}
+                >
+                  <CardContent sx={{ p: 3 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Assignment sx={{ mr: 1, color: '#6B4E3D' }} />
+                      <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                        {form.title}
+                      </Typography>
+                    </Box>
 
-            <Grid container spacing={3}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: "#B85C38", mb: 1 }}>
-                  For Mount Kenya Treks:
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
-                  Technical routes available: Nelion, Batian peaks
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
-                  Trek duration: 3-7 days depending on route
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
-                  Fitness level required: Good to excellent
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
-                  Best seasons: January-February, July-September
-                </Typography>
-                <Typography variant="body1" sx={{ color: "text.primary" }}>
-                  Altitude: Up to 5,199m (Batian peak)
-                </Typography>
-              </Grid>
+                    {form.description && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 2, lineHeight: 1.5 }}
+                      >
+                        {form.description.length > 100
+                          ? `${form.description.substring(0, 100)}...`
+                          : form.description
+                        }
+                      </Typography>
+                    )}
 
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: "#B85C38", mb: 1 }}>
-                  For Mount Kilimanjaro Treks:
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
-                  Route options: Marangu, Machame, Lemosho, Rongai
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
-                  Trek duration: 5-9 days depending on route
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
-                  Fitness level required: Moderate to good
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 0.75, color: "text.primary" }}>
-                  Best seasons: January-March, June-October
-                </Typography>
-                <Typography variant="body1" sx={{ color: "text.primary" }}>
-                  Altitude: 5,895m (Uhuru peak)
-                </Typography>
-              </Grid>
+                    {/* Form Fields Preview */}
+                    {form.fields && form.fields.length > 0 && (
+                      <Box sx={{ mb: 2 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1, color: '#6B4E3D' }}>
+                          Questions ({form.fields.length}):
+                        </Typography>
+                        <Box sx={{ maxHeight: 200, overflowY: 'auto' }}>
+                          {form.fields.slice(0, 5).map((field, index) => (
+                            <Box key={field.id} sx={{ mb: 1.5 }}>
+                              <Typography variant="body2" sx={{ fontWeight: 500, color: '#333' }}>
+                                {index + 1}. {field.label}
+                                {field.is_required && <span style={{ color: '#d32f2f' }}> *</span>}
+                              </Typography>
 
-              <Grid size={{ xs: 12 }}>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: "#3D2817", mb: 1.5 }}>
-                  Trekking Package Inclusions:
-                </Typography>
-                <Box component="ul" sx={{ pl: 3, mb: 0 }}>
-                  {[
-                    "Professional mountain guides",
-                    "Porters and cooks",
-                    "Quality mountain equipment",
-                    "Park fees and permits",
-                    "Emergency evacuation insurance",
-                    "Pre-trek briefing and training advice",
-                  ].map((item) => (
-                    <Typography
-                      key={item}
-                      component="li"
-                      variant="body1"
-                      sx={{ mb: 0.75, color: "text.primary" }}
-                    >
-                      {item}
-                    </Typography>
-                  ))}
-                </Box>
+                              {/* Field Type Preview */}
+                              <Box sx={{ mt: 0.5, pl: 2 }}>
+                                {field.field_type === 'text' || field.field_type === 'email' || field.field_type === 'tel' || field.field_type === 'number' ? (
+                                  <Box
+                                    sx={{
+                                      height: 32,
+                                      border: '1px solid #e0e0e0',
+                                      borderRadius: 1,
+                                      backgroundColor: '#f9f9f9',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      px: 1
+                                    }}
+                                  >
+                                    <Typography variant="caption" color="text.secondary">
+                                      {field.placeholder || `Enter ${field.label.toLowerCase()}`}
+                                    </Typography>
+                                  </Box>
+                                ) : field.field_type === 'textarea' ? (
+                                  <Box
+                                    sx={{
+                                      height: 48,
+                                      border: '1px solid #e0e0e0',
+                                      borderRadius: 1,
+                                      backgroundColor: '#f9f9f9',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      px: 1
+                                    }}
+                                  >
+                                    <Typography variant="caption" color="text.secondary">
+                                      {field.placeholder || `Enter ${field.label.toLowerCase()}`}
+                                    </Typography>
+                                  </Box>
+                                ) : field.field_type === 'select' ? (
+                                  <Box
+                                    sx={{
+                                      height: 32,
+                                      border: '1px solid #e0e0e0',
+                                      borderRadius: 1,
+                                      backgroundColor: '#f9f9f9',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'space-between',
+                                      px: 1
+                                    }}
+                                  >
+                                    <Typography variant="caption" color="text.secondary">
+                                      Select an option
+                                    </Typography>
+                                  </Box>
+                                ) : field.field_type === 'radio' ? (
+                                  <Box sx={{ pl: 1 }}>
+                                    {field.options?.map((option, optIndex) => (
+                                      <Box key={option.id} sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                        <Box
+                                          sx={{
+                                            width: 12,
+                                            height: 12,
+                                            border: '1px solid #6B4E3D',
+                                            borderRadius: '50%',
+                                            mr: 1
+                                          }}
+                                        />
+                                        <Typography variant="caption" color="text.secondary">
+                                          {option.option_label}
+                                        </Typography>
+                                      </Box>
+                                    ))}
+                                  </Box>
+                                ) : field.field_type === 'checkbox' ? (
+                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box
+                                      sx={{
+                                        width: 12,
+                                        height: 12,
+                                        border: '1px solid #6B4E3D',
+                                        mr: 1
+                                      }}
+                                    />
+                                    <Typography variant="caption" color="text.secondary">
+                                      {field.label}
+                                    </Typography>
+                                  </Box>
+                                ) : field.field_type === 'checkbox_group' ? (
+                                  <Box sx={{ pl: 1 }}>
+                                    {field.options?.map((option) => (
+                                      <Box key={option.id} sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                        <Box
+                                          sx={{
+                                            width: 12,
+                                            height: 12,
+                                            border: '1px solid #6B4E3D',
+                                            mr: 1
+                                          }}
+                                        />
+                                        <Typography variant="caption" color="text.secondary">
+                                          {option.option_label}
+                                        </Typography>
+                                      </Box>
+                                    ))}
+                                  </Box>
+                                ) : field.field_type === 'date' ? (
+                                  <Box
+                                    sx={{
+                                      height: 32,
+                                      border: '1px solid #e0e0e0',
+                                      borderRadius: 1,
+                                      backgroundColor: '#f9f9f9',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      px: 1
+                                    }}
+                                  >
+                                    <Typography variant="caption" color="text.secondary">
+                                      Select date
+                                    </Typography>
+                                  </Box>
+                                ) : (
+                                  <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                                    {field.field_type} field
+                                  </Typography>
+                                )}
+                              </Box>
+                            </Box>
+                          ))}
+
+                          {form.fields.length > 5 && (
+                            <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic', mt: 1, display: 'block' }}>
+                              +{form.fields.length - 5} more questions...
+                            </Typography>
+                          )}
+                        </Box>
+                      </Box>
+                    )}
+                  </CardContent>
+                </Card>
               </Grid>
-            </Grid>
-          </Box>
-        </Paper>
+            ))}
+          </Grid>
+        )}
+          </Paper>
+        </MotionBox>
       </Container>
     </Box>
   );

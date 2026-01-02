@@ -7,6 +7,7 @@ export default function HeroSection() {
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [countryToIdMap, setCountryToIdMap] = useState({});
   const images = [
     "/images/rhinoceros-1837164_1280.jpg",
     "/images/elephants-4275741_1280.jpg",
@@ -30,16 +31,50 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, [images.length]);
 
+  // Fetch destinations and create country mapping
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const response = await fetch("/api/destinations/public");
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            // Create mapping from button labels to destination IDs
+            const mapping = {};
+
+            result.data.forEach(destination => {
+              // Map based on title or location
+              if (destination.title) {
+                // If title contains country name, map it
+                const title = destination.title.toLowerCase();
+                if (title.includes('kenya')) mapping['Kenya'] = destination.id;
+                else if (title.includes('uganda')) mapping['Uganda'] = destination.id;
+                else if (title.includes('tanzania')) mapping['Tanzania'] = destination.id;
+                else if (title.includes('rwanda')) mapping['Rwanda'] = destination.id;
+              }
+
+              // Also try location field as fallback
+              if (destination.location) {
+                const location = destination.location.trim();
+                if (location === 'East Africa' && !mapping['Kenya']) {
+                  mapping['Kenya'] = destination.id; // Kenya is in East Africa
+                }
+              }
+            });
+
+            setCountryToIdMap(mapping);
+          }
+        }
+      } catch (error) {
+        console.warn("Failed to fetch destinations for hero mapping:", error);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
+
   const handleBookSafari = () => {
     navigate("/plan");
-  };
-
-  // Map country names to destination IDs (matching ServicesSection dummyDestinations)
-  const countryToIdMap = {
-    Kenya: 1,
-    Uganda: 2,
-    Tanzania: 3,
-    Rwanda: 4,
   };
 
   const handleCountryClick = (country) => {
@@ -58,7 +93,7 @@ export default function HeroSection() {
         width: "100%",
         overflow: "hidden",
         marginTop: "-80px",
-        backgroundColor: "#000", // prevent white flash during transitions
+        backgroundColor: "#E0D8C0", // beige background covering full screen
       }}
     >
       {/* Background Images */}

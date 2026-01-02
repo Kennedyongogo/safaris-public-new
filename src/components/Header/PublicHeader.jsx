@@ -248,8 +248,6 @@ export default function PublicHeader() {
                     maxHeight: "72px",
                     width: "auto",
                     transition: "all 0.4s ease",
-                    transform: "scale(2.0)",
-                    transformOrigin: "left center",
                     filter: (scrolled || location.pathname !== "/")
                       ? "none"
                       : "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
@@ -257,7 +255,7 @@ export default function PublicHeader() {
                 />
                 <Box
                   sx={{
-                    ml: { xs: 3, sm: 4 },
+                    ml: { xs: 1.5, sm: 2 },
                     display: { xs: "block", sm: "block" },
                   }}
                 >
@@ -415,6 +413,7 @@ export default function PublicHeader() {
                 disableRipple
                 sx={{
                   display: { xs: "flex", md: "none" },
+                  marginLeft: "auto",
                   color: mobileMenuOpen
                     ? "#6B4E3D" // Medium brown
                     : (scrolled || location.pathname !== "/")
@@ -472,6 +471,7 @@ export default function PublicHeader() {
         sx={{
           "& .MuiDrawer-paper": {
             width: { xs: "260px", sm: "300px" },
+            marginRight: { xs: 2, sm: 3 }, // Add right margin so it doesn't appear cut by screen edge
             backgroundColor: "background.default", // Light beige
             backgroundImage:
               "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%)",

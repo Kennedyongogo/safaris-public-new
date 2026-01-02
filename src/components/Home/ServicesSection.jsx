@@ -75,6 +75,150 @@ const buildImageUrl = (imagePath) => {
   return imagePath;
 };
 
+// Destination Card Component with Image Transitions
+const DestinationCard = ({ destination, isMobile }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageError, setImageError] = useState(false);
+
+  // Combine hero image with gallery images for transitions
+  const getAllImages = () => {
+    const images = [];
+
+    // Add hero image first
+    if (destination.image) {
+      images.push(destination.image);
+    }
+
+    // Add gallery images
+    if (destination.gallery_images && Array.isArray(destination.gallery_images)) {
+      images.push(...destination.gallery_images.filter(img => img)); // Filter out empty URLs
+    }
+
+    return images;
+  };
+
+  const images = getAllImages();
+  const hasMultipleImages = images.length > 1;
+
+  // Auto-transition images if there are multiple
+  useEffect(() => {
+    if (!hasMultipleImages) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [hasMultipleImages, images.length]);
+
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        height: isMobile ? "200px" : "240px",
+        width: "100%",
+        overflow: "hidden",
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      {images.length > 0 && !imageError ? (
+        <>
+          {images.map((imageUrl, imgIndex) => {
+            const isActive = imgIndex === currentImageIndex;
+            return (
+              <Box
+                key={imgIndex}
+                component="img"
+                src={imageUrl}
+                alt={`${destination.title} - Image ${imgIndex + 1}`}
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  opacity: isActive ? 1 : 0,
+                  transition: "opacity 0.5s ease-in-out",
+                }}
+                onError={(e) => {
+                  if (isActive) {
+                    setImageError(true);
+                  }
+                }}
+              />
+            );
+          })}
+          {hasMultipleImages && (
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 8,
+                left: "50%",
+                transform: "translateX(-50%)",
+                display: "flex",
+                gap: 0.5,
+                zIndex: 3,
+              }}
+            >
+              {images.map((_, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    width: currentImageIndex === idx ? 20 : 6,
+                    height: 6,
+                    borderRadius: "3px",
+                    backgroundColor:
+                      currentImageIndex === idx
+                        ? "white"
+                        : "rgba(255, 255, 255, 0.5)",
+                    transition: "all 0.3s ease",
+                  }}
+                />
+              ))}
+            </Box>
+          )}
+        </>
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#f5f5f5",
+          }}
+        >
+          <Typography variant="body2" color="text.secondary">
+            No image available
+          </Typography>
+        </Box>
+      )}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 12,
+          left: 12,
+        }}
+      >
+        <Chip
+          label="Safari Destination"
+          size="small"
+          sx={{
+            backgroundColor: "#6B4E3D",
+            color: "white",
+            border: "1px solid #8B6F5E",
+            fontWeight: 700,
+            fontSize: "0.8rem",
+            letterSpacing: 0.2,
+          }}
+        />
+      </Box>
+    </Box>
+  );
+};
+
 // Mission Card Component
 const MissionCard = ({
   category,
@@ -296,63 +440,13 @@ const MissionCard = ({
   );
 };
 
-// Dummy destination data
-const dummyDestinations = [
-  {
-    id: 1,
-    title: "Kenya",
-    description:
-      "Experience the world-famous Great Migration in Maasai Mara, witness the Big Five, and explore diverse landscapes from savannah plains to snow-capped mountains. Kenya offers unparalleled wildlife viewing and rich cultural experiences.",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    location: "East Africa",
-    duration: "5-14 Days",
-    bestTime: "July - October, January - March",
-    wildlife: "Big Five, Great Migration, Wildebeest, Elephants",
-    highlights: ["Maasai Mara", "Amboseli", "Samburu", "Tsavo"],
-  },
-  {
-    id: 2,
-    title: "Uganda",
-    description:
-      "Discover the Pearl of Africa with mountain gorilla trekking in Bwindi, chimpanzee encounters, and diverse ecosystems. Home to half of the world's remaining mountain gorillas and the source of the Nile.",
-    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    location: "East Africa",
-    duration: "7-14 Days",
-    bestTime: "June - September, December - February",
-    wildlife: "Mountain Gorillas, Chimpanzees, Big Five, Primates",
-    highlights: ["Bwindi Impenetrable", "Queen Elizabeth", "Murchison Falls"],
-  },
-  {
-    id: 3,
-    title: "Tanzania",
-    description:
-      "Home to the Serengeti's Great Migration, Ngorongoro Crater, and Mount Kilimanjaro. Experience vast wilderness areas, incredible wildlife concentrations, and pristine beaches of Zanzibar.",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    location: "East Africa",
-    duration: "7-14 Days",
-    bestTime: "June - October, December - March",
-    wildlife: "Big Five, Great Migration, Wildebeest, Zebras",
-    highlights: ["Serengeti", "Ngorongoro", "Kilimanjaro", "Zanzibar"],
-  },
-  {
-    id: 4,
-    title: "Rwanda",
-    description:
-      "The Land of a Thousand Hills offers intimate gorilla trekking experiences, golden monkey encounters, and rich cultural heritage. Experience one of Africa's most successful conservation stories.",
-    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    location: "East Africa",
-    duration: "4-10 Days",
-    bestTime: "June - September, December - February",
-    wildlife: "Mountain Gorillas, Golden Monkeys, Big Five",
-    highlights: ["Volcanoes National Park", "Nyungwe Forest", "Akagera"],
-  },
-];
+// Destinations are now fetched from API
 
 export default function ServicesSection() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
-  // const [missionCategories, setMissionCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [destinations, setDestinations] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // Commented out dialog-related state
   // const [currentIndex, setCurrentIndex] = useState(0);
@@ -360,9 +454,6 @@ export default function ServicesSection() {
   // const [dialogOpen, setDialogOpen] = useState(false);
   // const [missionDetails, setMissionDetails] = useState(null);
   // const [loadingDetails, setLoadingDetails] = useState(false);
-
-  // Use dummy data instead of API
-  const missionCategories = dummyDestinations;
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -374,35 +465,65 @@ export default function ServicesSection() {
 
   useEffect(() => {
     setIsVisible(true);
-    // fetchMissionCategories(); // Commented out - using dummy data
+    fetchDestinations();
   }, []);
 
-  // Commented out API fetch logic
-  // const fetchMissionCategories = async () => {
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     const response = await fetch("/api/mission-categories/public");
+  const fetchDestinations = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch("/api/destinations/public");
 
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-  //     const result = await response.json();
+      const result = await response.json();
 
-  //     if (result.success && result.data) {
-  //       setMissionCategories(result.data);
-  //     } else {
-  //       throw new Error(result.message || "Failed to fetch mission categories");
-  //     }
-  //   } catch (err) {
-  //     console.error("Error fetching mission categories:", err);
-  //     setError(err.message);
-  //     setMissionCategories([]);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      if (result.success && result.data) {
+        // Helper to build full image URL
+        const buildFullImageUrl = (imagePath) => {
+          if (!imagePath) return "";
+          if (imagePath.startsWith("http")) return imagePath;
+          // Prepend the API base URL to relative paths
+          return `http://localhost:4000/${imagePath}`;
+        };
+
+        // Map API data to component expected format
+        const mappedDestinations = result.data.map(destination => ({
+          id: destination.id,
+          slug: destination.slug, // Include slug for navigation
+          title: destination.title,
+          description: destination.description,
+          image: buildFullImageUrl(destination.hero_image), // Convert to full URL
+          gallery_images: Array.isArray(destination.gallery_images)
+            ? destination.gallery_images.map(img => buildFullImageUrl(img)) // Convert gallery images to full URLs
+            : [],
+          location: destination.location,
+          duration: destination.duration_display || `${destination.duration_min}-${destination.duration_max} Days`,
+          highlights: Array.isArray(destination.key_highlights)
+            ? destination.key_highlights.slice(0, 3) // Take first 3 highlights
+            : [],
+          attractions: Array.isArray(destination.attractions)
+            ? destination.attractions.map(attr => ({
+                name: attr.name,
+                description: attr.description,
+                images: (attr.images || []).map(img => buildFullImageUrl(img)) // Convert all attraction images to full URLs
+              }))
+            : []
+        }));
+        setDestinations(mappedDestinations);
+      } else {
+        throw new Error(result.message || "Failed to fetch destinations");
+      }
+    } catch (err) {
+      console.error("Error fetching destinations:", err);
+      setError(err.message);
+      setDestinations([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Commented out navigation functions - showing all 3 cards
   // const handlePrevious = () => {
@@ -417,9 +538,30 @@ export default function ServicesSection() {
   //   return missionCategories.slice(currentIndex, currentIndex + cardsToShow);
   // };
 
-  const handleViewMore = (destination) => {
-    // Navigate to destination details page (from services section)
-    navigate(`/destination/${destination.id}`, { state: { from: "services" } });
+  const handleViewMore = async (destination) => {
+    try {
+      // Fetch destination details from backend
+      const response = await fetch(`/api/destinations/public/id/${destination.id}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        // Navigate to destination details page with the fetched data
+        navigate(`/destination/${destination.id}`, {
+          state: { destination: result.data }
+        });
+      } else {
+        throw new Error(result.message || "Failed to fetch destination details");
+      }
+    } catch (error) {
+      console.error("Error fetching destination details:", error);
+      // Still navigate even if fetch fails, let the destination page handle it
+      navigate(`/destination/${destination.id}`);
+    }
   };
 
   // Commented out dialog handlers - using page navigation instead
@@ -436,22 +578,9 @@ export default function ServicesSection() {
         pt: { xs: 0, sm: 0, md: 0 },
         pb: { xs: 0.5, sm: 0.75, md: 1 },
         px: 0,
-        bgcolor: "background.paper",
-        background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.9) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(232, 224, 209, 0.9) 100%)", // Beige tones
+        backgroundColor: "#F5F1E8", // Solid beige background to prevent rendering flicker
         position: "relative",
         overflow: "hidden",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            "radial-gradient(circle at 20% 80%, rgba(107, 78, 61, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(184, 92, 56, 0.1) 0%, transparent 50%)", // Medium brown and rust
-          zIndex: 0,
-        },
       }}
     >
       <Container
@@ -580,10 +709,10 @@ export default function ServicesSection() {
                   {error}
                 </Typography>
               </Box>
-            ) : missionCategories.length === 0 ? (
+            ) : destinations.length === 0 ? (
               <Box textAlign="center" py={4}>
                 <Typography color="text.secondary" variant="body1">
-                  No mission categories available at the moment.
+                  No destinations available at the moment.
                 </Typography>
               </Box>
             ) : (
@@ -594,7 +723,7 @@ export default function ServicesSection() {
                   spacing={{ xs: 2, sm: 2.5, md: 3 }}
                   justifyContent="center"
                 >
-                  {missionCategories.map((destination, index) => (
+                  {destinations.map((destination, index) => (
                     <Grid
                       size={{
                         xs: 12,
@@ -610,68 +739,35 @@ export default function ServicesSection() {
                       >
                         <Card
                           sx={{
-                            height: { xs: "480px", sm: "520px" },
-                            width: "100%",
+                            height: "100%",
                             display: "flex",
                             flexDirection: "column",
-                            transition:
-                              "transform 0.3s ease, box-shadow 0.3s ease",
+                            transition: "transform 0.3s ease, box-shadow 0.3s ease",
                             "&:hover": {
                               transform: "translateY(-8px)",
                               boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
                             },
                           }}
                         >
-                          {/* Image Section */}
-                          <Box
-                            sx={{
-                              position: "relative",
-                              height: isMobile ? "180px" : "220px",
-                              width: "100%",
-                              overflow: "hidden",
-                              backgroundColor: "#f5f5f5",
-                            }}
-                          >
-                            <Box
-                              component="img"
-                              src={destination.image}
-                              alt={destination.title}
-                              sx={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                display: "block",
-                              }}
-                              onError={(e) => {
-                                e.target.src = "/foundation-logo.png";
-                              }}
-                            />
-                          </Box>
+                          <DestinationCard destination={destination} isMobile={isMobile} />
 
                           <CardContent
                             sx={{
                               flexGrow: 1,
-                              p: { xs: 2, sm: 3 },
+                              p: { xs: 2, sm: 2.5 },
                               display: "flex",
                               flexDirection: "column",
-                              minHeight: { xs: "260px", sm: "300px" },
                             }}
                           >
-                            <Box sx={{ mb: { xs: 1, sm: 2 } }}>
-                              <Chip
-                                label="Safari Destination"
-                                color="primary"
-                                size="small"
-                                sx={{ mb: { xs: 1, sm: 1.5 } }}
-                              />
+                            <Box sx={{ mb: 1.5 }}>
                               <Typography
                                 variant="h6"
                                 component="h3"
                                 sx={{
-                                  fontWeight: 600,
-                                  mb: { xs: 0.5, sm: 1 },
+                                  fontWeight: 700,
+                                  mb: 1,
                                   color: "text.primary",
-                                  fontSize: { xs: "1rem", sm: "1.25rem" },
+                                  fontSize: { xs: "1.2rem", sm: "1.35rem" },
                                 }}
                               >
                                 {destination.title}
@@ -682,55 +778,115 @@ export default function ServicesSection() {
                               variant="body2"
                               color="text.secondary"
                               sx={{
-                                mb: { xs: 1, sm: 1.5 },
+                                mb: 1.5,
                                 overflow: "hidden",
                                 display: "-webkit-box",
-                                WebkitLineClamp: 3,
+                                WebkitLineClamp: 2,
                                 WebkitBoxOrient: "vertical",
                                 lineHeight: 1.5,
-                                flexGrow: 1,
                                 fontSize: { xs: "0.95rem", sm: "1.05rem" },
-                                fontWeight: 700,
-                                minHeight: { xs: "3.6rem", sm: "4.5rem" },
+                                fontWeight: 600,
                               }}
                             >
                               {destination.description}
                             </Typography>
 
-                            <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
+                            <Box sx={{ mb: 1.5 }}>
                               <Box
                                 sx={{
                                   display: "flex",
                                   alignItems: "center",
-                                  gap: 0.5,
-                                  mb: { xs: 0.25, sm: 0.5 },
+                                  gap: 0.75,
+                                  mb: 0.75,
                                 }}
                               >
                                 <LocationOn
                                   sx={{
-                                      fontSize: { xs: 12, sm: 14 },
-                                      color: "#6B4E3D", // Medium brown
+                                    fontSize: { xs: 14, sm: 16 },
+                                    color: "#5D4037",
                                   }}
                                 />
                                 <Typography
                                   variant="body2"
-                                  color="text.secondary"
                                   sx={{
-                                      fontSize: { xs: "0.85rem", sm: "0.95rem" },
-                                      fontWeight: 700,
-                                      overflow: "hidden",
-                                      display: "-webkit-box",
-                                      WebkitLineClamp: 3,
-                                      WebkitBoxOrient: "vertical",
-                                      textOverflow: "ellipsis",
+                                    fontSize: { xs: "0.9rem", sm: "0.95rem" },
+                                    color: "text.secondary",
+                                    fontWeight: 600,
                                   }}
                                 >
                                   {destination.location}
                                 </Typography>
                               </Box>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 0.75,
+                                }}
+                              >
+                                <Schedule
+                                  sx={{
+                                    fontSize: { xs: 14, sm: 16 },
+                                    color: "#5D4037",
+                                  }}
+                                />
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    fontSize: { xs: "0.9rem", sm: "0.95rem" },
+                                    color: "text.secondary",
+                                    fontWeight: 600,
+                                  }}
+                                >
+                                  {destination.duration}
+                                </Typography>
+                              </Box>
                             </Box>
 
-                            <Box sx={{ mt: "auto", pt: { xs: 0.5, sm: 1 } }}>
+                            <Box sx={{ mb: 2, flexGrow: 1 }}>
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  fontSize: "0.85rem",
+                                  fontWeight: 700,
+                                  color: "#5D4037",
+                                  mb: 0.5,
+                                  display: "block",
+                                }}
+                              >
+                                Highlights:
+                              </Typography>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: 0.5,
+                                }}
+                              >
+                                {destination.highlights.slice(0, 3).map((highlight, idx) => (
+                                  <Chip
+                                    key={idx}
+                                    label={highlight}
+                                    size="small"
+                                    sx={{
+                                      fontSize: "0.8rem",
+                                      height: "22px",
+                                      backgroundColor: "#f5f5f5",
+                                      color: "#5D4037",
+                                      fontWeight: 700,
+                                    }}
+                                  />
+                                ))}
+                              </Box>
+                            </Box>
+
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 1,
+                                mt: "auto",
+                              }}
+                            >
                               <Button
                                 variant="outlined"
                                 size="small"
@@ -738,16 +894,22 @@ export default function ServicesSection() {
                                 endIcon={<ArrowForward />}
                                 onClick={() => handleViewMore(destination)}
                                 sx={{
-                                  borderColor: "#6B4E3D", // Medium brown
-                                  color: "#6B4E3D",
-                                  fontSize: "0.875rem",
-                                  py: 1,
+                                  borderColor: "#5D4037",
+                                  color: "#5D4037",
+                                  fontSize: "0.95rem",
+                                  fontWeight: 700,
+                                  py: 0.75,
                                   outline: "none",
-                                  "&:focus": { outline: "none", boxShadow: "none" },
-                                  "&:focus-visible": { outline: "none", boxShadow: "none" },
+                                  "&:focus": {
+                                    outline: "none",
+                                  },
+                                  "&:focus-visible": {
+                                    outline: "none",
+                                    boxShadow: "none",
+                                  },
                                   "&:hover": {
-                                    borderColor: "#B85C38", // Rust
-                                    backgroundColor: "#6B4E3D",
+                                    borderColor: "#4E342E",
+                                    backgroundColor: "#5D4037",
                                     color: "white",
                                   },
                                 }}
