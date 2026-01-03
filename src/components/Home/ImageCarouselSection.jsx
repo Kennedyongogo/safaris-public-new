@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Container,
+  Card,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -70,15 +71,24 @@ export default function ImageCarouselSection() {
         background: "#FFFFFF",
       }}
     >
-      <Container
-        maxWidth="xl"
+      <Card
         sx={{
-          px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0, sm: 0, md: 0 },
-          position: "relative",
-          zIndex: 1,
+          mx: { xs: 0.75, sm: 0.75, md: 0.75 },
+          borderRadius: { xs: 3, md: 4 },
+          background: "#FFFFFF",
+          border: "1px solid rgba(107, 78, 61, 0.2)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
         }}
       >
+        <Container
+          maxWidth="xl"
+          sx={{
+            px: { xs: 1.5, sm: 1.5, md: 1.5 },
+            pt: { xs: 0, sm: 0, md: 0 },
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
         <Box
           sx={{
             pt: { xs: 0.5, sm: 0.75, md: 1 },
@@ -143,7 +153,8 @@ export default function ImageCarouselSection() {
             ))}
           </Box>
         </Box>
-      </Container>
+        </Container>
+      </Card>
     </Box>
   );
 }

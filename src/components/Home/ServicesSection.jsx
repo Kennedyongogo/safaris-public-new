@@ -583,6 +583,15 @@ export default function ServicesSection() {
         overflow: "hidden",
       }}
     >
+      <Card
+        sx={{
+          mx: { xs: 0.75, sm: 0.75, md: 0.75 },
+          borderRadius: { xs: 3, md: 4 },
+          background: "#FFFFFF",
+          border: "1px solid rgba(107, 78, 61, 0.2)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+        }}
+      >
       <Container
         maxWidth="xl"
         sx={{
@@ -928,6 +937,7 @@ export default function ServicesSection() {
           </Box>
         </Box>
       </Container>
+      </Card>
     </Box>
   );
 }

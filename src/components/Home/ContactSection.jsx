@@ -6,6 +6,7 @@ import {
   Typography,
   Stack,
   Divider,
+  Card,
 } from "@mui/material";
 import { LocationOn, Email, Phone } from "@mui/icons-material";
 
@@ -22,13 +23,22 @@ export default function ContactSection() {
         background: "#FFFFFF",
       }}
     >
-      <Container
-        maxWidth="xl"
+      <Card
         sx={{
-          px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0, sm: 0, md: 0 },
+          mx: { xs: 0.75, sm: 0.75, md: 0.75 },
+          borderRadius: { xs: 3, md: 4 },
+          background: "#FFFFFF",
+          border: "1px solid rgba(107, 78, 61, 0.2)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
         }}
       >
+        <Container
+          maxWidth="xl"
+          sx={{
+            px: { xs: 1.5, sm: 1.5, md: 1.5 },
+            pt: { xs: 0, sm: 0, md: 0 },
+          }}
+        >
         <Box
           sx={{
             py: { xs: 0.75, sm: 1, md: 1.25 },
@@ -162,7 +172,8 @@ export default function ContactSection() {
 
           </Stack>
         </Box>
-      </Container>
+        </Container>
+      </Card>
     </Box>
   );
 }

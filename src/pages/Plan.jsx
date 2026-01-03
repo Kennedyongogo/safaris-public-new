@@ -21,9 +21,10 @@ import {
   Checkbox,
   Stack,
 } from "@mui/material";
-import { Description, Assignment } from "@mui/icons-material";
+import { Description, Assignment, Lock as LockIcon } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const MotionBox = motion(Box);
 
@@ -61,15 +62,27 @@ export default function Plan() {
     return true;
   };
 
-  // Update visible fields when form data changes
+  // Update visible fields when form data changes (only when visibility actually changes)
   useEffect(() => {
     if (selectedForm?.fields) {
-      const visible = selectedForm.fields.filter(field => shouldShowField(field));
+      const visible = selectedForm.fields
+        .filter(field => shouldShowField(field))
+        .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+
+      console.log('Visible fields:', visible.map(f => ({ id: f.id, type: f.field_type, display_order: f.display_order })));
+
+      // Only reset step if the visible fields actually changed
+      const visibleFieldIds = visible.map(f => f.id).sort().join(',');
+      const currentVisibleIds = visibleFields.map(f => f.id).sort().join(',');
+
       setVisibleFields(visible);
-      // Reset to first step when visible fields change
-      setCurrentStep(0);
+
+      // Only reset to first step if the set of visible fields changed
+      if (visibleFieldIds !== currentVisibleIds) {
+        setCurrentStep(0);
+      }
     }
-  }, [selectedForm, formData]);
+  }, [selectedForm, formData, visibleFields]);
 
   // Handle form input changes
   const handleInputChange = (fieldName, value) => {
@@ -77,6 +90,63 @@ export default function Plan() {
       ...prev,
       [fieldName]: value
     }));
+  };
+
+  // Check if current field is valid/answered
+  const isCurrentFieldValid = () => {
+    const field = currentField;
+    if (!field) return true; // No field to validate
+
+    // If field is not required, it's always valid
+    if (!field.is_required) return true;
+
+    // Special handling for compound fields
+    if (field.field_type === 'compound') {
+      return (field.sub_fields || []).every(subField => {
+        if (!subField.is_required) return true;
+
+        const subFieldValue = formData[subField.field_name];
+        switch (subField.type) {
+          case 'text':
+          case 'email':
+          case 'tel':
+          case 'number':
+          case 'textarea':
+          case 'date':
+            return subFieldValue && subFieldValue.toString().trim() !== '';
+          default:
+            return true;
+        }
+      });
+    }
+
+    const fieldValue = formData[field.field_name];
+
+    // Check based on field type
+    switch (field.field_type) {
+      case 'text':
+      case 'email':
+      case 'tel':
+      case 'number':
+      case 'textarea':
+      case 'date':
+        return fieldValue && fieldValue.toString().trim() !== '';
+
+      case 'select':
+        return fieldValue && fieldValue !== '';
+
+      case 'radio':
+        return fieldValue && fieldValue !== '';
+
+      case 'checkbox':
+        return fieldValue === true;
+
+      case 'checkbox_group':
+        return fieldValue && Array.isArray(fieldValue) && fieldValue.length > 0;
+
+      default:
+        return true;
+    }
   };
 
   // Navigation functions
@@ -92,18 +162,95 @@ export default function Plan() {
     }
   };
 
+  // Check if all visible required fields are valid
+  const areAllFieldsValid = () => {
+    console.log('Checking validation for fields:', visibleFields.map(f => ({ id: f.id, type: f.field_type, required: f.is_required })));
+    return visibleFields.every(field => {
+      if (!field.is_required) return true;
+
+      // Special handling for compound fields
+      if (field.field_type === 'compound') {
+        console.log('Validating compound field:', field.field_name, 'sub_fields:', field.sub_fields);
+        const isValid = (field.sub_fields || []).every(subField => {
+          if (!subField.is_required) return true;
+
+          const subFieldValue = formData[subField.field_name];
+          console.log(`Checking sub_field ${subField.field_name}:`, subFieldValue);
+          switch (subField.type) {
+            case 'text':
+            case 'email':
+            case 'tel':
+            case 'number':
+            case 'textarea':
+            case 'date':
+              return subFieldValue && subFieldValue.toString().trim() !== '';
+            default:
+              return true;
+          }
+        });
+        console.log('Compound field valid:', isValid);
+        return isValid;
+      }
+
+      const fieldValue = formData[field.field_name];
+      console.log(`Checking field ${field.field_name}:`, fieldValue);
+
+      // Check based on field type
+      switch (field.field_type) {
+        case 'text':
+        case 'email':
+        case 'tel':
+        case 'number':
+        case 'textarea':
+        case 'date':
+          return fieldValue && fieldValue.toString().trim() !== '';
+
+        case 'select':
+          return fieldValue && fieldValue !== '';
+
+        case 'radio':
+          return fieldValue && fieldValue !== '';
+
+        case 'checkbox':
+          return fieldValue === true;
+
+        case 'checkbox_group':
+          return fieldValue && Array.isArray(fieldValue) && fieldValue.length > 0;
+
+        default:
+          return true;
+      }
+    });
+  };
+
   const handleSubmit = async () => {
+    // Validate all fields before submission
+    if (!areAllFieldsValid()) {
+      alert('Please answer all required questions before submitting.');
+      return;
+    }
+
     try {
       setLoading(true);
       await axios.post(`/api/forms/public/${selectedForm.slug}/submit`, formData);
-      // Handle success - maybe show success message or redirect
-      alert('Form submitted successfully!');
+      // Handle success - show SweetAlert success message
+      Swal.fire({
+        icon: "success",
+        title: "Thank you!",
+        text: "Your enquiry has been submitted successfully. We'll get back to you within 24 hours.",
+        confirmButtonColor: "#B85C38",
+      });
       setSelectedForm(null);
       setCurrentStep(0);
       setFormData({});
     } catch (error) {
       console.error('Form submission error:', error);
-      alert('Error submitting form. Please try again.');
+      Swal.fire({
+        icon: "error",
+        title: "Submission failed",
+        text: error.message || "Please try again.",
+        confirmButtonColor: "#B85C38",
+      });
     } finally {
       setLoading(false);
     }
@@ -119,7 +266,24 @@ export default function Plan() {
       setLoading(true);
       setError(null);
       const response = await axios.get('/api/forms/public');
-      setForms(response.data.data || []);
+
+      // Process forms to extract sub_fields from validation_rules for compound fields
+      const processedForms = (response.data.data || []).map(form => ({
+        ...form,
+        fields: form.fields.map(field => {
+          // Extract sub_fields from validation_rules for compound fields
+          if (field.field_type === 'compound' && field.validation_rules?.sub_fields) {
+            console.log('Processing compound field:', field.field_name, 'sub_fields:', field.validation_rules.sub_fields);
+            return {
+              ...field,
+              sub_fields: field.validation_rules.sub_fields
+            };
+          }
+          return field;
+        })
+      }));
+
+      setForms(processedForms);
     } catch (err) {
       setError(err.message || 'Failed to load forms');
     } finally {
@@ -224,24 +388,39 @@ export default function Plan() {
                     },
                   }}
                 >
-                  {currentForm.title}
+                  GET A TRIP QUOTE
                 </Typography>
-                {currentForm.description && (
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      mt: 3,
-                      fontWeight: 500,
-                      fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
-                      color: "text.secondary",
-                      maxWidth: "800px",
-                      mx: "auto",
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    {currentForm.description}
-                  </Typography>
-                )}
+                <Typography
+                  variant="h6"
+                  sx={{
+                    mt: 3,
+                    fontWeight: 500,
+                    fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
+                    color: "text.secondary",
+                    maxWidth: "800px",
+                    mx: "auto",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Your private African safari quote – delivered in 24 hrs
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    mt: 2,
+                    fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
+                    color: "text.secondary",
+                    maxWidth: "800px",
+                    mx: "auto",
+                    lineHeight: 1.6,
+                    textAlign: "center",
+                  }}
+                >
+                  Share your dates, dream wildlife sightings and budget. We'll hand-craft
+                  an expert-guided, crowd-free itinerary across East Africa's best parks and
+                  beaches. Ready for the Great Migration, gorilla treks or Zanzibar's white
+                  sand? Let's build your unforgettable journey today.
+                </Typography>
               </Box>
 
               {/* Progress Indicator */}
@@ -469,6 +648,92 @@ export default function Plan() {
                               },
                             }}
                           />
+                        ) : currentField.field_type === 'compound' ? (
+                          <Box>
+                            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                              {currentField.help_text || "Please fill in all the information below"}
+                            </Typography>
+                            <Stack spacing={2}>
+                              {(currentField.sub_fields || []).map((subField) => (
+                                <Box key={subField.field_name}>
+                                  {subField.type === 'textarea' ? (
+                                    <TextField
+                                      fullWidth
+                                      multiline
+                                      rows={3}
+                                      label={`${subField.label}${subField.is_required ? ' *' : ''}`}
+                                      placeholder={subField.placeholder}
+                                      required={subField.is_required}
+                                      value={formData[subField.field_name] || ''}
+                                      onChange={(e) => handleInputChange(subField.field_name, e.target.value)}
+                                      sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                          backgroundColor: '#f9f9f9',
+                                          '& fieldset': {
+                                            borderColor: 'rgba(107, 78, 61, 0.3)',
+                                          },
+                                          '&:hover fieldset': {
+                                            borderColor: '#6B4E3D',
+                                          },
+                                          '&.Mui-focused fieldset': {
+                                            borderColor: '#B85C38',
+                                          },
+                                        },
+                                      }}
+                                    />
+                                  ) : subField.type === 'date' ? (
+                                    <TextField
+                                      fullWidth
+                                      type="date"
+                                      label={`${subField.label}${subField.is_required ? ' *' : ''}`}
+                                      InputLabelProps={{ shrink: true }}
+                                      required={subField.is_required}
+                                      value={formData[subField.field_name] || ''}
+                                      onChange={(e) => handleInputChange(subField.field_name, e.target.value)}
+                                      sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                          backgroundColor: '#f9f9f9',
+                                          '& fieldset': {
+                                            borderColor: 'rgba(107, 78, 61, 0.3)',
+                                          },
+                                          '&:hover fieldset': {
+                                            borderColor: '#6B4E3D',
+                                          },
+                                          '&.Mui-focused fieldset': {
+                                            borderColor: '#B85C38',
+                                          },
+                                        },
+                                      }}
+                                    />
+                                  ) : (
+                                    <TextField
+                                      fullWidth
+                                      type={subField.type}
+                                      label={`${subField.label}${subField.is_required ? ' *' : ''}`}
+                                      placeholder={subField.placeholder}
+                                      required={subField.is_required}
+                                      value={formData[subField.field_name] || ''}
+                                      onChange={(e) => handleInputChange(subField.field_name, e.target.value)}
+                                      sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                          backgroundColor: '#f9f9f9',
+                                          '& fieldset': {
+                                            borderColor: 'rgba(107, 78, 61, 0.3)',
+                                          },
+                                          '&:hover fieldset': {
+                                            borderColor: '#6B4E3D',
+                                          },
+                                          '&.Mui-focused fieldset': {
+                                            borderColor: '#B85C38',
+                                          },
+                                        },
+                                      }}
+                                    />
+                                  )}
+                                </Box>
+                              ))}
+                            </Stack>
+                          </Box>
                         ) : (
                           <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: 'italic' }}>
                             Unsupported field type: {currentField.field_type}
@@ -491,6 +756,57 @@ export default function Plan() {
                   </Box>
                 )}
               </Box>
+
+              {/* Newsletter and Privacy Policy - Only show on last step */}
+              {isLastStep && (
+                <Box sx={{ px: { xs: 2, md: 4 }, mt: 3 }}>
+                  <Box sx={{ maxWidth: 800, mx: "auto" }}>
+                    {/* Newsletter Checkbox */}
+                    <Box sx={{ mb: 3 }}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.newsletter_optin || false}
+                            onChange={(e) => handleInputChange('newsletter_optin', e.target.checked)}
+                            sx={{
+                              color: 'rgba(107, 78, 61, 0.3)',
+                              '&.Mui-checked': {
+                                color: '#B85C38',
+                              },
+                            }}
+                          />
+                        }
+                        label="Yes, send me Asilia Africa's newsletter. You can unsubscribe at any time. See our Privacy Policy."
+                        sx={{
+                          alignItems: 'flex-start',
+                          '& .MuiFormControlLabel-label': {
+                            fontSize: '0.9rem',
+                            color: 'text.secondary',
+                            lineHeight: 1.4,
+                            ml: 1,
+                          },
+                        }}
+                      />
+                    </Box>
+
+                    {/* Privacy Policy Notice */}
+                    <Box sx={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 1,
+                      p: 2,
+                      bgcolor: 'rgba(184, 92, 56, 0.05)',
+                      borderRadius: 1,
+                      border: '1px solid rgba(184, 92, 56, 0.1)',
+                    }}>
+                      <LockIcon sx={{ color: '#6B4E3D', mt: 0.2, fontSize: '1.2rem' }} />
+                      <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.5 }}>
+                        We protect your personal information. By submitting, you agree to the use of it as described in our Privacy Policy and Notice at Collection. You may opt out of our communications at any time.
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
 
               {/* Navigation Buttons - positioned at card edges */}
               <Box sx={{
@@ -517,6 +833,8 @@ export default function Plan() {
                       color: '#ccc',
                       borderColor: '#ccc',
                     },
+                    '&:focus': { outline: 'none' },
+                    '&:focus-visible': { outline: 'none' },
                   }}
                 >
                   Back
@@ -526,7 +844,7 @@ export default function Plan() {
                   <Button
                     variant="contained"
                     onClick={handleSubmit}
-                    disabled={loading}
+                    disabled={loading || !areAllFieldsValid()}
                     sx={{
                       px: 3,
                       py: 0.5,
@@ -536,6 +854,12 @@ export default function Plan() {
                       },
                       fontSize: "1.1rem",
                       fontWeight: 600,
+                      '&:disabled': {
+                        background: '#ccc',
+                        color: '#666',
+                      },
+                      '&:focus': { outline: 'none' },
+                      '&:focus-visible': { outline: 'none' },
                     }}
                   >
                     {loading ? 'Submitting...' : (currentForm.submit_button_text || 'Submit Form')}
@@ -544,6 +868,7 @@ export default function Plan() {
                   <Button
                     variant="contained"
                     onClick={handleNext}
+                    disabled={!isCurrentFieldValid()}
                     sx={{
                       px: 3,
                       py: 0.5,
@@ -553,6 +878,12 @@ export default function Plan() {
                       },
                       fontSize: "1.1rem",
                       fontWeight: 600,
+                      '&:disabled': {
+                        background: '#ccc',
+                        color: '#666',
+                      },
+                      '&:focus': { outline: 'none' },
+                      '&:focus-visible': { outline: 'none' },
                     }}
                   >
                     Next
@@ -691,7 +1022,6 @@ export default function Plan() {
           "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
         position: "relative",
         overflow: "hidden",
-        minHeight: "100vh",
         "&::before": {
           content: '""',
           position: "absolute",

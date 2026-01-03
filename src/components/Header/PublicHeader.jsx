@@ -70,7 +70,7 @@ export default function PublicHeader() {
         color: "#6B7D47", // Olive green
       },
       {
-        label: "Start Planning",
+        label: "Inquire",
         icon: <LocalHospital />,
         route: "/plan",
         color: "#B85C38", // Burnt orange/rust

@@ -90,54 +90,64 @@ export default function BackgroundImageSection() {
         pb: { xs: 0.5, sm: 0.75, md: 1 },
         position: "relative",
         zIndex: 1,
-        background: "transparent",
+        backgroundColor: "#F5F1E8", // Solid beige background to prevent rendering flicker
       }}
     >
-      {/* Full Width Background Images */}
-      <Box
+      <Card
         sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 0,
+          mx: { xs: 0.75, sm: 0.75, md: 0.75 },
+          borderRadius: { xs: 3, md: 4 },
+          background: "#FFFFFF",
+          border: "1px solid rgba(107, 78, 61, 0.2)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+          position: "relative",
           overflow: "hidden",
         }}
       >
-        {backgroundImages.map((imageUrl, index) => (
-          <Box
-            key={index}
-            component="img"
-            src={imageUrl}
-            alt={`Background ${index + 1}`}
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              opacity: index === currentImageIndex ? 1 : 0,
-              transition: "opacity 1s ease-in-out",
-            }}
-            onError={(e) => {
-              e.target.src =
-                "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&h=600&fit=crop";
-            }}
-          />
-        ))}
-      </Box>
-
-      <Container
-        maxWidth="xl"
-        sx={{
-          px: { xs: 1.5, sm: 1.5, md: 1.5 },
-          pt: { xs: 0, sm: 0, md: 0 },
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
+        {/* Full Width Background Images */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            overflow: "hidden",
+          }}
+        >
+          {backgroundImages.map((imageUrl, index) => (
+            <Box
+              key={index}
+              component="img"
+              src={imageUrl}
+              alt={`Background ${index + 1}`}
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: index === currentImageIndex ? 1 : 0,
+                transition: "opacity 1s ease-in-out",
+              }}
+              onError={(e) => {
+                e.target.src =
+                  "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&h=600&fit=crop";
+              }}
+            />
+          ))}
+        </Box>
+        <Container
+          maxWidth="xl"
+          sx={{
+            px: { xs: 1.5, sm: 1.5, md: 1.5 },
+            pt: { xs: 0, sm: 0, md: 0 },
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
         <Box
           sx={{
             minHeight: { xs: "400px", sm: "500px", md: "600px" },
@@ -309,7 +319,8 @@ export default function BackgroundImageSection() {
             ))}
           </Box>
         </Box>
-      </Container>
+        </Container>
+      </Card>
     </Box>
   );
 }
