@@ -82,7 +82,7 @@ export default function BackgroundImageSection() {
             if (item.filePath.startsWith('http')) {
               return item.filePath;
             } else {
-              return `http://localhost:4000/${item.filePath.startsWith('/') ? item.filePath.slice(1) : item.filePath}`;
+              return `/${item.filePath.startsWith('/') ? item.filePath.slice(1) : item.filePath}`;
             }
           });
 

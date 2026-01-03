@@ -30,7 +30,7 @@ export default function HeroSection() {
             id: item.id,
             url: item.filePath.startsWith('http')
               ? item.filePath
-              : `http://localhost:4000/${item.filePath.startsWith('/') ? item.filePath.slice(1) : item.filePath}`,
+              : `/${item.filePath.startsWith('/') ? item.filePath.slice(1) : item.filePath}`,
             title: item.title,
             altText: item.altText
           }));

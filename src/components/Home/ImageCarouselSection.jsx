@@ -29,7 +29,7 @@ export default function ImageCarouselSection() {
             type: item.type,
             url: item.filePath.startsWith('http')
               ? item.filePath
-              : `http://localhost:4000/${item.filePath.startsWith('/') ? item.filePath.slice(1) : item.filePath}`,
+              : `/${item.filePath.startsWith('/') ? item.filePath.slice(1) : item.filePath}`,
             altText: item.altText || item.title,
             title: item.title
           }));
