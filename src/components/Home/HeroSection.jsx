@@ -5,31 +5,89 @@ import { ArrowForward } from "@mui/icons-material";
 
 export default function HeroSection() {
   const navigate = useNavigate();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [countryToIdMap, setCountryToIdMap] = useState({});
-  const images = [
-    "/images/rhinoceros-1837164_1280.jpg",
-    "/images/elephants-4275741_1280.jpg",
-    "/images/lion-5751867_1280.jpg",
-  ];
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingStartTime] = useState(Date.now());
+  const [minLoadingTime] = useState(800); // Minimum 800ms to prevent flashing
 
-  // Preload all images for smooth transitions
+  // Fetch videos from gallery
   useEffect(() => {
-    images.forEach((imageSrc) => {
-      const img = new Image();
-      img.src = imageSrc;
-    });
+    const fetchVideos = async () => {
+      try {
+        console.log('Fetching videos from gallery API...');
+        const response = await fetch('/api/gallery/public?all=true&type=video');
+        const data = await response.json();
+        console.log('Gallery API response:', data);
+
+        if (data.success && data.data.items && data.data.items.length > 0) {
+          console.log(`Found ${data.data.items.length} videos in gallery`);
+
+          // Convert gallery items to video objects
+          const videoItems = data.data.items.map(item => ({
+            id: item.id,
+            url: item.filePath.startsWith('http')
+              ? item.filePath
+              : `http://localhost:4000/${item.filePath.startsWith('/') ? item.filePath.slice(1) : item.filePath}`,
+            title: item.title,
+            altText: item.altText
+          }));
+
+          console.log('Video URLs:', videoItems.map(v => v.url));
+
+          // Ensure we have at least 3 videos for rotation
+          let finalVideos = [...videoItems];
+          while (finalVideos.length < 3) {
+            finalVideos = [...finalVideos, ...videoItems];
+          }
+
+          setVideos(finalVideos.slice(0, 3));
+        } else {
+          console.log('No videos found in gallery, using fallback');
+          // Fallback to default videos if API fails or no videos available
+          const fallbackVideos = [
+            { id: 'fallback-1', url: '/videos/safari-fallback-1.mp4', title: 'Safari Adventure' },
+            { id: 'fallback-2', url: '/videos/safari-fallback-2.mp4', title: 'Wildlife Journey' },
+            { id: 'fallback-3', url: '/videos/safari-fallback-3.mp4', title: 'Nature Discovery' },
+          ];
+          setVideos(fallbackVideos);
+        }
+      } catch (error) {
+        console.error('Failed to fetch hero videos:', error);
+        // Fallback videos
+        const fallbackVideos = [
+          { id: 'fallback-1', url: '/videos/safari-fallback-1.mp4', title: 'Safari Adventure' },
+          { id: 'fallback-2', url: '/videos/safari-fallback-2.mp4', title: 'Wildlife Journey' },
+          { id: 'fallback-3', url: '/videos/safari-fallback-3.mp4', title: 'Nature Discovery' },
+        ];
+        setVideos(fallbackVideos);
+      } finally {
+        // Smart loading: ensure minimum display time but don't delay if loading took longer
+        const elapsedTime = Date.now() - loadingStartTime;
+        const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+
+        setTimeout(() => {
+          setLoading(false);
+        }, remainingTime);
+      }
+    };
+
+    fetchVideos();
   }, []);
 
   useEffect(() => {
     setIsVisible(true);
+    // Only start rotation if we have videos
+    if (videos.length === 0) return;
+
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000); // Change image every 5 seconds
+      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % videos.length);
+    }, 8000); // Change video every 8 seconds (longer for videos)
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [videos]);
 
   // Fetch destinations and create country mapping
   useEffect(() => {
@@ -93,20 +151,107 @@ export default function HeroSection() {
         width: "100%",
         overflow: "hidden",
         marginTop: "-80px",
-        backgroundColor: "#E0D8C0", // beige background covering full screen
+        background: "linear-gradient(135deg, #2D4A3E 0%, #4A6741 25%, #8B7355 50%, #B85C38 75%, #6B4E3D 100%)", // Rich safari gradient
       }}
     >
-      {/* Background Images */}
-      {images.map((image, index) => {
-        const isActive = currentImageIndex === index;
-        
+      {/* Loading State with Safari Theme */}
+      {loading && (
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 4,
+            background: "linear-gradient(135deg, #2D4A3E 0%, #4A6741 25%, #8B7355 50%, #B85C38 75%, #6B4E3D 100%)",
+          }}
+        >
+          {/* Safari Loading Animation */}
+          <Box
+            sx={{
+              position: "relative",
+              width: "120px",
+              height: "120px",
+              mb: 4,
+            }}
+          >
+            {/* Central sun/compass */}
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "20px",
+                height: "20px",
+                background: "radial-gradient(circle, #FFD700 0%, #FFA500 100%)",
+                borderRadius: "50%",
+                boxShadow: "0 0 20px rgba(255, 215, 0, 0.6)",
+                animation: "pulse 2s ease-in-out infinite",
+              }}
+            />
+
+            {/* Orbiting elements representing safari journey */}
+            {[...Array(6)].map((_, i) => (
+              <Box
+                key={i}
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  width: "8px",
+                  height: "8px",
+                  background: i % 2 === 0 ? "#8B7355" : "#4A6741",
+                  borderRadius: "50%",
+                  transformOrigin: "-40px 0px",
+                  animation: `orbit ${3 + i * 0.5}s linear infinite`,
+                  animationDelay: `${i * 0.3}s`,
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: "-2px",
+                    left: "-2px",
+                    right: "-2px",
+                    bottom: "-2px",
+                    border: "1px solid rgba(255, 255, 255, 0.3)",
+                    borderRadius: "50%",
+                  },
+                }}
+              />
+            ))}
+          </Box>
+
+        </Box>
+      )}
+
+      {/* Background Videos */}
+      {videos.length > 0 ? videos.map((video, index) => {
+        const isActive = currentVideoIndex === index;
+
         return (
           <Box
-            key={`${image}-${index}`}
-            component="img"
-            src={image}
-            alt="Akira Safaris hero"
-            onError={() => console.warn("Hero image failed to load:", image)}
+            key={`${video.id}-${index}`}
+            component="video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            src={video.url}
+            onError={(e) => {
+              console.warn("Hero video failed to load:", video.url);
+              // If video fails, try to play it after a delay for browsers that block autoplay
+              setTimeout(() => {
+                if (e.target && e.target.paused) {
+                  e.target.play().catch(err => console.warn("Video play failed:", err));
+                }
+              }, 1000);
+            }}
+            onLoadedData={() => console.log("Video loaded successfully:", video.url)}
+            onPlay={() => console.log("Video started playing:", video.url)}
             sx={{
               position: "absolute",
               width: "100%",
@@ -129,7 +274,141 @@ export default function HeroSection() {
             }}
           />
         );
-      })}
+      }) : (
+        // Enhanced loading/placeholder state
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            background: loading
+              ? "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)"
+              : "linear-gradient(135deg, #2D4A3E 0%, #4A6741 25%, #8B7355 50%, #B85C38 75%, #6B4E3D 100%)",
+            opacity: 0.95,
+            zIndex: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            px: 3,
+          }}
+        >
+          {loading ? (
+            <>
+              {/* Animated safari icon */}
+              <Box
+                sx={{
+                  mb: 3,
+                  fontSize: "3rem",
+                  animation: "bounce 2s ease-in-out infinite",
+                  color: "#E0D8C0",
+                  textShadow: "0 0 20px rgba(184, 92, 56, 0.5)",
+                }}
+              >
+                🦁
+              </Box>
+
+              <Box sx={{ textAlign: "center", mb: 2 }}>
+                <Typography
+                  sx={{
+                    color: "#E0D8C0",
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    textShadow: "2px 2px 8px rgba(0,0,0,0.7)",
+                    mb: 1,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  Akira Safaris
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "#F5F1E8",
+                    fontSize: "1.1rem",
+                    fontWeight: 500,
+                    textShadow: "1px 1px 4px rgba(0,0,0,0.5)",
+                    opacity: 0.9,
+                  }}
+                >
+                  Preparing Your Safari Adventure
+                </Typography>
+              </Box>
+
+              {/* Animated progress dots */}
+              <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+                {[0, 1, 2].map((index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      backgroundColor: "#E0D8C0",
+                      animation: `pulse 1.5s ease-in-out infinite ${index * 0.2}s`,
+                      boxShadow: "0 0 10px rgba(224, 216, 192, 0.5)",
+                    }}
+                  />
+                ))}
+              </Box>
+
+              <Typography
+                sx={{
+                  color: "#E0D8C0",
+                  fontSize: "0.9rem",
+                  fontWeight: 400,
+                  textAlign: "center",
+                  opacity: 0.8,
+                  textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
+                }}
+              >
+                Loading wildlife experiences...
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Box
+                sx={{
+                  mb: 3,
+                  fontSize: "2.5rem",
+                  color: "#E0D8C0",
+                  opacity: 0.7,
+                }}
+              >
+                🎬
+              </Box>
+
+              <Typography
+                sx={{
+                  color: "#E0D8C0",
+                  fontSize: "1.3rem",
+                  fontWeight: 600,
+                  textAlign: "center",
+                  textShadow: "2px 2px 6px rgba(0,0,0,0.7)",
+                  mb: 2,
+                }}
+              >
+                Safari Videos Coming Soon
+              </Typography>
+
+              <Typography
+                sx={{
+                  color: "#F5F1E8",
+                  fontSize: "1rem",
+                  fontWeight: 400,
+                  textAlign: "center",
+                  opacity: 0.8,
+                  textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
+                  maxWidth: "400px",
+                  lineHeight: 1.6,
+                }}
+              >
+                We're curating the most breathtaking safari moments.
+                Videos will appear here once uploaded to showcase your African adventures.
+              </Typography>
+            </>
+          )}
+        </Box>
+      )}
 
 
       {/* Enhanced Floating Particles Animation */}
@@ -342,33 +621,71 @@ export default function HeroSection() {
       <style>
         {`
           @keyframes slideInUp {
-            from { 
+            from {
               opacity: 0;
               transform: translateY(60px);
             }
-            to { 
+            to {
               opacity: 1;
               transform: translateY(0);
             }
           }
-          
+
           @keyframes float {
-            0%, 100% { 
+            0%, 100% {
               transform: translateY(0px) rotate(0deg);
               opacity: 0.6;
             }
-            50% { 
+            50% {
               transform: translateY(-20px) rotate(180deg);
               opacity: 1;
             }
           }
-          
+
           @keyframes bounce {
-            0%, 100% { 
+            0%, 100% {
               transform: translateX(-50%) translateY(0);
             }
-            50% { 
+            50% {
               transform: translateX(-50%) translateY(-10px);
+            }
+          }
+
+          @keyframes pulse {
+            0%, 100% {
+              opacity: 0.4;
+              transform: scale(0.8);
+            }
+            50% {
+              opacity: 1;
+              transform: scale(1.2);
+            }
+          }
+
+          @keyframes bounce {
+            0%, 100% {
+              transform: translateY(0);
+            }
+            50% {
+              transform: translateY(-10px);
+            }
+          }
+
+          @keyframes orbit {
+            from {
+              transform: rotate(0deg) translateX(40px) rotate(0deg);
+            }
+            to {
+              transform: rotate(360deg) translateX(40px) rotate(-360deg);
+            }
+          }
+
+          @keyframes fadeInOut {
+            0%, 100% {
+              opacity: 0.7;
+            }
+            50% {
+              opacity: 1;
             }
           }
         `}

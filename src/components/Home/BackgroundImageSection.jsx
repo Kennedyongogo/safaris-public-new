@@ -12,15 +12,6 @@ import {
 } from "@mui/material";
 import { LocationOn, CalendarToday } from "@mui/icons-material";
 
-// Background images that will change every 3 seconds
-const backgroundImages = [
-  "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&h=1080&fit=crop&q=90",
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=90",
-  "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1920&h=1080&fit=crop&q=90",
-  "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=1920&h=1080&fit=crop&q=90",
-  "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop&q=90",
-];
-
 // Testimonial cards data - one for each background image
 const testimonials = [
   {
@@ -74,14 +65,74 @@ export default function BackgroundImageSection() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [backgroundImages, setBackgroundImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch gallery images for background
+  useEffect(() => {
+    const fetchBackgroundImages = async () => {
+      try {
+        const response = await fetch('/api/gallery/public?all=true&type=image');
+        const data = await response.json();
+
+        if (data.success && data.data.items.length > 0) {
+          // Convert gallery items to image URLs
+          const imageUrls = data.data.items.map(item => {
+            // Build full image URL from filePath
+            if (item.filePath.startsWith('http')) {
+              return item.filePath;
+            } else {
+              return `http://localhost:4000/${item.filePath.startsWith('/') ? item.filePath.slice(1) : item.filePath}`;
+            }
+          });
+
+          // Ensure we have at least 5 images for the background rotation
+          // Duplicate images if necessary to reach minimum count
+          const minImages = 5;
+          let finalImages = [...imageUrls];
+          while (finalImages.length < minImages) {
+            finalImages = [...finalImages, ...imageUrls];
+          }
+
+          setBackgroundImages(finalImages.slice(0, minImages));
+        } else {
+          // Fallback to some default images if API fails or no items
+          setBackgroundImages([
+            "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&h=1080&fit=crop&q=90",
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=90",
+            "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1920&h=1080&fit=crop&q=90",
+            "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=1920&h=1080&fit=crop&q=90",
+            "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop&q=90",
+          ]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch background images:', error);
+        // Fallback to default images
+        setBackgroundImages([
+          "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&h=1080&fit=crop&q=90",
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&q=90",
+          "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1920&h=1080&fit=crop&q=90",
+          "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=1920&h=1080&fit=crop&q=90",
+          "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop&q=90",
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBackgroundImages();
+  }, []);
 
   useEffect(() => {
+    // Only start the rotation if we have images
+    if (backgroundImages.length === 0) return;
+
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
     }, 5000); // Change image every 5 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [backgroundImages]);
 
   return (
     <Box
@@ -116,9 +167,9 @@ export default function BackgroundImageSection() {
             overflow: "hidden",
           }}
         >
-          {backgroundImages.map((imageUrl, index) => (
+          {backgroundImages.length > 0 ? backgroundImages.map((imageUrl, index) => (
             <Box
-              key={index}
+              key={`${imageUrl}-${index}`}
               component="img"
               src={imageUrl}
               alt={`Background ${index + 1}`}
@@ -137,7 +188,20 @@ export default function BackgroundImageSection() {
                   "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&h=600&fit=crop";
               }}
             />
-          ))}
+          )) : (
+            // Loading placeholder - solid background until images load
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
+                opacity: 0.8,
+              }}
+            />
+          )}
         </Box>
         <Container
           maxWidth="xl"

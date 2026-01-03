@@ -83,14 +83,26 @@ function App() {
                 },
               }}
             >
-              <Box sx={{ mb: 3, position: "relative", zIndex: 1 }}>
+              <Box sx={{ mb: 3, position: "relative", zIndex: 1, textAlign: "center" }}>
+                {/* Safari animal icon */}
+                <Box
+                  sx={{
+                    fontSize: "3.5rem",
+                    mb: 2,
+                    animation: "bounce 2s ease-in-out infinite",
+                  }}
+                >
+                  🦁
+                </Box>
+
                 <Typography
                   variant="h4"
                   sx={{
                     fontWeight: 700,
                     color: "#3D2817",
-                    mb: 2,
+                    mb: 1,
                     textAlign: "center",
+                    fontSize: { xs: "1.8rem", md: "2.2rem" },
                   }}
                 >
                   Akira Safaris
@@ -101,21 +113,31 @@ function App() {
                     color: "#B85C38",
                     textAlign: "center",
                     fontWeight: 500,
+                    mb: 2,
+                    fontSize: { xs: "1.1rem", md: "1.3rem" },
                   }}
                 >
                   Crafting Your African Adventure
                 </Typography>
+
+                {/* Animated progress dots */}
+                <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mb: 3 }}>
+                  {[0, 1, 2].map((index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: "#B85C38",
+                        animation: `pulse 1.5s ease-in-out infinite ${index * 0.2}s`,
+                        boxShadow: "0 0 10px rgba(184, 92, 56, 0.3)",
+                      }}
+                    />
+                  ))}
+                </Box>
               </Box>
-              <Box sx={{ position: "relative", zIndex: 1 }}>
-                <CircularProgress
-                  size={60}
-                  thickness={4}
-                  sx={{
-                    color: "#B85C38",
-                    mb: 2,
-                  }}
-                />
-              </Box>
+
               <Typography
                 variant="body1"
                 sx={{
@@ -124,9 +146,27 @@ function App() {
                   fontWeight: 500,
                   position: "relative",
                   zIndex: 1,
+                  mb: 2,
+                  fontSize: "1.1rem",
                 }}
               >
-                Loading your experience...
+                Preparing your safari experience...
+              </Typography>
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "#8B7355",
+                  textAlign: "center",
+                  fontWeight: 400,
+                  position: "relative",
+                  zIndex: 1,
+                  opacity: 0.8,
+                  maxWidth: "300px",
+                  mx: "auto",
+                }}
+              >
+                Loading destinations, wildlife, and unforgettable moments
               </Typography>
             </Box>
           }
@@ -247,3 +287,34 @@ function App() {
 }
 
 export default App;
+
+// Global styles for loading animations
+const styles = `
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.4;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+`;
+
+// Inject styles
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement('style');
+  styleSheet.type = 'text/css';
+  styleSheet.innerText = styles;
+  document.head.appendChild(styleSheet);
+}
