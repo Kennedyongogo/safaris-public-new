@@ -97,7 +97,7 @@ const AttractionCard = ({ attraction, onClick }) => {
                       }}
                       onError={(e) => {
                         console.error(`Failed to load attraction image: ${image}`);
-                        e.target.src = "/foundation-logo.png";
+                        e.target.src = "/IMG-20251210-WA0070.jpg";
                       }}
                     />
                   );
@@ -145,7 +145,7 @@ const AttractionCard = ({ attraction, onClick }) => {
               >
                 <Box
                   component="img"
-                  src="/foundation-logo.png"
+                  src="/IMG-20251210-WA0070.jpg"
                   alt="No images available"
                   sx={{
                     width: "80px",
@@ -496,7 +496,7 @@ export default function DestinationDetails() {
                   objectFit: "cover",
                 }}
                 onError={(e) => {
-                  e.target.src = "/foundation-logo.png";
+                  e.target.src = "/IMG-20251210-WA0070.jpg";
                 }}
               />
               <Box
@@ -861,7 +861,7 @@ export default function DestinationDetails() {
                             flex: 1,
                           }}
                           onError={(e) => {
-                            e.target.src = "/foundation-logo.png";
+                            e.target.src = "/IMG-20251210-WA0070.jpg";
                           }}
                         />
                       </Card>
@@ -1024,7 +1024,7 @@ export default function DestinationDetails() {
                           }}
                           onError={(e) => {
                             console.error(`Failed to load attraction image: ${image}`);
-                            e.target.src = "/foundation-logo.png";
+                            e.target.src = "/IMG-20251210-WA0070.jpg";
                           }}
                         />
                       );

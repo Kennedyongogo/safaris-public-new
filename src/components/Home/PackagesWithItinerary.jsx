@@ -480,7 +480,7 @@ const PackagesWithItinerary = () => {
                               display: "block",
                             }}
                             onError={(e) => {
-                              e.target.src = "/foundation-logo.png";
+                              e.target.src = "/IMG-20251210-WA0070.jpg";
                             }}
                           />
                           <Box
