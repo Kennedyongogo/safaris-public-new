@@ -485,8 +485,8 @@ export default function ServicesSection() {
         const buildFullImageUrl = (imagePath) => {
           if (!imagePath) return "";
           if (imagePath.startsWith("http")) return imagePath;
-          // Prepend the API base URL to relative paths
-          return `http://localhost:4000/${imagePath}`;
+          // Use relative path that gets proxied to the API server
+          return `/${imagePath}`;
         };
 
         // Map API data to component expected format

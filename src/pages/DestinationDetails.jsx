@@ -258,9 +258,8 @@ export default function DestinationDetails() {
         const buildFullImageUrl = (imagePath) => {
           if (!imagePath) return "";
           if (imagePath.startsWith("http")) return imagePath;
-          // Use relative path from frontend to API static files
-          // Since both are on localhost but different ports, use the API base URL
-          return `http://localhost:4000/${imagePath}`;
+          // Use relative path that gets proxied to the API server
+          return `/${imagePath}`;
         };
 
         // Use the exact API data structure provided by user
