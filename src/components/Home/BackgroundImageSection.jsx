@@ -74,15 +74,7 @@ export default function BackgroundImageSection() {
             }
           });
 
-          // Ensure we have at least 5 images for the background rotation
-          // Duplicate images if necessary to reach minimum count
-          const minImages = 5;
-          let finalImages = [...imageUrls];
-          while (finalImages.length < minImages) {
-            finalImages = [...finalImages, ...imageUrls];
-          }
-
-          setBackgroundImages(finalImages.slice(0, minImages));
+          setBackgroundImages(imageUrls);
         } else {
           // Fallback to some default images if API fails or no items
           setBackgroundImages([
