@@ -15,7 +15,8 @@ import { LocationOn, CalendarToday } from "@mui/icons-material";
 export default function BackgroundImageSection() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
   const [backgroundImages, setBackgroundImages] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -110,16 +111,29 @@ export default function BackgroundImageSection() {
     fetchBackgroundImages();
   }, []);
 
+  // Rotate reviews independently
   useEffect(() => {
     // Only start the rotation if we have reviews
     if (reviews.length === 0) return;
 
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % reviews.length);
+      setCurrentReviewIndex((prevIndex) => (prevIndex + 1) % reviews.length);
     }, 5000); // Change review every 5 seconds
 
     return () => clearInterval(interval);
   }, [reviews]);
+
+  // Rotate background images independently
+  useEffect(() => {
+    // Only start the rotation if we have background images
+    if (backgroundImages.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentBackgroundIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
+    }, 4000); // Change background image every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [backgroundImages]);
 
   return (
     <Box
@@ -154,33 +168,28 @@ export default function BackgroundImageSection() {
             overflow: "hidden",
           }}
         >
-          {backgroundImages.length > 0 ? backgroundImages.map((imageUrl, index) => {
-            const backgroundImageIndex = reviews.length > 0 
-              ? currentImageIndex % backgroundImages.length 
-              : currentImageIndex;
-            return (
-              <Box
-                key={`${imageUrl}-${index}`}
-                component="img"
-                src={imageUrl}
-                alt={`Background ${index + 1}`}
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  opacity: index === backgroundImageIndex ? 1 : 0,
-                  transition: "opacity 1s ease-in-out",
-                }}
-                onError={(e) => {
-                  e.target.src =
-                    "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&h=600&fit=crop";
-                }}
-              />
-            );
-          }) : (
+          {backgroundImages.length > 0 ? backgroundImages.map((imageUrl, index) => (
+            <Box
+              key={`${imageUrl}-${index}`}
+              component="img"
+              src={imageUrl}
+              alt={`Background ${index + 1}`}
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: index === currentBackgroundIndex ? 1 : 0,
+                transition: "opacity 1s ease-in-out",
+              }}
+              onError={(e) => {
+                e.target.src =
+                  "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&h=600&fit=crop";
+              }}
+            />
+          )) : (
             // Loading placeholder - solid background until images load
             <Box
               sx={{
@@ -231,13 +240,13 @@ export default function BackgroundImageSection() {
                     position: "absolute",
                     width: { xs: "100%", sm: "90%", md: "600px" },
                     maxWidth: "600px",
-                    opacity: index === currentImageIndex ? 1 : 0,
+                    opacity: index === currentReviewIndex ? 1 : 0,
                     transform:
-                      index === currentImageIndex
+                      index === currentReviewIndex
                         ? "translateY(0) scale(1)"
                         : "translateY(20px) scale(0.95)",
                     transition: "opacity 1s ease-in-out, transform 1s ease-in-out",
-                    pointerEvents: index === currentImageIndex ? "auto" : "none",
+                    pointerEvents: index === currentReviewIndex ? "auto" : "none",
                   }}
                 >
                   <Card
