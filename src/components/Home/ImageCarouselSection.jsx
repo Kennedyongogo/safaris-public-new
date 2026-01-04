@@ -34,12 +34,7 @@ export default function ImageCarouselSection() {
             title: item.title
           }));
 
-          // Duplicate items to create a longer carousel (minimum 15 items)
-          const duplicatedItems = [];
-          while (duplicatedItems.length < 15) {
-            duplicatedItems.push(...mediaItems);
-          }
-          setCarouselItems(duplicatedItems.slice(0, 15));
+          setCarouselItems(mediaItems);
         } else {
           // Fallback to some default images if API fails or no items
           setCarouselItems([
