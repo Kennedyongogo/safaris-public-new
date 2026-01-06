@@ -32,6 +32,7 @@ import {
   Cabin,
   Hotel,
   Article,
+  BusinessCenter,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -64,9 +65,9 @@ export default function PublicHeader() {
         color: "#B85C38", // Burnt orange/rust
       },
       {
-        label: "Camp & Lodges",
-        icon: <Cabin />,
-        route: "/camp-lodges",
+        label: "Agent Partnership",
+        icon: <BusinessCenter />,
+        route: "/agent-program",
         color: "#6B7D47", // Olive green
       },
       {

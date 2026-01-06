@@ -151,82 +151,12 @@ export default function HeroSection() {
         width: "100%",
         overflow: "hidden",
         marginTop: "-80px",
-        background: "linear-gradient(135deg, #2D4A3E 0%, #4A6741 25%, #8B7355 50%, #B85C38 75%, #6B4E3D 100%)", // Rich safari gradient
+        backgroundImage: "url('/images/lion-5751867_1280.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Loading State with Safari Theme */}
-      {loading && (
-        <Box
-          sx={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 4,
-            background: "linear-gradient(135deg, #2D4A3E 0%, #4A6741 25%, #8B7355 50%, #B85C38 75%, #6B4E3D 100%)",
-          }}
-        >
-          {/* Safari Loading Animation */}
-          <Box
-            sx={{
-              position: "relative",
-              width: "120px",
-              height: "120px",
-              mb: 4,
-            }}
-          >
-            {/* Central sun/compass */}
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "20px",
-                height: "20px",
-                background: "radial-gradient(circle, #FFD700 0%, #FFA500 100%)",
-                borderRadius: "50%",
-                boxShadow: "0 0 20px rgba(255, 215, 0, 0.6)",
-                animation: "pulse 2s ease-in-out infinite",
-              }}
-            />
-
-            {/* Orbiting elements representing safari journey */}
-            {[...Array(6)].map((_, i) => (
-              <Box
-                key={i}
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  width: "8px",
-                  height: "8px",
-                  background: i % 2 === 0 ? "#8B7355" : "#4A6741",
-                  borderRadius: "50%",
-                  transformOrigin: "-40px 0px",
-                  animation: `orbit ${3 + i * 0.5}s linear infinite`,
-                  animationDelay: `${i * 0.3}s`,
-                  "&::before": {
-                    content: '""',
-                    position: "absolute",
-                    top: "-2px",
-                    left: "-2px",
-                    right: "-2px",
-                    bottom: "-2px",
-                    border: "1px solid rgba(255, 255, 255, 0.3)",
-                    borderRadius: "50%",
-                  },
-                }}
-              />
-            ))}
-          </Box>
-
-        </Box>
-      )}
-
       {/* Background Videos */}
       {videos.length > 0 ? videos.map((video, index) => {
         const isActive = currentVideoIndex === index;
@@ -281,10 +211,10 @@ export default function HeroSection() {
             position: "absolute",
             width: "100%",
             height: "100%",
-            background: loading
-              ? "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)"
-              : "linear-gradient(135deg, #2D4A3E 0%, #4A6741 25%, #8B7355 50%, #B85C38 75%, #6B4E3D 100%)",
-            opacity: 0.95,
+            backgroundImage: "url('/images/lion-5751867_1280.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
             zIndex: 1,
             display: "flex",
             flexDirection: "column",
@@ -293,78 +223,7 @@ export default function HeroSection() {
             px: 3,
           }}
         >
-          {loading ? (
-            <>
-              {/* Animated safari icon */}
-              <Box
-                sx={{
-                  mb: 3,
-                  fontSize: "3rem",
-                  animation: "bounce 2s ease-in-out infinite",
-                  color: "#E0D8C0",
-                  textShadow: "0 0 20px rgba(184, 92, 56, 0.5)",
-                }}
-              >
-                🦁
-              </Box>
-
-              <Box sx={{ textAlign: "center", mb: 2 }}>
-                <Typography
-                  sx={{
-                    color: "#E0D8C0",
-                    fontSize: "1.8rem",
-                    fontWeight: 700,
-                    textShadow: "2px 2px 8px rgba(0,0,0,0.7)",
-                    mb: 1,
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  Akira Safaris
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "#F5F1E8",
-                    fontSize: "1.1rem",
-                    fontWeight: 500,
-                    textShadow: "1px 1px 4px rgba(0,0,0,0.5)",
-                    opacity: 0.9,
-                  }}
-                >
-                  Preparing Your Safari Adventure
-                </Typography>
-              </Box>
-
-              {/* Animated progress dots */}
-              <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
-                {[0, 1, 2].map((index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      backgroundColor: "#E0D8C0",
-                      animation: `pulse 1.5s ease-in-out infinite ${index * 0.2}s`,
-                      boxShadow: "0 0 10px rgba(224, 216, 192, 0.5)",
-                    }}
-                  />
-                ))}
-              </Box>
-
-              <Typography
-                sx={{
-                  color: "#E0D8C0",
-                  fontSize: "0.9rem",
-                  fontWeight: 400,
-                  textAlign: "center",
-                  opacity: 0.8,
-                  textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
-                }}
-              >
-                Loading wildlife experiences...
-              </Typography>
-            </>
-          ) : (
+          {!loading && (
             <>
               <Box
                 sx={{
@@ -372,6 +231,8 @@ export default function HeroSection() {
                   fontSize: "2.5rem",
                   color: "#E0D8C0",
                   opacity: 0.7,
+                  zIndex: 2,
+                  position: "relative",
                 }}
               >
                 🎬
@@ -385,6 +246,8 @@ export default function HeroSection() {
                   textAlign: "center",
                   textShadow: "2px 2px 6px rgba(0,0,0,0.7)",
                   mb: 2,
+                  zIndex: 2,
+                  position: "relative",
                 }}
               >
                 Safari Videos Coming Soon
@@ -400,6 +263,8 @@ export default function HeroSection() {
                   textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
                   maxWidth: "400px",
                   lineHeight: 1.6,
+                  zIndex: 2,
+                  position: "relative",
                 }}
               >
                 We're curating the most breathtaking safari moments.
