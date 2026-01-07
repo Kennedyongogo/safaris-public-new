@@ -2,9 +2,11 @@ import React from "react";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
-// Floating WhatsApp entry point (replace href with the real link later).
+// Floating WhatsApp entry point - Direct chat with Akira Safaris
 const Chatbot = () => {
-  const placeholderLink = "https://wa.me/"; // TODO: update with the actual WhatsApp link/number
+  const whatsappNumber = "254731913293"; // Akira Safaris WhatsApp number
+  const defaultMessage = "Hello Akira Safaris, I'm interested in your safari packages!";
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(defaultMessage)}`;
 
   return (
     <Box
@@ -15,10 +17,10 @@ const Chatbot = () => {
         zIndex: 1001,
       }}
     >
-      <Tooltip title="Chat on WhatsApp">
+      <Tooltip title="Chat with us on WhatsApp">
         <IconButton
           component="a"
-          href={placeholderLink}
+          href={whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
           sx={{
@@ -28,8 +30,19 @@ const Chatbot = () => {
             backgroundColor: "#25D366",
             color: "#fff",
             boxShadow: "0 12px 32px rgba(0,0,0,0.2)",
+            transition: "all 0.3s ease",
             "&:hover": {
               backgroundColor: "#1EBE57",
+              transform: "scale(1.1)",
+              boxShadow: "0 16px 40px rgba(37, 211, 102, 0.4)",
+            },
+            "&:focus": {
+              outline: "none",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.2)",
+            },
+            "&:focus-visible": {
+              outline: "none",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.2)",
             },
           }}
         >
