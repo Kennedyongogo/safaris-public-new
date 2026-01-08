@@ -304,25 +304,27 @@ export default function Plan() {
       // Process forms to extract sub_fields from validation_rules for compound fields
       const processedForms = (response.data.data || []).map((form) => ({
         ...form,
-        fields: form.fields.map((field) => {
-          // Extract sub_fields from validation_rules for compound fields
-          if (
-            field.field_type === "compound" &&
-            field.validation_rules?.sub_fields
-          ) {
-            console.log(
-              "Processing compound field:",
-              field.field_name,
-              "sub_fields:",
-              field.validation_rules.sub_fields
-            );
-            return {
-              ...field,
-              sub_fields: field.validation_rules.sub_fields,
-            };
-          }
-          return field;
-        }),
+        fields: form.fields
+          .map((field) => {
+            // Extract sub_fields from validation_rules for compound fields
+            if (
+              field.field_type === "compound" &&
+              field.validation_rules?.sub_fields
+            ) {
+              console.log(
+                "Processing compound field:",
+                field.field_name,
+                "sub_fields:",
+                field.validation_rules.sub_fields
+              );
+              return {
+                ...field,
+                sub_fields: field.validation_rules.sub_fields,
+              };
+            }
+            return field;
+          })
+          .sort((a, b) => (a.display_order || 0) - (b.display_order || 0)),
       }));
 
       setForms(processedForms);
