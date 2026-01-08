@@ -20,7 +20,7 @@ export default function Team() {
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  
+
   // Typewriter animation state
   const [displayText, setDisplayText] = useState("A");
   const fullText = "Akira Safaris";
@@ -86,7 +86,9 @@ export default function Team() {
       setHighlightId(highlight);
     }
     // remove highlight after 2 seconds
-    const clear = highlight ? setTimeout(() => setHighlightId(null), 2000) : null;
+    const clear = highlight
+      ? setTimeout(() => setHighlightId(null), 2000)
+      : null;
     // Clear state so it doesn't re-run on next renders
     navigate("/team", { replace: true, state: null });
     return () => {
@@ -127,7 +129,8 @@ export default function Team() {
         fontSize: "1.3rem",
         "& .MuiTypography-root": { fontSize: "1.3rem" },
         "& .MuiButton-root": { fontSize: "1.3rem" },
-        background: "linear-gradient(135deg, rgba(245, 241, 232, 0.9) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(232, 224, 209, 0.9) 100%)", // Beige tones
+        background:
+          "linear-gradient(135deg, rgba(245, 241, 232, 0.9) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(232, 224, 209, 0.9) 100%)", // Beige tones
       }}
     >
       <Container
@@ -152,7 +155,8 @@ export default function Team() {
               sx={{
                 p: { xs: 1, sm: 1.25, md: 1.5 },
                 borderRadius: { xs: 2, md: 3 },
-                background: "linear-gradient(135deg, rgba(245, 241, 232, 0.5) 0%, rgba(255, 255, 255, 1) 100%)",
+                background:
+                  "linear-gradient(135deg, rgba(245, 241, 232, 0.5) 0%, rgba(255, 255, 255, 1) 100%)",
                 border: "1px solid rgba(107, 78, 61, 0.2)",
               }}
             >
@@ -189,7 +193,7 @@ export default function Team() {
                   />
                 )}
               </Typography>
-              
+
               <Typography
                 variant="h4"
                 sx={{
@@ -229,7 +233,10 @@ export default function Team() {
                   mx: "auto",
                 }}
               >
-                At Akira Safaris, we don't sell tours—we design deeply personal journeys into East Africa's wild heart. Built on genuine hospitality and local expertise, our safaris are shaped by human connection, storytelling, and a lifelong love for Africa.
+                At Akira Safaris, we don't sell tours—we design deeply personal
+                journeys into East Africa's wild heart. Built on genuine
+                hospitality and local expertise, our safaris are shaped by human
+                connection, storytelling, and a lifelong love for Africa.
               </Typography>
 
               {/* Our Story Section */}
@@ -255,7 +262,13 @@ export default function Team() {
                     textAlign: "center",
                   }}
                 >
-                  Akira Safaris began around shared meals, campfires, and Couchsurfing guests who asked to experience "the Africa we know." What started as simple road trips grew into expertly guided journeys through the Mara, Amboseli, and the Rift Valley. Today, that same warmth remains—only now, it's refined, responsible, and intentionally small-scale. You arrive as a guest and leave as family.
+                  Akira Safaris began around shared meals, campfires, and
+                  Couchsurfing guests who asked to experience "the Africa we
+                  know." What started as simple road trips grew into expertly
+                  guided journeys through the Mara, Amboseli, and the Rift
+                  Valley. Today, that same warmth remains—only now, it's
+                  refined, responsible, and intentionally small-scale. You
+                  arrive as a guest and leave as family.
                 </Typography>
               </Box>
 
@@ -273,18 +286,92 @@ export default function Team() {
                 >
                   What We Do
                 </Typography>
-                <Box component="ul" sx={{ textAlign: "center", mb: 0, listStylePosition: "inside" }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
-                    Private, tailor-made safaris with dedicated vehicles and guides
+                <Box
+                  component="ul"
+                  sx={{
+                    textAlign: "center",
+                    mb: 0,
+                    listStyle: "none",
+                    pl: 0,
+                    pr: 0,
+                    ml: 0,
+                    mr: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
+                    Private, tailor-made safaris with dedicated vehicles and
+                    guides
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
-                    Bespoke itineraries—luxury camps, family travel, photography, wellness retreats
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
+                    Bespoke itineraries—luxury camps, family travel,
+                    photography, wellness retreats
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
-                    Carbon-positive travel—110% footprint offset and 10 indigenous trees planted per guest
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
+                    Carbon-positive travel—110% footprint offset and 10
+                    indigenous trees planted per guest
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
-                    Cultural immersion—Maasai traditions, fireside stories, and life beyond the game drive
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
+                    Cultural immersion—Maasai traditions, fireside stories, and
+                    life beyond the game drive
                   </Typography>
                 </Box>
               </Box>
@@ -303,21 +390,107 @@ export default function Team() {
                 >
                   Why Akira Safaris
                 </Typography>
-                <Box component="ul" sx={{ textAlign: "center", mb: 0, listStylePosition: "inside" }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
+                <Box
+                  component="ul"
+                  sx={{
+                    textAlign: "center",
+                    mb: 0,
+                    listStyle: "none",
+                    pl: 0,
+                    pr: 0,
+                    ml: 0,
+                    mr: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
                     Locally rooted—we live here; this is our home
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
                     Truly bespoke—your pace, interests, and budget lead the way
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
                     Boutique care—a personal concierge from planning to return
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
-                    Purpose-driven travel—fair wages, community support, plastic-free camps
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
+                    Purpose-driven travel—fair wages, community support,
+                    plastic-free camps
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
-                    Endless discoveries—rare wildlife moments and hidden places most never see
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
+                    Endless discoveries—rare wildlife moments and hidden places
+                    most never see
                   </Typography>
                 </Box>
               </Box>
@@ -336,18 +509,90 @@ export default function Team() {
                 >
                   Signature Experiences
                 </Typography>
-                <Box component="ul" sx={{ textAlign: "center", mb: 0, listStylePosition: "inside" }}>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
+                <Box
+                  component="ul"
+                  sx={{
+                    textAlign: "center",
+                    mb: 0,
+                    listStyle: "none",
+                    pl: 0,
+                    pr: 0,
+                    ml: 0,
+                    mr: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
                     Migration Detox Retreat – Phone-free Great Migration journey
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
                     Classic Kenya Highlights – Mara, Nakuru & Amboseli in 7 days
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ mb: 0.25, color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
-                    Gorilla & Chimp Flex-Trek – Permit-guaranteed primate encounters
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      mb: 0.25,
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
+                    Gorilla & Chimp Flex-Trek – Permit-guaranteed primate
+                    encounters
                   </Typography>
-                  <Typography component="li" variant="body1" sx={{ color: "text.primary", fontSize: { xs: "0.875rem", md: "1rem" }, lineHeight: 1.6, textAlign: "center" }}>
-                    Photographic Safaris – Off-road access with professional image delivery
+                  <Typography
+                    component="li"
+                    variant="body1"
+                    sx={{
+                      color: "text.primary",
+                      fontSize: { xs: "0.875rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      textAlign: "center",
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      width: "100%",
+                    }}
+                  >
+                    Photographic Safaris – Off-road access with professional
+                    image delivery
                   </Typography>
                 </Box>
               </Box>
@@ -375,7 +620,10 @@ export default function Team() {
                     textAlign: "center",
                   }}
                 >
-                  Every Akira Safari is locally designed, ethically operated, and personally delivered. Your guide is more than a driver—they're your storyteller, cultural bridge, and trusted companion through Africa's most unforgettable landscapes.
+                  Every Akira Safari is locally designed, ethically operated,
+                  and personally delivered. Your guide is more than a
+                  driver—they're your storyteller, cultural bridge, and trusted
+                  companion through Africa's most unforgettable landscapes.
                 </Typography>
               </Box>
 
@@ -384,7 +632,8 @@ export default function Team() {
                 sx={{
                   mt: 1.25,
                   p: { xs: 0.5, sm: 0.625, md: 0.75 },
-                  background: "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.05) 100%)",
+                  background:
+                    "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.05) 100%)",
                   borderRadius: { xs: 2, md: 3 },
                   border: "1px solid rgba(184, 92, 56, 0.2)",
                   textAlign: "center",
@@ -412,7 +661,9 @@ export default function Team() {
                     mb: 1,
                   }}
                 >
-                  Tell us your dreams, fears, bucket-list shots and dietary quirks. We'll turn them into a day-by-day adventure that fits you—and the planet—perfectly.
+                  Tell us your dreams, fears, bucket-list shots and dietary
+                  quirks. We'll turn them into a day-by-day adventure that fits
+                  you—and the planet—perfectly.
                 </Typography>
                 <Button
                   variant="contained"
@@ -504,7 +755,11 @@ export default function Team() {
               Team coming soon.
             </Typography>
           )}
-          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
+          <Grid
+            container
+            spacing={{ xs: 2, sm: 3, md: 4 }}
+            justifyContent="center"
+          >
             {members.map((member) => (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} key={member.id}>
                 <Card
@@ -554,6 +809,7 @@ export default function Team() {
                           width: "100%",
                           height: "100%",
                           objectFit: "cover",
+                          objectPosition: "center 30%",
                         }}
                         onError={(e) => {
                           e.target.style.display = "none";
@@ -695,4 +951,3 @@ export default function Team() {
     </Box>
   );
 }
-

@@ -225,6 +225,7 @@ export default function TeamMemberDetail() {
                           width: "100%",
                           height: "100%",
                           objectFit: "cover",
+                          objectPosition: "center 30%",
                         }}
                         onError={(e) => {
                           e.target.style.display = "none";
@@ -361,6 +362,14 @@ export default function TeamMemberDetail() {
                       py: 0.75,
                       minWidth: 100,
                       fontSize: { xs: "0.7rem", md: "0.8rem" },
+                      "&:focus": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
                     }}
                   >
                     Facebook
@@ -377,6 +386,14 @@ export default function TeamMemberDetail() {
                       py: 0.75,
                       minWidth: 100,
                       fontSize: { xs: "0.7rem", md: "0.8rem" },
+                      "&:focus": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
                     }}
                   >
                     WhatsApp
@@ -393,6 +410,14 @@ export default function TeamMemberDetail() {
                       py: 0.75,
                       minWidth: 100,
                       fontSize: { xs: "0.7rem", md: "0.8rem" },
+                      "&:focus": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
                     }}
                   >
                     X
@@ -409,6 +434,14 @@ export default function TeamMemberDetail() {
                       py: 0.75,
                       minWidth: 100,
                       fontSize: { xs: "0.7rem", md: "0.8rem" },
+                      "&:focus": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
                     }}
                   >
                     Google

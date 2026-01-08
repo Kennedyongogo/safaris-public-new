@@ -407,6 +407,7 @@ export default function BlogDetail() {
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
+                  objectPosition: "center 30%",
                 }}
               />
             </Box>
@@ -714,6 +715,7 @@ export default function BlogDetail() {
                                 minWidth: { md: "360px" },
                                 height: { xs: "220px", md: "240px" },
                                 objectFit: "cover",
+                                objectPosition: "center 30%",
                                 flexShrink: 0,
                               }}
                               image={relatedPost.featuredImage}

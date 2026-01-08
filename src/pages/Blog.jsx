@@ -364,6 +364,7 @@ export default function Blog() {
                             minWidth: { md: "360px" },
                             height: { xs: "220px", md: "240px" },
                             objectFit: "cover",
+                            objectPosition: "center 30%",
                             flexShrink: 0,
                           }}
                           image={post.featuredImage}
@@ -541,6 +542,7 @@ export default function Blog() {
                             minWidth: { md: "360px" },
                             height: { xs: "220px", md: "240px" },
                             objectFit: "cover",
+                            objectPosition: "center 30%",
                             flexShrink: 0,
                           }}
                           image={post.featuredImage}
