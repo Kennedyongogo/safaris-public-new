@@ -32,11 +32,11 @@ const MotionBox = motion(Box);
 
 // Destinations are now fetched from API
 
-// Attraction Card Component with Image Transitions
-const AttractionCard = ({ attraction, onClick }) => {
+// Package Card Component with Image Transitions
+const PackageCard = ({ package: pkg, categoryName, onClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const images = attraction.images || [];
+  const images = pkg.gallery || [];
   const hasMultipleImages = images.length > 1;
 
   // Auto-transition images if there are multiple
@@ -63,7 +63,7 @@ const AttractionCard = ({ attraction, onClick }) => {
           boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
         },
       }}
-      onClick={() => onClick(attraction)}
+      onClick={() => onClick(pkg)}
     >
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
@@ -84,7 +84,7 @@ const AttractionCard = ({ attraction, onClick }) => {
                       key={imgIndex}
                       component="img"
                       src={image}
-                      alt={`${attraction.name} - Image ${imgIndex + 1}`}
+                      alt={`${pkg.title} - Image ${imgIndex + 1}`}
                       sx={{
                         position: "absolute",
                         top: 0,
@@ -96,7 +96,7 @@ const AttractionCard = ({ attraction, onClick }) => {
                         transition: "opacity 0.5s ease-in-out",
                       }}
                       onError={(e) => {
-                        console.error(`Failed to load attraction image: ${image}`);
+                        console.error(`Failed to load package image: ${image}`);
                         e.target.src = "/IMG-20251210-WA0070.jpg";
                       }}
                     />
@@ -159,16 +159,26 @@ const AttractionCard = ({ attraction, onClick }) => {
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+            <Chip
+              label={`Package #${pkg.number}`}
+              size="small"
+              sx={{
+                mb: 1,
+                backgroundColor: "#B85C38",
+                color: "white",
+                fontWeight: 600,
+              }}
+            />
             <Typography
               variant="h5"
               sx={{
                 fontWeight: 700,
-                mb: 2,
+                mb: 1.5,
                 color: "#3D2817",
                 fontSize: { xs: "1.25rem", md: "1.4rem" },
               }}
             >
-              {attraction.name}
+              {pkg.title}
             </Typography>
             <Typography
               variant="body1"
@@ -177,14 +187,73 @@ const AttractionCard = ({ attraction, onClick }) => {
                 lineHeight: 1.7,
                 fontSize: { xs: "1rem", md: "1.1rem" },
                 fontWeight: 500,
-                overflow: "hidden",
-                display: "-webkit-box",
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
+                mb: 2,
               }}
             >
-              {attraction.description}
+              {pkg.short_description}
             </Typography>
+            {pkg.highlights && pkg.highlights.length > 0 && (
+              <Box sx={{ mb: 2 }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    fontWeight: 700,
+                    color: "#6B4E3D",
+                    mb: 1,
+                    fontSize: { xs: "0.95rem", md: "1rem" },
+                  }}
+                >
+                  Highlights:
+                </Typography>
+                <Box component="ul" sx={{ pl: 2, mb: 0 }}>
+                  {pkg.highlights.slice(0, 3).map((highlight, idx) => (
+                    <Typography
+                      key={idx}
+                      component="li"
+                      variant="body2"
+                      sx={{
+                        mb: 0.5,
+                        color: "text.secondary",
+                        lineHeight: 1.6,
+                        fontSize: { xs: "0.95rem", md: "1rem" },
+                        fontWeight: 500,
+                      }}
+                    >
+                      {highlight}
+                    </Typography>
+                  ))}
+                </Box>
+              </Box>
+            )}
+            {pkg.pricing_tiers && pkg.pricing_tiers.length > 0 && (
+              <Box>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    fontWeight: 700,
+                    color: "#6B4E3D",
+                    mb: 1,
+                    fontSize: { xs: "0.95rem", md: "1rem" },
+                  }}
+                >
+                  Pricing:
+                </Typography>
+                {pkg.pricing_tiers.map((tier, idx) => (
+                  <Typography
+                    key={idx}
+                    variant="body2"
+                    sx={{
+                      mb: 0.5,
+                      color: "text.secondary",
+                      fontSize: { xs: "0.95rem", md: "1rem" },
+                      fontWeight: 600,
+                    }}
+                  >
+                    <strong>{tier.tier}:</strong> {tier.price_range}
+                  </Typography>
+                ))}
+              </Box>
+            )}
           </CardContent>
         </Grid>
       </Grid>
@@ -199,8 +268,8 @@ export default function DestinationDetails() {
   const [destination, setDestination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedAttraction, setSelectedAttraction] = useState(null);
-  const [attractionDialogOpen, setAttractionDialogOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [packageDialogOpen, setPackageDialogOpen] = useState(false);
   const [dialogImageIndex, setDialogImageIndex] = useState(0);
 
   const theme = useTheme();
@@ -213,30 +282,30 @@ export default function DestinationDetails() {
   const cameFromHero = cameFrom === "hero";
   const cameFromServices = cameFrom === "services";
 
-  const handleAttractionClick = (attraction) => {
-    setSelectedAttraction(attraction);
+  const handlePackageClick = (pkg) => {
+    setSelectedPackage(pkg);
     setDialogImageIndex(0); // Reset to first image when opening
-    setAttractionDialogOpen(true);
+    setPackageDialogOpen(true);
   };
 
-  const handleCloseAttractionDialog = () => {
-    setAttractionDialogOpen(false);
-    setSelectedAttraction(null);
+  const handleClosePackageDialog = () => {
+    setPackageDialogOpen(false);
+    setSelectedPackage(null);
     setDialogImageIndex(0);
   };
 
   // Auto-transition images in dialog if there are multiple
   useEffect(() => {
-    if (!attractionDialogOpen || !selectedAttraction || !selectedAttraction.images || selectedAttraction.images.length <= 1) {
+    if (!packageDialogOpen || !selectedPackage || !selectedPackage.gallery || selectedPackage.gallery.length <= 1) {
       return;
     }
 
     const interval = setInterval(() => {
-      setDialogImageIndex((prev) => (prev + 1) % selectedAttraction.images.length);
+      setDialogImageIndex((prev) => (prev + 1) % selectedPackage.gallery.length);
     }, 3000); // Change image every 3 seconds
 
     return () => clearInterval(interval);
-  }, [attractionDialogOpen, selectedAttraction]);
+  }, [packageDialogOpen, selectedPackage]);
 
   useEffect(() => {
     fetchDestinationDetails();
@@ -262,46 +331,36 @@ export default function DestinationDetails() {
           return `/${imagePath}`;
         };
 
-        // Use the exact API data structure provided by user
+        // Map new API data structure with packages
         const mappedDestination = {
           id: data.data.id,
           slug: data.data.slug,
           title: data.data.title,
-          description: data.data.description,
+          subtitle: data.data.subtitle || "",
+          description: data.data.brief_description || "", // Use brief_description
           image: buildFullImageUrl(data.data.hero_image), // Convert to full URL
           imageAlt: data.data.hero_image_alt || `${data.data.title} destination`,
           location: data.data.location,
-          duration: data.data.duration_display || `${data.data.duration_min}-${data.data.duration_max} Days`,
-          durationMin: data.data.duration_min,
-          durationMax: data.data.duration_max,
-          bestTime: Array.isArray(data.data.best_visit_months)
-            ? data.data.best_visit_months.join(", ")
-            : "Best months vary by destination",
-          wildlife: Array.isArray(data.data.featured_species)
-            ? data.data.featured_species.join(", ")
-            : "Various wildlife species",
-          wildlifeTypes: Array.isArray(data.data.wildlife_types)
-            ? data.data.wildlife_types.join(", ")
-            : "Various wildlife experiences",
-          highlights: Array.isArray(data.data.key_highlights)
-            ? data.data.key_highlights
-            : [],
           gallery_images: Array.isArray(data.data.gallery_images)
             ? data.data.gallery_images.map(img => buildFullImageUrl(img))
             : [],
-          attractions: Array.isArray(data.data.attractions)
-            ? data.data.attractions.map(attr => {
-                const processedImages = (attr.images || []).map(img => buildFullImageUrl(img));
-                console.log(`Attraction "${attr.name}" has ${processedImages.length} images:`, processedImages);
-                return {
-                  name: attr.name,
-                  description: attr.description,
-                  images: processedImages // Convert all attraction images to full URLs
-                };
-              })
-            : [],
-          category_tags: Array.isArray(data.data.category_tags)
-            ? data.data.category_tags
+          packages: Array.isArray(data.data.packages)
+            ? data.data.packages.map(category => ({
+                category_name: category.category_name || "",
+                category_order: category.category_order || 0,
+                packages: Array.isArray(category.packages)
+                  ? category.packages.map(pkg => ({
+                      number: pkg.number || 0,
+                      title: pkg.title || "",
+                      short_description: pkg.short_description || "",
+                      highlights: Array.isArray(pkg.highlights) ? pkg.highlights : [],
+                      pricing_tiers: Array.isArray(pkg.pricing_tiers) ? pkg.pricing_tiers : [],
+                      gallery: Array.isArray(pkg.gallery)
+                        ? pkg.gallery.map(img => buildFullImageUrl(img))
+                        : []
+                    }))
+                  : []
+              }))
             : [],
           is_active: data.data.is_active,
           sort_order: data.data.sort_order,
@@ -370,17 +429,6 @@ export default function DestinationDetails() {
     );
   }
 
-  const wildlifeItems =
-    destination?.wildlife
-      ?.split(",")
-      .map((item) => item.trim())
-      .filter(Boolean) || [];
-
-  const wildlifeTypesItems =
-    destination?.wildlifeTypes
-      ?.split(",")
-      .map((item) => item.trim())
-      .filter(Boolean) || [];
 
   return (
     <Box
@@ -517,10 +565,25 @@ export default function DestinationDetails() {
                     fontWeight: 700,
                     fontSize: { xs: "2.2rem", sm: "2.6rem", md: "3.2rem" },
                     textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                    mb: destination.subtitle ? 0.5 : 0,
                   }}
                 >
                   {destination.title}
                 </Typography>
+                {destination.subtitle && (
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "white",
+                      fontWeight: 500,
+                      fontSize: { xs: "1rem", sm: "1.2rem", md: "1.4rem" },
+                      textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {destination.subtitle}
+                  </Typography>
+                )}
               </Box>
             </Box>
 
@@ -546,62 +609,33 @@ export default function DestinationDetails() {
                     },
                   }}
                 />
-                <Chip
-                  icon={<Schedule />}
-                  label={`Duration: ${destination.duration}`}
-                  variant="outlined"
-                  sx={{
-                    fontWeight: 600,
-                    borderColor: "#3D2817", // Dark brown from palette
-                    color: "#3D2817",
-                    "& .MuiChip-icon": {
-                      color: "#3D2817",
-                    },
-                  }}
-                />
-                <Chip
-                  icon={<People />}
-                  label={`Best Time: ${destination.bestTime}`}
-                  variant="outlined"
-                  sx={{
-                    fontWeight: 600,
-                    borderColor: "#B85C38", // Burnt orange/rust
-                    color: "#3D2817",
-                    "& .MuiChip-icon": {
-                      color: "#B85C38",
-                    },
-                  }}
-                />
-                {destination.wildlife && destination.wildlife !== "Various wildlife species" && (
+                {destination.packages && destination.packages.length > 0 && (
                   <Chip
-                    label={`Featured Species: ${destination.wildlife}`}
+                    icon={<Schedule />}
+                    label={`${destination.packages.reduce((total, cat) => total + (cat.packages?.length || 0), 0)} Packages Available`}
                     variant="outlined"
                     sx={{
                       fontWeight: 600,
-                      borderColor: "#2D4A2D",
+                      borderColor: "#3D2817", // Dark brown from palette
                       color: "#3D2817",
+                      "& .MuiChip-icon": {
+                        color: "#3D2817",
+                      },
                     }}
                   />
                 )}
-                {destination.wildlifeTypes && destination.wildlifeTypes !== "Various wildlife experiences" && (
+                {destination.packages && destination.packages.length > 0 && (
                   <Chip
-                    label={`Wildlife Types: ${destination.wildlifeTypes}`}
+                    icon={<People />}
+                    label={`${destination.packages.length} Categories`}
                     variant="outlined"
                     sx={{
                       fontWeight: 600,
-                      borderColor: "#6B7D47",
+                      borderColor: "#B85C38", // Burnt orange/rust
                       color: "#3D2817",
-                    }}
-                  />
-                )}
-                {Array.isArray(destination.category_tags) && destination.category_tags.length > 0 && (
-                  <Chip
-                    label={`Categories: ${destination.category_tags.join(", ")}`}
-                    variant="outlined"
-                    sx={{
-                      fontWeight: 600,
-                      borderColor: "#6B4E3D",
-                      color: "#3D2817",
+                      "& .MuiChip-icon": {
+                        color: "#B85C38",
+                      },
                     }}
                   />
                 )}
@@ -632,181 +666,6 @@ export default function DestinationDetails() {
                 {destination.description}
               </Typography>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  width: "100%",
-                  alignItems: "stretch",
-                }}
-              >
-                {/* Wildlife Section */}
-                <Card
-                  sx={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    backgroundColor: "#F5F1E8", // Light beige from palette
-                    border: "1px solid rgba(107, 78, 61, 0.3)", // Medium brown border
-                  }}
-                >
-                  <CardContent
-                    sx={{
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      p: { xs: 1.25, sm: 1.5 },
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 700,
-                        mb: 1,
-                        color: "#3D2817", // Dark brown from palette
-                        fontSize: { xs: "1.2rem", md: "1.35rem" },
-                      }}
-                    >
-                      Wildlife
-                    </Typography>
-
-                    {/* Wildlife Types */}
-                    {wildlifeTypesItems.length > 0 && (
-                      <Box sx={{ mb: 1 }}>
-                        <Typography
-                          variant="subtitle2"
-                          sx={{
-                            fontWeight: 700,
-                            color: "#6B4E3D",
-                            mb: 0.5,
-                            fontSize: { xs: "0.95rem", md: "1rem" },
-                          }}
-                        >
-                          Wildlife Types:
-                        </Typography>
-                        <Box component="ul" sx={{ pl: 2, mb: 1 }}>
-                          {wildlifeTypesItems.map((item, index) => (
-                            <Typography
-                              key={`type-${index}`}
-                              component="li"
-                              variant="body2"
-                              sx={{
-                                mb: 0.25,
-                                color: "text.secondary",
-                                lineHeight: 1.6,
-                                fontSize: { xs: "1rem", md: "1.05rem" },
-                                fontWeight: 500,
-                              }}
-                            >
-                              {item}
-                            </Typography>
-                          ))}
-                        </Box>
-                      </Box>
-                    )}
-
-                    {/* Featured Species */}
-                    {wildlifeItems.length > 0 && (
-                      <Box>
-                        <Typography
-                          variant="subtitle2"
-                          sx={{
-                            fontWeight: 700,
-                            color: "#6B4E3D",
-                            mb: 0.5,
-                            fontSize: { xs: "0.95rem", md: "1rem" },
-                          }}
-                        >
-                          Featured Species:
-                        </Typography>
-                        <Box component="ul" sx={{ pl: 2, mb: 0 }}>
-                          {wildlifeItems.map((item, index) => (
-                            <Typography
-                              key={`species-${index}`}
-                              component="li"
-                              variant="body2"
-                              sx={{
-                                mb: 0.25,
-                                color: "text.secondary",
-                                lineHeight: 1.6,
-                                fontSize: { xs: "1rem", md: "1.05rem" },
-                                fontWeight: 500,
-                              }}
-                            >
-                              {item}
-                            </Typography>
-                          ))}
-                        </Box>
-                      </Box>
-                    )}
-
-                    {/* Fallback if no specific data */}
-                    {wildlifeItems.length === 0 && wildlifeTypesItems.length === 0 && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "text.secondary",
-                          lineHeight: 1.6,
-                          fontSize: { xs: "1rem", md: "1.05rem" },
-                          fontWeight: 500,
-                        }}
-                      >
-                        Various wildlife species
-                      </Typography>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Highlights Section */}
-                <Card
-                  sx={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    backgroundColor: "#F5F1E8", // Light beige from palette
-                    border: "1px solid rgba(107, 78, 61, 0.3)", // Medium brown border
-                  }}
-                >
-                  <CardContent
-                    sx={{
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      p: { xs: 1.25, sm: 1.5 },
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 700,
-                        mb: 1,
-                        color: "#3D2817", // Dark brown from palette
-                        fontSize: { xs: "1.2rem", md: "1.35rem" },
-                      }}
-                    >
-                      Highlights
-                    </Typography>
-                    <Box component="ul" sx={{ pl: 2, mb: 0 }}>
-                      {destination.highlights.map((highlight, index) => (
-                        <Typography
-                          key={index}
-                          component="li"
-                          variant="body1"
-                          sx={{
-                            mb: 0.5,
-                            color: "text.secondary",
-                            lineHeight: 1.7,
-                            fontSize: { xs: "1.05rem", md: "1.1rem" },
-                            fontWeight: 600,
-                          }}
-                        >
-                          {highlight}
-                        </Typography>
-                      ))}
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Box>
 
               {/* Gallery Images Section */}
               {Array.isArray(destination.gallery_images) && destination.gallery_images.length > 0 && (
@@ -870,30 +729,52 @@ export default function DestinationDetails() {
                 </Box>
               )}
 
-              {/* Tourist Attractions Section */}
-              <Box sx={{ mt: 3 }}>
-                <Typography
-                  variant="h4"
-                  sx={{
-                    fontWeight: 700,
-                    mb: 3,
-                    color: "#3D2817",
-                    fontSize: { xs: "1.5rem", md: "1.75rem" },
-                  }}
-                >
-                  Must-Visit Attractions
-                </Typography>
-                <Grid container spacing={3}>
-                  {destination.attractions?.map((attraction, index) => (
-                    <Grid item xs={12} key={index}>
-                      <AttractionCard
-                        attraction={attraction}
-                        onClick={handleAttractionClick}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
+              {/* Packages Section */}
+              {destination.packages && destination.packages.length > 0 && (
+                <Box sx={{ mt: 3 }}>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: 700,
+                      mb: 3,
+                      color: "#3D2817",
+                      fontSize: { xs: "1.5rem", md: "1.75rem" },
+                    }}
+                  >
+                    Safari Packages & Tours
+                  </Typography>
+                  {destination.packages
+                    .sort((a, b) => (a.category_order || 0) - (b.category_order || 0))
+                    .map((category, catIndex) => (
+                      <Box key={catIndex} sx={{ mb: 4 }}>
+                        <Typography
+                          variant="h5"
+                          sx={{
+                            fontWeight: 700,
+                            mb: 2,
+                            color: "#6B4E3D",
+                            fontSize: { xs: "1.3rem", md: "1.5rem" },
+                            borderBottom: "2px solid #B85C38",
+                            pb: 1,
+                          }}
+                        >
+                          {category.category_name}
+                        </Typography>
+                        <Grid container spacing={3}>
+                          {category.packages.map((pkg, pkgIndex) => (
+                            <Grid size={{ xs: 12 }} key={pkgIndex}>
+                              <PackageCard
+                                package={pkg}
+                                categoryName={category.category_name}
+                                onClick={handlePackageClick}
+                              />
+                            </Grid>
+                          ))}
+                        </Grid>
+                      </Box>
+                    ))}
+                </Box>
+              )}
 
               {/* Call to Action */}
               <Box
@@ -944,10 +825,10 @@ export default function DestinationDetails() {
         </MotionBox>
       </Container>
 
-      {/* Attraction Detail Dialog */}
+      {/* Package Detail Dialog */}
       <Dialog
-        open={attractionDialogOpen}
-        onClose={handleCloseAttractionDialog}
+        open={packageDialogOpen}
+        onClose={handleClosePackageDialog}
         maxWidth="md"
         fullWidth
         sx={{
@@ -965,16 +846,25 @@ export default function DestinationDetails() {
           },
         }}
       >
-        {selectedAttraction && (
+        {selectedPackage && (
           <>
             <DialogTitle
               sx={{
                 pb: 1,
                 background: "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
                 borderBottom: "1px solid rgba(107, 78, 61, 0.1)",
-                textAlign: "center",
               }}
             >
+              <Chip
+                label={`Package #${selectedPackage.number}`}
+                size="small"
+                sx={{
+                  mb: 1,
+                  backgroundColor: "#B85C38",
+                  color: "white",
+                  fontWeight: 600,
+                }}
+              />
               <Typography
                 variant="h5"
                 sx={{
@@ -983,14 +873,14 @@ export default function DestinationDetails() {
                   fontSize: { xs: "1.5rem", md: "1.75rem" },
                 }}
               >
-                {selectedAttraction.name}
+                {selectedPackage.title}
               </Typography>
             </DialogTitle>
 
             <DialogContent sx={{ p: 0 }}>
               <Box sx={{ p: { xs: 2, md: 3 } }}>
                 {/* Main Image with Transitions */}
-                {selectedAttraction.images && selectedAttraction.images.length > 0 && (
+                {selectedPackage.gallery && selectedPackage.gallery.length > 0 && (
                   <Box
                     sx={{
                       width: "100%",
@@ -1003,14 +893,14 @@ export default function DestinationDetails() {
                       position: "relative",
                     }}
                   >
-                    {selectedAttraction.images.map((image, imgIndex) => {
+                    {selectedPackage.gallery.map((image, imgIndex) => {
                       const isActive = imgIndex === dialogImageIndex;
                       return (
                         <Box
                           key={imgIndex}
                           component="img"
                           src={image}
-                          alt={`${selectedAttraction.name} - Image ${imgIndex + 1}`}
+                          alt={`${selectedPackage.title} - Image ${imgIndex + 1}`}
                           sx={{
                             position: "absolute",
                             top: 0,
@@ -1023,7 +913,7 @@ export default function DestinationDetails() {
                             display: "block",
                           }}
                           onError={(e) => {
-                            console.error(`Failed to load attraction image: ${image}`);
+                            console.error(`Failed to load package image: ${image}`);
                             e.target.src = "/IMG-20251210-WA0070.jpg";
                           }}
                         />
@@ -1031,7 +921,7 @@ export default function DestinationDetails() {
                     })}
 
                     {/* Image Indicators */}
-                    {selectedAttraction.images.length > 1 && (
+                    {selectedPackage.gallery.length > 1 && (
                       <Box
                         sx={{
                           position: "absolute",
@@ -1043,7 +933,7 @@ export default function DestinationDetails() {
                           zIndex: 3,
                         }}
                       >
-                        {selectedAttraction.images.map((_, idx) => (
+                        {selectedPackage.gallery.map((_, idx) => (
                           <Box
                             key={idx}
                             sx={{
@@ -1063,7 +953,7 @@ export default function DestinationDetails() {
                   </Box>
                 )}
 
-                {/* Full Description */}
+                {/* Description */}
                 <Typography
                   variant="body1"
                   sx={{
@@ -1071,10 +961,77 @@ export default function DestinationDetails() {
                     lineHeight: 1.7,
                     fontSize: { xs: "1.05rem", md: "1.15rem" },
                     fontWeight: 500,
+                    mb: 2,
                   }}
                 >
-                  {selectedAttraction.description}
+                  {selectedPackage.short_description}
                 </Typography>
+
+                {/* Highlights */}
+                {selectedPackage.highlights && selectedPackage.highlights.length > 0 && (
+                  <Box sx={{ mb: 2 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: 700,
+                        color: "#6B4E3D",
+                        mb: 1,
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                      }}
+                    >
+                      Highlights:
+                    </Typography>
+                    <Box component="ul" sx={{ pl: 2 }}>
+                      {selectedPackage.highlights.map((highlight, idx) => (
+                        <Typography
+                          key={idx}
+                          component="li"
+                          variant="body2"
+                          sx={{
+                            mb: 0.5,
+                            color: "text.secondary",
+                            lineHeight: 1.6,
+                            fontSize: { xs: "1rem", md: "1.05rem" },
+                            fontWeight: 500,
+                          }}
+                        >
+                          {highlight}
+                        </Typography>
+                      ))}
+                    </Box>
+                  </Box>
+                )}
+
+                {/* Pricing */}
+                {selectedPackage.pricing_tiers && selectedPackage.pricing_tiers.length > 0 && (
+                  <Box>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: 700,
+                        color: "#6B4E3D",
+                        mb: 1,
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                      }}
+                    >
+                      Indicative Pricing (2026 Rates):
+                    </Typography>
+                    {selectedPackage.pricing_tiers.map((tier, idx) => (
+                      <Typography
+                        key={idx}
+                        variant="body1"
+                        sx={{
+                          mb: 0.75,
+                          color: "text.primary",
+                          fontSize: { xs: "1rem", md: "1.05rem" },
+                          fontWeight: 600,
+                        }}
+                      >
+                        <strong>{tier.tier}:</strong> {tier.price_range}
+                      </Typography>
+                    ))}
+                  </Box>
+                )}
               </Box>
             </DialogContent>
 
@@ -1087,7 +1044,7 @@ export default function DestinationDetails() {
               }}
             >
               <Button
-                onClick={handleCloseAttractionDialog}
+                onClick={handleClosePackageDialog}
                 variant="outlined"
                 sx={{
                   borderColor: "#6B4E3D",

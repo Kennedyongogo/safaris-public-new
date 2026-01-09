@@ -100,26 +100,52 @@ export default function HeroSection() {
             // Create mapping from button labels to destination IDs
             const mapping = {};
 
+            // Define country names in various formats for matching
+            const countryVariations = {
+              'Kenya': ['kenya', 'kenyan'],
+              'Tanzania': ['tanzania', 'tanzanian'],
+              'Uganda': ['uganda', 'ugandan'],
+              'Rwanda': ['rwanda', 'rwandan']
+            };
+
             result.data.forEach(destination => {
-              // Map based on title or location
+              // First, try exact match on title (case-insensitive)
               if (destination.title) {
-                // If title contains country name, map it
-                const title = destination.title.toLowerCase();
-                if (title.includes('kenya')) mapping['Kenya'] = destination.id;
-                else if (title.includes('uganda')) mapping['Uganda'] = destination.id;
-                else if (title.includes('tanzania')) mapping['Tanzania'] = destination.id;
-                else if (title.includes('rwanda')) mapping['Rwanda'] = destination.id;
+                const title = destination.title.toLowerCase().trim();
+                
+                // Check for exact matches first (most reliable)
+                Object.keys(countryVariations).forEach(country => {
+                  if (title === country.toLowerCase()) {
+                    mapping[country] = destination.id;
+                  }
+                });
+
+                // Then check for partial matches if exact match not found
+                Object.keys(countryVariations).forEach(country => {
+                  if (!mapping[country]) {
+                    countryVariations[country].forEach(variation => {
+                      if (title.includes(variation)) {
+                        mapping[country] = destination.id;
+                      }
+                    });
+                  }
+                });
               }
 
-              // Also try location field as fallback
-              if (destination.location) {
-                const location = destination.location.trim();
-                if (location === 'East Africa' && !mapping['Kenya']) {
-                  mapping['Kenya'] = destination.id; // Kenya is in East Africa
-                }
+              // Also check slug field (most reliable for exact matching)
+              if (destination.slug) {
+                const slug = destination.slug.toLowerCase().trim();
+                Object.keys(countryVariations).forEach(country => {
+                  if (slug === country.toLowerCase() || slug.includes(country.toLowerCase())) {
+                    if (!mapping[country]) {
+                      mapping[country] = destination.id;
+                    }
+                  }
+                });
               }
             });
 
+            console.log('Country to Destination ID mapping:', mapping);
             setCountryToIdMap(mapping);
           }
         }
@@ -139,6 +165,11 @@ export default function HeroSection() {
     const destinationId = countryToIdMap[country];
     if (destinationId) {
       navigate(`/destination/${destinationId}`, { state: { from: "hero" } });
+    } else {
+      console.warn(`No destination found for country: ${country}`);
+      // Fallback: navigate to destinations page or show a message
+      // You could also navigate to a general destinations page
+      navigate("/#mission-section"); // Scroll to destinations section
     }
   };
 

@@ -490,28 +490,35 @@ export default function ServicesSection() {
         };
 
         // Map API data to component expected format
-        const mappedDestinations = result.data.map(destination => ({
-          id: destination.id,
-          slug: destination.slug, // Include slug for navigation
-          title: destination.title,
-          description: destination.description,
-          image: buildFullImageUrl(destination.hero_image), // Convert to full URL
-          gallery_images: Array.isArray(destination.gallery_images)
-            ? destination.gallery_images.map(img => buildFullImageUrl(img)) // Convert gallery images to full URLs
-            : [],
-          location: destination.location,
-          duration: destination.duration_display || `${destination.duration_min}-${destination.duration_max} Days`,
-          highlights: Array.isArray(destination.key_highlights)
-            ? destination.key_highlights.slice(0, 3) // Take first 3 highlights
-            : [],
-          attractions: Array.isArray(destination.attractions)
-            ? destination.attractions.map(attr => ({
-                name: attr.name,
-                description: attr.description,
-                images: (attr.images || []).map(img => buildFullImageUrl(img)) // Convert all attraction images to full URLs
-              }))
-            : []
-        }));
+        const mappedDestinations = result.data.map(destination => {
+          // Extract highlights from packages (first package's highlights)
+          let highlights = [];
+          if (Array.isArray(destination.packages) && destination.packages.length > 0) {
+            const firstCategory = destination.packages[0];
+            if (firstCategory.packages && firstCategory.packages.length > 0) {
+              const firstPackage = firstCategory.packages[0];
+              highlights = Array.isArray(firstPackage.highlights)
+                ? firstPackage.highlights.slice(0, 3) // Take first 3 highlights
+                : [];
+            }
+          }
+
+          return {
+            id: destination.id,
+            slug: destination.slug, // Include slug for navigation
+            title: destination.title,
+            subtitle: destination.subtitle || "",
+            description: destination.brief_description || "", // Use brief_description
+            image: buildFullImageUrl(destination.hero_image), // Convert to full URL
+            gallery_images: Array.isArray(destination.gallery_images)
+              ? destination.gallery_images.map(img => buildFullImageUrl(img)) // Convert gallery images to full URLs
+              : [],
+            location: destination.location,
+            duration: "Multiple packages available", // Packages have varying durations
+            highlights: highlights,
+            packages: Array.isArray(destination.packages) ? destination.packages : []
+          };
+        });
         setDestinations(mappedDestinations);
       } else {
         throw new Error(result.message || "Failed to fetch destinations");
@@ -783,6 +790,21 @@ export default function ServicesSection() {
                               </Typography>
                             </Box>
 
+                            {destination.subtitle && (
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  mb: 0.5,
+                                  color: "#B85C38",
+                                  fontWeight: 700,
+                                  fontSize: { xs: "0.85rem", sm: "0.9rem" },
+                                  fontStyle: "italic",
+                                  display: "block",
+                                }}
+                              >
+                                {destination.subtitle}
+                              </Typography>
+                            )}
                             <Typography
                               variant="body2"
                               color="text.secondary"
@@ -847,7 +869,9 @@ export default function ServicesSection() {
                                     fontWeight: 600,
                                   }}
                                 >
-                                  {destination.duration}
+                                  {destination.packages && destination.packages.length > 0
+                                    ? `${destination.packages.reduce((total, cat) => total + (cat.packages?.length || 0), 0)} Packages Available`
+                                    : destination.duration}
                                 </Typography>
                               </Box>
                             </Box>
