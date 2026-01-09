@@ -59,11 +59,22 @@ export default function BlogDetail() {
 
   // Build absolute URL for Open Graph meta tags (Facebook requires full URLs)
   const buildAbsoluteUrl = (path) => {
-    if (!path) return window.location.origin + "/placeholder.jpg";
-    if (path.startsWith("http")) return path;
+    if (!path || typeof window === 'undefined') return '';
+    if (path.startsWith("http://") || path.startsWith("https://")) return path;
+    
+    // Handle relative paths
     const origin = window.location.origin;
-    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-    return `${origin}${normalizedPath}`;
+    let normalizedPath = path;
+    
+    // Remove leading slashes to avoid double slashes
+    normalizedPath = normalizedPath.replace(/^\/+/, '');
+    
+    // Ensure it starts with a single slash
+    normalizedPath = `/${normalizedPath}`;
+    
+    // Build full URL
+    const fullUrl = `${origin}${normalizedPath}`;
+    return fullUrl;
   };
 
   useEffect(() => {
@@ -325,11 +336,40 @@ export default function BlogDetail() {
     );
   }
 
-  // Build Open Graph meta data
-  const currentUrl = window.location.href;
-  const ogTitle = post?.metaTitle || post?.title || "Akira Safaris Blog";
-  const ogDescription = post?.metaDescription || post?.excerpt || "";
-  const ogImageUrl = post?.ogImage ? buildAbsoluteUrl(post.ogImage) : (post?.featuredImage ? buildAbsoluteUrl(post.featuredImage) : `${window.location.origin}/placeholder.jpg`);
+  // Build Open Graph meta data - ensure we always have values even if post is loading
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const siteName = "Akira Safaris";
+  const defaultTitle = "Akira Safaris Blog - Experience the Magic of Africa";
+  const defaultDescription = "Discover amazing safari adventures and travel experiences with Akira Safaris in Kenya.";
+  const defaultImage = typeof window !== 'undefined' ? `${window.location.origin}/placeholder.jpg` : '';
+
+  const ogTitle = post?.metaTitle || post?.title || defaultTitle;
+  
+  // Clean description: remove HTML tags and truncate
+  let ogDescription = post?.metaDescription || post?.excerpt || defaultDescription;
+  if (post?.content && !post?.metaDescription && !post?.excerpt) {
+    // Strip HTML tags and truncate to 200 characters
+    const textContent = post.content.replace(/<[^>]*>/g, '').trim();
+    ogDescription = textContent.substring(0, 200) + (textContent.length > 200 ? '...' : '');
+  }
+  // Clean any remaining HTML and ensure proper length
+  ogDescription = ogDescription.replace(/<[^>]*>/g, '').trim().substring(0, 300);
+  
+  // Build absolute image URL - ensure it's fully qualified
+  let ogImageUrl = defaultImage;
+  if (post) {
+    if (post.ogImage) {
+      ogImageUrl = buildAbsoluteUrl(post.ogImage);
+    } else if (post.featuredImage) {
+      ogImageUrl = buildAbsoluteUrl(post.featuredImage);
+    }
+  }
+
+  // Ensure the URL is absolute (starts with http:// or https://)
+  if (ogImageUrl && !ogImageUrl.startsWith('http://') && !ogImageUrl.startsWith('https://')) {
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    ogImageUrl = ogImageUrl.startsWith('/') ? `${origin}${ogImageUrl}` : `${origin}/${ogImageUrl}`;
+  }
 
   return (
     <>
@@ -341,27 +381,31 @@ export default function BlogDetail() {
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={currentUrl} />
+        {currentUrl && <meta property="og:url" content={currentUrl} />}
         <meta property="og:title" content={ogTitle} />
         <meta property="og:description" content={ogDescription} />
-        <meta property="og:image" content={ogImageUrl} />
+        {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+        <meta property="og:image:secure_url" content={ogImageUrl?.replace('http://', 'https://') || ogImageUrl} />
+        <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:site_name" content="Akira Safaris" />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:locale" content="en_US" />
 
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={currentUrl} />
-        <meta property="twitter:title" content={ogTitle} />
-        <meta property="twitter:description" content={ogDescription} />
-        <meta property="twitter:image" content={ogImageUrl} />
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@akirasafaris" />
+        {currentUrl && <meta name="twitter:url" content={currentUrl} />}
+        <meta name="twitter:title" content={ogTitle} />
+        <meta name="twitter:description" content={ogDescription} />
+        {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
-        {/* Article specific */}
+        {/* Article specific meta tags */}
         {post?.author && <meta property="article:author" content={post.author} />}
         {post?.publishDate && <meta property="article:published_time" content={new Date(post.publishDate).toISOString()} />}
         {post?.category && <meta property="article:section" content={post.category} />}
         {post?.tags && post.tags.length > 0 && post.tags.map((tag, index) => (
-          <meta key={index} property="article:tag" content={tag} />
+          <meta key={`tag-${index}`} property="article:tag" content={tag} />
         ))}
       </Helmet>
       <Box
