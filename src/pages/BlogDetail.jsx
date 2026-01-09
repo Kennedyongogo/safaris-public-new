@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -56,6 +57,15 @@ export default function BlogDetail() {
     return `/${path}`;
   };
 
+  // Build absolute URL for Open Graph meta tags (Facebook requires full URLs)
+  const buildAbsoluteUrl = (path) => {
+    if (!path) return window.location.origin + "/placeholder.jpg";
+    if (path.startsWith("http")) return path;
+    const origin = window.location.origin;
+    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+    return `${origin}${normalizedPath}`;
+  };
+
   useEffect(() => {
     // reset guard on slug change
     if (prevSlugRef.current !== slug) {
@@ -91,6 +101,10 @@ export default function BlogDetail() {
           readTime: data.data.readTime ? `${data.data.readTime} min` : "—",
           likes: data.data.likes ?? 0,
           views: data.data.views ?? 0,
+          // Meta fields for Open Graph
+          metaTitle: data.data.metaTitle || data.data.title,
+          metaDescription: data.data.metaDescription || data.data.excerpt || "",
+          ogImage: data.data.ogImage || data.data.featuredImage,
         };
 
         setPost(normalized);
@@ -311,31 +325,69 @@ export default function BlogDetail() {
     );
   }
 
+  // Build Open Graph meta data
+  const currentUrl = window.location.href;
+  const ogTitle = post?.metaTitle || post?.title || "Akira Safaris Blog";
+  const ogDescription = post?.metaDescription || post?.excerpt || "";
+  const ogImageUrl = post?.ogImage ? buildAbsoluteUrl(post.ogImage) : (post?.featuredImage ? buildAbsoluteUrl(post.featuredImage) : `${window.location.origin}/placeholder.jpg`);
+
   return (
-    <Box
-      sx={{
-        pt: 0.75,
-        pb: 0.75,
-        px: 0,
-        bgcolor: "#F5F1E8",
-        background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
-        position: "relative",
-        overflow: "hidden",
-        minHeight: "100vh",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+    <>
+      <Helmet>
+        {/* Primary Meta Tags */}
+        <title>{ogTitle}</title>
+        <meta name="title" content={ogTitle} />
+        <meta name="description" content={ogDescription} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={currentUrl} />
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:description" content={ogDescription} />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="Akira Safaris" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={currentUrl} />
+        <meta property="twitter:title" content={ogTitle} />
+        <meta property="twitter:description" content={ogDescription} />
+        <meta property="twitter:image" content={ogImageUrl} />
+
+        {/* Article specific */}
+        {post?.author && <meta property="article:author" content={post.author} />}
+        {post?.publishDate && <meta property="article:published_time" content={new Date(post.publishDate).toISOString()} />}
+        {post?.category && <meta property="article:section" content={post.category} />}
+        {post?.tags && post.tags.length > 0 && post.tags.map((tag, index) => (
+          <meta key={index} property="article:tag" content={tag} />
+        ))}
+      </Helmet>
+      <Box
+        sx={{
+          pt: 0.75,
+          pb: 0.75,
+          px: 0,
+          bgcolor: "#F5F1E8",
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
-          zIndex: 0,
-        },
-      }}
-    >
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          position: "relative",
+          overflow: "hidden",
+          minHeight: "100vh",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+            zIndex: 0,
+          },
+        }}
+      >
       <Container
         maxWidth="xl"
         sx={{
@@ -847,5 +899,6 @@ export default function BlogDetail() {
         </MotionBox>
       </Container>
     </Box>
+    </>
   );
 }

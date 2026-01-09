@@ -255,6 +255,13 @@ export default function Footer() {
                                 border: "1px solid rgba(0,0,0,0.1)",
                                 transition:
                                   "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                outline: "none",
+                                "&:focus": {
+                                  outline: "none",
+                                },
+                                "&:focus-visible": {
+                                  outline: "none",
+                                },
                                 "&:hover": {
                                   background: social.color,
                                   color: "white",
@@ -330,6 +337,13 @@ export default function Footer() {
                               background: "rgba(0,0,0,0.05)",
                               border: "1px solid rgba(0,0,0,0.1)",
                               transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                              outline: "none",
+                              "&:focus": {
+                                outline: "none",
+                              },
+                              "&:focus-visible": {
+                                outline: "none",
+                              },
                               "&:hover": {
                                 background: social.color,
                                 color: "white",

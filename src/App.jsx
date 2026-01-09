@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { ThemeProvider, CssBaseline, LinearProgress, Box, Typography, CircularProgress } from "@mui/material";
+import { HelmetProvider } from "react-helmet-async";
 import { theme } from "./theme";
 import "./App.css";
 import React, { useState, useEffect, Suspense, lazy } from "react";
@@ -50,10 +51,11 @@ function App() {
   const [drawerOpen, setDrawerOpen] = useState(true); // Drawer open by default
 
   return (
-    <ThemeProvider theme={theme}>
-      <Router style={{ margin: 0, padding: 0 }}>
-        <ScrollToTop />
-        <PublicHeader />
+    <HelmetProvider>
+      <ThemeProvider theme={theme}>
+        <Router style={{ margin: 0, padding: 0 }}>
+          <ScrollToTop />
+          <PublicHeader />
         <Suspense
           fallback={
             <Box
@@ -293,6 +295,7 @@ function App() {
         <Chatbot />
       </Router>
     </ThemeProvider>
+    </HelmetProvider>
   );
 }
 
