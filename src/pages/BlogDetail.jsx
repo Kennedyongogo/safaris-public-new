@@ -112,10 +112,13 @@ export default function BlogDetail() {
           readTime: data.data.readTime ? `${data.data.readTime} min` : "—",
           likes: data.data.likes ?? 0,
           views: data.data.views ?? 0,
-          // Meta fields for Open Graph
+          // Meta fields for Open Graph - prioritize featuredImage (what user wants MOST)
           metaTitle: data.data.metaTitle || data.data.title,
           metaDescription: data.data.metaDescription || data.data.excerpt || "",
-          ogImage: data.data.ogImage || data.data.featuredImage,
+          // Store original image paths (not normalized) for absolute URL building in meta tags
+          // Priority: featuredImage first (user's priority), then ogImage as fallback
+          ogImagePath: data.data.featuredImage || data.data.ogImage,
+          content: data.data.content, // Store actual content for description extraction
         };
 
         setPost(normalized);
@@ -345,26 +348,38 @@ export default function BlogDetail() {
 
   const ogTitle = post?.metaTitle || post?.title || defaultTitle;
   
-  // Clean description: remove HTML tags and truncate
-  let ogDescription = post?.metaDescription || post?.excerpt || defaultDescription;
-  if (post?.content && !post?.metaDescription && !post?.excerpt) {
-    // Strip HTML tags and truncate to 200 characters
-    const textContent = post.content.replace(/<[^>]*>/g, '').trim();
-    ogDescription = textContent.substring(0, 200) + (textContent.length > 200 ? '...' : '');
+  // Build description from CONTENT field (what user wants to share)
+  // Priority: metaDescription > excerpt > content (from blog.content field)
+  let ogDescription = post?.metaDescription || "";
+  if (!ogDescription && post?.excerpt) {
+    ogDescription = post.excerpt.trim();
   }
-  // Clean any remaining HTML and ensure proper length
-  ogDescription = ogDescription.replace(/<[^>]*>/g, '').trim().substring(0, 300);
-  
-  // Build absolute image URL - ensure it's fully qualified
-  let ogImageUrl = defaultImage;
-  if (post) {
-    if (post.ogImage) {
-      ogImageUrl = buildAbsoluteUrl(post.ogImage);
-    } else if (post.featuredImage) {
-      ogImageUrl = buildAbsoluteUrl(post.featuredImage);
+  // Extract from blog.content field - the actual blog post content
+  if (!ogDescription && post?.content) {
+    // Strip HTML tags and get meaningful text from content
+    const textContent = post.content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    // Take first 300 characters, but try to end at a sentence for better display
+    ogDescription = textContent.substring(0, 300);
+    const lastPeriod = ogDescription.lastIndexOf('.');
+    if (lastPeriod > 200) {
+      ogDescription = ogDescription.substring(0, lastPeriod + 1);
+    } else if (textContent.length > 300) {
+      ogDescription += '...';
     }
   }
-
+  if (!ogDescription) {
+    ogDescription = defaultDescription;
+  }
+  // Clean any remaining HTML
+  ogDescription = ogDescription.replace(/<[^>]*>/g, '').trim();
+  
+  // Build absolute image URL - PRIORITIZE FEATURED IMAGE (what user wants MOST)
+  // Use featuredImage first (user's priority), then ogImage as fallback
+  let ogImageUrl = defaultImage;
+  if (post?.ogImagePath) {
+    ogImageUrl = buildAbsoluteUrl(post.ogImagePath);
+  }
+  
   // Ensure the URL is absolute (starts with http:// or https://)
   if (ogImageUrl && !ogImageUrl.startsWith('http://') && !ogImageUrl.startsWith('https://')) {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
