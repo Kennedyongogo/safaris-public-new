@@ -407,7 +407,7 @@ export default function HeroSection() {
               }}
             >
 
-              {["Kenya", "Uganda", "Tanzania", "Rwanda"].map((country) => (
+              {["Kenya", "Tanzania", "Uganda", "Rwanda"].map((country) => (
                 <Box
                   key={country}
                   onClick={() => handleCountryClick(country)}
