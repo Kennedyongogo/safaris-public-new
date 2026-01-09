@@ -19,6 +19,7 @@ import {
   useTheme,
   CircularProgress,
   Alert,
+  Snackbar,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import {
@@ -29,6 +30,8 @@ import {
   Facebook,
   Twitter,
   LinkedIn,
+  Instagram,
+  WhatsApp,
   ArrowForward,
   Person,
 } from "@mui/icons-material";
@@ -47,6 +50,7 @@ export default function BlogDetail() {
   const [error, setError] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [likeLoading, setLikeLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const hasIncrementedView = useRef(false);
   const prevSlugRef = useRef(null);
 
@@ -175,11 +179,39 @@ export default function BlogDetail() {
   const handleShare = (platform) => {
     const url = window.location.href;
     const text = post?.title || "";
+    
     const shareUrls = {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
       twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`,
+      instagram: `https://www.instagram.com/`, // Opens Instagram (on mobile may open app)
     };
+    
+    if (platform === "instagram") {
+      // Instagram doesn't have a direct share URL like Facebook
+      // Open Instagram website (on mobile, this may open the app if installed)
+      // Also copy the link to clipboard for easy pasting
+      window.open(shareUrls[platform], "_blank", "width=600,height=400");
+      
+      // Copy link to clipboard as well for easy sharing
+      navigator.clipboard.writeText(url).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+      return;
+    }
+    
     window.open(shareUrls[platform], "_blank", "width=600,height=400");
   };
 
@@ -675,6 +707,32 @@ export default function BlogDetail() {
                     >
                       <LinkedIn />
                     </IconButton>
+                    <IconButton
+                      onClick={() => handleShare("whatsapp")}
+                      sx={{
+                        color: "#25D366",
+                        outline: "none",
+                        "&:focus": { outline: "none" },
+                        "&:focus-visible": { outline: "none" },
+                        "&:hover": { backgroundColor: "rgba(37, 211, 102, 0.1)" },
+                      }}
+                    >
+                      <WhatsApp />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleShare("instagram")}
+                      sx={{
+                        color: "#E4405F",
+                        outline: "none",
+                        "&:focus": { outline: "none" },
+                        "&:focus-visible": { outline: "none" },
+                        "&:hover": { backgroundColor: "rgba(228, 64, 95, 0.1)" },
+                        position: "relative",
+                      }}
+                      title={copied ? "Link copied!" : "Copy link to share on Instagram"}
+                    >
+                      <Instagram />
+                    </IconButton>
                     <MotionButton
                       variant="outlined"
                       size={isMobile ? "small" : "medium"}
@@ -957,6 +1015,13 @@ export default function BlogDetail() {
           </Paper>
         </MotionBox>
       </Container>
+      <Snackbar
+        open={copied}
+        autoHideDuration={3000}
+        onClose={() => setCopied(false)}
+        message="Link copied! Instagram opened. Paste the link in your post."
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
     </Box>
     </>
   );
