@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import {
   Facebook,
-  Twitter,
   Instagram,
   LinkedIn,
   LocationOn,
@@ -22,7 +21,36 @@ import {
   Phone,
 } from "@mui/icons-material";
 
+// Custom X icon for Twitter/X rebrand
+const XIcon = ({ sx, ...props }) => (
+  <Box
+    component="svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    sx={{
+      width: 24,
+      height: 24,
+      ...sx,
+    }}
+    {...props}
+  >
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </Box>
+);
+
 export default function Footer() {
+  const handleSocialClick = (label) => {
+    if (label === "Facebook") {
+      window.open("https://www.facebook.com/akirasafaris/", "_blank", "noopener,noreferrer");
+    } else if (label === "Twitter") {
+      window.open("https://x.com/AkiraSafaris", "_blank", "noopener,noreferrer");
+    } else if (label === "Instagram") {
+      window.open("https://www.instagram.com/akirasafaris/?hl=en", "_blank", "noopener,noreferrer");
+    } else if (label === "LinkedIn") {
+      window.open("https://www.linkedin.com/in/david-odongo-78876637/", "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <Box
       component="footer"
@@ -231,8 +259,8 @@ export default function Footer() {
                               label: "Facebook",
                             },
                             {
-                              icon: <Twitter />,
-                              color: "#1da1f2",
+                              icon: <XIcon />,
+                              color: "#000000",
                               label: "Twitter",
                             },
                             {
@@ -249,6 +277,7 @@ export default function Footer() {
                             <IconButton
                               key={index}
                               aria-label={social.label}
+                              onClick={() => handleSocialClick(social.label)}
                               sx={{
                                 color: social.color,
                                 background: "rgba(0,0,0,0.05)",
@@ -314,8 +343,8 @@ export default function Footer() {
                             label: "Facebook",
                           },
                           {
-                            icon: <Twitter />,
-                            color: "#1da1f2",
+                            icon: <XIcon />,
+                            color: "#000000",
                             label: "Twitter",
                           },
                           {
@@ -332,6 +361,7 @@ export default function Footer() {
                           <IconButton
                             key={index}
                             aria-label={social.label}
+                            onClick={() => handleSocialClick(social.label)}
                             sx={{
                               color: social.color,
                               background: "rgba(0,0,0,0.05)",
