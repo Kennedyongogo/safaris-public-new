@@ -38,6 +38,40 @@ const XIcon = ({ sx, ...props }) => (
   </Box>
 );
 
+// Custom TikTok icon
+const TikTokIcon = ({ sx, ...props }) => (
+  <Box
+    component="svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    sx={{
+      width: 24,
+      height: 24,
+      ...sx,
+    }}
+    {...props}
+  >
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+  </Box>
+);
+
+// Custom YouTube icon
+const YouTubeIcon = ({ sx, ...props }) => (
+  <Box
+    component="svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    sx={{
+      width: 24,
+      height: 24,
+      ...sx,
+    }}
+    {...props}
+  >
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+  </Box>
+);
+
 export default function Footer() {
   const handleSocialClick = (label) => {
     if (label === "Facebook") {
@@ -48,6 +82,10 @@ export default function Footer() {
       window.open("https://www.instagram.com/akirasafaris/?hl=en", "_blank", "noopener,noreferrer");
     } else if (label === "LinkedIn") {
       window.open("https://www.linkedin.com/in/david-odongo-78876637/", "_blank", "noopener,noreferrer");
+    } else if (label === "TikTok") {
+      window.open("https://www.tiktok.com/tag/akirasafari", "_blank", "noopener,noreferrer");
+    } else if (label === "YouTube") {
+      window.open("https://www.youtube.com/channel/UCV_RwQsbXHwO3gzYQKsXw7Q", "_blank", "noopener,noreferrer");
     }
   };
 
@@ -273,6 +311,16 @@ export default function Footer() {
                               color: "#0077b5",
                               label: "LinkedIn",
                             },
+                            {
+                              icon: <TikTokIcon />,
+                              color: "#000000",
+                              label: "TikTok",
+                            },
+                            {
+                              icon: <YouTubeIcon />,
+                              color: "#FF0000",
+                              label: "YouTube",
+                            },
                           ].map((social, index) => (
                             <IconButton
                               key={index}
@@ -356,6 +404,16 @@ export default function Footer() {
                             icon: <LinkedIn />,
                             color: "#0077b5",
                             label: "LinkedIn",
+                          },
+                          {
+                            icon: <TikTokIcon />,
+                            color: "#000000",
+                            label: "TikTok",
+                          },
+                          {
+                            icon: <YouTubeIcon />,
+                            color: "#FF0000",
+                            label: "YouTube",
                           },
                         ].map((social, index) => (
                           <IconButton

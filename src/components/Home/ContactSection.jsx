@@ -120,7 +120,7 @@ export default function ContactSection() {
                       icon: <Phone sx={{ fontSize: 18 }} />,
                       label: "Alternative Contacts:",
                       value:
-                        "+254 721 913 292\n+254 726 913 293\n+254 739 611 948",
+                        "+254 721 913 293\n+254 726 913 872\n+254 739 611 948",
                       color: "#8B6F47",
                     },
                   ].map((item) => (
