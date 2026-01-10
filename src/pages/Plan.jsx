@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Container,
@@ -36,6 +36,8 @@ export default function Plan() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [visibleFields, setVisibleFields] = useState([]);
+  const previousVisibleFieldsRef = useRef([]);
+  const previousCurrentStepRef = useRef(0);
 
   useEffect(() => {
     fetchForms();
@@ -47,7 +49,41 @@ export default function Plan() {
 
     const { depends_on_field, show_when_value, hide_when_value } =
       field.conditional_logic;
-    const dependentValue = formData[depends_on_field];
+    
+    // Find the actual field name in the form (handle case sensitivity and slight variations)
+    // First try exact match
+    let actualFieldName = selectedForm?.fields?.find(
+      (f) => f.field_name === depends_on_field
+    )?.field_name;
+    
+    // If not found, try case-insensitive match
+    if (!actualFieldName) {
+      actualFieldName = selectedForm?.fields?.find(
+        (f) => f.field_name?.toLowerCase() === depends_on_field?.toLowerCase()
+      )?.field_name;
+    }
+    
+    // If still not found, try partial match (for cases like "visit" vs "travel")
+    if (!actualFieldName && depends_on_field) {
+      const keyWords = depends_on_field.split('_').filter(w => w.length > 3);
+      actualFieldName = selectedForm?.fields?.find((f) => {
+        if (!f.field_name) return false;
+        const fieldWords = f.field_name.split('_').filter(w => w.length > 3);
+        // Check if most key words match
+        const matchingWords = keyWords.filter(kw => 
+          fieldWords.some(fw => fw.toLowerCase().includes(kw.toLowerCase()) || kw.toLowerCase().includes(fw.toLowerCase()))
+        );
+        return matchingWords.length >= Math.min(2, keyWords.length);
+      })?.field_name;
+    }
+    
+    if (!actualFieldName && depends_on_field) {
+      // If the dependent field doesn't exist, show the field by default
+      return true;
+    }
+    
+    const fieldNameToUse = actualFieldName || depends_on_field;
+    const dependentValue = formData[fieldNameToUse];
 
     // If hide_when_value is specified and matches, hide the field
     if (hide_when_value && dependentValue === hide_when_value) {
@@ -70,33 +106,59 @@ export default function Plan() {
         .filter((field) => shouldShowField(field))
         .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
 
-      console.log(
-        "Visible fields:",
-        visible.map((f) => ({
-          id: f.id,
-          type: f.field_type,
-          display_order: f.display_order,
-        }))
-      );
-
       // Only reset step if the visible fields actually changed
       const visibleFieldIds = visible
         .map((f) => f.id)
         .sort()
         .join(",");
-      const currentVisibleIds = visibleFields
+      const currentVisibleIds = previousVisibleFieldsRef.current
         .map((f) => f.id)
         .sort()
         .join(",");
 
-      setVisibleFields(visible);
-
-      // Only reset to first step if the set of visible fields changed
+      // If visible fields changed, maintain position based on current field
+      let newStep = currentStep;
       if (visibleFieldIds !== currentVisibleIds) {
-        setCurrentStep(0);
+        const previousCurrentField = previousVisibleFieldsRef.current[previousCurrentStepRef.current];
+        
+        if (previousCurrentField) {
+          // Find the previous current field's position in the new visible fields array
+          const newIndex = visible.findIndex((f) => f.id === previousCurrentField.id);
+          
+          if (newIndex !== -1) {
+            // Field still exists in new array, maintain position
+            newStep = newIndex;
+          } else {
+            // Current field is no longer visible (was hidden by conditional logic)
+            // Find the next field in display_order sequence
+            const currentDisplayOrder = previousCurrentField.display_order || 0;
+            const nextField = visible.find(
+              (f) => (f.display_order || 0) > currentDisplayOrder
+            );
+            
+            if (nextField) {
+              const nextIndex = visible.findIndex((f) => f.id === nextField.id);
+              newStep = nextIndex;
+            } else {
+              // No next field found, go to the last visible field
+              newStep = Math.max(0, visible.length - 1);
+            }
+          }
+        } else {
+          // No previous current field (initial load), start at first step
+          newStep = 0;
+        }
+      }
+
+      // Update refs for next comparison
+      previousVisibleFieldsRef.current = visible;
+      previousCurrentStepRef.current = newStep;
+      setVisibleFields(visible);
+      if (newStep !== currentStep) {
+        setCurrentStep(newStep);
       }
     }
-  }, [selectedForm, formData, visibleFields]);
+  }, [selectedForm, formData]);
 
   // Handle form input changes
   const handleInputChange = (fieldName, value) => {
@@ -178,33 +240,15 @@ export default function Plan() {
 
   // Check if all visible required fields are valid
   const areAllFieldsValid = () => {
-    console.log(
-      "Checking validation for fields:",
-      visibleFields.map((f) => ({
-        id: f.id,
-        type: f.field_type,
-        required: f.is_required,
-      }))
-    );
     return visibleFields.every((field) => {
       if (!field.is_required) return true;
 
       // Special handling for compound fields
       if (field.field_type === "compound") {
-        console.log(
-          "Validating compound field:",
-          field.field_name,
-          "sub_fields:",
-          field.sub_fields
-        );
         const isValid = (field.sub_fields || []).every((subField) => {
           if (!subField.is_required) return true;
 
           const subFieldValue = formData[subField.field_name];
-          console.log(
-            `Checking sub_field ${subField.field_name}:`,
-            subFieldValue
-          );
           switch (subField.type) {
             case "text":
             case "email":
@@ -217,12 +261,10 @@ export default function Plan() {
               return true;
           }
         });
-        console.log("Compound field valid:", isValid);
         return isValid;
       }
 
       const fieldValue = formData[field.field_name];
-      console.log(`Checking field ${field.field_name}:`, fieldValue);
 
       // Check based on field type
       switch (field.field_type) {
@@ -311,12 +353,6 @@ export default function Plan() {
               field.field_type === "compound" &&
               field.validation_rules?.sub_fields
             ) {
-              console.log(
-                "Processing compound field:",
-                field.field_name,
-                "sub_fields:",
-                field.validation_rules.sub_fields
-              );
               return {
                 ...field,
                 sub_fields: field.validation_rules.sub_fields,

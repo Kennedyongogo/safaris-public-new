@@ -26,13 +26,16 @@ import {
   People,
   ArrowBack,
   Image as ImageIcon,
+  CheckCircle,
+  AttachMoney,
+  Visibility,
 } from "@mui/icons-material";
 
 const MotionBox = motion(Box);
 
 // Destinations are now fetched from API
 
-// Package Card Component with Image Transitions
+// Package Card Component with Image Transitions - Compact & Beautiful Design
 const PackageCard = ({ package: pkg, categoryName, onClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -54,209 +57,293 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
     <Card
       sx={{
         overflow: "hidden",
-        border: "1px solid rgba(107, 78, 61, 0.2)",
-        borderRadius: 2,
+        border: "1px solid rgba(107, 78, 61, 0.15)",
+        borderRadius: 3,
         cursor: "pointer",
-        transition: "transform 0.2s ease, boxShadow 0.2s ease",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        background: "linear-gradient(to bottom, #FFFFFF 0%, #F9F7F4 100%)",
+        boxShadow: "0 2px 8px rgba(61, 40, 23, 0.08)",
         "&:hover": {
-          transform: "translateY(-4px)",
-          boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
+          transform: "translateY(-6px)",
+          boxShadow: "0 12px 32px rgba(61, 40, 23, 0.15)",
+          borderColor: "rgba(184, 92, 56, 0.3)",
         },
       }}
       onClick={() => onClick(pkg)}
     >
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Box sx={{
-            height: { xs: "250px", md: "300px" },
-            borderRadius: 2,
-            border: "1px solid rgba(107, 78, 61, 0.2)",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-            overflow: "hidden",
-            position: "relative"
-          }}>
-            {images.length > 0 ? (
-              <>
-                {images.map((image, imgIndex) => {
-                  const isActive = imgIndex === currentImageIndex;
-                  return (
-                    <Box
-                      key={imgIndex}
-                      component="img"
-                      src={image}
-                      alt={`${pkg.title} - Image ${imgIndex + 1}`}
-                      sx={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        opacity: isActive ? 1 : 0,
-                        transition: "opacity 0.5s ease-in-out",
-                      }}
-                      onError={(e) => {
-                        console.error(`Failed to load package image: ${image}`);
-                        e.target.src = "/IMG-20251210-WA0070.jpg";
-                      }}
-                    />
-                  );
-                })}
-                {hasMultipleImages && (
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      bottom: 8,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      display: "flex",
-                      gap: 0.5,
-                      zIndex: 3,
-                    }}
-                  >
-                    {images.map((_, idx) => (
-                      <Box
-                        key={idx}
-                        sx={{
-                          width: currentImageIndex === idx ? 20 : 6,
-                          height: 6,
-                          borderRadius: "3px",
-                          backgroundColor:
-                            currentImageIndex === idx
-                              ? "white"
-                              : "rgba(255, 255, 255, 0.5)",
-                          transition: "all 0.3s ease",
-                        }}
-                      />
-                    ))}
-                  </Box>
-                )}
-              </>
-            ) : (
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#f5f5f5",
-                }}
-              >
+      {/* Image Section - Compact */}
+      <Box
+        sx={{
+          width: "100%",
+          height: { xs: "200px", sm: "220px", md: "240px" },
+          position: "relative",
+          overflow: "hidden",
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        {images.length > 0 ? (
+          <>
+            {images.map((image, imgIndex) => {
+              const isActive = imgIndex === currentImageIndex;
+              return (
                 <Box
+                  key={imgIndex}
                   component="img"
-                  src="/IMG-20251210-WA0070.jpg"
-                  alt="No images available"
+                  src={image}
+                  alt={`${pkg.title} - Image ${imgIndex + 1}`}
                   sx={{
-                    width: "80px",
-                    height: "80px",
-                    opacity: 0.5,
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    opacity: isActive ? 1 : 0,
+                    transition: "opacity 0.6s ease-in-out",
+                  }}
+                  onError={(e) => {
+                    console.error(`Failed to load package image: ${image}`);
+                    e.target.src = "/IMG-20251210-WA0070.jpg";
                   }}
                 />
-              </Box>
-            )}
-          </Box>
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <CardContent sx={{ p: { xs: 2, md: 3 } }}>
-            <Chip
-              label={`Package #${pkg.number}`}
-              size="small"
-              sx={{
-                mb: 1,
-                backgroundColor: "#B85C38",
-                color: "white",
-                fontWeight: 600,
-              }}
-            />
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 700,
-                mb: 1.5,
-                color: "#3D2817",
-                fontSize: { xs: "1.25rem", md: "1.4rem" },
-              }}
-            >
-              {pkg.title}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: "text.secondary",
-                lineHeight: 1.7,
-                fontSize: { xs: "1rem", md: "1.1rem" },
-                fontWeight: 500,
-                mb: 2,
-              }}
-            >
-              {pkg.short_description}
-            </Typography>
-            {pkg.highlights && pkg.highlights.length > 0 && (
-              <Box sx={{ mb: 2 }}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    fontWeight: 700,
-                    color: "#6B4E3D",
-                    mb: 1,
-                    fontSize: { xs: "0.95rem", md: "1rem" },
-                  }}
-                >
-                  Highlights:
-                </Typography>
-                <Box component="ul" sx={{ pl: 2, mb: 0 }}>
-                  {pkg.highlights.slice(0, 3).map((highlight, idx) => (
-                    <Typography
-                      key={idx}
-                      component="li"
-                      variant="body2"
-                      sx={{
-                        mb: 0.5,
-                        color: "text.secondary",
-                        lineHeight: 1.6,
-                        fontSize: { xs: "0.95rem", md: "1rem" },
-                        fontWeight: 500,
-                      }}
-                    >
-                      {highlight}
-                    </Typography>
-                  ))}
-                </Box>
-              </Box>
-            )}
-            {pkg.pricing_tiers && pkg.pricing_tiers.length > 0 && (
-              <Box>
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    fontWeight: 700,
-                    color: "#6B4E3D",
-                    mb: 1,
-                    fontSize: { xs: "0.95rem", md: "1rem" },
-                  }}
-                >
-                  Pricing:
-                </Typography>
-                {pkg.pricing_tiers.map((tier, idx) => (
-                  <Typography
+              );
+            })}
+            {hasMultipleImages && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  bottom: 10,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  display: "flex",
+                  gap: 0.75,
+                  zIndex: 3,
+                }}
+              >
+                {images.map((_, idx) => (
+                  <Box
                     key={idx}
-                    variant="body2"
                     sx={{
-                      mb: 0.5,
-                      color: "text.secondary",
-                      fontSize: { xs: "0.95rem", md: "1rem" },
-                      fontWeight: 600,
+                      width: currentImageIndex === idx ? 24 : 8,
+                      height: 8,
+                      borderRadius: "4px",
+                      backgroundColor:
+                        currentImageIndex === idx
+                          ? "rgba(255, 255, 255, 0.95)"
+                          : "rgba(255, 255, 255, 0.4)",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
                     }}
-                  >
-                    <strong>{tier.tier}:</strong> {tier.price_range}
-                  </Typography>
+                  />
                 ))}
               </Box>
             )}
-          </CardContent>
-        </Grid>
-      </Grid>
+            {/* Gradient overlay for better text readability */}
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "60px",
+                background: "linear-gradient(to top, rgba(0,0,0,0.3), transparent)",
+                pointerEvents: "none",
+              }}
+            />
+          </>
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#f5f5f5",
+            }}
+          >
+            <ImageIcon sx={{ fontSize: 48, color: "rgba(0,0,0,0.2)" }} />
+          </Box>
+        )}
+      </Box>
+
+      {/* Content Section - Compact */}
+      <CardContent sx={{ p: { xs: 1.5, sm: 2 }, pb: { xs: 1.5, sm: 2 } }}>
+        {/* Title */}
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 700,
+            mb: 0.75,
+            color: "#3D2817",
+            fontSize: { xs: "1.1rem", sm: "1.2rem" },
+            lineHeight: 1.3,
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {pkg.title}
+        </Typography>
+
+        {/* Description - Truncated */}
+        <Typography
+          variant="body2"
+          sx={{
+            color: "text.secondary",
+            lineHeight: 1.5,
+            fontSize: { xs: "0.875rem", sm: "0.9rem" },
+            mb: 1.5,
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            minHeight: "2.7em",
+          }}
+        >
+          {pkg.short_description}
+        </Typography>
+
+        {/* Highlights - Compact with icons */}
+        {pkg.highlights && pkg.highlights.length > 0 && (
+          <Box sx={{ mb: 1.25 }}>
+            <Box
+              component="ul"
+              sx={{
+                pl: 0,
+                mb: 0,
+                listStyle: "none",
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.5,
+              }}
+            >
+              {pkg.highlights.slice(0, 2).map((highlight, idx) => (
+                <Box
+                  key={idx}
+                  component="li"
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 0.75,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 4,
+                      height: 4,
+                      borderRadius: "50%",
+                      backgroundColor: "#B85C38",
+                      mt: 0.75,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary",
+                      lineHeight: 1.4,
+                      fontSize: { xs: "0.8rem", sm: "0.85rem" },
+                      fontWeight: 500,
+                      display: "-webkit-box",
+                      WebkitLineClamp: 1,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {highlight}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {/* Pricing - Compact */}
+        {pkg.pricing_tiers && pkg.pricing_tiers.length > 0 && (
+          <Box
+            sx={{
+              mt: "auto",
+              pt: 1,
+              borderTop: "1px solid rgba(107, 78, 61, 0.1)",
+            }}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                color: "#6B4E3D",
+                fontSize: { xs: "0.8rem", sm: "0.85rem" },
+                fontWeight: 600,
+                display: "-webkit-box",
+                WebkitLineClamp: 1,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}
+            >
+              {pkg.pricing_tiers[0]?.tier && (
+                <>
+                  <Box component="span" sx={{ color: "#B85C38", mr: 0.5 }}>
+                    From:
+                  </Box>
+                  {pkg.pricing_tiers[0].price_range}
+                </>
+              )}
+            </Typography>
+          </Box>
+        )}
+
+        {/* View Details Hint */}
+        <Box
+          sx={{
+            mt: 1.25,
+            pt: 1.25,
+            borderTop: "1px solid rgba(107, 78, 61, 0.1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              color: "#B85C38",
+              fontSize: { xs: "0.75rem", sm: "0.8rem" },
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+            }}
+          >
+            View Details
+          </Typography>
+          <Box
+            sx={{
+              width: 20,
+              height: 20,
+              borderRadius: "50%",
+              backgroundColor: "#B85C38",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "transform 0.3s ease",
+              "&:hover": {
+                transform: "scale(1.1)",
+              },
+            }}
+          >
+            <Box
+              sx={{
+                width: 0,
+                height: 0,
+                borderLeft: "6px solid white",
+                borderTop: "4px solid transparent",
+                borderBottom: "4px solid transparent",
+                ml: 0.5,
+              }}
+            />
+          </Box>
+        </Box>
+      </CardContent>
     </Card>
   );
 };
@@ -746,23 +833,23 @@ export default function DestinationDetails() {
                   {destination.packages
                     .sort((a, b) => (a.category_order || 0) - (b.category_order || 0))
                     .map((category, catIndex) => (
-                      <Box key={catIndex} sx={{ mb: 4 }}>
+                      <Box key={catIndex} sx={{ mb: { xs: 3, md: 3.5 } }}>
                         <Typography
                           variant="h5"
                           sx={{
                             fontWeight: 700,
-                            mb: 2,
+                            mb: 1.5,
                             color: "#6B4E3D",
-                            fontSize: { xs: "1.3rem", md: "1.5rem" },
+                            fontSize: { xs: "1.25rem", md: "1.4rem" },
                             borderBottom: "2px solid #B85C38",
-                            pb: 1,
+                            pb: 0.75,
                           }}
                         >
                           {category.category_name}
                         </Typography>
-                        <Grid container spacing={3}>
+                        <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
                           {category.packages.map((pkg, pkgIndex) => (
-                            <Grid size={{ xs: 12 }} key={pkgIndex}>
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={pkgIndex}>
                               <PackageCard
                                 package={pkg}
                                 categoryName={category.category_name}
@@ -855,16 +942,6 @@ export default function DestinationDetails() {
                 borderBottom: "1px solid rgba(107, 78, 61, 0.1)",
               }}
             >
-              <Chip
-                label={`Package #${selectedPackage.number}`}
-                size="small"
-                sx={{
-                  mb: 1,
-                  backgroundColor: "#B85C38",
-                  color: "white",
-                  fontWeight: 600,
-                }}
-              />
               <Typography
                 variant="h5"
                 sx={{

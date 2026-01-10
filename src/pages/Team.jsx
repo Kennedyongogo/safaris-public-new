@@ -769,178 +769,157 @@ export default function Team() {
                     display: "flex",
                     flexDirection: "column",
                     overflow: "hidden",
+                    borderRadius: 4,
                     transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    "&:hover": {
-                      transform: "translateY(-8px)",
-                      boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
-                    },
+                    background: "linear-gradient(to bottom, #FFFFFF 0%, #F9F7F4 100%)",
+                    border: "1px solid rgba(107, 78, 61, 0.15)",
                     boxShadow:
                       highlightId && String(highlightId) === String(member.id)
                         ? "0 0 0 3px rgba(184, 92, 56, 0.6), 0 12px 40px rgba(184, 92, 56, 0.25)"
-                        : undefined,
-                    background:
-                      highlightId && String(highlightId) === String(member.id)
-                        ? "linear-gradient(180deg, rgba(184, 92, 56, 0.08) 0%, rgba(255,255,255,1) 60%)"
-                        : "transparent",
+                        : "0 2px 8px rgba(61, 40, 23, 0.08)",
+                    "&:hover": {
+                      transform: "translateY(-8px)",
+                      boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+                      borderColor: "rgba(184, 92, 56, 0.3)",
+                    },
                     transition:
                       "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease",
                   }}
                 >
-                  {/* Profile Image */}
+                  {/* Card Content */}
                   <Box
                     sx={{
-                      width: "100%",
-                      height: { xs: "240px", sm: "280px", md: "320px" },
-                      overflow: "hidden",
-                      backgroundColor: "#f5f5f5",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      position: "relative",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {member.image ? (
-                      <Box
-                        component="img"
-                        src={member.image}
-                        alt={member.name}
-                        sx={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          objectPosition: "center 30%",
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                          if (e.target.nextSibling) {
-                            e.target.nextSibling.style.display = "flex";
-                          }
-                        }}
-                      />
-                    ) : null}
-                    <Box
-                      sx={{
-                        display: member.image ? "none" : "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: "100%",
-                        height: "100%",
-                        color: "#999",
-                      }}
-                    >
-                      <PersonIcon sx={{ fontSize: "4rem", mb: 1 }} />
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          fontSize: "0.9rem",
-                          textAlign: "center",
-                          fontWeight: 600,
-                        }}
-                      >
-                        No Photo
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  {/* Card Content - Purple/Lavender Background */}
-                  <Box
-                    sx={{
-                      backgroundColor: "#F5F1E8", // Light beige from palette
-                      p: { xs: 2, sm: 2.5, md: 3 },
+                      p: { xs: 2, sm: 2.5, md: 2.5 },
                       flexGrow: 1,
                       display: "flex",
                       flexDirection: "column",
+                      alignItems: "center",
                       justifyContent: "space-between",
+                      textAlign: "center",
                     }}
                   >
-                    {/* Top Section - Role, Name, Description */}
-                    <Box>
-                      {/* Role Label */}
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontSize: { xs: "0.875rem", md: "0.9375rem" },
-                          color: "text.primary",
-                          mb: 0.5,
-                        }}
-                      >
-                        {member.role}
-                      </Typography>
-
-                      {/* Name */}
-                      <Typography
-                        variant="h5"
-                        sx={{
-                          fontWeight: 700,
-                          mb: 1.5,
-                          color: "text.primary",
-                          fontSize: { xs: "1.25rem", md: "1.5rem" },
-                        }}
-                      >
-                        {member.name}
-                      </Typography>
-
-                      {/* Description */}
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "text.secondary",
-                          fontSize: { xs: "0.875rem", md: "0.9375rem" },
-                          lineHeight: 1.6,
-                          mb: 2,
-                          overflow: "hidden",
-                          display: "-webkit-box",
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: "vertical",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {member.description}
-                      </Typography>
-                    </Box>
-
-                    {/* Bottom Section - Social Icons and Button */}
+                    {/* Circular Profile Image */}
                     <Box
                       sx={{
+                        width: { xs: "120px", sm: "140px", md: "150px" },
+                        height: { xs: "120px", sm: "140px", md: "150px" },
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        backgroundColor: "#f5f5f5",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "flex-end",
-                        mt: "auto",
+                        justifyContent: "center",
+                        position: "relative",
+                        mb: 2,
+                        border: "3px solid rgba(184, 92, 56, 0.2)",
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          borderColor: "rgba(184, 92, 56, 0.4)",
+                          boxShadow: "0 6px 30px rgba(184, 92, 56, 0.2)",
+                          transform: "scale(1.05)",
+                        },
                       }}
                     >
-                      {/* More About Button */}
-                      <Button
-                        variant="contained"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/team/${member.id}`);
-                        }}
+                      {member.image ? (
+                        <Box
+                          component="img"
+                          src={member.image}
+                          alt={member.name}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            objectPosition: "center",
+                          }}
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            if (e.target.nextSibling) {
+                              e.target.nextSibling.style.display = "flex";
+                            }
+                          }}
+                        />
+                      ) : null}
+                      <Box
                         sx={{
-                          backgroundColor: "#B85C38", // Burnt orange/rust
-                          color: "#fff",
-                          borderRadius: 2,
-                          px: 2,
-                          py: 0.75,
-                          fontSize: { xs: "0.75rem", md: "0.875rem" },
-                          textTransform: "none",
-                          fontWeight: 500,
-                          "&:hover": {
-                            backgroundColor: "#8B4225", // Dark rust
-                          },
-                          "&:focus": {
-                            outline: "none",
-                          },
-                          "&:focus-visible": {
-                            outline: "none",
-                            boxShadow: "none",
-                          },
+                          display: member.image ? "none" : "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "100%",
+                          height: "100%",
+                          color: "#999",
                         }}
                       >
-                        More about {member.name.split(" ")[0]}
-                      </Button>
+                        <PersonIcon sx={{ fontSize: "4rem" }} />
+                      </Box>
                     </Box>
+
+                    {/* Role Label */}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: { xs: "0.8rem", md: "0.875rem" },
+                        color: "#B85C38",
+                        mb: 0.5,
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      {member.role}
+                    </Typography>
+
+                    {/* Name */}
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: 700,
+                        mb: 2,
+                        color: "#3D2817",
+                        fontSize: { xs: "1.1rem", md: "1.25rem" },
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {member.name}
+                    </Typography>
+
+                    {/* More About Button */}
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/team/${member.id}`);
+                      }}
+                      sx={{
+                        backgroundColor: "#B85C38",
+                        color: "#fff",
+                        borderRadius: 2,
+                        px: 2,
+                        py: 0.75,
+                        fontSize: { xs: "0.8rem", md: "0.875rem" },
+                        textTransform: "none",
+                        fontWeight: 600,
+                        mt: "auto",
+                        boxShadow: "0 4px 12px rgba(184, 92, 56, 0.3)",
+                        "&:hover": {
+                          backgroundColor: "#8B4225",
+                          boxShadow: "0 6px 20px rgba(184, 92, 56, 0.4)",
+                          transform: "translateY(-2px)",
+                        },
+                        transition: "all 0.3s ease",
+                        "&:focus": {
+                          outline: "none",
+                        },
+                        "&:focus-visible": {
+                          outline: "none",
+                          boxShadow: "none",
+                        },
+                      }}
+                    >
+                      Learn More
+                    </Button>
                   </Box>
                 </Card>
               </Grid>

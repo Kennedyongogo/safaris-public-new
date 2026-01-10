@@ -7,6 +7,7 @@ import {
   Alert,
   Button,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import {
@@ -83,72 +84,119 @@ export default function TeamMemberDetail() {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 2 }}>
-        <Typography variant="body1" sx={{ mb: 1.5, color: "text.secondary" }}>
-          Loading team member...
-        </Typography>
-        <Button variant="outlined" onClick={handleBack}>
-          <ArrowBack sx={{ mr: 1 }} />
-          Back to Team
-        </Button>
-      </Container>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "60vh",
+          bgcolor: "#F5F1E8", // Light beige from palette
+          background:
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          position: "relative",
+          overflow: "hidden",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+            zIndex: 0,
+          },
+        }}
+      >
+        <Box sx={{ position: "relative", zIndex: 1 }}>
+          <CircularProgress sx={{ color: "#B85C38" }} />
+        </Box>
+      </Box>
     );
   }
 
   if (error || !member) {
     return (
-      <Container maxWidth="lg" sx={{ py: 2 }}>
-        <Alert severity="error" sx={{ mb: 1.5 }}>
-          {error || "Team member not found"}
-        </Alert>
-        <Button variant="outlined" onClick={handleBack}>
-          <ArrowBack sx={{ mr: 1 }} />
-          Back to Team
-        </Button>
-      </Container>
+      <Box
+        sx={{
+          pt: 0.75,
+          pb: 0.75,
+          px: 0,
+          bgcolor: "#F5F1E8", // Light beige from palette
+          background:
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          position: "relative",
+          overflow: "hidden",
+          minHeight: "auto",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+            zIndex: 0,
+          },
+        }}
+      >
+        <Container
+          maxWidth="xl"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+            px: { xs: 1.5, sm: 1.5, md: 1.5 },
+            pt: { xs: 0.375, sm: 0.375, md: 0.375 },
+            py: 2,
+          }}
+        >
+          <Alert severity="error" sx={{ mb: 1.5 }}>
+            {error || "Team member not found"}
+          </Alert>
+          <Button variant="outlined" onClick={handleBack}>
+            <ArrowBack sx={{ mr: 1 }} />
+            Back to Team
+          </Button>
+        </Container>
+      </Box>
     );
   }
 
   return (
-    <>
-      {/* Global background styles */}
-      <style>
-        {`
-          * {
-            box-sizing: border-box;
-          }
-          html {
-            height: 100%;
-            overflow-y: scroll;
-            scroll-behavior: smooth;
-          }
-          html, body, #root {
-            background: #f8f9fa !important;
-            margin: 0 !important;
-            padding: 0 !important;
-          }
-          body {
-            min-height: 100%;
-            overflow-x: hidden;
-          }
-          #root {
-            min-height: 100vh;
-          }
-        `}
-      </style>
-      
-      <Box 
-        sx={{ 
-          pt: 0.75,
-          pb: 0.75,
-          px: 0,
-          minHeight: "auto", 
-          position: "relative",
-          zIndex: 1,
-          background: "transparent",
-        }}
-      >
-        <Container maxWidth="xl" sx={{ pt: { xs: 0.375, sm: 0.375, md: 0.375 }, px: { xs: 1.5, sm: 1.5, md: 1.5 }, position: "relative", zIndex: 1 }}>
+    <Box 
+      sx={{ 
+        pt: 0.75,
+        pb: 0.75,
+        px: 0,
+        bgcolor: "#F5F1E8", // Light beige from palette
+        background:
+          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+        position: "relative",
+        overflow: "hidden",
+        minHeight: "auto",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background:
+            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+          zIndex: 0,
+        },
+      }}
+    >
+        <Container 
+          maxWidth="xl" 
+          sx={{ 
+            position: "relative",
+            zIndex: 1,
+            px: { xs: 1.5, sm: 1.5, md: 1.5 },
+            pt: { xs: 0.375, sm: 0.375, md: 0.375 },
+          }}
+        >
           <MotionBox
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -453,6 +501,5 @@ export default function TeamMemberDetail() {
           </MotionBox>
         </Container>
       </Box>
-    </>
   );
 }

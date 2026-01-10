@@ -115,7 +115,7 @@ const DestinationCard = ({ destination, isMobile }) => {
     <Box
       sx={{
         position: "relative",
-        height: isMobile ? "200px" : "240px",
+        height: isMobile ? "180px" : "200px",
         width: "100%",
         overflow: "hidden",
         backgroundColor: "#f5f5f5",
@@ -770,20 +770,21 @@ export default function ServicesSection() {
                           <CardContent
                             sx={{
                               flexGrow: 1,
-                              p: { xs: 2, sm: 2.5 },
+                              p: { xs: 1.25, sm: 1.5 },
                               display: "flex",
                               flexDirection: "column",
                             }}
                           >
-                            <Box sx={{ mb: 1.5 }}>
+                            <Box sx={{ mb: 1 }}>
                               <Typography
                                 variant="h6"
                                 component="h3"
                                 sx={{
                                   fontWeight: 700,
-                                  mb: 1,
+                                  mb: 0.5,
                                   color: "text.primary",
-                                  fontSize: { xs: "1.2rem", sm: "1.35rem" },
+                                  fontSize: { xs: "1.15rem", sm: "1.3rem" },
+                                  lineHeight: 1.2,
                                 }}
                               >
                                 {destination.title}
@@ -809,38 +810,38 @@ export default function ServicesSection() {
                               variant="body2"
                               color="text.secondary"
                               sx={{
-                                mb: 1.5,
+                                mb: 1,
                                 overflow: "hidden",
                                 display: "-webkit-box",
                                 WebkitLineClamp: 2,
                                 WebkitBoxOrient: "vertical",
-                                lineHeight: 1.5,
-                                fontSize: { xs: "0.95rem", sm: "1.05rem" },
+                                lineHeight: 1.4,
+                                fontSize: { xs: "0.9rem", sm: "1rem" },
                                 fontWeight: 600,
                               }}
                             >
                               {destination.description}
                             </Typography>
 
-                            <Box sx={{ mb: 1.5 }}>
+                            <Box sx={{ mb: 1 }}>
                               <Box
                                 sx={{
                                   display: "flex",
                                   alignItems: "center",
-                                  gap: 0.75,
-                                  mb: 0.75,
+                                  gap: 0.5,
+                                  mb: 0.5,
                                 }}
                               >
                                 <LocationOn
                                   sx={{
-                                    fontSize: { xs: 14, sm: 16 },
+                                    fontSize: { xs: 14, sm: 15 },
                                     color: "#5D4037",
                                   }}
                                 />
                                 <Typography
                                   variant="body2"
                                   sx={{
-                                    fontSize: { xs: "0.9rem", sm: "0.95rem" },
+                                    fontSize: { xs: "0.875rem", sm: "0.95rem" },
                                     color: "text.secondary",
                                     fontWeight: 600,
                                   }}
@@ -852,19 +853,19 @@ export default function ServicesSection() {
                                 sx={{
                                   display: "flex",
                                   alignItems: "center",
-                                  gap: 0.75,
+                                  gap: 0.5,
                                 }}
                               >
                                 <Schedule
                                   sx={{
-                                    fontSize: { xs: 14, sm: 16 },
+                                    fontSize: { xs: 14, sm: 15 },
                                     color: "#5D4037",
                                   }}
                                 />
                                 <Typography
                                   variant="body2"
                                   sx={{
-                                    fontSize: { xs: "0.9rem", sm: "0.95rem" },
+                                    fontSize: { xs: "0.875rem", sm: "0.95rem" },
                                     color: "text.secondary",
                                     fontWeight: 600,
                                   }}
@@ -876,14 +877,14 @@ export default function ServicesSection() {
                               </Box>
                             </Box>
 
-                            <Box sx={{ mb: 2, flexGrow: 1 }}>
+                            <Box sx={{ mb: 1.25, flexGrow: 1 }}>
                               <Typography
                                 variant="caption"
                                 sx={{
                                   fontSize: "0.85rem",
                                   fontWeight: 700,
                                   color: "#5D4037",
-                                  mb: 0.5,
+                                  mb: 0.4,
                                   display: "block",
                                 }}
                               >
@@ -893,7 +894,7 @@ export default function ServicesSection() {
                                 sx={{
                                   display: "flex",
                                   flexWrap: "wrap",
-                                  gap: 0.5,
+                                  gap: 0.4,
                                 }}
                               >
                                 {destination.highlights.slice(0, 3).map((highlight, idx) => (
@@ -903,7 +904,7 @@ export default function ServicesSection() {
                                     size="small"
                                     sx={{
                                       fontSize: "0.8rem",
-                                      height: "22px",
+                                      height: "20px",
                                       backgroundColor: "#f5f5f5",
                                       color: "#5D4037",
                                       fontWeight: 700,
@@ -929,9 +930,9 @@ export default function ServicesSection() {
                                 sx={{
                                   borderColor: "#5D4037",
                                   color: "#5D4037",
-                                  fontSize: "0.95rem",
+                                  fontSize: "0.9rem",
                                   fontWeight: 700,
-                                  py: 0.75,
+                                  py: 0.5,
                                   outline: "none",
                                   "&:focus": {
                                     outline: "none",
