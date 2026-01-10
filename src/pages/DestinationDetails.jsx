@@ -142,7 +142,7 @@ const CategoryCard = ({ category, onClick }) => {
             fontWeight: 700,
             mb: 1,
             color: "#3D2817",
-            fontSize: { xs: "0.9rem", sm: "1.35rem", md: "1.5rem" },
+            fontSize: { xs: "0.7rem", sm: "0.85rem", md: "0.95rem" },
             lineHeight: 1.2,
             whiteSpace: "nowrap",
             overflow: "hidden",

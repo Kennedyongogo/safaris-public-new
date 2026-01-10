@@ -467,6 +467,7 @@ export default function HeroSection() {
                 color: "#E8E0D1", // Light beige for better contrast
                 px: { xs: 0, sm: 0 },
                 letterSpacing: "0.02em",
+                textTransform: "uppercase",
               }}
             >
               Endless Discovery
