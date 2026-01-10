@@ -57,7 +57,7 @@ export default function PublicHeader() {
         color: "#6B4E3D", // Medium brown
       },
       {
-        label: "About Us",
+        label: "About Akira",
         icon: <Groups />,
         route: "/team",
         color: "#B85C38", // Burnt orange/rust
@@ -499,7 +499,8 @@ export default function PublicHeader() {
                         ? "transparent" // Will use gradient
                         : "#000000", // Black when inside header
                       lineHeight: 1.1,
-                      transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                      // Exclude fontSize from transition to prevent visible resize - fontSize changes instantly
+                      transition: "color 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s cubic-bezier(0.4, 0, 0.2, 1), textShadow 0.5s cubic-bezier(0.4, 0, 0.2, 1), letterSpacing 0.5s cubic-bezier(0.4, 0, 0.2, 1), fontWeight 0.3s ease",
                       textShadow: isHeaderTransparent && isHeaderVisible
                         ? "4px 4px 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4), 0 0 60px rgba(224, 216, 192, 0.3)"
                         : "none",
