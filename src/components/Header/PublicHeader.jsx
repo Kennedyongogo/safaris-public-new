@@ -40,15 +40,19 @@ export default function PublicHeader() {
   const navigate = useNavigate();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(false); // Start with background, only transparent when explicitly at top
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero-section");
   const [isNavigating, setIsNavigating] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [hasScrolled, setHasScrolled] = useState(false); // Track if user has scrolled at least once
+  const [isHeroVisible, setIsHeroVisible] = useState(false); // Track if hero section is visible
 
   const navItems = useMemo(
     () => [
       {
-        label: "Home",
-        icon: <Home />,
+        label: "Explore",
+        icon: <Explore />,
         sectionId: "hero-section",
         color: "#6B4E3D", // Medium brown
       },
@@ -59,28 +63,10 @@ export default function PublicHeader() {
         color: "#B85C38", // Burnt orange/rust
       },
       {
-        label: "Itineraries",
-        icon: <Explore />,
-        route: "/tour",
-        color: "#B85C38", // Burnt orange/rust
-      },
-      {
         label: "Agent Partnership",
         icon: <BusinessCenter />,
         route: "/agent-program",
         color: "#6B7D47", // Olive green
-      },
-      {
-        label: "Inquire",
-        icon: <LocalHospital />,
-        route: "/plan",
-        color: "#B85C38", // Burnt orange/rust
-      },
-      {
-        label: "Reviews",
-        icon: <RateReview />,
-        route: "/reviews",
-        color: "#2D4A2D", // Dark forest green
       },
       {
         label: "Blog",
@@ -95,17 +81,80 @@ export default function PublicHeader() {
   // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
+    setIsHeaderVisible(true);
+  }, [location.pathname]);
+
+  // Listen to hero section visibility events from HeroSection component
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      setIsHeroVisible(false);
+      setIsAtTop(false);
+      return;
+    }
+
+    const handleHeroVisibility = (event) => {
+      const { isVisible, scrollY } = event.detail;
+      setIsHeroVisible(isVisible);
+      setIsAtTop(isVisible);
+      
+      console.log('📡 Header received hero visibility event:', {
+        isVisible,
+        scrollY,
+        isAtTop: isVisible
+      });
+    };
+
+    window.addEventListener('heroVisibilityChange', handleHeroVisibility);
+
+    // Set initial state
+    setIsHeroVisible(false);
+    setIsAtTop(false);
+
+    return () => {
+      window.removeEventListener('heroVisibilityChange', handleHeroVisibility);
+    };
   }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const scrollY = window.scrollY;
+      const newScrolled = scrollY > 0;
+      
+      // Track if user has scrolled at least once
+      if (scrollY > 0 && !hasScrolled) {
+        setHasScrolled(true);
+      }
+      
+      // Update scrolled state
+      setScrolled(newScrolled);
+      
+      // Update isAtTop based on hero visibility and scroll position
+      if (location.pathname === "/") {
+        const isAtVeryTop = scrollY <= 20;
+        const newIsAtTop = isHeroVisible && isAtVeryTop;
+        setIsAtTop(newIsAtTop);
+        
+        console.log('🔍 Scroll Debug:', {
+          scrollY,
+          newScrolled,
+          isHeroVisible,
+          isAtVeryTop,
+          newIsAtTop,
+          hasScrolled,
+          location: location.pathname
+        });
+      }
 
       // Don't update active section if we're currently navigating (clicked a nav item)
       if (isNavigating) return;
 
       // Detect active section based on scroll position
       if (location.pathname === "/") {
+        // Header disappears as soon as user starts scrolling down on homepage
+        // Show header only when at the very top (with small threshold)
+        const isAtTop = window.scrollY < 50;
+        setIsHeaderVisible(isAtTop);
+
         // Get all sections in the order they appear on the page (exclude items with routes)
         const sectionIds = navItems
           .filter((item) => !item.route && item.sectionId)
@@ -145,15 +194,39 @@ export default function PublicHeader() {
       } else if (location.pathname === "/destinations") {
         // Set Destinations as active when on destinations page
         setActiveSection("mission-section");
+        setIsHeaderVisible(true); // Always visible on other pages
+      } else {
+        setIsHeaderVisible(true); // Always visible on other pages
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     handleScroll(); // Check on mount
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [location.pathname, navItems, isNavigating]);
+  }, [location.pathname, navItems, isNavigating, hasScrolled, isHeroVisible]);
 
   const isActive = (path) => location.pathname === path;
+
+  // Split nav items for centered layout on home page
+  const isHomePage = location.pathname === "/";
+  const leftNavItems = isHomePage ? navItems.slice(0, Math.floor(navItems.length / 2)) : [];
+  const rightNavItems = isHomePage ? navItems.slice(Math.floor(navItems.length / 2)) : navItems;
+  
+  // Check if header is transparent (only on home page when at absolute top)
+  const isHeaderTransparent = isHomePage && isAtTop;
+  
+  // Debug logging for font size conditions
+  useEffect(() => {
+    console.log('📊 Header State Debug:', {
+      isHomePage,
+      isAtTop,
+      isHeaderTransparent,
+      isHeaderVisible,
+      scrolled,
+      shouldBeLarge: isHeaderTransparent && isHeaderVisible,
+      location: location.pathname
+    });
+  }, [isHomePage, isAtTop, isHeaderTransparent, isHeaderVisible, scrolled, location.pathname]);
 
   const handleNavigateToSection = (item) => {
     setMobileMenuOpen(false);
@@ -205,17 +278,23 @@ export default function PublicHeader() {
         position="fixed"
         elevation={0}
         sx={{
-          backgroundColor: scrolled
-            ? "rgba(245, 241, 232, 0.95)" // Light beige with transparency when scrolled
-            : location.pathname === "/" ? "transparent" : "rgba(245, 241, 232, 0.95)", // Transparent only on home hero section
-          backdropFilter: scrolled || location.pathname !== "/" ? "blur(20px)" : "none",
-          boxShadow: scrolled || location.pathname !== "/"
-            ? "0 8px 32px rgba(61, 40, 23, 0.12)"
-            : "none",
+          backgroundColor: (location.pathname === "/" && isAtTop)
+            ? "transparent" // Transparent only when at absolute top on home page
+            : "rgba(245, 241, 232, 0.95)", // Light beige with transparency otherwise
+          backdropFilter: (location.pathname === "/" && isAtTop) ? "none" : "blur(20px)",
+          boxShadow: (location.pathname === "/" && isAtTop)
+            ? "none"
+            : "0 8px 32px rgba(61, 40, 23, 0.12)",
           transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-          borderBottom: scrolled || location.pathname !== "/"
-            ? "1px solid rgba(107, 78, 61, 0.2)"
-            : "none",
+          borderBottom: (location.pathname === "/" && isAtTop)
+            ? "none"
+            : "1px solid rgba(107, 78, 61, 0.2)",
+          // Hide header when scrolling past hero section on home page
+          transform: location.pathname === "/" && !isHeaderVisible 
+            ? "translateY(-100%)" 
+            : "translateY(0)",
+          opacity: location.pathname === "/" && !isHeaderVisible ? 0 : 1,
+          pointerEvents: location.pathname === "/" && !isHeaderVisible ? "none" : "auto",
         }}
       >
         <Toolbar sx={{ px: { xs: 1, sm: 1.5, md: 2 }, py: 1 }}>
@@ -223,11 +302,140 @@ export default function PublicHeader() {
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "flex-start",
               width: "100%",
+              justifyContent: isHomePage ? "space-between" : "flex-start",
+              position: "relative",
             }}
           >
-            {/* Enhanced Logo Section */}
+            {/* Left Navigation Items (only on home page, large screens) */}
+            {isHomePage && (
+              <Box
+                sx={{
+                  display: { xs: "none", md: "flex" },
+                  gap: 1,
+                  alignItems: "center",
+                  flex: isHeaderTransparent && isHeaderVisible ? "0 0 auto" : 1,
+                  justifyContent: "flex-start",
+                  maxWidth: isHeaderTransparent && isHeaderVisible ? "auto" : "none",
+                }}
+              >
+                {leftNavItems.map((item, index) => {
+                  const isActiveItem =
+                    item.route
+                      ? location.pathname === item.route
+                      : activeSection === item.sectionId && location.pathname === "/";
+                  return (
+                    <Slide
+                      direction="down"
+                      in={true}
+                      timeout={800 + index * 200}
+                      key={item.label}
+                    >
+                      <Button
+                        onClick={() => handleNavigateToSection(item)}
+                        startIcon={item.icon}
+                        disableRipple
+                        sx={{
+                          color: isActiveItem
+                            ? item.color
+                            : (scrolled || location.pathname !== "/")
+                              ? "text.primary"
+                              : "white",
+                          fontSize: {
+                            md: "0.875rem",
+                            lg: "0.925rem",
+                            xl: "0.975rem",
+                          },
+                          fontWeight: isActiveItem ? 700 : 600,
+                          px: { md: 2, lg: 1.5, xl: 2 },
+                          py: { md: 1.2, lg: 1, xl: 1.2 },
+                          borderRadius: "25px",
+                          textTransform: "uppercase",
+                          transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                          position: "relative",
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                          backgroundColor: isActiveItem
+                            ? (scrolled || location.pathname !== "/")
+                              ? `${item.color}20`
+                              : `${item.color}30`
+                            : "transparent",
+                          "&:focus": {
+                            outline: "none",
+                            backgroundColor: isActiveItem
+                              ? (scrolled || location.pathname !== "/")
+                                ? `${item.color}20`
+                                : `${item.color}30`
+                              : "transparent",
+                          },
+                          "&:focus-visible": {
+                            outline: "none",
+                          },
+                          "& .MuiButton-startIcon": {
+                            marginRight: { md: 1, lg: 0.75, xl: 1 },
+                            "& > *:nth-of-type(1)": {
+                              fontSize: {
+                                md: "1.1rem",
+                                lg: "1rem",
+                                xl: "1.1rem",
+                              },
+                              color: isActiveItem ? item.color : "inherit",
+                            },
+                          },
+                          "&:hover": {
+                            backgroundColor: "transparent",
+                            transform: "none",
+                            boxShadow: "none",
+                            "& .icon": {
+                              color: item.color,
+                            },
+                          },
+                          "&:hover::after": !isActiveItem
+                            ? {
+                                content: '""',
+                                position: "absolute",
+                                bottom: 0,
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                width: "60%",
+                                height: "3px",
+                                backgroundColor: item.color,
+                                borderRadius: "2px 2px 0 0",
+                                transition: "all 0.3s ease-out",
+                              }
+                            : {},
+                          "&::after": isActiveItem
+                            ? {
+                                content: '""',
+                                position: "absolute",
+                                bottom: 0,
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                width: "60%",
+                                height: "3px",
+                                backgroundColor: item.color,
+                                borderRadius: "2px 2px 0 0",
+                              }
+                            : {},
+                          "& .icon": {
+                            transition: "all 0.4s ease",
+                            color: isActiveItem
+                              ? item.color
+                              : (scrolled || location.pathname !== "/")
+                                ? item.color
+                                : "white",
+                          },
+                        }}
+                      >
+                        {item.label}
+                      </Button>
+                    </Slide>
+                  );
+                })}
+              </Box>
+            )}
+
+            {/* Enhanced Logo Section - Centered on home page, left-aligned on other pages */}
             <Fade in={true} timeout={1000}>
               <Box
                 sx={{
@@ -236,46 +444,77 @@ export default function PublicHeader() {
                   cursor: "pointer",
                   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
-                    transform: "scale(1.05) translateY(-2px)",
+                    transform: isHeaderTransparent && isHeaderVisible
+                      ? "translateX(-50%) translateY(40px) scale(1.05)" 
+                      : "scale(1.05) translateY(-2px)",
                   },
+                  position: isHomePage ? "absolute" : "relative",
+                  left: isHomePage ? "50%" : "auto",
+                  transform: isHomePage 
+                    ? isHeaderTransparent && isHeaderVisible
+                      ? "translateX(-50%) translateY(40px)" 
+                      : "translateX(-50%)"
+                    : "none",
+                  zIndex: isHeaderTransparent && isHeaderVisible ? 1000 : 2, // Higher z-index to float over hero
+                  mb: isHeaderTransparent && isHeaderVisible ? { xs: -2, md: -4 } : 0, // Extend into hero section
+                  animation: isHeaderTransparent && isHeaderVisible ? "floatHeader 3s ease-in-out infinite" : "none",
                 }}
                 onClick={() => navigate("/")}
               >
-                <img
-                  src="/images/WhatsApp_Image_2025-12-14_at_10.56.47_AM-removebg-preview%20(1).png"
-                  alt="Akira Safaris Logo"
-                  style={{
-                    height: (scrolled || location.pathname !== "/") ? "64px" : "72px",
-                    maxHeight: "72px",
-                    width: "auto",
-                    transition: "all 0.4s ease",
-                    filter: (scrolled || location.pathname !== "/")
-                      ? "none"
-                      : "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
-                  }}
-                />
+                {!isHomePage && (
+                  <img
+                    src="/images/WhatsApp_Image_2025-12-14_at_10.56.47_AM-removebg-preview%20(1).png"
+                    alt="Akira Safaris Logo"
+                    style={{
+                      height: (scrolled || location.pathname !== "/") ? "64px" : "72px",
+                      maxHeight: "72px",
+                      width: "auto",
+                      transition: "all 0.4s ease",
+                      filter: (scrolled || location.pathname !== "/")
+                        ? "none"
+                        : "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
+                    }}
+                  />
+                )}
                 <Box
                   sx={{
-                    ml: { xs: 1.5, sm: 2 },
+                    ml: isHomePage ? 0 : { xs: 1.5, sm: 2 },
                     display: { xs: "block", sm: "block" },
                   }}
                 >
                   <Typography
                     sx={{
-                      fontWeight: "700",
-                      fontSize: { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
-                      color: (scrolled || location.pathname !== "/") ? "primary.main" : "white",
-                      lineHeight: 1.2,
-                      transition: "all 0.3s ease",
-                      textShadow: (scrolled || location.pathname !== "/")
-                        ? "none"
-                        : "2px 2px 4px rgba(0,0,0,0.3)",
-                      background: (scrolled || location.pathname !== "/")
-                        ? "linear-gradient(45deg, #6B4E3D, #3D2817)" // Medium to dark brown
-                        : "linear-gradient(45deg, #ffffff, #F5F1E8)", // White to light beige
-                      backgroundClip: "text",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
+                      fontWeight: isHeaderTransparent && isHeaderVisible ? 900 : 700,
+                      fontSize: isHeaderTransparent && isHeaderVisible
+                        ? {
+                            xs: "1.2rem", // Reduced for small screens to fit in one row
+                            sm: "2rem",
+                            md: "3rem",
+                            lg: "3.6rem",
+                            xl: "4.2rem",
+                          }
+                        : { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
+                      // Black when header has background, gradient when transparent/floating
+                      color: isHeaderTransparent && isHeaderVisible 
+                        ? "transparent" // Will use gradient
+                        : "#000000", // Black when inside header
+                      lineHeight: 1.1,
+                      transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                      textShadow: isHeaderTransparent && isHeaderVisible
+                        ? "4px 4px 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4), 0 0 60px rgba(224, 216, 192, 0.3)"
+                        : "none",
+                      // Only use gradient when transparent/floating, otherwise solid black
+                      background: isHeaderTransparent && isHeaderVisible
+                        ? "linear-gradient(135deg, #E0D8C0 0%, #F5F1E8 20%, #ffffff 40%, #F5F1E8 60%, #7B8D57 80%, #6B7D47 100%)"
+                        : "none",
+                      backgroundClip: isHeaderTransparent && isHeaderVisible ? "text" : "unset",
+                      WebkitBackgroundClip: isHeaderTransparent && isHeaderVisible ? "text" : "unset",
+                      WebkitTextFillColor: isHeaderTransparent && isHeaderVisible ? "transparent" : "#000000",
+                      letterSpacing: isHeaderTransparent && isHeaderVisible
+                        ? { xs: "0.02em", sm: "0.05em", md: "0.08em", lg: "0.1em" } 
+                        : "0.02em",
+                      textTransform: "uppercase",
+                      whiteSpace: "nowrap", // Prevent text wrapping
                     }}
                   >
                     AKIRA SAFARIS
@@ -284,25 +523,30 @@ export default function PublicHeader() {
               </Box>
             </Fade>
 
-            {/* Enhanced Desktop Navigation */}
+            {/* Right Navigation Items */}
             <Box
               sx={{
                 display: { xs: "none", md: "flex" },
                 gap: 1,
                 alignItems: "center",
-                marginLeft: "auto",
+                flex: isHeaderTransparent && isHeaderVisible ? "0 0 auto" : 1,
+                justifyContent: isHomePage ? "flex-end" : "flex-end",
+                marginLeft: isHomePage ? 0 : "auto",
+                maxWidth: isHeaderTransparent && isHeaderVisible ? "auto" : "none",
               }}
             >
-              {navItems.map((item, index) => {
+              {rightNavItems.map((item, index) => {
                 const isActiveItem =
                   item.route
                     ? location.pathname === item.route
                     : activeSection === item.sectionId && location.pathname === "/";
+                // Adjust timeout to account for left nav items on home page
+                const adjustedIndex = isHomePage ? leftNavItems.length + index : index;
                 return (
                   <Slide
                     direction="down"
                     in={true}
-                    timeout={800 + index * 200}
+                    timeout={800 + adjustedIndex * 200}
                     key={item.label}
                   >
                     <Button
@@ -611,6 +855,19 @@ export default function PublicHeader() {
           transition: "height 0.4s ease",
         }}
       />
+
+      <style>
+        {`
+          @keyframes floatHeader {
+            0%, 100% {
+              transform: translateX(-50%) translateY(40px);
+            }
+            50% {
+              transform: translateX(-50%) translateY(30px);
+            }
+          }
+        `}
+      </style>
     </>
   );
 }

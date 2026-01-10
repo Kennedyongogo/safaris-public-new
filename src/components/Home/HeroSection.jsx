@@ -89,6 +89,76 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, [videos]);
 
+  // Detect when hero section is visible and notify header
+  useEffect(() => {
+    const heroSection = document.getElementById("hero-section");
+    if (!heroSection) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const isVisible = entry.isIntersecting && entry.intersectionRatio > 0.2;
+          const scrollY = window.scrollY;
+          const isAtTop = scrollY <= 20;
+          
+          // Dispatch custom event to notify header
+          const event = new CustomEvent('heroVisibilityChange', {
+            detail: {
+              isVisible: isVisible && isAtTop,
+              intersectionRatio: entry.intersectionRatio,
+              scrollY: scrollY
+            }
+          });
+          window.dispatchEvent(event);
+          
+          console.log('🎬 Hero Section Visibility:', {
+            isIntersecting: entry.isIntersecting,
+            intersectionRatio: entry.intersectionRatio,
+            isVisible,
+            scrollY,
+            isAtTop,
+            shouldBeTransparent: isVisible && isAtTop
+          });
+        });
+      },
+      {
+        threshold: [0, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0],
+        rootMargin: '0px'
+      }
+    );
+
+    observer.observe(heroSection);
+
+    // Check initial state
+    setTimeout(() => {
+      const rect = heroSection.getBoundingClientRect();
+      const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+      const isAtTop = window.scrollY <= 20;
+      const event = new CustomEvent('heroVisibilityChange', {
+        detail: {
+          isVisible: isInView && isAtTop,
+          intersectionRatio: isInView ? 1 : 0,
+          scrollY: window.scrollY
+        }
+      });
+      window.dispatchEvent(event);
+      
+      console.log('🎬 Initial Hero Check:', {
+        rectTop: rect.top,
+        rectBottom: rect.bottom,
+        windowHeight: window.innerHeight,
+        scrollY: window.scrollY,
+        isInView,
+        isAtTop,
+        shouldBeTransparent: isInView && isAtTop
+      });
+    }, 200);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   // Fetch destinations and create country mapping
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -387,28 +457,6 @@ export default function HeroSection() {
             }}
           >
             <Typography
-              variant="h1"
-              sx={{
-                fontSize: {
-                  xs: "2.2rem",
-                  sm: "2.8rem",
-                  md: "3.8rem",
-                  lg: "4.5rem",
-                },
-                fontWeight: 800,
-                mb: 0.5,
-                textShadow: "4px 4px 12px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.3)",
-                background: "linear-gradient(135deg, #E0D8C0 0%, #F5F1E8 30%, #7B8D57 70%, #6B7D47 100%)",
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                lineHeight: 1.1,
-                letterSpacing: { xs: "0.02em", md: "0.03em" },
-              }}
-            >
-              Akira Safaris
-            </Typography>
-            <Typography
               variant="h4"
               sx={{
                 mb: 1,
@@ -423,95 +471,76 @@ export default function HeroSection() {
             >
               Endless Discovery
             </Typography>
-            
-
-            {/* Call-to-action row with destinations */}
-            <Box
+            <Typography
               sx={{
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                gap: { xs: 1.25, sm: 2, md: 2.25 },
-                flexWrap: { xs: "nowrap", lg: "nowrap" },
-                alignItems: "center",
-                justifyContent: "center",
-                mb: { xs: 6, sm: 5, md: 4 },
+                mb: 2,
+                textShadow: "2px 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3)",
+                opacity: 0.95,
+                fontWeight: 800,
+                fontSize: { xs: "1rem", sm: "1.2rem", md: "1.4rem" },
+                color: "#E8E0D1", // Light beige for better contrast
+                px: { xs: 0, sm: 0 },
+                letterSpacing: "0.05em",
+                lineHeight: 1.6,
+                textTransform: "uppercase",
               }}
             >
-
-              {["Kenya", "Tanzania", "Uganda", "Rwanda"].map((country) => (
-                <Box
-                  key={country}
-                  onClick={() => handleCountryClick(country)}
-                  sx={{
-                    px: 2,
-                    py: 0.75,
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                    borderRadius: "50px",
-                    whiteSpace: "nowrap",
-                    width: { xs: "90%", sm: "auto" },
-                    maxWidth: { xs: 320, sm: "none" },
-                    background: "rgba(255, 255, 255, 0.08)",
-                    border: "1px solid rgba(255, 255, 255, 0.15)",
-                    boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
-                    backdropFilter: "blur(6px)",
-                    color: "#E0D8C0",
-                    textAlign: "center",
-                    letterSpacing: 0.3,
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                    "&:hover": {
-                      transform: "translateY(-3px) scale(1.05)",
-                      boxShadow: "0 12px 40px rgba(0,0,0,0.45)",
-                      borderColor: "rgba(184, 92, 56, 0.6)",
-                    },
-                  }}
-                >
-                  {country}
-                </Box>
-              ))}
-            </Box>
+              east africa Explore africa FROM EVERY PERSPECTIVE.
+            </Typography>
+            <Button
+              variant="contained"
+              endIcon={<ArrowForward />}
+              onClick={() => {
+                const element = document.getElementById("mission-section");
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth", block: "start" });
+                } else {
+                  // Fallback: navigate to home and then scroll
+                  navigate("/");
+                  setTimeout(() => {
+                    const el = document.getElementById("mission-section");
+                    if (el) {
+                      el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                  }, 100);
+                }
+              }}
+              sx={{
+                mt: 1,
+                px: { xs: 3, sm: 4, md: 5 },
+                py: { xs: 1.2, sm: 1.5, md: 1.8 },
+                fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                borderRadius: "50px",
+                background: "rgba(255, 255, 255, 0.15)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                color: "#E0D8C0",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:focus": {
+                  outline: "none",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                },
+                "&:focus-visible": {
+                  outline: "none",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                },
+                "&:hover": {
+                  background: "rgba(255, 255, 255, 0.25)",
+                  transform: "translateY(-3px) scale(1.05)",
+                  boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+                  borderColor: "rgba(184, 92, 56, 0.6)",
+                },
+              }}
+            >
+              explore east africa
+            </Button>
 
           </Box>
         </Fade>
-      </Box>
-
-      {/* Scroll Indicator */}
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: { xs: "20px", md: "30px" },
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 3,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 1,
-          color: "#E0D8C0",
-          animation: "bounce 2s ease-in-out infinite",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: "0.75rem",
-            fontWeight: 500,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            textShadow: "2px 2px 4px rgba(0,0,0,0.4)",
-          }}
-        >
-          Explore
-        </Typography>
-        <Box
-          sx={{
-            width: "2px",
-            height: "30px",
-            background: "linear-gradient(to bottom, rgba(224, 216, 192, 0.8), rgba(224, 216, 192, 0.2))",
-            borderRadius: "2px",
-          }}
-        />
       </Box>
 
       <style>

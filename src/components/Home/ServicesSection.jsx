@@ -76,7 +76,7 @@ const buildImageUrl = (imagePath) => {
 };
 
 // Destination Card Component with Image Transitions
-const DestinationCard = ({ destination, isMobile }) => {
+const DestinationCard = ({ destination, isMobile, onClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageError, setImageError] = useState(false);
 
@@ -113,12 +113,18 @@ const DestinationCard = ({ destination, isMobile }) => {
 
   return (
     <Box
+      onClick={onClick}
       sx={{
         position: "relative",
-        height: isMobile ? "180px" : "200px",
+        height: isMobile ? "300px" : "400px",
         width: "100%",
         overflow: "hidden",
         backgroundColor: "#f5f5f5",
+        cursor: "pointer",
+        transition: "transform 0.3s ease",
+        "&:hover": {
+          transform: "scale(1.02)",
+        },
       }}
     >
       {images.length > 0 && !imageError ? (
@@ -153,7 +159,7 @@ const DestinationCard = ({ destination, isMobile }) => {
             <Box
               sx={{
                 position: "absolute",
-                bottom: 8,
+                bottom: 60,
                 left: "50%",
                 transform: "translateX(-50%)",
                 display: "flex",
@@ -195,25 +201,31 @@ const DestinationCard = ({ destination, isMobile }) => {
           </Typography>
         </Box>
       )}
+      
+      {/* Title positioned at lower right */}
       <Box
         sx={{
           position: "absolute",
-          top: 12,
-          left: 12,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)",
+          p: 2,
+          zIndex: 2,
         }}
       >
-        <Chip
-          label="Safari Destination"
-          size="small"
+        <Typography
+          variant="h6"
           sx={{
-            backgroundColor: "#6B4E3D",
             color: "white",
-            border: "1px solid #8B6F5E",
             fontWeight: 700,
-            fontSize: "0.8rem",
-            letterSpacing: 0.2,
+            fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.5rem" },
+            textAlign: "right",
+            textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
           }}
-        />
+        >
+          {destination.title}
+        </Typography>
       </Box>
     </Box>
   );
@@ -653,7 +665,7 @@ export default function ServicesSection() {
                   mx: "auto",
                   px: { xs: 1, sm: 0 },
                   fontWeight: 500,
-                  fontSize: { xs: "0.85rem", sm: "0.95rem", md: "1rem" },
+                  fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
                   lineHeight: 1.6,
                   color: "text.primary",
                 }}
@@ -758,6 +770,7 @@ export default function ServicesSection() {
                             height: "100%",
                             display: "flex",
                             flexDirection: "column",
+                            overflow: "hidden",
                             transition: "transform 0.3s ease, box-shadow 0.3s ease",
                             "&:hover": {
                               transform: "translateY(-8px)",
@@ -765,193 +778,11 @@ export default function ServicesSection() {
                             },
                           }}
                         >
-                          <DestinationCard destination={destination} isMobile={isMobile} />
-
-                          <CardContent
-                            sx={{
-                              flexGrow: 1,
-                              p: { xs: 1.25, sm: 1.5 },
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <Box sx={{ mb: 1 }}>
-                              <Typography
-                                variant="h6"
-                                component="h3"
-                                sx={{
-                                  fontWeight: 700,
-                                  mb: 0.5,
-                                  color: "text.primary",
-                                  fontSize: { xs: "1.15rem", sm: "1.3rem" },
-                                  lineHeight: 1.2,
-                                }}
-                              >
-                                {destination.title}
-                              </Typography>
-                            </Box>
-
-                            {destination.subtitle && (
-                              <Typography
-                                variant="caption"
-                                sx={{
-                                  mb: 0.5,
-                                  color: "#B85C38",
-                                  fontWeight: 700,
-                                  fontSize: { xs: "0.85rem", sm: "0.9rem" },
-                                  fontStyle: "italic",
-                                  display: "block",
-                                }}
-                              >
-                                {destination.subtitle}
-                              </Typography>
-                            )}
-                            <Typography
-                              variant="body2"
-                              color="text.secondary"
-                              sx={{
-                                mb: 1,
-                                overflow: "hidden",
-                                display: "-webkit-box",
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: "vertical",
-                                lineHeight: 1.4,
-                                fontSize: { xs: "0.9rem", sm: "1rem" },
-                                fontWeight: 600,
-                              }}
-                            >
-                              {destination.description}
-                            </Typography>
-
-                            <Box sx={{ mb: 1 }}>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 0.5,
-                                  mb: 0.5,
-                                }}
-                              >
-                                <LocationOn
-                                  sx={{
-                                    fontSize: { xs: 14, sm: 15 },
-                                    color: "#5D4037",
-                                  }}
-                                />
-                                <Typography
-                                  variant="body2"
-                                  sx={{
-                                    fontSize: { xs: "0.875rem", sm: "0.95rem" },
-                                    color: "text.secondary",
-                                    fontWeight: 600,
-                                  }}
-                                >
-                                  {destination.location}
-                                </Typography>
-                              </Box>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 0.5,
-                                }}
-                              >
-                                <Schedule
-                                  sx={{
-                                    fontSize: { xs: 14, sm: 15 },
-                                    color: "#5D4037",
-                                  }}
-                                />
-                                <Typography
-                                  variant="body2"
-                                  sx={{
-                                    fontSize: { xs: "0.875rem", sm: "0.95rem" },
-                                    color: "text.secondary",
-                                    fontWeight: 600,
-                                  }}
-                                >
-                                  {destination.packages && destination.packages.length > 0
-                                    ? `${destination.packages.reduce((total, cat) => total + (cat.packages?.length || 0), 0)} Packages Available`
-                                    : destination.duration}
-                                </Typography>
-                              </Box>
-                            </Box>
-
-                            <Box sx={{ mb: 1.25, flexGrow: 1 }}>
-                              <Typography
-                                variant="caption"
-                                sx={{
-                                  fontSize: "0.85rem",
-                                  fontWeight: 700,
-                                  color: "#5D4037",
-                                  mb: 0.4,
-                                  display: "block",
-                                }}
-                              >
-                                Highlights:
-                              </Typography>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  gap: 0.4,
-                                }}
-                              >
-                                {destination.highlights.slice(0, 3).map((highlight, idx) => (
-                                  <Chip
-                                    key={idx}
-                                    label={highlight}
-                                    size="small"
-                                    sx={{
-                                      fontSize: "0.8rem",
-                                      height: "20px",
-                                      backgroundColor: "#f5f5f5",
-                                      color: "#5D4037",
-                                      fontWeight: 700,
-                                    }}
-                                  />
-                                ))}
-                              </Box>
-                            </Box>
-
-                            <Box
-                              sx={{
-                                display: "flex",
-                                gap: 1,
-                                mt: "auto",
-                              }}
-                            >
-                              <Button
-                                variant="outlined"
-                                size="small"
-                                fullWidth
-                                endIcon={<ArrowForward />}
-                                onClick={() => handleViewMore(destination)}
-                                sx={{
-                                  borderColor: "#5D4037",
-                                  color: "#5D4037",
-                                  fontSize: "0.9rem",
-                                  fontWeight: 700,
-                                  py: 0.5,
-                                  outline: "none",
-                                  "&:focus": {
-                                    outline: "none",
-                                  },
-                                  "&:focus-visible": {
-                                    outline: "none",
-                                    boxShadow: "none",
-                                  },
-                                  "&:hover": {
-                                    borderColor: "#4E342E",
-                                    backgroundColor: "#5D4037",
-                                    color: "white",
-                                  },
-                                }}
-                              >
-                                View Details
-                              </Button>
-                            </Box>
-                          </CardContent>
+                          <DestinationCard 
+                            destination={destination} 
+                            isMobile={isMobile}
+                            onClick={() => handleViewMore(destination)}
+                          />
                         </Card>
                       </Slide>
                     </Grid>

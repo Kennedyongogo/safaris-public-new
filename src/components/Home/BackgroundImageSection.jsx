@@ -207,10 +207,36 @@ export default function BackgroundImageSection() {
         >
         <Box
           sx={{
-            minHeight: { xs: "400px", sm: "500px", md: "600px" },
+            minHeight: { xs: "250px", sm: "300px", md: "350px" },
             position: "relative",
           }}
         >
+          {/* Vintage Style Heading for Reviews */}
+          <Box
+            sx={{
+              textAlign: "center",
+              mb: { xs: 1, sm: 1.5, md: 2 },
+              position: "relative",
+              py: { xs: 1, sm: 1.5, md: 2 },
+              zIndex: 2,
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "'Brush Script MT', 'Lucida Handwriting', 'Dancing Script', cursive",
+                fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "3rem" },
+                fontWeight: 900,
+                color: "#6B4E3D", // Medium brown
+                letterSpacing: "0.03em",
+                lineHeight: 1.1,
+                display: "inline-block",
+                position: "relative",
+                textShadow: "2px 2px 4px rgba(255, 255, 255, 0.8)",
+              }}
+            >
+              Akira Safaris Reviews
+            </Typography>
+          </Box>
 
           {/* Single Testimonial Card Overlay - Centered and Transitioning */}
           {reviews.length > 0 && (
@@ -221,8 +247,8 @@ export default function BackgroundImageSection() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                minHeight: { xs: "400px", sm: "500px", md: "600px" },
-                p: { xs: 2, sm: 3, md: 4 },
+                minHeight: { xs: "250px", sm: "300px", md: "350px" },
+                p: { xs: 1.5, sm: 2, md: 3 },
               }}
             >
               {reviews.map((review, index) => (

@@ -3,6 +3,7 @@ import {
   Box,
   Container,
   Card,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -121,11 +122,36 @@ export default function ImageCarouselSection() {
         >
         <Box
           sx={{
-            pt: { xs: 0.5, sm: 0.75, md: 1 },
-            pb: { xs: 1.5, sm: 2, md: 2.5 },
+            pt: { xs: 0.25, sm: 0.5, md: 0.75 },
+            pb: { xs: 0.75, sm: 1, md: 1.5 },
             px: { xs: 1.5, sm: 1.5, md: 1.5 },
           }}
         >
+          {/* Vintage Style Heading */}
+          <Box
+            sx={{
+              textAlign: "center",
+              mb: { xs: 1, sm: 1.5, md: 2 },
+              position: "relative",
+              py: { xs: 1, sm: 1.5, md: 2 },
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "'Brush Script MT', 'Lucida Handwriting', 'Dancing Script', cursive",
+                fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "3rem" },
+                fontWeight: 900,
+                color: "#6B4E3D", // Medium brown
+                letterSpacing: "0.03em",
+                lineHeight: 1.1,
+                display: "inline-block",
+                position: "relative",
+              }}
+            >
+              Experience it with Akira Safaris
+            </Typography>
+          </Box>
+
           <Box
             ref={scrollContainerRef}
             sx={{

@@ -35,6 +35,175 @@ const MotionBox = motion(Box);
 
 // Destinations are now fetched from API
 
+// Category Card Component
+const CategoryCard = ({ category, onClick }) => {
+  // Get first image from first package in category for preview
+  const previewImage = category.packages && category.packages.length > 0 && category.packages[0].gallery && category.packages[0].gallery.length > 0
+    ? category.packages[0].gallery[0]
+    : null;
+  const packageCount = category.packages ? category.packages.length : 0;
+
+  return (
+    <Card
+      sx={{
+        overflow: "hidden",
+        border: "1px solid rgba(107, 78, 61, 0.15)",
+        borderRadius: 3,
+        cursor: "pointer",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        background: "linear-gradient(to bottom, #FFFFFF 0%, #F9F7F4 100%)",
+        boxShadow: "0 2px 8px rgba(61, 40, 23, 0.08)",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        "&:hover": {
+          transform: "translateY(-8px)",
+          boxShadow: "0 12px 32px rgba(61, 40, 23, 0.15)",
+          borderColor: "rgba(184, 92, 56, 0.3)",
+        },
+      }}
+      onClick={onClick}
+    >
+      {/* Image Section */}
+      <Box
+        sx={{
+          width: "100%",
+          height: { xs: "200px", sm: "240px", md: "280px" },
+          position: "relative",
+          overflow: "hidden",
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        {previewImage ? (
+          <Box
+            component="img"
+            src={previewImage}
+            alt={category.category_name}
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+            onError={(e) => {
+              e.target.src = "/IMG-20251210-WA0070.jpg";
+            }}
+          />
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#f5f5f5",
+            }}
+          >
+            <ImageIcon sx={{ fontSize: 64, color: "rgba(0,0,0,0.2)" }} />
+          </Box>
+        )}
+        {/* Gradient overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "80px",
+            background: "linear-gradient(to top, rgba(0,0,0,0.5), transparent)",
+            pointerEvents: "none",
+          }}
+        />
+        {/* Package count badge */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 12,
+            right: 12,
+            backgroundColor: "rgba(184, 92, 56, 0.95)",
+            color: "white",
+            px: 1.5,
+            py: 0.5,
+            borderRadius: 2,
+            fontWeight: 700,
+            fontSize: "0.875rem",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+          }}
+        >
+          {packageCount} {packageCount === 1 ? "Package" : "Packages"}
+        </Box>
+      </Box>
+
+      {/* Content Section */}
+      <CardContent sx={{ p: { xs: 2, sm: 2.5 }, flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 700,
+            mb: 1,
+            color: "#3D2817",
+            fontSize: { xs: "0.9rem", sm: "1.35rem", md: "1.5rem" },
+            lineHeight: 1.2,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {category.category_name}
+        </Typography>
+
+        {/* View Packages Hint */}
+        <Box
+          sx={{
+            mt: "auto",
+            pt: 1.5,
+            borderTop: "1px solid rgba(107, 78, 61, 0.1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#B85C38",
+              fontSize: { xs: "0.875rem", sm: "0.9rem" },
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+            }}
+          >
+            View Packages
+          </Typography>
+          <Box
+            sx={{
+              width: 24,
+              height: 24,
+              borderRadius: "50%",
+              backgroundColor: "#B85C38",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "transform 0.3s ease",
+            }}
+          >
+            <Box
+              sx={{
+                width: 0,
+                height: 0,
+                borderLeft: "7px solid white",
+                borderTop: "5px solid transparent",
+                borderBottom: "5px solid transparent",
+                ml: 0.5,
+              }}
+            />
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
+
 // Package Card Component with Image Transitions - Compact & Beautiful Design
 const PackageCard = ({ package: pkg, categoryName, onClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -368,6 +537,17 @@ export default function DestinationDetails() {
   const cameFromDestinations = cameFrom === "/destinations";
   const cameFromHero = cameFrom === "hero";
   const cameFromServices = cameFrom === "services";
+
+  const handleCategoryClick = (category) => {
+    // Navigate to CategoryPackages component with category and destination data
+    navigate("/category-packages", {
+      state: {
+        category: category,
+        destination: destination,
+        destinationId: id,
+      },
+    });
+  };
 
   const handlePackageClick = (pkg) => {
     setSelectedPackage(pkg);
@@ -816,9 +996,9 @@ export default function DestinationDetails() {
                 </Box>
               )}
 
-              {/* Packages Section */}
+              {/* Packages Section - Categories Only */}
               {destination.packages && destination.packages.length > 0 && (
-                <Box sx={{ mt: 3 }}>
+                <Box id="packages-section" sx={{ mt: 3 }}>
                   <Typography
                     variant="h4"
                     sx={{
@@ -830,36 +1010,29 @@ export default function DestinationDetails() {
                   >
                     Safari Packages & Tours
                   </Typography>
-                  {destination.packages
-                    .sort((a, b) => (a.category_order || 0) - (b.category_order || 0))
-                    .map((category, catIndex) => (
-                      <Box key={catIndex} sx={{ mb: { xs: 3, md: 3.5 } }}>
-                        <Typography
-                          variant="h5"
-                          sx={{
-                            fontWeight: 700,
-                            mb: 1.5,
-                            color: "#6B4E3D",
-                            fontSize: { xs: "1.25rem", md: "1.4rem" },
-                            borderBottom: "2px solid #B85C38",
-                            pb: 0.75,
-                          }}
-                        >
-                          {category.category_name}
-                        </Typography>
-                        <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-                          {category.packages.map((pkg, pkgIndex) => (
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={pkgIndex}>
-                              <PackageCard
-                                package={pkg}
-                                categoryName={category.category_name}
-                                onClick={handlePackageClick}
-                              />
-                            </Grid>
-                          ))}
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      mb: 3,
+                      color: "text.secondary",
+                      fontSize: { xs: "1rem", sm: "1.1rem" },
+                      fontWeight: 500,
+                    }}
+                  >
+                    Select a category to view available packages
+                  </Typography>
+                  <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
+                    {destination.packages
+                      .sort((a, b) => (a.category_order || 0) - (b.category_order || 0))
+                      .map((category, catIndex) => (
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={catIndex}>
+                          <CategoryCard
+                            category={category}
+                            onClick={() => handleCategoryClick(category)}
+                          />
                         </Grid>
-                      </Box>
-                    ))}
+                      ))}
+                  </Grid>
                 </Box>
               )}
 

@@ -184,7 +184,7 @@ export default function Blog() {
                 sx={{
                   mb: 1,
                   fontWeight: 800,
-                  fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.8rem" },
+                  fontSize: { xs: "2rem", sm: "2.5rem", md: "3.2rem" },
                   background:
                     "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)",
                   backgroundClip: "text",
@@ -211,7 +211,7 @@ export default function Blog() {
                 sx={{
                   mt: 3,
                   fontWeight: 500,
-                  fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
+                  fontSize: { xs: "1.05rem", sm: "1.15rem", md: "1.25rem" },
                   color: "text.secondary",
                   maxWidth: "800px",
                   mx: "auto",
@@ -307,6 +307,7 @@ export default function Blog() {
                 color: "text.secondary",
                 mb: 2,
                 fontWeight: 600,
+                fontSize: { xs: "0.95rem", sm: "1rem", md: "1.05rem" },
               }}
             >
               {loading
@@ -327,7 +328,7 @@ export default function Blog() {
                   mb: 2,
                   fontWeight: 700,
                   color: "#3D2817",
-                  fontSize: { xs: "1.3rem", md: "1.5rem" },
+                  fontSize: { xs: "1.5rem", md: "1.7rem" },
                 }}
               >
                 Featured Articles
@@ -386,6 +387,7 @@ export default function Blog() {
                               backgroundColor: "#B85C38",
                               color: "white",
                               fontWeight: 600,
+                              fontSize: "0.85rem",
                               alignSelf: "flex-start",
                             }}
                           />
@@ -395,7 +397,7 @@ export default function Blog() {
                               fontWeight: 700,
                               mb: 1.5,
                               color: "#3D2817",
-                              fontSize: { xs: "1.3rem", md: "1.5rem" },
+                              fontSize: { xs: "1.5rem", md: "1.7rem" },
                               lineHeight: 1.3,
                             }}
                           >
@@ -407,6 +409,7 @@ export default function Blog() {
                               mb: 2,
                               color: "text.secondary",
                               lineHeight: 1.6,
+                              fontSize: { xs: "0.95rem", sm: "1rem", md: "1.05rem" },
                               display: "-webkit-box",
                               WebkitLineClamp: 3,
                               WebkitBoxOrient: "vertical",
@@ -424,10 +427,10 @@ export default function Blog() {
                             }}
                           >
                             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                              <CalendarToday sx={{ fontSize: 16, color: "#6B4E3D" }} />
+                              <CalendarToday sx={{ fontSize: 18, color: "#6B4E3D" }} />
                               <Typography
                                 variant="caption"
-                                sx={{ color: "text.secondary", fontWeight: 600 }}
+                                sx={{ color: "text.secondary", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
                               >
                                 {new Date(post.publishDate).toLocaleDateString("en-US", {
                                   month: "short",
@@ -437,10 +440,10 @@ export default function Blog() {
                               </Typography>
                             </Box>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                              <AccessTime sx={{ fontSize: 16, color: "#6B4E3D" }} />
+                              <AccessTime sx={{ fontSize: 18, color: "#6B4E3D" }} />
                               <Typography
                                 variant="caption"
-                                sx={{ color: "text.secondary", fontWeight: 600 }}
+                                sx={{ color: "text.secondary", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
                               >
                                 {post.readTime}
                               </Typography>
@@ -473,13 +476,13 @@ export default function Blog() {
               {/* All Posts Grid */}
             {error ? (
               <Box sx={{ p: 4, textAlign: "center" }}>
-                <Typography variant="h6" sx={{ color: "text.secondary", mb: 1 }}>
+                <Typography variant="h6" sx={{ color: "text.secondary", mb: 1, fontSize: { xs: "1.1rem", md: "1.2rem" } }}>
                   {error}
                 </Typography>
               </Box>
             ) : loading ? (
               <Box sx={{ p: 4, textAlign: "center" }}>
-                <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                <Typography variant="h6" sx={{ color: "text.secondary", fontSize: { xs: "1.1rem", md: "1.2rem" } }}>
                   Loading...
                 </Typography>
               </Box>
@@ -490,10 +493,10 @@ export default function Blog() {
                   textAlign: "center",
                 }}
               >
-                <Typography variant="h6" sx={{ color: "text.secondary", mb: 1 }}>
+                <Typography variant="h6" sx={{ color: "text.secondary", mb: 1, fontSize: { xs: "1.1rem", md: "1.2rem" } }}>
                   No articles found
                 </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                <Typography variant="body2" sx={{ color: "text.secondary", fontSize: { xs: "0.95rem", md: "1rem" } }}>
                   Try adjusting your search or filter criteria
                 </Typography>
               </Box>
@@ -505,7 +508,7 @@ export default function Blog() {
                   mb: 2,
                   fontWeight: 700,
                   color: "#3D2817",
-                  fontSize: { xs: "1.3rem", md: "1.5rem" },
+                  fontSize: { xs: "1.5rem", md: "1.7rem" },
                 }}
               >
                 {page === 1 ? "All Articles" : `Articles - Page ${page}`}
@@ -558,7 +561,7 @@ export default function Blog() {
                                 backgroundColor: "#B85C38",
                                 color: "white",
                                 fontWeight: 600,
-                                fontSize: "0.75rem",
+                                fontSize: "0.85rem",
                               alignSelf: "flex-start",
                               }}
                             />
@@ -569,7 +572,7 @@ export default function Blog() {
                               fontWeight: 700,
                               mb: 1,
                               color: "#3D2817",
-                              fontSize: { xs: "1.1rem", md: "1.2rem" },
+                              fontSize: { xs: "1.3rem", md: "1.4rem" },
                               lineHeight: 1.3,
                               display: "-webkit-box",
                               WebkitLineClamp: 2,
@@ -586,6 +589,7 @@ export default function Blog() {
                               color: "text.secondary",
                               lineHeight: 1.6,
                               flexGrow: 1,
+                              fontSize: { xs: "0.95rem", sm: "1rem", md: "1.05rem" },
                               display: "-webkit-box",
                               WebkitLineClamp: 3,
                               WebkitBoxOrient: "vertical",
@@ -610,16 +614,16 @@ export default function Blog() {
                               />
                               <Typography
                                 variant="caption"
-                                sx={{ color: "text.secondary", fontWeight: 600 }}
+                                sx={{ color: "text.secondary", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
                               >
                                 {post.author}
                               </Typography>
                             </Box>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                              <AccessTime sx={{ fontSize: 14, color: "#6B4E3D" }} />
+                              <AccessTime sx={{ fontSize: 16, color: "#6B4E3D" }} />
                               <Typography
                                 variant="caption"
-                                sx={{ color: "text.secondary", fontWeight: 600 }}
+                                sx={{ color: "text.secondary", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
                               >
                                 {post.readTime}
                               </Typography>
@@ -634,7 +638,7 @@ export default function Blog() {
                               flexWrap: "wrap",
                             }}
                           >
-                            <Tag sx={{ fontSize: 14, color: "#6B4E3D" }} />
+                            <Tag sx={{ fontSize: 18, color: "#6B4E3D" }} />
                             {post.tags.slice(0, 2).map((tag, idx) => (
                               <Chip
                                 key={idx}
@@ -642,8 +646,8 @@ export default function Blog() {
                                 size="small"
                                 variant="outlined"
                                 sx={{
-                                  fontSize: "0.65rem",
-                                  height: "20px",
+                                  fontSize: "0.9rem",
+                                  height: "24px",
                                   borderColor: "rgba(107, 78, 61, 0.3)",
                                   color: "#6B4E3D",
                                 }}
