@@ -18,6 +18,7 @@ import Chatbot from "./components/Chatbot/Chatbot";
 const Home = lazy(() => import("./pages/Home"));
 const TeamMemberDetail = lazy(() => import("./pages/TeamMemberDetail"));
 const Team = lazy(() => import("./pages/Team"));
+const Staff = lazy(() => import("./pages/Staff"));
 const Reviews = lazy(() => import("./pages/Reviews"));
 const Plan = lazy(() => import("./pages/Plan"));
 const DestinationDetails = lazy(() => import("./pages/DestinationDetails"));
@@ -197,6 +198,15 @@ function App() {
               element={
                 <>
                   <TeamMemberDetail />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/staff"
+              element={
+                <>
+                  <Staff />
                   <Footer />
                 </>
               }

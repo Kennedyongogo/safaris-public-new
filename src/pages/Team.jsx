@@ -4,22 +4,14 @@ import {
   Box,
   Typography,
   Container,
-  Grid,
-  Card,
-  CardContent,
   Paper,
   Button,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 
 export default function Team() {
   const navigate = useNavigate();
   const location = useLocation();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Typewriter animation state
   const [displayText, setDisplayText] = useState("A");
@@ -27,74 +19,6 @@ export default function Team() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(1); // Start at 1 since we begin with "A"
   const [highlightId, setHighlightId] = useState(null);
-  const [members, setMembers] = useState([]);
-  const [membersError, setMembersError] = useState(null);
-  const [membersLoading, setMembersLoading] = useState(false);
-
-  const buildImageUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith("http")) return path;
-    if (path.startsWith("/")) return path;
-    return `/${path}`;
-  };
-
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        setMembersLoading(true);
-        setMembersError(null);
-        const res = await fetch("/api/admin-users/public?limit=100");
-        const data = await res.json();
-        if (!res.ok || !data.success || !Array.isArray(data.data)) {
-          throw new Error(data.message || "Failed to load team");
-        }
-        const normalized = data.data.map((m) => ({
-          id: m.id,
-          name: m.full_name,
-          role: m.position || m.role || "Team Member",
-          description: m.description,
-          image: buildImageUrl(m.profile_image),
-        }));
-        setMembers(normalized);
-      } catch (err) {
-        setMembersError(err.message || "Failed to load team");
-      } finally {
-        setMembersLoading(false);
-      }
-    };
-
-    fetchMembers();
-  }, []);
-
-  // When coming back from detail, scroll to the originating card
-  useEffect(() => {
-    const targetId = location.state?.scrollToId;
-    const highlight = location.state?.highlightId;
-    if (!targetId) return;
-
-    const scrollToCard = () => {
-      const cardEl = document.querySelector(`[data-member-id="${targetId}"]`);
-      if (cardEl) {
-        cardEl.scrollIntoView({ behavior: "smooth", block: "center" });
-      } else {
-        setTimeout(scrollToCard, 100);
-      }
-    };
-
-    requestAnimationFrame(scrollToCard);
-    if (highlight) {
-      setHighlightId(highlight);
-    }
-    // remove highlight after 2 seconds
-    const clear = highlight
-      ? setTimeout(() => setHighlightId(null), 2000)
-      : null;
-    // Clear state so it doesn't re-run on next renders
-    navigate("/team", { replace: true, state: null });
-    return () => {
-      if (clear) clearTimeout(clear);
-    };
-  }, [location.state, navigate]);
 
   useEffect(() => {
     const typeSpeed = isDeleting ? 50 : 100; // Faster when deleting
@@ -149,17 +73,11 @@ export default function Team() {
           }}
         >
           {/* Company Profile Section */}
-          <Box sx={{ mb: { xs: 2, sm: 2.5, md: 3 } }}>
-            <Paper
-              elevation={2}
-              sx={{
-                p: { xs: 1, sm: 1.25, md: 1.5 },
-                borderRadius: { xs: 2, md: 3 },
-                background:
-                  "linear-gradient(135deg, rgba(245, 241, 232, 0.5) 0%, rgba(255, 255, 255, 1) 100%)",
-                border: "1px solid rgba(107, 78, 61, 0.2)",
-              }}
-            >
+          <Box
+            sx={{
+              p: { xs: 1, sm: 1.25, md: 1.5 },
+            }}
+          >
               <Typography
                 variant="h3"
                 sx={{
@@ -195,64 +113,443 @@ export default function Team() {
               </Typography>
 
               <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 600,
-                  mb: 0.5,
-                  color: "#6B4E3D",
-                  fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
-                  textAlign: "center",
-                }}
-              >
-                YOUR JOURNEY, OUR STORY
-              </Typography>
-
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 500,
-                  mb: 0.5,
-                  color: "#B85C38",
-                  fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                  textAlign: "center",
-                  fontStyle: "italic",
-                }}
-              >
-                Crafting Authentic African Adventures
-              </Typography>
-
-              <Typography
                 variant="body1"
                 sx={{
-                  mb: 1,
+                  mb: 1.5,
                   color: "text.primary",
                   fontSize: { xs: "0.875rem", md: "1rem" },
                   lineHeight: 1.6,
-                  textAlign: "center",
-                  maxWidth: "900px",
-                  mx: "auto",
+                  textAlign: "left",
                 }}
               >
-                At Akira Safaris, we don't sell tours—we design deeply personal
-                journeys into East Africa's wild heart. Built on genuine
-                hospitality and local expertise, our safaris are shaped by human
-                connection, storytelling, and a lifelong love for Africa.
+                Welcome to Akira Safaris, your gateway to authentic adventure in East Africa. We are a family-run company built on a simple belief: the most memorable journeys are shaped through genuine human connection and deep respect for local cultures and wild places.
               </Typography>
 
               {/* Our Story Section */}
-              <Box sx={{ mb: 1 }}>
+              <Box 
+                sx={{ 
+                  mb: 1.5,
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  gap: { xs: 2, md: 4 },
+                  alignItems: { xs: "flex-start", md: "flex-start" },
+                  justifyContent: { md: "space-between" },
+                }}
+              >
+                <Box
+                  sx={{
+                    flex: { xs: "1 1 100%", md: "0 0 auto" },
+                    display: { xs: "block", md: "block" },
+                    width: { xs: "100%", md: "250px" },
+                    minWidth: { xs: "auto", md: "250px" },
+                    maxWidth: { xs: "100%", md: "250px" },
+                    mt: { xs: 0, md: -2 },
+                    alignSelf: { xs: "center", md: "flex-start" },
+                    flexShrink: 0,
+                    ml: { xs: 0, md: "auto" },
+                    order: { xs: -1, md: 1 },
+                  }}
+                >
+                  <Paper
+                    elevation={4}
+                    sx={{
+                      p: 2,
+                      background: "linear-gradient(135deg, rgba(184, 92, 56, 0.15) 0%, rgba(107, 78, 61, 0.1) 100%)",
+                      border: "2px solid rgba(184, 92, 56, 0.3)",
+                      borderRadius: 3,
+                      transform: { xs: "rotate(2deg)", md: "rotate(5deg)" },
+                      transition: "transform 0.3s ease",
+                      "&:hover": {
+                        transform: { xs: "rotate(1deg) scale(1.02)", md: "rotate(3deg) scale(1.02)" },
+                      },
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src="/FB_IMG_1767444543346.jpg"
+                      alt="Akira Safaris"
+                      sx={{
+                        width: "100%",
+                        height: "auto",
+                        borderRadius: 2,
+                        mb: 1.5,
+                        objectFit: "cover",
+                      }}
+                    />
+                    <Button
+                      onClick={() => navigate("/staff")}
+                      size="small"
+                      sx={{
+                        mt: 1,
+                        backgroundColor: "#B85C38",
+                        color: "#fff",
+                        borderRadius: 2,
+                        px: 1.5,
+                        py: 0.5,
+                        fontSize: { xs: "0.75rem", md: "0.75rem" },
+                        textTransform: "none",
+                        fontWeight: 600,
+                        boxShadow: "0 2px 8px rgba(184, 92, 56, 0.3)",
+                        "&:hover": {
+                          backgroundColor: "#8B4225",
+                          boxShadow: "0 4px 12px rgba(184, 92, 56, 0.4)",
+                          transform: "translateY(-2px)",
+                        },
+                        transition: "all 0.3s ease",
+                        "&:focus": {
+                          outline: "none",
+                          boxShadow: "0 2px 8px rgba(184, 92, 56, 0.3)",
+                        },
+                        "&:focus-visible": {
+                          outline: "none",
+                          boxShadow: "0 2px 8px rgba(184, 92, 56, 0.3)",
+                        },
+                        "&:active": {
+                          outline: "none",
+                          boxShadow: "0 2px 8px rgba(184, 92, 56, 0.3)",
+                        },
+                      }}
+                    >
+                      Meet Our Team
+                    </Button>
+                  </Paper>
+                </Box>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "text.primary",
+                    fontSize: { xs: "0.875rem", md: "1rem" },
+                    lineHeight: 1.6,
+                    textAlign: "left",
+                    flex: { xs: "1 1 100%", md: "0 1 auto" },
+                    maxWidth: { md: "calc(100% - 280px)" },
+                    pr: { md: 0 },
+                    order: { xs: 1, md: 0 },
+                  }}
+                >
+                  Our story is rooted in a lifelong passion for sharing the true spirit of Kenya. For more than 16 years, we have opened our home to travelers from around the world. That experience taught us something important. People are not just looking for a checklist of sights. They are looking for insight, trust, and a sense of belonging. Akira Safaris was founded to extend that philosophy beyond our home, with family at the center of everything we do.
+                </Typography>
+              </Box>
+
+              {/* Meet Our Family Section */}
+              <Box sx={{ mb: 1.5 }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
-                    mb: 0.25,
+                    mb: 0.75,
                     color: "#B85C38",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                     textAlign: "center",
                   }}
                 >
-                  Our Story
+                  Meet Our Family
                 </Typography>
+                <Box 
+                  sx={{ 
+                    display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    gap: { xs: 2, md: 3 },
+                    alignItems: { xs: "flex-start", md: "flex-start" },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      flex: { xs: "1 1 100%", md: "0 0 auto" },
+                      display: { xs: "block", md: "block" },
+                      width: { xs: "100%", md: "250px" },
+                      minWidth: { xs: "auto", md: "200px" },
+                      maxWidth: { xs: "100%", md: "250px" },
+                      alignSelf: { xs: "center", md: "flex-start" },
+                      order: { xs: -1, md: 0 },
+                    }}
+                  >
+                    <Paper
+                      elevation={4}
+                      sx={{
+                        p: 2,
+                        background: "linear-gradient(135deg, rgba(107, 125, 71, 0.15) 0%, rgba(123, 141, 87, 0.1) 100%)",
+                        border: "2px solid rgba(107, 125, 71, 0.3)",
+                        borderRadius: 3,
+                        transform: { xs: "rotate(-2deg)", md: "rotate(-5deg)" },
+                        transition: "transform 0.3s ease",
+                        "&:hover": {
+                          transform: { xs: "rotate(-1deg) scale(1.02)", md: "rotate(-3deg) scale(1.02)" },
+                        },
+                      }}
+                    >
+                      <Box
+                        component="img"
+                        src="/FB_IMG_1768133663752.jpg"
+                        alt="Akira Safaris Team"
+                        sx={{
+                          width: "100%",
+                          height: "auto",
+                          borderRadius: 2,
+                          mb: 1.5,
+                          objectFit: "cover",
+                        }}
+                      />
+                      <Button
+                        onClick={() => navigate("/staff")}
+                        size="small"
+                        sx={{
+                          mt: 1,
+                          backgroundColor: "#6B7D47",
+                          color: "#fff",
+                          borderRadius: 2,
+                          px: 1.5,
+                          py: 0.5,
+                          fontSize: { md: "0.75rem" },
+                          textTransform: "none",
+                          fontWeight: 600,
+                          boxShadow: "0 2px 8px rgba(107, 125, 71, 0.3)",
+                          "&:hover": {
+                            backgroundColor: "#5A6B3A",
+                            boxShadow: "0 4px 12px rgba(107, 125, 71, 0.4)",
+                            transform: "translateY(-2px)",
+                          },
+                          transition: "all 0.3s ease",
+                          "&:focus": {
+                            outline: "none",
+                            boxShadow: "0 2px 8px rgba(107, 125, 71, 0.3)",
+                          },
+                          "&:focus-visible": {
+                            outline: "none",
+                            boxShadow: "0 2px 8px rgba(107, 125, 71, 0.3)",
+                          },
+                          "&:active": {
+                            outline: "none",
+                            boxShadow: "0 2px 8px rgba(107, 125, 71, 0.3)",
+                          },
+                        }}
+                      >
+                        Meet Our Team
+                      </Button>
+                    </Paper>
+                  </Box>
+                  <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 60%" }, order: { xs: 1, md: 0 } }}>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        mb: 1,
+                        color: "text.primary",
+                        fontSize: { xs: "0.875rem", md: "1rem" },
+                        lineHeight: 1.6,
+                        textAlign: "left",
+                      }}
+                    >
+                      Akira Safaris is proudly co-founded and operated by David, his wife Hellene A., and their daughter Malyne Abigael. We are not just running a business. We are sharing our East Africa.
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: "text.primary",
+                        fontSize: { xs: "0.875rem", md: "1rem" },
+                        lineHeight: 1.6,
+                        textAlign: "left",
+                      }}
+                    >
+                      David brings vision and deep local understanding. Hellene ensures warmth, comfort, and care in every detail. Malyne adds a modern, globally connected perspective. Together, we design safaris that feel personal, thoughtful, and seamless, from your first inquiry to the moment you return home.
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+
+              {/* Our Commitment to You Section */}
+              <Box sx={{ mb: 0.75 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 700,
+                    mb: 0.75,
+                    color: "#B85C38",
+                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    textAlign: "center",
+                  }}
+                >
+                  Our Commitment to You
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    gap: { xs: 2, md: 3 },
+                    alignItems: { xs: "flex-start", md: "flex-start" },
+                  }}
+                >
+                  <Box
+                    component="ul"
+                    sx={{
+                      textAlign: "left",
+                      mb: 0,
+                      listStyle: "none",
+                      pl: 0,
+                      pr: 0,
+                      ml: 0,
+                      mr: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      flex: { xs: "1 1 100%", md: "1 1 60%" },
+                      order: { xs: 1, md: 0 },
+                    }}
+                  >
+                    <Typography
+                      component="li"
+                      variant="body1"
+                      sx={{
+                        mb: 0.75,
+                        color: "text.primary",
+                        fontSize: { xs: "0.875rem", md: "1rem" },
+                        lineHeight: 1.6,
+                        listStyle: "none",
+                        margin: 0,
+                        padding: 0,
+                        "&::before": {
+                          content: '"•"',
+                          color: "#B85C38",
+                          fontWeight: "bold",
+                          display: "inline-block",
+                          width: "1em",
+                          marginRight: "0.5em",
+                        },
+                      }}
+                    >
+                      <strong>Tailor-Made Itineraries</strong>
+                      <br />
+                      We design private or small-group journeys across Kenya, Tanzania, Uganda, and Rwanda, shaped around your interests, pace, and travel style.
+                    </Typography>
+                    <Typography
+                      component="li"
+                      variant="body1"
+                      sx={{
+                        mb: 0.75,
+                        color: "text.primary",
+                        fontSize: { xs: "0.875rem", md: "1rem" },
+                        lineHeight: 1.6,
+                        listStyle: "none",
+                        margin: 0,
+                        padding: 0,
+                        "&::before": {
+                          content: '"•"',
+                          color: "#B85C38",
+                          fontWeight: "bold",
+                          display: "inline-block",
+                          width: "1em",
+                          marginRight: "0.5em",
+                        },
+                      }}
+                    >
+                      <strong>Access & Authenticity</strong>
+                      <br />
+                      We go beyond the guidebooks to reveal hidden gems, from vibrant local markets to quiet, off-the-beaten-path landscapes. You experience East Africa through the eyes of a friend, not a tourist.
+                    </Typography>
+                    <Typography
+                      component="li"
+                      variant="body1"
+                      sx={{
+                        color: "text.primary",
+                        fontSize: { xs: "0.875rem", md: "1rem" },
+                        lineHeight: 1.6,
+                        listStyle: "none",
+                        margin: 0,
+                        padding: 0,
+                        "&::before": {
+                          content: '"•"',
+                          color: "#B85C38",
+                          fontWeight: "bold",
+                          display: "inline-block",
+                          width: "1em",
+                          marginRight: "0.5em",
+                        },
+                      }}
+                    >
+                      <strong>Seamless Planning</strong>
+                      <br />
+                      From honest advice to on-the-ground support, we guide you every step of the way so you can travel with confidence and ease.
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      flex: { xs: "1 1 100%", md: "0 0 auto" },
+                      display: { xs: "block", md: "block" },
+                      width: { xs: "100%", md: "250px" },
+                      minWidth: { xs: "auto", md: "200px" },
+                      maxWidth: { xs: "100%", md: "250px" },
+                      alignSelf: { xs: "center", md: "flex-start" },
+                      order: { xs: -1, md: 1 },
+                    }}
+                  >
+                    <Paper
+                      elevation={4}
+                      sx={{
+                        p: 2,
+                        background: "linear-gradient(135deg, rgba(107, 78, 61, 0.15) 0%, rgba(184, 92, 56, 0.1) 100%)",
+                        border: "2px solid rgba(107, 78, 61, 0.3)",
+                        borderRadius: 3,
+                        transform: { xs: "rotate(2deg)", md: "rotate(5deg)" },
+                        transition: "transform 0.3s ease",
+                        "&:hover": {
+                          transform: { xs: "rotate(1deg) scale(1.02)", md: "rotate(3deg) scale(1.02)" },
+                        },
+                      }}
+                    >
+                      <Box
+                        component="img"
+                        src="/20230325142541_IMG_0003@-2042003499.jpg"
+                        alt="Akira Safaris Journey"
+                        sx={{
+                          width: "100%",
+                          height: "auto",
+                          borderRadius: 2,
+                          mb: 1.5,
+                          objectFit: "cover",
+                        }}
+                      />
+                      <Button
+                        onClick={() => navigate("/staff")}
+                        size="small"
+                        sx={{
+                          mt: 1,
+                          backgroundColor: "#6B4E3D",
+                          color: "#fff",
+                          borderRadius: 2,
+                          px: 1.5,
+                          py: 0.5,
+                          fontSize: { md: "0.75rem" },
+                          textTransform: "none",
+                          fontWeight: 600,
+                          boxShadow: "0 2px 8px rgba(107, 78, 61, 0.3)",
+                          "&:hover": {
+                            backgroundColor: "#5A3E2D",
+                            boxShadow: "0 4px 12px rgba(107, 78, 61, 0.4)",
+                            transform: "translateY(-2px)",
+                          },
+                          transition: "all 0.3s ease",
+                          "&:focus": {
+                            outline: "none",
+                            boxShadow: "0 2px 8px rgba(107, 78, 61, 0.3)",
+                          },
+                          "&:focus-visible": {
+                            outline: "none",
+                            boxShadow: "0 2px 8px rgba(107, 78, 61, 0.3)",
+                          },
+                          "&:active": {
+                            outline: "none",
+                            boxShadow: "0 2px 8px rgba(107, 78, 61, 0.3)",
+                          },
+                        }}
+                      >
+                        Meet Our Team
+                      </Button>
+                    </Paper>
+                  </Box>
+                </Box>
+              </Box>
+
+              {/* Closing Paragraph */}
+              <Box sx={{ mb: 1.5 }}>
                 <Typography
                   variant="body1"
                   sx={{
@@ -260,374 +557,16 @@ export default function Team() {
                     fontSize: { xs: "0.875rem", md: "1rem" },
                     lineHeight: 1.6,
                     textAlign: "center",
+                    maxWidth: "900px",
+                    mx: "auto",
+                    fontStyle: "italic",
                   }}
                 >
-                  Akira Safaris began around shared meals, campfires, and
-                  Couchsurfing guests who asked to experience "the Africa we
-                  know." What started as simple road trips grew into expertly
-                  guided journeys through the Mara, Amboseli, and the Rift
-                  Valley. Today, that same warmth remains—only now, it's
-                  refined, responsible, and intentionally small-scale. You
-                  arrive as a guest and leave as family.
+                  For us, every itinerary is more than a trip. It is an invitation to discover, connect, and create stories that last a lifetime. We would be honored to help you write yours.
                 </Typography>
               </Box>
 
-              {/* What We Do Section */}
-              <Box sx={{ mb: 1 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 700,
-                    mb: 0.25,
-                    color: "#B85C38",
-                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                    textAlign: "center",
-                  }}
-                >
-                  What We Do
-                </Typography>
-                <Box
-                  component="ul"
-                  sx={{
-                    textAlign: "center",
-                    mb: 0,
-                    listStyle: "none",
-                    pl: 0,
-                    pr: 0,
-                    ml: 0,
-                    mr: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Private, tailor-made safaris with dedicated vehicles and
-                    guides
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Bespoke itineraries—luxury camps, family travel,
-                    photography, wellness retreats
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Carbon-positive travel—110% footprint offset and 10
-                    indigenous trees planted per guest
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Cultural immersion—Maasai traditions, fireside stories, and
-                    life beyond the game drive
-                  </Typography>
-                </Box>
-              </Box>
-
-              {/* Why Akira Safaris Section */}
-              <Box sx={{ mb: 1 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 700,
-                    mb: 0.25,
-                    color: "#B85C38",
-                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                    textAlign: "center",
-                  }}
-                >
-                  Why Akira Safaris
-                </Typography>
-                <Box
-                  component="ul"
-                  sx={{
-                    textAlign: "center",
-                    mb: 0,
-                    listStyle: "none",
-                    pl: 0,
-                    pr: 0,
-                    ml: 0,
-                    mr: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Locally rooted—we live here; this is our home
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Truly bespoke—your pace, interests, and budget lead the way
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Boutique care—a personal concierge from planning to return
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Purpose-driven travel—fair wages, community support,
-                    plastic-free camps
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Endless discoveries—rare wildlife moments and hidden places
-                    most never see
-                  </Typography>
-                </Box>
-              </Box>
-
-              {/* Signature Experiences Section */}
-              <Box sx={{ mb: 1 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 700,
-                    mb: 0.25,
-                    color: "#B85C38",
-                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                    textAlign: "center",
-                  }}
-                >
-                  Signature Experiences
-                </Typography>
-                <Box
-                  component="ul"
-                  sx={{
-                    textAlign: "center",
-                    mb: 0,
-                    listStyle: "none",
-                    pl: 0,
-                    pr: 0,
-                    ml: 0,
-                    mr: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Migration Detox Retreat – Phone-free Great Migration journey
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Classic Kenya Highlights – Mara, Nakuru & Amboseli in 7 days
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      mb: 0.25,
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Gorilla & Chimp Flex-Trek – Permit-guaranteed primate
-                    encounters
-                  </Typography>
-                  <Typography
-                    component="li"
-                    variant="body1"
-                    sx={{
-                      color: "text.primary",
-                      fontSize: { xs: "0.875rem", md: "1rem" },
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      width: "100%",
-                    }}
-                  >
-                    Photographic Safaris – Off-road access with professional
-                    image delivery
-                  </Typography>
-                </Box>
-              </Box>
-
-              {/* Our Commitment Section */}
-              <Box sx={{ mb: 1 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 700,
-                    mb: 0.25,
-                    color: "#B85C38",
-                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
-                    textAlign: "center",
-                  }}
-                >
-                  Our Commitment
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: "text.primary",
-                    fontSize: { xs: "0.875rem", md: "1rem" },
-                    lineHeight: 1.6,
-                    textAlign: "center",
-                  }}
-                >
-                  Every Akira Safari is locally designed, ethically operated,
-                  and personally delivered. Your guide is more than a
-                  driver—they're your storyteller, cultural bridge, and trusted
-                  companion through Africa's most unforgettable landscapes.
-                </Typography>
-              </Box>
-
-              {/* Ready to Start Section */}
+              {/* Start Your Journey Section */}
               <Box
                 sx={{
                   mt: 1.25,
@@ -648,7 +587,7 @@ export default function Team() {
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
                 >
-                  🚀 Ready to Start?
+                  Start Your Journey
                 </Typography>
                 <Typography
                   variant="body1"
@@ -661,270 +600,50 @@ export default function Team() {
                     mb: 1,
                   }}
                 >
-                  Tell us your dreams, fears, bucket-list shots and dietary
-                  quirks. We'll turn them into a day-by-day adventure that fits
-                  you—and the planet—perfectly.
+                  Contact us to begin planning your personalized East African safari with our family.
                 </Typography>
-                <Button
-                  variant="contained"
-                  size="large"
-                  endIcon={<ArrowForward />}
-                  onClick={() => navigate("/plan")}
-                  sx={{
-                    px: 2,
-                    py: 0.75,
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                    borderRadius: "50px",
-                    background:
-                      "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)", // Rust to light rust
-                    boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
-                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                    "& .MuiButton-endIcon": {
-                      marginLeft: 0.5,
-                    },
-                    "&:hover": {
-                      transform: "translateY(-3px) scale(1.05)",
-                      boxShadow: "0 12px 40px rgba(184, 92, 56, 0.4)",
-                      background:
-                        "linear-gradient(45deg, #8B4225 30%, #B85C38 90%)", // Dark rust to rust
-                    },
-                    "&:focus": {
-                      outline: "none",
-                    },
-                    "&:focus-visible": {
-                      outline: "none",
-                    },
-                  }}
-                >
-                  Book Your Safari
-                </Button>
+                 <Button
+                   variant="contained"
+                   size="large"
+                   endIcon={<ArrowForward />}
+                   onClick={() => navigate("/plan")}
+                   sx={{
+                     px: 2,
+                     py: 0.75,
+                     fontSize: "1.1rem",
+                     fontWeight: 600,
+                     borderRadius: "50px",
+                     background:
+                       "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)", // Rust to light rust
+                     boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                     "& .MuiButton-endIcon": {
+                       marginLeft: 0.5,
+                     },
+                     "&:hover": {
+                       transform: "translateY(-3px) scale(1.05)",
+                       boxShadow: "0 12px 40px rgba(184, 92, 56, 0.4)",
+                       background:
+                         "linear-gradient(45deg, #8B4225 30%, #B85C38 90%)", // Dark rust to rust
+                     },
+                     "&:focus": {
+                       outline: "none",
+                       boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                     },
+                     "&:focus-visible": {
+                       outline: "none",
+                       boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                     },
+                     "&:active": {
+                       outline: "none",
+                       boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                     },
+                   }}
+                 >
+                   Contact Us
+                 </Button>
               </Box>
-            </Paper>
           </Box>
-
-          {/* Meet Our Team Section */}
-          <Box sx={{ textAlign: "center", mb: { xs: 3, sm: 4, md: 5 } }}>
-            <Typography
-              variant="h2"
-              sx={{
-                fontWeight: 700,
-                mb: 2,
-                color: "#3D2817", // Dark brown from palette
-                fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-              }}
-            >
-              Meet Our Team
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: "text.secondary",
-                fontSize: { xs: "1rem", md: "1.125rem" },
-                maxWidth: "800px",
-                mx: "auto",
-              }}
-            >
-              Get to know the passionate individuals who make Akira Safaris an
-              unforgettable experience.
-            </Typography>
-          </Box>
-
-          {/* Team Members Grid - 3 cards per row */}
-          {membersError && (
-            <Typography
-              variant="body1"
-              sx={{ color: "error.main", textAlign: "center", mb: 2 }}
-            >
-              {membersError}
-            </Typography>
-          )}
-          {!membersError && membersLoading && (
-            <Typography
-              variant="body1"
-              sx={{ color: "text.secondary", textAlign: "center", mb: 2 }}
-            >
-              Loading team...
-            </Typography>
-          )}
-          {!membersError && !membersLoading && members.length === 0 && (
-            <Typography
-              variant="body1"
-              sx={{ color: "text.secondary", textAlign: "center", mb: 2 }}
-            >
-              Team coming soon.
-            </Typography>
-          )}
-          <Grid
-            container
-            spacing={{ xs: 2, sm: 3, md: 4 }}
-            justifyContent="center"
-          >
-            {members.map((member) => (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={member.id}>
-                <Card
-                  data-member-id={member.id}
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    overflow: "hidden",
-                    borderRadius: 4,
-                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    background: "linear-gradient(to bottom, #FFFFFF 0%, #F9F7F4 100%)",
-                    border: "1px solid rgba(107, 78, 61, 0.15)",
-                    boxShadow:
-                      highlightId && String(highlightId) === String(member.id)
-                        ? "0 0 0 3px rgba(184, 92, 56, 0.6), 0 12px 40px rgba(184, 92, 56, 0.25)"
-                        : "0 2px 8px rgba(61, 40, 23, 0.08)",
-                    "&:hover": {
-                      transform: "translateY(-8px)",
-                      boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
-                      borderColor: "rgba(184, 92, 56, 0.3)",
-                    },
-                    transition:
-                      "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease",
-                  }}
-                >
-                  {/* Card Content */}
-                  <Box
-                    sx={{
-                      p: { xs: 2, sm: 2.5, md: 2.5 },
-                      flexGrow: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      textAlign: "center",
-                    }}
-                  >
-                    {/* Circular Profile Image */}
-                    <Box
-                      sx={{
-                        width: { xs: "120px", sm: "140px", md: "150px" },
-                        height: { xs: "120px", sm: "140px", md: "150px" },
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                        backgroundColor: "#f5f5f5",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        position: "relative",
-                        mb: 2,
-                        border: "3px solid rgba(184, 92, 56, 0.2)",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          borderColor: "rgba(184, 92, 56, 0.4)",
-                          boxShadow: "0 6px 30px rgba(184, 92, 56, 0.2)",
-                          transform: "scale(1.05)",
-                        },
-                      }}
-                    >
-                      {member.image ? (
-                        <Box
-                          component="img"
-                          src={member.image}
-                          alt={member.name}
-                          sx={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            objectPosition: "center",
-                          }}
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                            if (e.target.nextSibling) {
-                              e.target.nextSibling.style.display = "flex";
-                            }
-                          }}
-                        />
-                      ) : null}
-                      <Box
-                        sx={{
-                          display: member.image ? "none" : "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: "100%",
-                          height: "100%",
-                          color: "#999",
-                        }}
-                      >
-                        <PersonIcon sx={{ fontSize: "4rem" }} />
-                      </Box>
-                    </Box>
-
-                    {/* Role Label */}
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontSize: { xs: "0.8rem", md: "0.875rem" },
-                        color: "#B85C38",
-                        mb: 0.5,
-                        fontWeight: 600,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.5px",
-                      }}
-                    >
-                      {member.role}
-                    </Typography>
-
-                    {/* Name */}
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        fontWeight: 700,
-                        mb: 2,
-                        color: "#3D2817",
-                        fontSize: { xs: "1.1rem", md: "1.25rem" },
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {member.name}
-                    </Typography>
-
-                    {/* More About Button */}
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/team/${member.id}`);
-                      }}
-                      sx={{
-                        backgroundColor: "#B85C38",
-                        color: "#fff",
-                        borderRadius: 2,
-                        px: 2,
-                        py: 0.75,
-                        fontSize: { xs: "0.8rem", md: "0.875rem" },
-                        textTransform: "none",
-                        fontWeight: 600,
-                        mt: "auto",
-                        boxShadow: "0 4px 12px rgba(184, 92, 56, 0.3)",
-                        "&:hover": {
-                          backgroundColor: "#8B4225",
-                          boxShadow: "0 6px 20px rgba(184, 92, 56, 0.4)",
-                          transform: "translateY(-2px)",
-                        },
-                        transition: "all 0.3s ease",
-                        "&:focus": {
-                          outline: "none",
-                        },
-                        "&:focus-visible": {
-                          outline: "none",
-                          boxShadow: "none",
-                        },
-                      }}
-                    >
-                      Learn More
-                    </Button>
-                  </Box>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
         </Paper>
       </Container>
     </Box>

@@ -70,7 +70,7 @@ export default function TeamMemberDetail() {
   }, [id]);
 
   const handleBack = () => {
-    navigate("/team", { state: { scrollToId: id, highlightId: id } });
+    navigate("/staff", { state: { scrollToId: id, highlightId: id } });
   };
 
   const handleSocialClick = (platform) => {

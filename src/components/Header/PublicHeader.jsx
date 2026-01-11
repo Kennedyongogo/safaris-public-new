@@ -295,6 +295,10 @@ export default function PublicHeader() {
             : "translateY(0)",
           opacity: location.pathname === "/" && !isHeaderVisible ? 0 : 1,
           pointerEvents: location.pathname === "/" && !isHeaderVisible ? "none" : "auto",
+          // Hide active underline when any nav button is hovered
+          "&:has(button:hover) button[data-active='true']::after": {
+            opacity: 0,
+          },
         }}
       >
         <Toolbar sx={{ px: { xs: 1, sm: 1.5, md: 2 }, py: 1 }}>
@@ -335,8 +339,9 @@ export default function PublicHeader() {
                         onClick={() => handleNavigateToSection(item)}
                         startIcon={item.icon}
                         disableRipple
+                        data-active={isActiveItem}
                         sx={{
-                          color: isActiveItem
+                          color: isActiveItem && location.pathname !== "/"
                             ? item.color
                             : (scrolled || location.pathname !== "/")
                               ? "text.primary"
@@ -346,7 +351,7 @@ export default function PublicHeader() {
                             lg: "0.925rem",
                             xl: "0.975rem",
                           },
-                          fontWeight: isActiveItem ? 700 : 600,
+                          fontWeight: isActiveItem && location.pathname !== "/" ? 700 : 600,
                           px: { md: 2, lg: 1.5, xl: 2 },
                           py: { md: 1.2, lg: 1, xl: 1.2 },
                           borderRadius: "25px",
@@ -355,14 +360,14 @@ export default function PublicHeader() {
                           position: "relative",
                           overflow: "hidden",
                           whiteSpace: "nowrap",
-                          backgroundColor: isActiveItem
+                          backgroundColor: isActiveItem && location.pathname !== "/"
                             ? (scrolled || location.pathname !== "/")
                               ? `${item.color}20`
                               : `${item.color}30`
                             : "transparent",
                           "&:focus": {
                             outline: "none",
-                            backgroundColor: isActiveItem
+                            backgroundColor: isActiveItem && location.pathname !== "/"
                               ? (scrolled || location.pathname !== "/")
                                 ? `${item.color}20`
                                 : `${item.color}30`
@@ -379,7 +384,7 @@ export default function PublicHeader() {
                                 lg: "1rem",
                                 xl: "1.1rem",
                               },
-                              color: isActiveItem ? item.color : "inherit",
+                              color: isActiveItem && location.pathname !== "/" ? item.color : "inherit",
                             },
                           },
                           "&:hover": {
@@ -390,7 +395,20 @@ export default function PublicHeader() {
                               color: item.color,
                             },
                           },
-                          "&:hover::after": !isActiveItem
+                          "&:hover::after": {
+                            content: '""',
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            width: "60%",
+                            height: "3px",
+                            backgroundColor: location.pathname === "/" ? "white" : item.color,
+                            borderRadius: "2px 2px 0 0",
+                            transition: "all 0.3s ease-out",
+                            zIndex: 1,
+                          },
+                          "&::after": isActiveItem && location.pathname === "/"
                             ? {
                                 content: '""',
                                 position: "absolute",
@@ -399,12 +417,12 @@ export default function PublicHeader() {
                                 transform: "translateX(-50%)",
                                 width: "60%",
                                 height: "3px",
-                                backgroundColor: item.color,
+                                backgroundColor: "white",
                                 borderRadius: "2px 2px 0 0",
-                                transition: "all 0.3s ease-out",
+                                transition: "opacity 0.3s ease-out",
+                                opacity: 1,
                               }
-                            : {},
-                          "&::after": isActiveItem
+                            : isActiveItem && location.pathname !== "/"
                             ? {
                                 content: '""',
                                 position: "absolute",
@@ -419,7 +437,7 @@ export default function PublicHeader() {
                             : {},
                           "& .icon": {
                             transition: "all 0.4s ease",
-                            color: isActiveItem
+                            color: isActiveItem && location.pathname !== "/"
                               ? item.color
                               : (scrolled || location.pathname !== "/")
                                 ? item.color
@@ -554,8 +572,9 @@ export default function PublicHeader() {
                       onClick={() => handleNavigateToSection(item)}
                       startIcon={item.icon}
                       disableRipple
+                      data-active={isActiveItem}
                       sx={{
-                        color: isActiveItem
+                        color: isActiveItem && location.pathname !== "/"
                           ? item.color
                           : (scrolled || location.pathname !== "/")
                             ? "text.primary"
@@ -565,7 +584,7 @@ export default function PublicHeader() {
                           lg: "0.925rem",
                           xl: "0.975rem",
                         },
-                        fontWeight: isActiveItem ? 700 : 600,
+                        fontWeight: isActiveItem && location.pathname !== "/" ? 700 : 600,
                         px: { md: 2, lg: 1.5, xl: 2 },
                         py: { md: 1.2, lg: 1, xl: 1.2 },
                         borderRadius: "25px",
@@ -574,14 +593,14 @@ export default function PublicHeader() {
                         position: "relative",
                         overflow: "hidden",
                         whiteSpace: "nowrap",
-                        backgroundColor: isActiveItem
+                        backgroundColor: isActiveItem && location.pathname !== "/"
                           ? (scrolled || location.pathname !== "/")
                             ? `${item.color}20`
                             : `${item.color}30`
                           : "transparent",
                         "&:focus": {
                           outline: "none",
-                          backgroundColor: isActiveItem
+                          backgroundColor: isActiveItem && location.pathname !== "/"
                             ? (scrolled || location.pathname !== "/")
                               ? `${item.color}20`
                               : `${item.color}30`
@@ -598,7 +617,7 @@ export default function PublicHeader() {
                               lg: "1rem",
                               xl: "1.1rem",
                             },
-                            color: isActiveItem ? item.color : "inherit",
+                            color: isActiveItem && location.pathname !== "/" ? item.color : "inherit",
                           },
                         },
                         "&:hover": {
@@ -609,7 +628,20 @@ export default function PublicHeader() {
                             color: item.color,
                           },
                         },
-                        "&:hover::after": !isActiveItem
+                        "&:hover::after": {
+                          content: '""',
+                          position: "absolute",
+                          bottom: 0,
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          width: "60%",
+                          height: "3px",
+                          backgroundColor: location.pathname === "/" ? "white" : item.color,
+                          borderRadius: "2px 2px 0 0",
+                          transition: "all 0.3s ease-out",
+                          zIndex: 1,
+                        },
+                        "&::after": isActiveItem && location.pathname === "/"
                           ? {
                               content: '""',
                               position: "absolute",
@@ -618,12 +650,12 @@ export default function PublicHeader() {
                               transform: "translateX(-50%)",
                               width: "60%",
                               height: "3px",
-                              backgroundColor: item.color,
+                              backgroundColor: "white",
                               borderRadius: "2px 2px 0 0",
-                              transition: "all 0.3s ease-out",
+                              transition: "opacity 0.3s ease-out",
+                              opacity: 1,
                             }
-                          : {},
-                        "&::after": isActiveItem
+                          : isActiveItem && location.pathname !== "/"
                           ? {
                               content: '""',
                               position: "absolute",
@@ -638,7 +670,7 @@ export default function PublicHeader() {
                           : {},
                         "& .icon": {
                           transition: "all 0.4s ease",
-                        color: isActiveItem
+                        color: isActiveItem && location.pathname !== "/"
                           ? item.color
                           : (scrolled || location.pathname !== "/")
                             ? item.color
