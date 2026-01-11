@@ -54,25 +54,25 @@ export default function PublicHeader() {
         label: "Explore",
         icon: <Explore />,
         sectionId: "hero-section",
-        color: "#6B4E3D", // Medium brown
+        color: "#8b7355", // Secondary Brown
       },
       {
         label: "About Akira",
         icon: <Groups />,
         route: "/team",
-        color: "#B85C38", // Burnt orange/rust
+        color: "#c8a97e", // Accent Gold
       },
       {
         label: "Agent Partnership",
         icon: <BusinessCenter />,
         route: "/agent-program",
-        color: "#6B7D47", // Olive green
+        color: "#8b7355", // Secondary Brown
       },
       {
         label: "Blog",
         icon: <Article />,
         route: "/blog",
-        color: "#6B4E3D", // Medium brown
+        color: "#c8a97e", // Accent Gold
       },
     ],
     []
@@ -280,15 +280,15 @@ export default function PublicHeader() {
         sx={{
           backgroundColor: (location.pathname === "/" && isAtTop)
             ? "transparent" // Transparent only when at absolute top on home page
-            : "rgba(245, 241, 232, 0.95)", // Light beige with transparency otherwise
+            : "rgba(249, 247, 243, 0.95)", // Warm White with transparency otherwise
           backdropFilter: (location.pathname === "/" && isAtTop) ? "none" : "blur(20px)",
           boxShadow: (location.pathname === "/" && isAtTop)
             ? "none"
-            : "0 8px 32px rgba(61, 40, 23, 0.12)",
+            : "0 8px 32px rgba(26, 26, 26, 0.12)",
           transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           borderBottom: (location.pathname === "/" && isAtTop)
             ? "none"
-            : "1px solid rgba(107, 78, 61, 0.2)",
+            : "1px solid rgba(139, 115, 85, 0.2)",
           // Hide header when scrolling past hero section on home page
           transform: location.pathname === "/" && !isHeaderVisible 
             ? "translateY(-100%)" 
@@ -524,7 +524,7 @@ export default function PublicHeader() {
                         : "none",
                       // Only use gradient when transparent/floating, otherwise solid black
                       background: isHeaderTransparent && isHeaderVisible
-                        ? "linear-gradient(135deg, #E0D8C0 0%, #F5F1E8 20%, #ffffff 40%, #F5F1E8 60%, #7B8D57 80%, #6B7D47 100%)"
+                        ? "linear-gradient(135deg, #c8a97e 0%, #f9f7f3 20%, #ffffff 40%, #f9f7f3 60%, #8b7355 80%, #1a1a1a 100%)"
                         : "none",
                       backgroundClip: isHeaderTransparent && isHeaderVisible ? "text" : "unset",
                       WebkitBackgroundClip: isHeaderTransparent && isHeaderVisible ? "text" : "unset",
@@ -693,23 +693,23 @@ export default function PublicHeader() {
                   display: { xs: "flex", md: "none" },
                   marginLeft: "auto",
                   color: mobileMenuOpen
-                    ? "#6B4E3D" // Medium brown
+                    ? "#8b7355" // Secondary Brown
                     : (scrolled || location.pathname !== "/")
-                      ? "primary.main"
+                      ? "#1a1a1a"
                       : "white",
                   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   borderRadius: "12px",
                   backgroundColor: mobileMenuOpen
                     ? (scrolled || location.pathname !== "/")
-                      ? "rgba(107, 78, 61, 0.2)" // Medium brown with transparency
-                      : "rgba(107, 78, 61, 0.3)"
+                      ? "rgba(139, 115, 85, 0.2)" // Secondary Brown with transparency
+                      : "rgba(139, 115, 85, 0.3)"
                     : "transparent",
                   "&:focus": {
                     outline: "none",
                     backgroundColor: mobileMenuOpen
                       ? (scrolled || location.pathname !== "/")
-                        ? "rgba(107, 78, 61, 0.2)"
-                        : "rgba(107, 78, 61, 0.3)"
+                        ? "rgba(139, 115, 85, 0.2)"
+                        : "rgba(139, 115, 85, 0.3)"
                       : "transparent",
                   },
                   "&:focus-visible": {
@@ -719,16 +719,16 @@ export default function PublicHeader() {
                   "&:hover": {
                     backgroundColor: mobileMenuOpen
                       ? (scrolled || location.pathname !== "/")
-                        ? "rgba(107, 78, 61, 0.25)"
-                        : "rgba(107, 78, 61, 0.35)"
+                        ? "rgba(139, 115, 85, 0.25)"
+                        : "rgba(139, 115, 85, 0.35)"
                       : (scrolled || location.pathname !== "/")
-                        ? "rgba(107, 78, 61, 0.1)"
+                        ? "rgba(139, 115, 85, 0.1)"
                         : "rgba(255, 255, 255, 0.15)",
                     transform: mobileMenuOpen
                       ? "scale(1.05)"
                       : "rotate(90deg) scale(1.1)",
                     boxShadow: (scrolled || location.pathname !== "/")
-                      ? "0 8px 25px rgba(107, 78, 61, 0.3)"
+                      ? "0 8px 25px rgba(139, 115, 85, 0.3)"
                       : "0 8px 25px rgba(255, 255, 255, 0.2)",
                   },
                 }}
@@ -750,12 +750,12 @@ export default function PublicHeader() {
           "& .MuiDrawer-paper": {
             width: { xs: "260px", sm: "300px" },
             marginRight: { xs: 2, sm: 3 }, // Add right margin so it doesn't appear cut by screen edge
-            backgroundColor: "background.default", // Light beige
+            backgroundColor: "#f9f7f3", // Warm White
             backgroundImage:
-              "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%)",
+              "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%)",
             backdropFilter: "blur(20px)",
-            borderLeft: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
-            boxShadow: "0 8px 32px rgba(61, 40, 23, 0.12)",
+            borderLeft: "1px solid rgba(139, 115, 85, 0.2)", // Secondary Brown border
+            boxShadow: "0 8px 32px rgba(26, 26, 26, 0.12)",
             height: "auto", // shrink to content by default
             maxHeight: {
               xs: "calc(100vh - 72px)",
@@ -779,7 +779,7 @@ export default function PublicHeader() {
               variant="h6"
               sx={{
                 fontWeight: 700,
-                background: "linear-gradient(45deg, #6B4E3D, #3D2817)", // Medium to dark brown
+                background: "linear-gradient(45deg, #8b7355, #1a1a1a)", // Secondary Brown to Primary Black
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -798,14 +798,14 @@ export default function PublicHeader() {
                   "&:focus-visible": { outline: "none", boxShadow: "none" },
                   "&:hover": {
                     transform: "rotate(90deg)",
-                    backgroundColor: "rgba(107, 78, 61, 0.1)", // Medium brown
+                    backgroundColor: "rgba(139, 115, 85, 0.1)", // Secondary Brown
                   },
                 }}
             >
               <Close fontSize="small" />
             </IconButton>
           </Box>
-          <Divider sx={{ mb: 1.5, borderColor: "rgba(107, 78, 61, 0.2)" }} />
+          <Divider sx={{ mb: 1.5, borderColor: "rgba(139, 115, 85, 0.2)" }} />
           <List dense sx={{ py: 0, gap: 0.5, display: "flex", flexDirection: "column" }}>
             {navItems.map((item, index) => {
               const isActiveItem =

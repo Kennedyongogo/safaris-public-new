@@ -32,37 +32,37 @@ import {
   People,
 } from "@mui/icons-material";
 
-// Category configuration mapping - Earth Tones
+// Category configuration mapping - Client Palette
 const categoryConfig = {
   educational_support: {
     icon: School,
-    color: "#6B4E3D", // Medium brown
-    gradient: "linear-gradient(135deg, #6B4E3D, #8B6F5E)",
+    color: "#8b7355", // Secondary Brown
+    gradient: "linear-gradient(135deg, #8b7355, #c8a97e)",
   },
   mental_health_awareness: {
     icon: Psychology,
-    color: "#6B7D47", // Olive green
-    gradient: "linear-gradient(135deg, #6B7D47, #8B9A6B)",
+    color: "#8b7355", // Secondary Brown
+    gradient: "linear-gradient(135deg, #8b7355, #c8a97e)",
   },
   poverty_alleviation: {
     icon: VolunteerActivism,
-    color: "#2D4A2D", // Dark forest green
-    gradient: "linear-gradient(135deg, #2D4A2D, #6B7D47)",
+    color: "#8b7355", // Secondary Brown
+    gradient: "linear-gradient(135deg, #8b7355, #c8a97e)",
   },
   community_empowerment: {
     icon: Group,
-    color: "#B85C38", // Burnt orange/rust
-    gradient: "linear-gradient(135deg, #B85C38, #C97A5A)",
+    color: "#c8a97e", // Accent Gold
+    gradient: "linear-gradient(135deg, #c8a97e, #8b7355)",
   },
   healthcare_access: {
     icon: LocalHospital,
-    color: "#3D2817", // Dark brown
-    gradient: "linear-gradient(135deg, #3D2817, #6B4E3D)",
+    color: "#1a1a1a", // Primary Black
+    gradient: "linear-gradient(135deg, #1a1a1a, #8b7355)",
   },
   youth_development: {
     icon: EmojiPeople,
-    color: "#8B6F5E", // Lighter brown
-    gradient: "linear-gradient(135deg, #8B6F5E, #B85C38)",
+    color: "#c8a97e", // Accent Gold
+    gradient: "linear-gradient(135deg, #c8a97e, #8b7355)",
   },
 };
 
@@ -196,7 +196,7 @@ const DestinationCard = ({ destination, isMobile, onClick }) => {
             backgroundColor: "#f5f5f5",
           }}
         >
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: "#666666" }}>
             No image available
           </Typography>
         </Box>
@@ -399,7 +399,6 @@ const MissionCard = ({
 
             <Typography
               variant="body2"
-              color="text.secondary"
               sx={{
                 mb: 2,
                 overflow: "hidden",
@@ -409,6 +408,7 @@ const MissionCard = ({
                 lineHeight: 1.5,
                 flexGrow: 1,
                 fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                color: "#666666",
               }}
             >
               {category.description}
@@ -597,7 +597,7 @@ export default function ServicesSection() {
         pt: { xs: 0, sm: 0, md: 0 },
         pb: { xs: 0.5, sm: 0.75, md: 1 },
         px: 0,
-        backgroundColor: "#F5F1E8", // Solid beige background to prevent rendering flicker
+        backgroundColor: "#f9f7f3", // Warm White background to prevent rendering flicker
         position: "relative",
         overflow: "hidden",
       }}
@@ -607,7 +607,7 @@ export default function ServicesSection() {
           mx: { xs: 0.75, sm: 0.75, md: 0.75 },
           borderRadius: { xs: 3, md: 4 },
           background: "#FFFFFF",
-          border: "1px solid rgba(107, 78, 61, 0.2)",
+          border: "1px solid rgba(139, 115, 85, 0.2)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
         }}
       >
@@ -635,12 +635,7 @@ export default function ServicesSection() {
                   mb: 1,
                   fontWeight: 800,
                   fontSize: { xs: "1.5rem", sm: "1.8rem", md: "2.2rem" },
-                  background:
-                    "linear-gradient(45deg, #6B4E3D, #B85C38, #6B7D47)", // Medium brown, rust, olive green
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  color: "#1a1a1a",
                   position: "relative",
                   "&::after": {
                     content: '""',
@@ -650,7 +645,7 @@ export default function ServicesSection() {
                     transform: "translateX(-50%)",
                     width: { xs: "60px", sm: "70px", md: "80px" },
                     height: "4px",
-                    background: "linear-gradient(45deg, #6B4E3D, #B85C38)", // Medium brown to rust
+                    background: "linear-gradient(45deg, #1a1a1a, #c8a97e)",
                     borderRadius: "2px",
                   },
                 }}
@@ -667,7 +662,7 @@ export default function ServicesSection() {
                   fontWeight: 500,
                   fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
                   lineHeight: 1.6,
-                  color: "text.primary",
+                  color: "#666666",
                 }}
               >
                 Discover the breathtaking beauty of Kenya's wildlife and
@@ -687,7 +682,7 @@ export default function ServicesSection() {
                 <Chip
                   label="Wildlife Adventures"
                   sx={{
-                    background: "linear-gradient(45deg, #6B4E3D, #8B6F5E)", // Medium brown to lighter brown
+                    background: "#8b7355",
                     color: "white",
                     fontWeight: 600,
                     px: { xs: 1.5, sm: 2 },
@@ -698,7 +693,7 @@ export default function ServicesSection() {
                 <Chip
                   label="Nature Exploration"
                   sx={{
-                    background: "linear-gradient(45deg, #B85C38, #C97A5A)", // Rust to light rust
+                    background: "#c8a97e",
                     color: "white",
                     fontWeight: 600,
                     px: { xs: 1.5, sm: 2 },
@@ -709,7 +704,7 @@ export default function ServicesSection() {
                 <Chip
                   label="Cultural Experiences"
                   sx={{
-                    background: "linear-gradient(45deg, #6B7D47, #8B9A6B)", // Olive green to light olive
+                    background: "#8b7355",
                     color: "white",
                     fontWeight: 600,
                     px: { xs: 1.5, sm: 2 },
@@ -739,7 +734,7 @@ export default function ServicesSection() {
               </Box>
             ) : destinations.length === 0 ? (
               <Box textAlign="center" py={4}>
-                <Typography color="text.secondary" variant="body1">
+                <Typography sx={{ color: "#666666" }} variant="body1">
                   No destinations available at the moment.
                 </Typography>
               </Box>

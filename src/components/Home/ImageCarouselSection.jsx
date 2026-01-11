@@ -107,7 +107,7 @@ export default function ImageCarouselSection() {
           mx: { xs: 0.75, sm: 0.75, md: 0.75 },
           borderRadius: { xs: 3, md: 4 },
           background: "#FFFFFF",
-          border: "1px solid rgba(107, 78, 61, 0.2)",
+          border: "1px solid rgba(139, 115, 85, 0.2)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
         }}
       >
@@ -141,7 +141,7 @@ export default function ImageCarouselSection() {
                 fontFamily: "'Brush Script MT', 'Lucida Handwriting', 'Dancing Script', cursive",
                 fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "3rem" },
                 fontWeight: 900,
-                color: "#6B4E3D", // Medium brown
+                color: "#1a1a1a", // Primary Black
                 letterSpacing: "0.03em",
                 lineHeight: 1.1,
                 display: "inline-block",
@@ -161,19 +161,19 @@ export default function ImageCarouselSection() {
               gap: { xs: 1.5, sm: 2, md: 2.5 },
               scrollBehavior: "smooth",
               scrollbarWidth: "thin",
-              scrollbarColor: "rgba(107, 78, 61, 0.3) transparent", // Medium brown
+              scrollbarColor: "rgba(139, 115, 85, 0.3) transparent", // Secondary Brown
               "&::-webkit-scrollbar": {
                 height: "8px",
               },
               "&::-webkit-scrollbar-track": {
-                backgroundColor: "rgba(107, 78, 61, 0.1)",
+                backgroundColor: "rgba(139, 115, 85, 0.1)",
                 borderRadius: "10px",
               },
               "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "rgba(107, 78, 61, 0.3)", // Medium brown
+                backgroundColor: "rgba(139, 115, 85, 0.3)", // Secondary Brown
                 borderRadius: "10px",
                 "&:hover": {
-                  backgroundColor: "rgba(107, 78, 61, 0.5)",
+                  backgroundColor: "rgba(139, 115, 85, 0.5)",
                 },
               },
             }}
@@ -259,7 +259,7 @@ export default function ImageCarouselSection() {
                     borderRadius: { xs: 2, md: 3 },
                     overflow: "hidden",
                     position: "relative",
-                    backgroundColor: "rgba(107, 78, 61, 0.1)",
+                    backgroundColor: "rgba(139, 115, 85, 0.1)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -269,8 +269,8 @@ export default function ImageCarouselSection() {
                     sx={{
                       width: "40px",
                       height: "40px",
-                      border: "3px solid rgba(107, 78, 61, 0.3)",
-                      borderTop: "3px solid rgba(107, 78, 61, 0.6)",
+                      border: "3px solid rgba(139, 115, 85, 0.3)",
+                      borderTop: "3px solid rgba(139, 115, 85, 0.6)",
                       borderRadius: "50%",
                       animation: "spin 1s linear infinite",
                       "@keyframes spin": {

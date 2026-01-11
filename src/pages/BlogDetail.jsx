@@ -270,7 +270,7 @@ export default function BlogDetail() {
                 component="li"
                 sx={{
                   mb: 0.5,
-                  color: "text.secondary",
+                  color: "#666666",
                   lineHeight: 1.8,
                   fontSize: { xs: "1.05rem", md: "1.1rem" },
                   fontWeight: 500,
@@ -299,7 +299,7 @@ export default function BlogDetail() {
               mt: 3,
               mb: 2,
               fontWeight: 700,
-              color: "#3D2817",
+              color: "#1a1a1a",
               fontSize: { xs: "1.4rem", md: "1.6rem" },
             }}
           >
@@ -315,7 +315,7 @@ export default function BlogDetail() {
             component="strong"
             sx={{
               fontWeight: 700,
-              color: "#3D2817",
+              color: "#1a1a1a",
               display: "block",
               mb: 1.5,
               fontSize: { xs: "1.05rem", md: "1.1rem" },
@@ -350,8 +350,38 @@ export default function BlogDetail() {
     return elements;
   };
 
-  // Show basic loading indicator only if no post data at all
-  const showLoading = loading && !post;
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "60vh",
+          bgcolor: "#f9f7f3", // Warm White from palette
+          background:
+            "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
+          position: "relative",
+          overflow: "hidden",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)", // Accent Gold and Secondary Brown
+            zIndex: 0,
+          },
+        }}
+      >
+        <Box sx={{ position: "relative", zIndex: 1 }}>
+          <CircularProgress sx={{ color: "#c8a97e" }} />
+        </Box>
+      </Box>
+    );
+  }
 
   if (error && !post) {
     return (
@@ -360,9 +390,9 @@ export default function BlogDetail() {
           pt: 0.75,
           pb: 0.75,
           px: 0,
-          bgcolor: "#F5F1E8",
+          bgcolor: "#f9f7f3",
           background:
-            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+            "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
         }}
       >
         <Container maxWidth="md" sx={{ py: 8 }}>
@@ -374,9 +404,9 @@ export default function BlogDetail() {
             onClick={() => navigate("/blog")}
             variant="contained"
             sx={{
-              backgroundColor: "#6B4E3D",
+              backgroundColor: "#8b7355",
               "&:hover": {
-                backgroundColor: "#B85C38",
+                backgroundColor: "#c8a97e",
               },
             }}
           >
@@ -476,9 +506,9 @@ export default function BlogDetail() {
           pt: 0.75,
           pb: 0.75,
           px: 0,
-          bgcolor: "#F5F1E8",
+          bgcolor: "#f9f7f3",
           background:
-            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+            "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
           minHeight: "100vh",
@@ -490,7 +520,7 @@ export default function BlogDetail() {
             right: 0,
             bottom: 0,
             background:
-              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+              "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)",
             zIndex: 0,
           },
         }}
@@ -510,33 +540,26 @@ export default function BlogDetail() {
           transition={{ duration: 0.5 }}
         >
           {/* Back Button */}
-          <Box sx={{ mb: 0.75, mt: 0.75, display: "flex", alignItems: "center", gap: 2 }}>
-            <Button
-              startIcon={<ArrowBack />}
-              onClick={() => navigate("/blog")}
-              sx={{
-                backgroundColor: "#B85C38",
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate("/blog")}
+            sx={{
+              mt: 0.5,
+              mb: 0.5,
+              backgroundColor: "#c8a97e", // Accent Gold
+              color: "white",
+              fontWeight: 600,
+              outline: "none",
+              "&:focus": { outline: "none", boxShadow: "none" },
+              "&:focus-visible": { outline: "none", boxShadow: "none" },
+              "&:hover": {
+                backgroundColor: "#8b7355", // Secondary Brown
                 color: "white",
-                fontWeight: 600,
-                outline: "none",
-                "&:focus": { outline: "none", boxShadow: "none" },
-                "&:focus-visible": { outline: "none", boxShadow: "none" },
-                "&:hover": {
-                  backgroundColor: "#8B4225",
-                },
-              }}
-            >
-              Back to Blog
-            </Button>
-            {showLoading && (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <CircularProgress size={20} sx={{ color: "#B85C38" }} />
-                <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 500 }}>
-                  Loading post...
-                </Typography>
-              </Box>
-            )}
-          </Box>
+              },
+            }}
+          >
+            Back to Blog
+          </Button>
 
           <Paper
             elevation={3}
@@ -545,7 +568,7 @@ export default function BlogDetail() {
               px: { xs: 1.5, sm: 1.5, md: 1.5 },
               borderRadius: { xs: 3, md: 4 },
               background: "#FFFFFF",
-              border: "1px solid rgba(107, 78, 61, 0.2)",
+              border: "1px solid rgba(139, 115, 85, 0.2)",
               overflow: "hidden",
             }}
           >
@@ -579,7 +602,7 @@ export default function BlogDetail() {
                   label={post?.category || "Article"}
                   sx={{
                     mb: 2,
-                    backgroundColor: "#B85C38",
+                    backgroundColor: "#c8a97e",
                     color: "white",
                     fontWeight: 600,
                     fontSize: "0.9rem",
@@ -591,7 +614,7 @@ export default function BlogDetail() {
                 sx={{
                   fontWeight: 800,
                   mb: 2,
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.6rem" },
                   lineHeight: 1.2,
                 }}
@@ -608,7 +631,7 @@ export default function BlogDetail() {
                     gap: 2,
                     mb: 3,
                     pb: 2,
-                    borderBottom: "1px solid rgba(107, 78, 61, 0.2)",
+                    borderBottom: "1px solid rgba(139, 115, 85, 0.2)",
                   }}
                 >
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -622,7 +645,7 @@ export default function BlogDetail() {
                         variant="body2"
                         sx={{
                           fontWeight: 700,
-                          color: "#3D2817",
+                          color: "#1a1a1a",
                           fontSize: "0.95rem",
                         }}
                       >
@@ -637,12 +660,12 @@ export default function BlogDetail() {
                         }}
                       >
                         <CalendarToday
-                          sx={{ fontSize: 14, color: "#6B4E3D" }}
+                          sx={{ fontSize: 14, color: "#8b7355" }}
                         />
                         <Typography
                           variant="caption"
                           sx={{
-                            color: "text.secondary",
+                            color: "#666666",
                             fontWeight: 600,
                             fontSize: "0.85rem",
                           }}
@@ -657,12 +680,12 @@ export default function BlogDetail() {
                           ) : "Loading..."}
                         </Typography>
                         <AccessTime
-                          sx={{ fontSize: 14, color: "#6B4E3D", ml: 1 }}
+                          sx={{ fontSize: 14, color: "#8b7355", ml: 1 }}
                         />
                         <Typography
                           variant="caption"
                           sx={{
-                            color: "text.secondary",
+                            color: "#666666",
                             fontWeight: 600,
                             fontSize: "0.85rem",
                           }}
@@ -680,7 +703,7 @@ export default function BlogDetail() {
                       sx={{
                         display: { xs: "none", sm: "flex" },
                         alignItems: "center",
-                        color: "text.secondary",
+                        color: "#666666",
                         fontWeight: 600,
                         mr: 1,
                       }}
@@ -761,11 +784,11 @@ export default function BlogDetail() {
                       animate={{ scale: [1, 1.12, 1] }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
                       sx={{
-                        borderColor: "#6B4E3D",
-                        color: "#6B4E3D",
-                        fontWeight: 700,
-                        ml: { xs: 0, sm: 1 },
-                        "&:hover": { borderColor: "#B85C38", backgroundColor: "rgba(107, 78, 61, 0.08)" },
+                      borderColor: "#8b7355",
+                      color: "#8b7355",
+                      fontWeight: 700,
+                      ml: { xs: 0, sm: 1 },
+                      "&:hover": { borderColor: "#c8a97e", backgroundColor: "rgba(139, 115, 85, 0.08)" },
                         "&:focus": { outline: "none" },
                         "&:focus-visible": { outline: "none" },
                       }}
@@ -782,7 +805,7 @@ export default function BlogDetail() {
                   mb: 4,
                   "& p": {
                     mb: 2,
-                    color: "text.secondary",
+                    color: "#666666",
                     lineHeight: 1.8,
                     fontSize: { xs: "1.05rem", md: "1.1rem" },
                     fontWeight: 500,
@@ -791,7 +814,7 @@ export default function BlogDetail() {
                     mt: 4,
                     mb: 2,
                     fontWeight: 700,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     fontSize: { xs: "1.5rem", md: "1.75rem" },
                   },
                   "& ul": {
@@ -800,17 +823,17 @@ export default function BlogDetail() {
                   },
                   "& li": {
                     mb: 1,
-                    color: "text.secondary",
+                    color: "#666666",
                     lineHeight: 1.8,
                   },
                   "& strong": {
                     fontWeight: 700,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                   },
                 }}
               >
                 {post?.content ? formatMarkdown(post.content) : (
-                  <Typography variant="body1" sx={{ color: "text.secondary", fontStyle: "italic" }}>
+                  <Typography variant="body1" sx={{ color: "#666666", fontStyle: "italic" }}>
                     Loading content...
                   </Typography>
                 )}
@@ -823,7 +846,7 @@ export default function BlogDetail() {
                   sx={{
                     fontWeight: 700,
                     mb: 1.5,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     fontSize: "1.2rem",
                   }}
                 >
@@ -836,16 +859,16 @@ export default function BlogDetail() {
                       label={tag}
                       variant="outlined"
                       sx={{
-                        borderColor: "rgba(107, 78, 61, 0.3)",
-                        color: "#6B4E3D",
+                        borderColor: "rgba(139, 115, 85, 0.3)",
+                        color: "#8b7355",
                         fontWeight: 600,
                         "&:hover": {
-                          backgroundColor: "rgba(107, 78, 61, 0.1)",
+                          backgroundColor: "rgba(139, 115, 85, 0.1)",
                         },
                       }}
                     />
                   )) || (
-                    <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: "italic" }}>
+                    <Typography variant="body2" sx={{ color: "#666666", fontStyle: "italic" }}>
                       Loading tags...
                     </Typography>
                   )}
@@ -862,7 +885,7 @@ export default function BlogDetail() {
                     sx={{
                       fontWeight: 700,
                       mb: 3,
-                      color: "#3D2817",
+                      color: "#1a1a1a",
                       fontSize: { xs: "1.4rem", md: "1.6rem" },
                     }}
                   >
@@ -919,7 +942,7 @@ export default function BlogDetail() {
                                 size="small"
                                 sx={{
                                   mb: 1,
-                                  backgroundColor: "#B85C38",
+                                  backgroundColor: "#c8a97e",
                                   color: "white",
                                   fontWeight: 600,
                                   fontSize: "0.75rem",
@@ -931,7 +954,7 @@ export default function BlogDetail() {
                                 sx={{
                                   fontWeight: 700,
                                   mb: 1,
-                                  color: "#3D2817",
+                                  color: "#1a1a1a",
                                   fontSize: "1.1rem",
                                   lineHeight: 1.3,
                                   display: "-webkit-box",
@@ -946,7 +969,7 @@ export default function BlogDetail() {
                                 variant="body2"
                                 sx={{
                                   mb: 2,
-                                  color: "text.secondary",
+                                  color: "#666666",
                                   lineHeight: 1.6,
                                   display: "-webkit-box",
                                   WebkitLineClamp: 2,
@@ -959,7 +982,7 @@ export default function BlogDetail() {
                               <Button
                                 endIcon={<ArrowForward />}
                                 sx={{
-                                  color: "#6B4E3D",
+                                  color: "#8b7355",
                                   fontWeight: 600,
                                   alignSelf: "flex-start",
                                   justifyContent: "flex-start",
@@ -968,7 +991,7 @@ export default function BlogDetail() {
                                   "&:focus-visible": { outline: "none", boxShadow: "none" },
                                   "&:hover": {
                                     backgroundColor: "transparent",
-                                    color: "#B85C38",
+                                    color: "#c8a97e",
                                   },
                                 }}
                               >
@@ -989,7 +1012,7 @@ export default function BlogDetail() {
                   mt: 5,
                   p: 3,
                   background:
-                    "linear-gradient(135deg, #B85C38, #C97A5A)",
+                    "linear-gradient(135deg, #c8a97e, #8b7355)",
                   borderRadius: 3,
                   textAlign: "center",
                 }}
@@ -1011,7 +1034,7 @@ export default function BlogDetail() {
                   onClick={() => navigate("/plan")}
                   sx={{
                     backgroundColor: "white",
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     fontWeight: 700,
                     px: 4,
                     py: 1.5,
@@ -1019,8 +1042,8 @@ export default function BlogDetail() {
                     "&:focus": { outline: "none", boxShadow: "none" },
                     "&:focus-visible": { outline: "none", boxShadow: "none" },
                     "&:hover": {
-                      backgroundColor: "#F5F1E8",
-                      color: "#3D2817",
+                      backgroundColor: "#f9f7f3",
+                      color: "#1a1a1a",
                     },
                   }}
                 >

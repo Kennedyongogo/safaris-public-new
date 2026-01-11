@@ -91,9 +91,9 @@ export default function Staff() {
         pt: 0.75,
         pb: 0.75,
         px: 0,
-        bgcolor: "#F5F1E8", // Light beige from palette
+        bgcolor: "#f9f7f3", // Warm White from palette
         background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
         position: "relative",
         overflow: "hidden",
         minHeight: "auto",
@@ -105,7 +105,7 @@ export default function Staff() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+            "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)", // Accent Gold and Secondary Brown
           zIndex: 0,
         },
       }}
@@ -126,14 +126,14 @@ export default function Staff() {
           sx={{
             mt: 0.5,
             mb: 0.5,
-            backgroundColor: "#B85C38", // Burnt orange/rust
+            backgroundColor: "#c8a97e", // Accent Gold
             color: "white",
             fontWeight: 600,
             outline: "none",
             "&:focus": { outline: "none", boxShadow: "none" },
             "&:focus-visible": { outline: "none", boxShadow: "none" },
             "&:hover": {
-              backgroundColor: "#8B4225", // Dark rust
+              backgroundColor: "#8b7355", // Secondary Brown
               color: "white",
             },
           }}
@@ -148,7 +148,7 @@ export default function Staff() {
             px: { xs: 1.5, sm: 1.5, md: 1.5 },
             borderRadius: { xs: 3, md: 4 },
             background: "#FFFFFF",
-            border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
+            border: "1px solid rgba(139, 115, 85, 0.2)", // Secondary Brown border
             minHeight: "auto",
             height: "auto",
             overflow: "hidden",
@@ -161,7 +161,7 @@ export default function Staff() {
               sx={{
                 fontWeight: 700,
                 mb: 2,
-                color: "#3D2817", // Dark brown from palette
+                color: "#1a1a1a", // Primary Black from palette
                 fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
               }}
             >
@@ -217,21 +217,21 @@ export default function Staff() {
                   data-member-id={member.id}
                   sx={{
                     overflow: "hidden",
-                    border: "1px solid rgba(107, 78, 61, 0.15)",
+                    border: "1px solid rgba(139, 115, 85, 0.15)",
                     borderRadius: 3,
                     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                    background: "linear-gradient(to bottom, #FFFFFF 0%, #F9F7F4 100%)",
+                    background: "linear-gradient(to bottom, #FFFFFF 0%, #f9f7f3 100%)",
                     boxShadow:
                       highlightId && String(highlightId) === String(member.id)
-                        ? "0 0 0 3px rgba(184, 92, 56, 0.6), 0 12px 40px rgba(184, 92, 56, 0.25)"
-                        : "0 2px 8px rgba(61, 40, 23, 0.08)",
+                        ? "0 0 0 3px rgba(200, 169, 126, 0.6), 0 12px 40px rgba(200, 169, 126, 0.25)"
+                        : "0 2px 8px rgba(26, 26, 26, 0.08)",
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
                     "&:hover": {
                       transform: "translateY(-8px)",
-                      boxShadow: "0 12px 32px rgba(61, 40, 23, 0.15)",
-                      borderColor: "rgba(184, 92, 56, 0.3)",
+                      boxShadow: "0 12px 32px rgba(26, 26, 26, 0.15)",
+                      borderColor: "rgba(200, 169, 126, 0.3)",
                     },
                   }}
                 >
@@ -260,12 +260,12 @@ export default function Staff() {
                         justifyContent: "center",
                         position: "relative",
                         mb: 2,
-                        border: "3px solid rgba(184, 92, 56, 0.2)",
+                        border: "3px solid rgba(200, 169, 126, 0.2)",
                         boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                         transition: "all 0.3s ease",
                         "&:hover": {
-                          borderColor: "rgba(184, 92, 56, 0.4)",
-                          boxShadow: "0 6px 30px rgba(184, 92, 56, 0.2)",
+                          borderColor: "rgba(200, 169, 126, 0.4)",
+                          boxShadow: "0 6px 30px rgba(200, 169, 126, 0.2)",
                           transform: "scale(1.05)",
                         },
                       }}
@@ -309,7 +309,7 @@ export default function Staff() {
                       variant="body2"
                       sx={{
                         fontSize: { xs: "0.8rem", md: "0.875rem" },
-                        color: "#B85C38",
+                        color: "#c8a97e",
                         mb: 0.5,
                         fontWeight: 600,
                         textTransform: "uppercase",
@@ -325,7 +325,7 @@ export default function Staff() {
                       sx={{
                         fontWeight: 700,
                         mb: 2,
-                        color: "#3D2817",
+                        color: "#1a1a1a",
                         fontSize: { xs: "1.1rem", md: "1.25rem" },
                         lineHeight: 1.2,
                       }}
@@ -342,7 +342,7 @@ export default function Staff() {
                         navigate(`/team/${member.id}`);
                       }}
                       sx={{
-                        backgroundColor: "#B85C38",
+                        backgroundColor: "#c8a97e",
                         color: "#fff",
                         borderRadius: 2,
                         px: 2,
@@ -351,10 +351,10 @@ export default function Staff() {
                         textTransform: "none",
                         fontWeight: 600,
                         mt: "auto",
-                        boxShadow: "0 4px 12px rgba(184, 92, 56, 0.3)",
+                        boxShadow: "0 4px 12px rgba(200, 169, 126, 0.3)",
                         "&:hover": {
-                          backgroundColor: "#8B4225",
-                          boxShadow: "0 6px 20px rgba(184, 92, 56, 0.4)",
+                          backgroundColor: "#8b7355",
+                          boxShadow: "0 6px 20px rgba(200, 169, 126, 0.4)",
                           transform: "translateY(-2px)",
                         },
                         transition: "all 0.3s ease",

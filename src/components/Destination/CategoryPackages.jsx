@@ -43,16 +43,16 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
     <Card
       sx={{
         overflow: "hidden",
-        border: "1px solid rgba(107, 78, 61, 0.15)",
+        border: "1px solid rgba(139, 115, 85, 0.15)",
         borderRadius: 3,
         cursor: "pointer",
         transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        background: "linear-gradient(to bottom, #FFFFFF 0%, #F9F7F4 100%)",
-        boxShadow: "0 2px 8px rgba(61, 40, 23, 0.08)",
+        background: "linear-gradient(to bottom, #FFFFFF 0%, #f9f7f3 100%)",
+        boxShadow: "0 2px 8px rgba(26, 26, 26, 0.08)",
         "&:hover": {
           transform: "translateY(-6px)",
-          boxShadow: "0 12px 32px rgba(61, 40, 23, 0.15)",
-          borderColor: "rgba(184, 92, 56, 0.3)",
+          boxShadow: "0 12px 32px rgba(26, 26, 26, 0.15)",
+          borderColor: "rgba(200, 169, 126, 0.3)",
         },
       }}
       onClick={() => onClick(pkg)}
@@ -132,7 +132,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
                 left: 0,
                 right: 0,
                 height: "60px",
-                background: "linear-gradient(to top, rgba(0,0,0,0.3), transparent)",
+                background: "linear-gradient(to top, rgba(26, 26, 26, 0.3), transparent)",
                 pointerEvents: "none",
               }}
             />
@@ -161,7 +161,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
           sx={{
             fontWeight: 700,
             mb: 0.75,
-            color: "#3D2817",
+            color: "#1a1a1a",
             fontSize: { xs: "1.1rem", sm: "1.2rem" },
             lineHeight: 1.3,
             display: "-webkit-box",
@@ -177,7 +177,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
         <Typography
           variant="body2"
           sx={{
-            color: "text.secondary",
+            color: "#666666",
             lineHeight: 1.5,
             fontSize: { xs: "0.875rem", sm: "0.9rem" },
             mb: 1.5,
@@ -220,7 +220,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
                       width: 4,
                       height: 4,
                       borderRadius: "50%",
-                      backgroundColor: "#B85C38",
+                      backgroundColor: "#c8a97e",
                       mt: 0.75,
                       flexShrink: 0,
                     }}
@@ -228,7 +228,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
                   <Typography
                     variant="body2"
                     sx={{
-                      color: "text.secondary",
+                      color: "#666666",
                       lineHeight: 1.4,
                       fontSize: { xs: "0.8rem", sm: "0.85rem" },
                       fontWeight: 500,
@@ -252,13 +252,13 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
             sx={{
               mt: "auto",
               pt: 1,
-              borderTop: "1px solid rgba(107, 78, 61, 0.1)",
+              borderTop: "1px solid rgba(139, 115, 85, 0.1)",
             }}
           >
             <Typography
               variant="body2"
               sx={{
-                color: "#6B4E3D",
+                color: "#8b7355",
                 fontSize: { xs: "0.8rem", sm: "0.85rem" },
                 fontWeight: 600,
                 display: "-webkit-box",
@@ -269,7 +269,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
             >
               {pkg.pricing_tiers[0]?.tier && (
                 <>
-                  <Box component="span" sx={{ color: "#B85C38", mr: 0.5 }}>
+                  <Box component="span" sx={{ color: "#c8a97e", mr: 0.5 }}>
                     From:
                   </Box>
                   {pkg.pricing_tiers[0].price_range}
@@ -284,7 +284,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
           sx={{
             mt: 1.25,
             pt: 1.25,
-            borderTop: "1px solid rgba(107, 78, 61, 0.1)",
+            borderTop: "1px solid rgba(139, 115, 85, 0.1)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -293,7 +293,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
           <Typography
             variant="caption"
             sx={{
-              color: "#B85C38",
+              color: "#c8a97e",
               fontSize: { xs: "0.75rem", sm: "0.8rem" },
               fontWeight: 600,
               textTransform: "uppercase",
@@ -307,7 +307,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
               width: 20,
               height: 20,
               borderRadius: "50%",
-              backgroundColor: "#B85C38",
+              backgroundColor: "#c8a97e",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -406,9 +406,9 @@ export default function CategoryPackages() {
         pt: 0.75,
         pb: 0.75,
         px: 0,
-        bgcolor: "#F5F1E8",
+        bgcolor: "#f9f7f3",
         background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
         position: "relative",
         overflow: "hidden",
         minHeight: "100vh",
@@ -420,7 +420,7 @@ export default function CategoryPackages() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+            "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)",
           zIndex: 0,
         },
       }}
@@ -446,11 +446,14 @@ export default function CategoryPackages() {
             sx={{
               mt: 0.5,
               mb: 2,
-              backgroundColor: "#6B4E3D",
+              backgroundColor: "#c8a97e",
               color: "white",
               fontWeight: 600,
+              outline: "none",
+              "&:focus": { outline: "none", boxShadow: "none" },
+              "&:focus-visible": { outline: "none", boxShadow: "none" },
               "&:hover": {
-                backgroundColor: "#5D4037",
+                backgroundColor: "#8b7355",
               },
             }}
           >
@@ -464,7 +467,7 @@ export default function CategoryPackages() {
               sx={{
                 fontWeight: 700,
                 mb: 1,
-                color: "#3D2817",
+                color: "#1a1a1a",
                 fontSize: { xs: "1rem", sm: "2.2rem", md: "2.6rem" },
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -477,7 +480,7 @@ export default function CategoryPackages() {
               <Typography
                 variant="body1"
                 sx={{
-                  color: "text.secondary",
+                  color: "#666666",
                   fontSize: { xs: "1rem", sm: "1.1rem" },
                   fontWeight: 500,
                 }}
@@ -517,7 +520,7 @@ export default function CategoryPackages() {
         sx={{
           "& .MuiDialog-paper": {
             borderRadius: 3,
-            border: "1px solid rgba(107, 78, 61, 0.2)",
+            border: "1px solid rgba(139, 115, 85, 0.2)",
           },
         }}
       >
@@ -526,15 +529,15 @@ export default function CategoryPackages() {
             <DialogTitle
               sx={{
                 pb: 1,
-                background: "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
-                borderBottom: "1px solid rgba(107, 78, 61, 0.1)",
+                background: "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
+                borderBottom: "1px solid rgba(139, 115, 85, 0.1)",
               }}
             >
               <Typography
                 variant="h5"
                 sx={{
                   fontWeight: 700,
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   fontSize: { xs: "1.5rem", md: "1.75rem" },
                 }}
               >
@@ -551,7 +554,7 @@ export default function CategoryPackages() {
                       width: "100%",
                       height: { xs: "250px", md: "350px" },
                       borderRadius: 2,
-                      border: "1px solid rgba(107, 78, 61, 0.2)",
+                      border: "1px solid rgba(139, 115, 85, 0.2)",
                       boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                       overflow: "hidden",
                       mb: 3,
@@ -621,7 +624,7 @@ export default function CategoryPackages() {
                 <Typography
                   variant="body1"
                   sx={{
-                    color: "text.primary",
+                    color: "#1a1a1a",
                     lineHeight: 1.7,
                     fontSize: { xs: "1.05rem", md: "1.15rem" },
                     fontWeight: 500,
@@ -638,7 +641,7 @@ export default function CategoryPackages() {
                       variant="subtitle1"
                       sx={{
                         fontWeight: 700,
-                        color: "#6B4E3D",
+                        color: "#8b7355",
                         mb: 1,
                         fontSize: { xs: "1rem", md: "1.1rem" },
                       }}
@@ -653,7 +656,7 @@ export default function CategoryPackages() {
                           variant="body2"
                           sx={{
                             mb: 0.5,
-                            color: "text.secondary",
+                            color: "#666666",
                             lineHeight: 1.6,
                             fontSize: { xs: "1rem", md: "1.05rem" },
                             fontWeight: 500,
@@ -673,7 +676,7 @@ export default function CategoryPackages() {
                       variant="subtitle1"
                       sx={{
                         fontWeight: 700,
-                        color: "#6B4E3D",
+                        color: "#8b7355",
                         mb: 1,
                         fontSize: { xs: "1rem", md: "1.1rem" },
                       }}
@@ -686,7 +689,7 @@ export default function CategoryPackages() {
                         variant="body1"
                         sx={{
                           mb: 0.75,
-                          color: "text.primary",
+                          color: "#1a1a1a",
                           fontSize: { xs: "1rem", md: "1.05rem" },
                           fontWeight: 600,
                         }}
@@ -703,19 +706,22 @@ export default function CategoryPackages() {
               sx={{
                 p: { xs: 2, md: 3 },
                 pt: 0,
-                background: "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
-                borderTop: "1px solid rgba(107, 78, 61, 0.1)",
+                background: "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
+                borderTop: "1px solid rgba(139, 115, 85, 0.1)",
               }}
             >
               <Button
                 onClick={handleClosePackageDialog}
                 variant="outlined"
                 sx={{
-                  borderColor: "#6B4E3D",
-                  color: "#6B4E3D",
+                  borderColor: "#8b7355",
+                  color: "#8b7355",
+                  outline: "none",
+                  "&:focus": { outline: "none", boxShadow: "none" },
+                  "&:focus-visible": { outline: "none", boxShadow: "none" },
                   "&:hover": {
-                    borderColor: "#5D4037",
-                    backgroundColor: "#6B4E3D",
+                    borderColor: "#c8a97e",
+                    backgroundColor: "#8b7355",
                     color: "white",
                   },
                 }}

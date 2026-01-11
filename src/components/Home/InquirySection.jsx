@@ -29,7 +29,7 @@ export default function InquirySection() {
         pb: { xs: 1, sm: 1.5, md: 2 },
         position: "relative",
         zIndex: 1,
-        background: "#F5F1E8",
+        background: "#f9f7f3",
       }}
     >
       <Card
@@ -37,7 +37,7 @@ export default function InquirySection() {
           mx: { xs: 0.75, sm: 0.75, md: 0.75 },
           borderRadius: { xs: 3, md: 4 },
           background: "#FFFFFF",
-          border: "1px solid rgba(107, 78, 61, 0.2)",
+          border: "1px solid rgba(139, 115, 85, 0.2)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
         }}
       >
@@ -65,7 +65,7 @@ export default function InquirySection() {
                     fontWeight: 900,
                     mb: { xs: 2, md: 2.5 },
                     fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.5rem", lg: "1.7rem" },
-                    background: "linear-gradient(45deg, #6B4E3D, #B85C38, #6B7D47)",
+                    background: "linear-gradient(45deg, #1a1a1a, #c8a97e, #8b7355)",
                     backgroundClip: "text",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -81,7 +81,7 @@ export default function InquirySection() {
                   variant="body1"
                   sx={{
                     mb: { xs: 2, md: 2.5 },
-                    color: "text.primary",
+                    color: "#1a1a1a",
                     fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
                     fontWeight: 500,
                     lineHeight: 1.8,
@@ -96,7 +96,7 @@ export default function InquirySection() {
                   variant="body1"
                   sx={{
                     mb: { xs: 2, md: 2.5 },
-                    color: "text.primary",
+                    color: "#1a1a1a",
                     fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
                     fontWeight: 500,
                     lineHeight: 1.8,
@@ -113,7 +113,7 @@ export default function InquirySection() {
                     mb: { xs: 3, md: 4 },
                     fontWeight: 700,
                     fontSize: { xs: "0.95rem", sm: "1.3rem", md: "1.5rem" },
-                    color: "#6B4E3D",
+                    color: "#8b7355",
                     letterSpacing: { xs: "0.03em", sm: "0.05em", md: "0.05em" },
                     textTransform: "uppercase",
                   }}
@@ -133,22 +133,22 @@ export default function InquirySection() {
                     textTransform: "uppercase",
                     letterSpacing: { xs: "0.05em", sm: "0.1em", md: "0.1em" },
                     borderRadius: "50px",
-                    background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 50%, #6B7D47 100%)",
+                    background: "linear-gradient(135deg, #8b7355 0%, #c8a97e 50%, #8b7355 100%)",
                     color: "white",
-                    boxShadow: "0 8px 32px rgba(107, 78, 61, 0.3)",
+                    boxShadow: "0 8px 32px rgba(139, 115, 85, 0.3)",
                     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:focus": {
                       outline: "none",
-                      boxShadow: "0 8px 32px rgba(107, 78, 61, 0.3)",
+                      boxShadow: "0 8px 32px rgba(139, 115, 85, 0.3)",
                     },
                     "&:focus-visible": {
                       outline: "none",
-                      boxShadow: "0 8px 32px rgba(107, 78, 61, 0.3)",
+                      boxShadow: "0 8px 32px rgba(139, 115, 85, 0.3)",
                     },
                     "&:hover": {
                       transform: "translateY(-3px) scale(1.05)",
-                      boxShadow: "0 12px 40px rgba(107, 78, 61, 0.4)",
-                      background: "linear-gradient(135deg, #8B6F5E 0%, #C97A5A 50%, #8B9A6B 100%)",
+                      boxShadow: "0 12px 40px rgba(139, 115, 85, 0.4)",
+                      background: "linear-gradient(135deg, #c8a97e 0%, #8b7355 50%, #c8a97e 100%)",
                     },
                   }}
                 >

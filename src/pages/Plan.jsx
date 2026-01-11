@@ -314,7 +314,7 @@ export default function Plan() {
         icon: "success",
         title: "Thank you!",
         text: "Your enquiry has been submitted successfully. We'll get back to you within 24 hours.",
-        confirmButtonColor: "#B85C38",
+        confirmButtonColor: "#c8a97e",
       });
       setSelectedForm(null);
       setCurrentStep(0);
@@ -325,7 +325,7 @@ export default function Plan() {
         icon: "error",
         title: "Submission failed",
         text: error.message || "Please try again.",
-        confirmButtonColor: "#B85C38",
+        confirmButtonColor: "#c8a97e",
       });
     } finally {
       setLoading(false);
@@ -396,9 +396,9 @@ export default function Plan() {
           pt: 1.5,
           pb: 1.5,
           px: 0,
-          bgcolor: "#F5F1E8",
+          bgcolor: "#f9f7f3",
           background:
-            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+            "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
           "&::before": {
@@ -409,7 +409,7 @@ export default function Plan() {
             right: 0,
             bottom: 0,
             background:
-              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+              "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)",
             zIndex: 0,
           },
         }}
@@ -435,7 +435,7 @@ export default function Plan() {
                 px: { xs: 1.5, sm: 1.5, md: 1.5 },
                 borderRadius: { xs: 3, md: 4 },
                 background: "#FFFFFF",
-                border: "1px solid rgba(107, 78, 61, 0.2)",
+                border: "1px solid rgba(139, 115, 85, 0.2)",
                 minHeight: "auto",
                 height: "auto",
                 overflow: "hidden",
@@ -449,11 +449,7 @@ export default function Plan() {
                     mb: 1,
                     fontWeight: 800,
                     fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.8rem" },
-                    background:
-                      "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)",
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
+                    color: "#1a1a1a",
                     position: "relative",
                     "&::after": {
                       content: '""',
@@ -463,7 +459,7 @@ export default function Plan() {
                       transform: "translateX(-50%)",
                       width: { xs: "80px", sm: "100px", md: "120px" },
                       height: "4px",
-                      background: "linear-gradient(45deg, #6B4E3D, #B85C38)",
+                      background: "linear-gradient(45deg, #1a1a1a, #c8a97e)",
                       borderRadius: "2px",
                     },
                   }}
@@ -476,7 +472,7 @@ export default function Plan() {
                     mt: 3,
                     fontWeight: 500,
                     fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
-                    color: "text.secondary",
+                    color: "#666666",
                     maxWidth: "800px",
                     mx: "auto",
                     lineHeight: 1.7,
@@ -489,7 +485,7 @@ export default function Plan() {
                   sx={{
                     mt: 2,
                     fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
-                    color: "text.secondary",
+                    color: "#666666",
                     maxWidth: "800px",
                     mx: "auto",
                     lineHeight: 1.6,
@@ -509,7 +505,7 @@ export default function Plan() {
                 <Box sx={{ maxWidth: 800, mx: "auto" }}>
                   <Typography
                     variant="body2"
-                    sx={{ mb: 1, color: "#6B4E3D", textAlign: "center" }}
+                    sx={{ mb: 1, color: "#8b7355", textAlign: "center" }}
                   >
                     Question {currentStep + 1} of {visibleFields.length}
                   </Typography>
@@ -525,7 +521,7 @@ export default function Plan() {
                       sx={{
                         width: `${((currentStep + 1) / visibleFields.length) * 100}%`,
                         height: "100%",
-                        bgcolor: "#B85C38",
+                        bgcolor: "#c8a97e",
                         borderRadius: 4,
                         transition: "width 0.3s ease-in-out",
                       }}
@@ -542,7 +538,7 @@ export default function Plan() {
                       variant="h6"
                       sx={{
                         mb: 3,
-                        color: "#6B4E3D",
+                        color: "#8b7355",
                         fontWeight: 600,
                         textAlign: "center",
                       }}
@@ -597,13 +593,13 @@ export default function Plan() {
                               "& .MuiOutlinedInput-root": {
                                 backgroundColor: "#f9f9f9",
                                 "& fieldset": {
-                                  borderColor: "rgba(107, 78, 61, 0.3)",
+                                  borderColor: "rgba(139, 115, 85, 0.3)",
                                 },
                                 "&:hover fieldset": {
-                                  borderColor: "#6B4E3D",
+                                  borderColor: "#8b7355",
                                 },
                                 "&.Mui-focused fieldset": {
-                                  borderColor: "#B85C38",
+                                  borderColor: "#c8a97e",
                                 },
                               },
                             }}
@@ -630,13 +626,13 @@ export default function Plan() {
                               "& .MuiOutlinedInput-root": {
                                 backgroundColor: "#f9f9f9",
                                 "& fieldset": {
-                                  borderColor: "rgba(107, 78, 61, 0.3)",
+                                  borderColor: "rgba(139, 115, 85, 0.3)",
                                 },
                                 "&:hover fieldset": {
-                                  borderColor: "#6B4E3D",
+                                  borderColor: "#8b7355",
                                 },
                                 "&.Mui-focused fieldset": {
-                                  borderColor: "#B85C38",
+                                  borderColor: "#c8a97e",
                                 },
                               },
                             }}
@@ -661,14 +657,14 @@ export default function Plan() {
                               sx={{
                                 backgroundColor: "#f9f9f9",
                                 "& .MuiOutlinedInput-notchedOutline": {
-                                  borderColor: "rgba(107, 78, 61, 0.3)",
+                                  borderColor: "rgba(139, 115, 85, 0.3)",
                                 },
                                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                                  borderColor: "#6B4E3D",
+                                  borderColor: "#8b7355",
                                 },
                                 "&.Mui-focused .MuiOutlinedInput-notchedOutline":
                                   {
-                                    borderColor: "#B85C38",
+                                    borderColor: "#c8a97e",
                                   },
                               }}
                             >
@@ -704,14 +700,14 @@ export default function Plan() {
                                   key={option.id}
                                   value={option.option_value}
                                   control={
-                                    <Radio
-                                      sx={{
-                                        color: "rgba(107, 78, 61, 0.3)",
-                                        "&.Mui-checked": {
-                                          color: "#B85C38",
-                                        },
-                                      }}
-                                    />
+                                      <Radio
+                                        sx={{
+                                          color: "rgba(139, 115, 85, 0.3)",
+                                          "&.Mui-checked": {
+                                            color: "#c8a97e",
+                                          },
+                                        }}
+                                      />
                                   }
                                   label={option.option_label}
                                 />
@@ -733,9 +729,9 @@ export default function Plan() {
                                   )
                                 }
                                 sx={{
-                                  color: "rgba(107, 78, 61, 0.3)",
+                                  color: "rgba(139, 115, 85, 0.3)",
                                   "&.Mui-checked": {
-                                    color: "#B85C38",
+                                    color: "#c8a97e",
                                   },
                                 }}
                               />
@@ -786,9 +782,9 @@ export default function Plan() {
                                         );
                                       }}
                                       sx={{
-                                        color: "rgba(107, 78, 61, 0.3)",
+                                        color: "rgba(139, 115, 85, 0.3)",
                                         "&.Mui-checked": {
-                                          color: "#B85C38",
+                                          color: "#c8a97e",
                                         },
                                       }}
                                     />
@@ -816,13 +812,13 @@ export default function Plan() {
                               "& .MuiOutlinedInput-root": {
                                 backgroundColor: "#f9f9f9",
                                 "& fieldset": {
-                                  borderColor: "rgba(107, 78, 61, 0.3)",
+                                  borderColor: "rgba(139, 115, 85, 0.3)",
                                 },
                                 "&:hover fieldset": {
-                                  borderColor: "#6B4E3D",
+                                  borderColor: "#8b7355",
                                 },
                                 "&.Mui-focused fieldset": {
-                                  borderColor: "#B85C38",
+                                  borderColor: "#c8a97e",
                                 },
                               },
                             }}
@@ -831,8 +827,7 @@ export default function Plan() {
                           <Box>
                             <Typography
                               variant="body2"
-                              color="text.secondary"
-                              sx={{ mb: 2 }}
+                              sx={{ color: "#666666", mb: 2 }}
                             >
                               {currentField.help_text ||
                                 "Please fill in all the information below"}
@@ -863,13 +858,13 @@ export default function Plan() {
                                             backgroundColor: "#f9f9f9",
                                             "& fieldset": {
                                               borderColor:
-                                                "rgba(107, 78, 61, 0.3)",
+                                                "rgba(139, 115, 85, 0.3)",
                                             },
                                             "&:hover fieldset": {
-                                              borderColor: "#6B4E3D",
+                                              borderColor: "#8b7355",
                                             },
                                             "&.Mui-focused fieldset": {
-                                              borderColor: "#B85C38",
+                                              borderColor: "#c8a97e",
                                             },
                                           },
                                         }}
@@ -895,13 +890,13 @@ export default function Plan() {
                                             backgroundColor: "#f9f9f9",
                                             "& fieldset": {
                                               borderColor:
-                                                "rgba(107, 78, 61, 0.3)",
+                                                "rgba(139, 115, 85, 0.3)",
                                             },
                                             "&:hover fieldset": {
-                                              borderColor: "#6B4E3D",
+                                              borderColor: "#8b7355",
                                             },
                                             "&.Mui-focused fieldset": {
-                                              borderColor: "#B85C38",
+                                              borderColor: "#c8a97e",
                                             },
                                           },
                                         }}
@@ -927,13 +922,13 @@ export default function Plan() {
                                             backgroundColor: "#f9f9f9",
                                             "& fieldset": {
                                               borderColor:
-                                                "rgba(107, 78, 61, 0.3)",
+                                                "rgba(139, 115, 85, 0.3)",
                                             },
                                             "&:hover fieldset": {
-                                              borderColor: "#6B4E3D",
+                                              borderColor: "#8b7355",
                                             },
                                             "&.Mui-focused fieldset": {
-                                              borderColor: "#B85C38",
+                                              borderColor: "#c8a97e",
                                             },
                                           },
                                         }}
@@ -948,7 +943,7 @@ export default function Plan() {
                           <Typography
                             variant="body2"
                             sx={{
-                              color: "text.secondary",
+                              color: "#666666",
                               fontStyle: "italic",
                             }}
                           >
@@ -974,7 +969,7 @@ export default function Plan() {
                   </Box>
                 ) : (
                   <Box sx={{ textAlign: "center", py: 6 }}>
-                    <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                    <Typography variant="h6" sx={{ color: "#666666" }}>
                       No form fields available at the moment.
                     </Typography>
                   </Box>
@@ -998,9 +993,9 @@ export default function Plan() {
                               )
                             }
                             sx={{
-                              color: "rgba(107, 78, 61, 0.3)",
+                              color: "rgba(139, 115, 85, 0.3)",
                               "&.Mui-checked": {
-                                color: "#B85C38",
+                                color: "#c8a97e",
                               },
                             }}
                           />
@@ -1010,7 +1005,7 @@ export default function Plan() {
                           alignItems: "flex-start",
                           "& .MuiFormControlLabel-label": {
                             fontSize: "0.9rem",
-                            color: "text.secondary",
+                            color: "#666666",
                             lineHeight: 1.4,
                             ml: 1,
                           },
@@ -1025,17 +1020,17 @@ export default function Plan() {
                         alignItems: "flex-start",
                         gap: 1,
                         p: 2,
-                        bgcolor: "rgba(184, 92, 56, 0.05)",
+                        bgcolor: "rgba(200, 169, 126, 0.05)",
                         borderRadius: 1,
-                        border: "1px solid rgba(184, 92, 56, 0.1)",
+                        border: "1px solid rgba(200, 169, 126, 0.1)",
                       }}
                     >
                       <LockIcon
-                        sx={{ color: "#6B4E3D", mt: 0.2, fontSize: "1.2rem" }}
+                        sx={{ color: "#8b7355", mt: 0.2, fontSize: "1.2rem" }}
                       />
                       <Typography
                         variant="body2"
-                        sx={{ color: "text.secondary", lineHeight: 1.5 }}
+                        sx={{ color: "#666666", lineHeight: 1.5 }}
                       >
                         We protect your personal information. By submitting, you
                         agree to the use of it as described in our Privacy
@@ -1064,11 +1059,11 @@ export default function Plan() {
                   sx={{
                     px: 2,
                     py: 0.5,
-                    color: "#6B4E3D",
-                    borderColor: "#6B4E3D",
+                    color: "#8b7355",
+                    borderColor: "#8b7355",
                     "&:hover": {
-                      borderColor: "#B85C38",
-                      backgroundColor: "rgba(184, 92, 56, 0.1)",
+                      borderColor: "#c8a97e",
+                      backgroundColor: "rgba(200, 169, 126, 0.1)",
                     },
                     "&:disabled": {
                       color: "#ccc",
@@ -1089,11 +1084,9 @@ export default function Plan() {
                     sx={{
                       px: 3,
                       py: 0.5,
-                      background:
-                        "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
+                      background: "#c8a97e",
                       "&:hover": {
-                        background:
-                          "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
+                        background: "#8b7355",
                       },
                       fontSize: "1.1rem",
                       fontWeight: 600,
@@ -1117,11 +1110,9 @@ export default function Plan() {
                     sx={{
                       px: 3,
                       py: 0.5,
-                      background:
-                        "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
+                      background: "#c8a97e",
                       "&:hover": {
-                        background:
-                          "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
+                        background: "#8b7355",
                       },
                       fontSize: "1.1rem",
                       fontWeight: 600,
@@ -1151,9 +1142,9 @@ export default function Plan() {
           pt: 1.5,
           pb: 1.5,
           px: 0,
-          bgcolor: "#F5F1E8",
+          bgcolor: "#f9f7f3",
           background:
-            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+            "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
           "&::before": {
@@ -1164,7 +1155,7 @@ export default function Plan() {
             right: 0,
             bottom: 0,
             background:
-              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+              "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)",
             zIndex: 0,
           },
           display: "flex",
@@ -1178,7 +1169,7 @@ export default function Plan() {
             variant="h4"
             sx={{
               fontWeight: 700,
-              color: "#3D2817",
+              color: "#1a1a1a",
               mb: 2,
               textAlign: "center",
             }}
@@ -1188,7 +1179,7 @@ export default function Plan() {
           <Typography
             variant="h6"
             sx={{
-              color: "#B85C38",
+              color: "#c8a97e",
               textAlign: "center",
               fontWeight: 500,
             }}
@@ -1201,7 +1192,7 @@ export default function Plan() {
             size={60}
             thickness={4}
             sx={{
-              color: "#B85C38",
+              color: "#c8a97e",
               mb: 2,
             }}
           />
@@ -1209,7 +1200,7 @@ export default function Plan() {
         <Typography
           variant="body1"
           sx={{
-            color: "#6B4E3D",
+            color: "#8b7355",
             textAlign: "center",
             fontWeight: 500,
             position: "relative",
@@ -1229,9 +1220,9 @@ export default function Plan() {
           pt: 1.5,
           pb: 1.5,
           px: 0,
-          bgcolor: "#F5F1E8",
+          bgcolor: "#f9f7f3",
           background:
-            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+            "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
           "&::before": {
@@ -1242,7 +1233,7 @@ export default function Plan() {
             right: 0,
             bottom: 0,
             background:
-              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+              "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)",
             zIndex: 0,
           },
           display: "flex",
@@ -1277,7 +1268,7 @@ export default function Plan() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+            "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)",
           zIndex: 0,
         },
       }}
@@ -1303,7 +1294,7 @@ export default function Plan() {
               px: { xs: 1.5, sm: 1.5, md: 1.5 },
               borderRadius: { xs: 3, md: 4 },
               background: "#FFFFFF",
-              border: "1px solid rgba(107, 78, 61, 0.2)",
+              border: "1px solid rgba(139, 115, 85, 0.2)",
               minHeight: "auto",
               height: "auto",
               overflow: "hidden",
@@ -1317,11 +1308,7 @@ export default function Plan() {
                   mb: 1,
                   fontWeight: 800,
                   fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.8rem" },
-                  background:
-                    "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  color: "#1a1a1a",
                   position: "relative",
                   "&::after": {
                     content: '""',
@@ -1331,7 +1318,7 @@ export default function Plan() {
                     transform: "translateX(-50%)",
                     width: { xs: "80px", sm: "100px", md: "120px" },
                     height: "4px",
-                    background: "linear-gradient(45deg, #6B4E3D, #B85C38)",
+                    background: "linear-gradient(45deg, #1a1a1a, #c8a97e)",
                     borderRadius: "2px",
                   },
                 }}
@@ -1357,7 +1344,7 @@ export default function Plan() {
 
             {forms.length === 0 ? (
               <Card sx={{ p: 4, textAlign: "center" }}>
-                <Typography variant="h6" color="text.secondary">
+                <Typography variant="h6" sx={{ color: "#666666" }}>
                   No forms available at the moment
                 </Typography>
               </Card>
@@ -1381,7 +1368,7 @@ export default function Plan() {
                         <Box
                           sx={{ display: "flex", alignItems: "center", mb: 2 }}
                         >
-                          <Assignment sx={{ mr: 1, color: "#6B4E3D" }} />
+                          <Assignment sx={{ mr: 1, color: "#8b7355" }} />
                           <Typography variant="h6" sx={{ fontWeight: 600 }}>
                             {form.title}
                           </Typography>
@@ -1390,8 +1377,7 @@ export default function Plan() {
                         {form.description && (
                           <Typography
                             variant="body2"
-                            color="text.secondary"
-                            sx={{ mb: 2, lineHeight: 1.5 }}
+                            sx={{ color: "#666666", mb: 2, lineHeight: 1.5 }}
                           >
                             {form.description.length > 100
                               ? `${form.description.substring(0, 100)}...`
@@ -1404,7 +1390,7 @@ export default function Plan() {
                           <Box sx={{ mb: 2 }}>
                             <Typography
                               variant="subtitle2"
-                              sx={{ fontWeight: 600, mb: 1, color: "#6B4E3D" }}
+                              sx={{ fontWeight: 600, mb: 1, color: "#8b7355" }}
                             >
                               Questions ({form.fields.length}):
                             </Typography>
@@ -1443,7 +1429,7 @@ export default function Plan() {
                                       >
                                         <Typography
                                           variant="caption"
-                                          color="text.secondary"
+                                          sx={{ color: "#666666" }}
                                         >
                                           {field.placeholder ||
                                             `Enter ${field.label.toLowerCase()}`}
@@ -1463,7 +1449,7 @@ export default function Plan() {
                                       >
                                         <Typography
                                           variant="caption"
-                                          color="text.secondary"
+                                          sx={{ color: "#666666" }}
                                         >
                                           {field.placeholder ||
                                             `Enter ${field.label.toLowerCase()}`}
@@ -1484,7 +1470,7 @@ export default function Plan() {
                                       >
                                         <Typography
                                           variant="caption"
-                                          color="text.secondary"
+                                          sx={{ color: "#666666" }}
                                         >
                                           Select an option
                                         </Typography>
@@ -1505,14 +1491,14 @@ export default function Plan() {
                                                 sx={{
                                                   width: 12,
                                                   height: 12,
-                                                  border: "1px solid #6B4E3D",
+                                                  border: "1px solid #8b7355",
                                                   borderRadius: "50%",
                                                   mr: 1,
                                                 }}
                                               />
                                               <Typography
                                                 variant="caption"
-                                                color="text.secondary"
+                                                sx={{ color: "#666666" }}
                                               >
                                                 {option.option_label}
                                               </Typography>
@@ -1531,13 +1517,13 @@ export default function Plan() {
                                           sx={{
                                             width: 12,
                                             height: 12,
-                                            border: "1px solid #6B4E3D",
+                                            border: "1px solid #8b7355",
                                             mr: 1,
                                           }}
                                         />
                                         <Typography
                                           variant="caption"
-                                          color="text.secondary"
+                                          sx={{ color: "#666666" }}
                                         >
                                           {field.label}
                                         </Typography>
@@ -1558,13 +1544,13 @@ export default function Plan() {
                                               sx={{
                                                 width: 12,
                                                 height: 12,
-                                                border: "1px solid #6B4E3D",
+                                                border: "1px solid #8b7355",
                                                 mr: 1,
                                               }}
                                             />
                                             <Typography
                                               variant="caption"
-                                              color="text.secondary"
+                                              sx={{ color: "#666666" }}
                                             >
                                               {option.option_label}
                                             </Typography>
@@ -1585,7 +1571,7 @@ export default function Plan() {
                                       >
                                         <Typography
                                           variant="caption"
-                                          color="text.secondary"
+                                          sx={{ color: "#666666" }}
                                         >
                                           Select date
                                         </Typography>
@@ -1593,8 +1579,7 @@ export default function Plan() {
                                     ) : (
                                       <Typography
                                         variant="caption"
-                                        color="text.secondary"
-                                        sx={{ fontStyle: "italic" }}
+                                        sx={{ color: "#666666", fontStyle: "italic" }}
                                       >
                                         {field.field_type} field
                                       </Typography>
@@ -1606,8 +1591,8 @@ export default function Plan() {
                               {form.fields.length > 5 && (
                                 <Typography
                                   variant="caption"
-                                  color="text.secondary"
                                   sx={{
+                                    color: "#666666",
                                     fontStyle: "italic",
                                     mt: 1,
                                     display: "block",

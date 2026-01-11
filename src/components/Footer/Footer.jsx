@@ -93,7 +93,7 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        background: "#F5F1E8",
+        background: "#f9f7f3",
         pt: { xs: 0, sm: 0, md: 0 },
         pb: 0.4,
         mt: "auto",
@@ -171,7 +171,7 @@ export default function Footer() {
                           sx={{
                             fontWeight: 700,
                             background:
-                              "linear-gradient(45deg, #6B4E3D, #3D2817)", // Medium to dark brown
+                              "linear-gradient(45deg, #8b7355, #1a1a1a)", // Secondary Brown to Primary Black
                             backgroundClip: "text",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",
@@ -188,7 +188,7 @@ export default function Footer() {
                           sx={{
                             mb: { xs: 0.5, sm: 1 },
                             fontWeight: 600,
-                            color: "#B85C38", // Burnt orange/rust
+                            color: "#c8a97e", // Accent Gold
                             fontSize: { xs: "1rem", sm: "1.25rem" },
                           }}
                         >
@@ -199,7 +199,7 @@ export default function Footer() {
                           sx={{
                             mb: 0.5,
                             lineHeight: 1.6,
-                            color: "text.primary",
+                            color: "#1a1a1a",
                             fontSize: { xs: "1.1rem", sm: "1.2rem" },
                           }}
                         >
@@ -211,7 +211,7 @@ export default function Footer() {
                           sx={{
                             mb: { xs: 1, sm: 1.5 },
                             lineHeight: 1.6,
-                            color: "text.primary",
+                            color: "#1a1a1a",
                             fontSize: { xs: "1.1rem", sm: "1.2rem" },
                           }}
                         >
@@ -234,13 +234,13 @@ export default function Footer() {
                           size="small"
                           sx={{
                             background:
-                              "linear-gradient(45deg, #2D4A2D, #6B7D47)", // Dark forest green to olive
+                              "linear-gradient(45deg, #8b7355, #c8a97e)", // Secondary Brown to Accent Gold
                             color: "white",
                             fontWeight: 600,
                             fontSize: { xs: "0.7rem", sm: "0.75rem" },
                             "&:hover": {
                               transform: "scale(1.05)",
-                              boxShadow: "0 4px 12px rgba(45, 74, 45, 0.4)",
+                              boxShadow: "0 4px 12px rgba(139, 115, 85, 0.4)",
                             },
                           }}
                         />
@@ -249,13 +249,13 @@ export default function Footer() {
                           size="small"
                           sx={{
                             background:
-                              "linear-gradient(45deg, #B85C38, #C97A5A)", // Rust to light rust
+                              "linear-gradient(45deg, #c8a97e, #8b7355)", // Accent Gold to Secondary Brown
                             color: "white",
                             fontWeight: 600,
                             fontSize: { xs: "0.7rem", sm: "0.75rem" },
                             "&:hover": {
                               transform: "scale(1.05)",
-                              boxShadow: "0 4px 12px rgba(184, 92, 56, 0.4)",
+                              boxShadow: "0 4px 12px rgba(200, 169, 126, 0.4)",
                             },
                           }}
                         />
@@ -264,13 +264,13 @@ export default function Footer() {
                           size="small"
                           sx={{
                             background:
-                              "linear-gradient(45deg, #6B4E3D, #8B6F5E)", // Medium brown to lighter brown
+                              "linear-gradient(45deg, #8b7355, #c8a97e)", // Secondary Brown to Accent Gold
                             color: "white",
                             fontWeight: 600,
                             fontSize: { xs: "0.7rem", sm: "0.75rem" },
                             "&:hover": {
                               transform: "scale(1.05)",
-                              boxShadow: "0 4px 12px rgba(107, 78, 61, 0.4)",
+                              boxShadow: "0 4px 12px rgba(139, 115, 85, 0.4)",
                             },
                           }}
                         />
@@ -283,7 +283,7 @@ export default function Footer() {
                           sx={{
                             mb: { xs: 0.5, sm: 1 },
                             fontWeight: 600,
-                            color: "text.primary",
+                            color: "#1a1a1a",
                             fontSize: { xs: "1rem", sm: "1.25rem" },
                           }}
                         >
@@ -374,7 +374,7 @@ export default function Footer() {
                         sx={{
                           fontWeight: 700,
                           background:
-                            "linear-gradient(45deg, #6B4E3D, #3D2817)", // Medium to dark brown
+                            "linear-gradient(45deg, #8b7355, #1a1a1a)", // Secondary Brown to Primary Black
                           backgroundClip: "text",
                           WebkitBackgroundClip: "text",
                           WebkitTextFillColor: "transparent",
@@ -457,9 +457,9 @@ export default function Footer() {
                   <Divider
                     sx={{
                       my: 1,
-                      borderColor: "rgba(107, 78, 61, 0.2)", // Medium brown
+                      borderColor: "rgba(139, 115, 85, 0.2)", // Secondary Brown
                       "&::before, &::after": {
-                        borderColor: "rgba(107, 78, 61, 0.1)",
+                        borderColor: "rgba(139, 115, 85, 0.1)",
                       },
                     }}
                   />
@@ -478,7 +478,7 @@ export default function Footer() {
                     <Typography
                       variant="body1"
                       sx={{
-                        color: "text.primary",
+                        color: "#1a1a1a",
                         fontWeight: 500,
                         fontSize: { xs: "0.85rem", sm: "0.95rem" },
                       }}
@@ -510,7 +510,7 @@ export default function Footer() {
                       <Typography
                         variant="body2"
                         sx={{
-                          color: "text.primary",
+                          color: "#1a1a1a",
                           fontWeight: 700,
                           fontSize: { xs: "0.78rem", sm: "0.9rem" },
                         }}

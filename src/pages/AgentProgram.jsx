@@ -121,9 +121,9 @@ export default function AgentProgram() {
         pt: 1.5,
         pb: 1.5,
         px: 0,
-        bgcolor: "#F5F1E8",
+        bgcolor: "#f9f7f3",
         background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
         position: "relative",
         overflow: "hidden",
         "&::before": {
@@ -134,7 +134,7 @@ export default function AgentProgram() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+            "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)",
           zIndex: 0,
         },
       }}
@@ -160,9 +160,9 @@ export default function AgentProgram() {
               px: { xs: 2, sm: 3, md: 4 },
               borderRadius: { xs: 3, md: 4 },
               background: "#FFFFFF",
-              border: "1px solid rgba(107, 78, 61, 0.2)",
+              border: "1px solid rgba(139, 115, 85, 0.2)",
               backgroundImage:
-                "linear-gradient(135deg, rgba(184, 92, 56, 0.03) 0%, rgba(255, 255, 255, 1) 50%, rgba(107, 78, 61, 0.03) 100%)",
+                "linear-gradient(135deg, rgba(200, 169, 126, 0.03) 0%, rgba(255, 255, 255, 1) 50%, rgba(139, 115, 85, 0.03) 100%)",
             }}
           >
             {/* Hero Section */}
@@ -173,10 +173,7 @@ export default function AgentProgram() {
                   mb: 1,
                   fontWeight: 800,
                   fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-                  background: "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  color: "#1a1a1a",
                   position: "relative",
                   "&::after": {
                     content: '""',
@@ -186,7 +183,7 @@ export default function AgentProgram() {
                     transform: "translateX(-50%)",
                     width: { xs: "120px", sm: "150px", md: "180px" },
                     height: "4px",
-                    background: "linear-gradient(45deg, #6B4E3D, #B85C38)",
+                    background: "linear-gradient(45deg, #1a1a1a, #c8a97e)",
                     borderRadius: "2px",
                   },
                 }}
@@ -200,7 +197,7 @@ export default function AgentProgram() {
                   mb: 1,
                   fontWeight: 600,
                   fontSize: { xs: "1.3rem", sm: "1.6rem", md: "1.9rem" },
-                  color: "#6B4E3D",
+                  color: "#1a1a1a",
                 }}
               >
                 Become a Remote Sales Agent and Earn Commission by Sharing the Magic of Africa
@@ -209,7 +206,7 @@ export default function AgentProgram() {
                 variant="body1"
                 sx={{
                   fontSize: { xs: "1.125rem", md: "1.3rem" },
-                  color: "text.secondary",
+                  color: "#666666",
                   maxWidth: "900px",
                   mx: "auto",
                   lineHeight: 1.7,
@@ -220,7 +217,7 @@ export default function AgentProgram() {
               </Typography>
             </Box>
 
-            <Divider sx={{ my: 2, borderColor: "rgba(107, 78, 61, 0.2)" }} />
+            <Divider sx={{ my: 2, borderColor: "rgba(139, 115, 85, 0.2)" }} />
 
             {/* Why Partner with Us Section */}
             <Box sx={{ mb: 2 }}>
@@ -230,7 +227,7 @@ export default function AgentProgram() {
                   mb: 2,
                   fontWeight: 700,
                   fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   textAlign: "center",
                 }}
               >
@@ -246,15 +243,15 @@ export default function AgentProgram() {
                         transition: "transform 0.3s ease, box-shadow 0.3s ease",
                         "&:hover": {
                           transform: "translateY(-8px)",
-                          boxShadow: "0 12px 40px rgba(184, 92, 56, 0.25)",
+                          boxShadow: "0 12px 40px rgba(200, 169, 126, 0.25)",
                         },
-                        border: "1px solid rgba(107, 78, 61, 0.1)",
+                        border: "1px solid rgba(139, 115, 85, 0.1)",
                       }}
                     >
                       <CardContent sx={{ p: 3 }}>
                         <Box
                           sx={{
-                            color: "#B85C38",
+                            color: "#c8a97e",
                             fontSize: "3rem",
                             mb: 2,
                             display: "flex",
@@ -268,7 +265,7 @@ export default function AgentProgram() {
                           sx={{
                             fontWeight: 600,
                             mb: 1.5,
-                            color: "#6B4E3D",
+                            color: "#1a1a1a",
                             fontSize: { xs: "1.1rem", md: "1.25rem" },
                           }}
                         >
@@ -277,7 +274,7 @@ export default function AgentProgram() {
                         <Typography
                           variant="body2"
                           sx={{
-                            color: "text.secondary",
+                            color: "#666666",
                             lineHeight: 1.6,
                             fontSize: { xs: "1rem", md: "1.125rem" },
                           }}
@@ -291,7 +288,7 @@ export default function AgentProgram() {
               </Box>
             </Box>
 
-            <Divider sx={{ my: 2, borderColor: "rgba(107, 78, 61, 0.2)" }} />
+            <Divider sx={{ my: 2, borderColor: "rgba(139, 115, 85, 0.2)" }} />
 
             {/* Who Can Join Section */}
             <Box sx={{ mb: 2 }}>
@@ -301,7 +298,7 @@ export default function AgentProgram() {
                   mb: 2,
                   fontWeight: 700,
                   fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   textAlign: "center",
                 }}
               >
@@ -311,7 +308,7 @@ export default function AgentProgram() {
                 {whoCanJoin.map((item, index) => (
                   <ListItem key={index} sx={{ py: 0.75 }}>
                     <ListItemIcon sx={{ minWidth: 40 }}>
-                      <CheckCircle sx={{ color: "#B85C38", fontSize: "1.5rem" }} />
+                      <CheckCircle sx={{ color: "#c8a97e", fontSize: "1.5rem" }} />
                     </ListItemIcon>
                     <ListItemText
                       primary={item}
@@ -325,7 +322,7 @@ export default function AgentProgram() {
               </List>
             </Box>
 
-            <Divider sx={{ my: 2, borderColor: "rgba(107, 78, 61, 0.2)" }} />
+            <Divider sx={{ my: 2, borderColor: "rgba(139, 115, 85, 0.2)" }} />
 
             {/* Commission Structure Section */}
             <Box sx={{ mb: 2 }}>
@@ -335,7 +332,7 @@ export default function AgentProgram() {
                   mb: 2,
                   fontWeight: 700,
                   fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   textAlign: "center",
                 }}
               >
@@ -355,8 +352,8 @@ export default function AgentProgram() {
                   sx={{
                     flex: 1,
                     width: { xs: "100%", md: "50%" },
-                    background: "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.05) 100%)",
-                    border: "1px solid rgba(184, 92, 56, 0.2)",
+                    background: "linear-gradient(135deg, rgba(200, 169, 126, 0.1) 0%, rgba(139, 115, 85, 0.05) 100%)",
+                    border: "1px solid rgba(200, 169, 126, 0.2)",
                     display: "flex",
                     flexDirection: "column",
                   }}
@@ -367,7 +364,7 @@ export default function AgentProgram() {
                       sx={{
                         fontWeight: 600,
                         mb: 1,
-                        color: "#B85C38",
+                        color: "#c8a97e",
                         fontSize: { xs: "1.2rem", md: "1.4rem" },
                       }}
                     >
@@ -378,12 +375,12 @@ export default function AgentProgram() {
                       sx={{
                         fontWeight: 700,
                         mb: 0.5,
-                        color: "#6B4E3D",
+                        color: "#1a1a1a",
                       }}
                     >
                       10%
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: "1rem", md: "1.125rem" } }}>
+                    <Typography variant="body2" sx={{ color: "#666666", fontSize: { xs: "1rem", md: "1.125rem" } }}>
                       per confirmed booking
                     </Typography>
                   </CardContent>
@@ -392,8 +389,8 @@ export default function AgentProgram() {
                   sx={{
                     flex: 1,
                     width: { xs: "100%", md: "50%" },
-                    background: "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.05) 100%)",
-                    border: "1px solid rgba(184, 92, 56, 0.2)",
+                    background: "linear-gradient(135deg, rgba(200, 169, 126, 0.1) 0%, rgba(139, 115, 85, 0.05) 100%)",
+                    border: "1px solid rgba(200, 169, 126, 0.2)",
                     display: "flex",
                     flexDirection: "column",
                   }}
@@ -404,7 +401,7 @@ export default function AgentProgram() {
                       sx={{
                         fontWeight: 600,
                         mb: 1,
-                        color: "#B85C38",
+                        color: "#c8a97e",
                         fontSize: { xs: "1.2rem", md: "1.4rem" },
                       }}
                     >
@@ -415,12 +412,12 @@ export default function AgentProgram() {
                       sx={{
                         fontWeight: 700,
                         mb: 0.5,
-                        color: "#6B4E3D",
+                        color: "#1a1a1a",
                       }}
                     >
                       +3% Extra
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: "1rem", md: "1.125rem" } }}>
+                    <Typography variant="body2" sx={{ color: "#666666", fontSize: { xs: "1rem", md: "1.125rem" } }}>
                       For packages over USD 1,000
                     </Typography>
                   </CardContent>
@@ -432,7 +429,7 @@ export default function AgentProgram() {
                 sx={{
                   fontWeight: 600,
                   mb: 1.5,
-                  color: "#6B4E3D",
+                  color: "#1a1a1a",
                   fontSize: { xs: "1.2rem", md: "1.4rem" },
                 }}
               >
@@ -441,11 +438,11 @@ export default function AgentProgram() {
               <TableContainer component={Paper} sx={{ mb: 2 }}>
                 <Table>
                   <TableHead>
-                    <TableRow sx={{ bgcolor: "#F5F1E8" }}>
-                      <TableCell sx={{ fontWeight: 700, color: "#3D2817", fontSize: { xs: "1rem", md: "1.125rem" } }}>
+                    <TableRow sx={{ bgcolor: "#f9f7f3" }}>
+                      <TableCell sx={{ fontWeight: 700, color: "#1a1a1a", fontSize: { xs: "1rem", md: "1.125rem" } }}>
                         Monthly Bookings
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 700, color: "#3D2817", fontSize: { xs: "1rem", md: "1.125rem" } }}>
+                      <TableCell sx={{ fontWeight: 700, color: "#1a1a1a", fontSize: { xs: "1rem", md: "1.125rem" } }}>
                         Bonus
                       </TableCell>
                     </TableRow>
@@ -454,13 +451,13 @@ export default function AgentProgram() {
                     <TableRow>
                       <TableCell sx={{ fontSize: { xs: "1rem", md: "1.125rem" } }}>5 bookings/month</TableCell>
                       <TableCell sx={{ fontSize: { xs: "1rem", md: "1.125rem" } }}>
-                        <Chip label="+2%" color="primary" sx={{ bgcolor: "#B85C38", color: "#fff" }} />
+                        <Chip label="+2%" color="primary" sx={{ bgcolor: "#c8a97e", color: "#fff" }} />
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell sx={{ fontSize: { xs: "1rem", md: "1.125rem" } }}>10 bookings/month</TableCell>
                       <TableCell sx={{ fontSize: { xs: "1rem", md: "1.125rem" } }}>
-                        <Chip label="+5%" color="primary" sx={{ bgcolor: "#B85C38", color: "#fff" }} />
+                        <Chip label="+5%" color="primary" sx={{ bgcolor: "#c8a97e", color: "#fff" }} />
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -472,7 +469,7 @@ export default function AgentProgram() {
                 sx={{
                   fontWeight: 600,
                   mb: 1.5,
-                  color: "#6B4E3D",
+                  color: "#1a1a1a",
                   fontSize: { xs: "1.2rem", md: "1.4rem" },
                 }}
               >
@@ -490,11 +487,11 @@ export default function AgentProgram() {
                   sx={{
                     flex: 1,
                     width: { xs: "100%", md: "50%" },
-                    border: "1px solid rgba(107, 78, 61, 0.2)",
+                    border: "1px solid rgba(139, 115, 85, 0.2)",
                   }}
                 >
                   <CardContent sx={{ p: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.75, color: "#6B4E3D" }}>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.75, color: "#1a1a1a" }}>
                       A 3-day safari package sold at USD 500:
                     </Typography>
                     <List dense>
@@ -503,7 +500,7 @@ export default function AgentProgram() {
                           primary="Base commission:"
                           secondary="USD 50"
                           primaryTypographyProps={{ fontSize: { xs: "1.05rem", md: "1.1rem" } }}
-                          secondaryTypographyProps={{ fontWeight: 600, color: "#B85C38", fontSize: { xs: "1.1rem", md: "1.2rem" } }}
+                          secondaryTypographyProps={{ fontWeight: 600, color: "#c8a97e", fontSize: { xs: "1.1rem", md: "1.2rem" } }}
                         />
                       </ListItem>
                       <ListItem sx={{ py: 0.5 }}>
@@ -511,7 +508,7 @@ export default function AgentProgram() {
                           primary="If you sold 5+ packages that month:"
                           secondary="USD 60"
                           primaryTypographyProps={{ fontSize: { xs: "1.05rem", md: "1.1rem" } }}
-                          secondaryTypographyProps={{ fontWeight: 600, color: "#B85C38", fontSize: { xs: "1.1rem", md: "1.2rem" } }}
+                          secondaryTypographyProps={{ fontWeight: 600, color: "#c8a97e", fontSize: { xs: "1.1rem", md: "1.2rem" } }}
                         />
                       </ListItem>
                     </List>
@@ -521,11 +518,11 @@ export default function AgentProgram() {
                   sx={{
                     flex: 1,
                     width: { xs: "100%", md: "50%" },
-                    border: "1px solid rgba(107, 78, 61, 0.2)",
+                    border: "1px solid rgba(139, 115, 85, 0.2)",
                   }}
                 >
                   <CardContent sx={{ p: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.75, color: "#6B4E3D" }}>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.75, color: "#1a1a1a" }}>
                       For packages over USD 1,000:
                     </Typography>
                     <List dense>
@@ -534,7 +531,7 @@ export default function AgentProgram() {
                           primary="One high-value booking:"
                           secondary="USD 130"
                           primaryTypographyProps={{ fontSize: { xs: "1.05rem", md: "1.1rem" } }}
-                          secondaryTypographyProps={{ fontWeight: 600, color: "#B85C38", fontSize: { xs: "1.1rem", md: "1.2rem" } }}
+                          secondaryTypographyProps={{ fontWeight: 600, color: "#c8a97e", fontSize: { xs: "1.1rem", md: "1.2rem" } }}
                         />
                       </ListItem>
                     </List>
@@ -543,7 +540,7 @@ export default function AgentProgram() {
               </Box>
             </Box>
 
-            <Divider sx={{ my: 2, borderColor: "rgba(107, 78, 61, 0.2)" }} />
+            <Divider sx={{ my: 2, borderColor: "rgba(139, 115, 85, 0.2)" }} />
 
             {/* How It Works Section */}
             <Box sx={{ mb: 2 }}>
@@ -553,7 +550,7 @@ export default function AgentProgram() {
                   mb: 2,
                   fontWeight: 700,
                   fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   textAlign: "center",
                 }}
               >
@@ -584,9 +581,9 @@ export default function AgentProgram() {
                         transition: "transform 0.3s ease, box-shadow 0.3s ease",
                         "&:hover": {
                           transform: "translateY(-8px)",
-                          boxShadow: "0 12px 40px rgba(184, 92, 56, 0.25)",
+                          boxShadow: "0 12px 40px rgba(200, 169, 126, 0.25)",
                         },
-                        border: "1px solid rgba(107, 78, 61, 0.1)",
+                        border: "1px solid rgba(139, 115, 85, 0.1)",
                       }}
                     >
                       <CardContent sx={{ p: 2 }}>
@@ -595,7 +592,7 @@ export default function AgentProgram() {
                             position: "absolute",
                             top: 12,
                             right: 12,
-                            bgcolor: "#B85C38",
+                            bgcolor: "#c8a97e",
                             color: "#fff",
                             borderRadius: "50%",
                             width: 32,
@@ -611,7 +608,7 @@ export default function AgentProgram() {
                         </Box>
                         <Box
                           sx={{
-                            color: "#B85C38",
+                            color: "#c8a97e",
                             fontSize: "3rem",
                             mb: 1.5,
                             display: "flex",
@@ -626,7 +623,7 @@ export default function AgentProgram() {
                           sx={{
                             fontWeight: 600,
                             mb: 1,
-                            color: "#6B4E3D",
+                            color: "#1a1a1a",
                             fontSize: { xs: "1.1rem", md: "1.25rem" },
                           }}
                         >
@@ -635,7 +632,7 @@ export default function AgentProgram() {
                         <Typography
                           variant="body2"
                           sx={{
-                            color: "text.secondary",
+                            color: "#666666",
                             lineHeight: 1.6,
                             fontSize: { xs: "1rem", md: "1.125rem" },
                           }}
@@ -649,7 +646,7 @@ export default function AgentProgram() {
               </Box>
             </Box>
 
-            <Divider sx={{ my: 2, borderColor: "rgba(107, 78, 61, 0.2)" }} />
+            <Divider sx={{ my: 2, borderColor: "rgba(139, 115, 85, 0.2)" }} />
 
             {/* Agent Benefits Section */}
             <Box sx={{ mb: 2 }}>
@@ -659,7 +656,7 @@ export default function AgentProgram() {
                   mb: 2,
                   fontWeight: 700,
                   fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   textAlign: "center",
                 }}
               >
@@ -692,7 +689,7 @@ export default function AgentProgram() {
                       }}
                     >
                       <CardContent sx={{ p: 2, display: "flex", alignItems: "center" }}>
-                        <Star sx={{ color: "#B85C38", mr: 2, fontSize: "1.5rem" }} />
+                        <Star sx={{ color: "#c8a97e", mr: 2, fontSize: "1.5rem" }} />
                         <Typography
                           variant="body1"
                           sx={{
@@ -709,15 +706,15 @@ export default function AgentProgram() {
               </Box>
             </Box>
 
-            <Divider sx={{ my: 2, borderColor: "rgba(107, 78, 61, 0.2)" }} />
+            <Divider sx={{ my: 2, borderColor: "rgba(139, 115, 85, 0.2)" }} />
 
             {/* Call to Action Section */}
             <Box
               sx={{
                 py: { xs: 1.5, sm: 2, md: 2.5 },
                 px: { xs: 2, sm: 2.5, md: 3 },
-                background: "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.05) 100%)",
-                border: "1px solid rgba(184, 92, 56, 0.3)",
+                background: "linear-gradient(135deg, rgba(200, 169, 126, 0.1) 0%, rgba(139, 115, 85, 0.05) 100%)",
+                border: "1px solid rgba(200, 169, 126, 0.3)",
                 borderRadius: { xs: 2, md: 3 },
                 textAlign: "center",
               }}
@@ -728,7 +725,7 @@ export default function AgentProgram() {
                   mb: 1,
                   fontWeight: 700,
                   fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                 }}
               >
                 Ready to Join?
@@ -737,7 +734,7 @@ export default function AgentProgram() {
                 variant="body1"
                 sx={{
                   fontSize: { xs: "1rem", md: "1.125rem" },
-                  color: "text.secondary",
+                  color: "#666666",
                   maxWidth: "700px",
                   mx: "auto",
                   lineHeight: 1.7,
@@ -757,13 +754,13 @@ export default function AgentProgram() {
                   fontSize: { xs: "1.1rem", md: "1.25rem" },
                   fontWeight: 600,
                   borderRadius: "50px",
-                  background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
-                  boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                  background: "#c8a97e",
+                  boxShadow: "0 8px 32px rgba(200, 169, 126, 0.3)",
                   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
                     transform: "translateY(-3px) scale(1.05)",
-                    boxShadow: "0 12px 40px rgba(184, 92, 56, 0.4)",
-                    background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
+                    boxShadow: "0 12px 40px rgba(200, 169, 126, 0.4)",
+                    background: "#8b7355",
                   },
                   "&:focus": {
                     outline: "none",

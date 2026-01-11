@@ -20,7 +20,7 @@ export default function LetterFromFounders() {
         pt: { xs: 0, sm: 0, md: 0 },
         pb: { xs: 0.5, sm: 0.75, md: 1 },
         px: 0,
-        backgroundColor: "#F5F1E8", // Solid beige background to prevent rendering flicker
+        backgroundColor: "#f9f7f3", // Warm White background
         position: "relative",
         overflow: "hidden",
       }}
@@ -30,7 +30,7 @@ export default function LetterFromFounders() {
           mx: { xs: 0.75, sm: 0.75, md: 0.75 },
           borderRadius: { xs: 3, md: 4 },
           background: "#FFFFFF",
-          border: "1px solid rgba(107, 78, 61, 0.2)",
+          border: "1px solid rgba(139, 115, 85, 0.2)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
         }}
       >
@@ -99,7 +99,7 @@ export default function LetterFromFounders() {
                 sx={{
                   fontWeight: 700,
                   mb: 2,
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
                   letterSpacing: "0.02em",
                   textTransform: "uppercase",
@@ -118,7 +118,7 @@ export default function LetterFromFounders() {
                   variant="body1"
                   sx={{
                     mb: 1.5,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     fontSize: { xs: "1rem", md: "1.125rem" },
                     lineHeight: 1.8,
                     fontWeight: 500,
@@ -131,7 +131,7 @@ export default function LetterFromFounders() {
                   variant="body1"
                   sx={{
                     mb: 2,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     fontSize: { xs: "1rem", md: "1.125rem" },
                     lineHeight: 1.8,
                     fontWeight: 400,
@@ -178,11 +178,11 @@ export default function LetterFromFounders() {
                       width: "100%",
                       height: "100%",
                       background:
-                        "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.1) 100%)",
+                        "linear-gradient(135deg, rgba(200, 169, 126, 0.1) 0%, rgba(139, 115, 85, 0.1) 100%)",
                       alignItems: "center",
                       justifyContent: "center",
                       flexDirection: "column",
-                      color: "#6B4E3D",
+                      color: "#8b7355",
                     }}
                   >
                     <Typography
@@ -190,7 +190,7 @@ export default function LetterFromFounders() {
                       sx={{
                         fontWeight: 700,
                         mb: 1,
-                        color: "#6B4E3D",
+                        color: "#8b7355",
                       }}
                     >
                       David, Hellene & Malyne
@@ -198,7 +198,7 @@ export default function LetterFromFounders() {
                     <Typography
                       variant="body1"
                       sx={{
-                        color: "#6B4E3D",
+                        color: "#8b7355",
                         fontStyle: "italic",
                       }}
                     >
@@ -211,7 +211,7 @@ export default function LetterFromFounders() {
                   variant="body1"
                   sx={{
                     mb: 2,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     fontSize: { xs: "1rem", md: "1.125rem" },
                     lineHeight: 1.8,
                     fontWeight: 400,
@@ -224,7 +224,7 @@ export default function LetterFromFounders() {
                   variant="body1"
                   sx={{
                     mb: 3,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     fontSize: { xs: "1rem", md: "1.125rem" },
                     lineHeight: 1.8,
                     fontWeight: 500,
@@ -239,7 +239,7 @@ export default function LetterFromFounders() {
                   sx={{
                     mt: 2.5,
                     pt: 2,
-                    borderTop: "1px solid rgba(107, 78, 61, 0.2)",
+                    borderTop: "1px solid rgba(139, 115, 85, 0.2)",
                   }}
                 >
                   <Box
@@ -257,7 +257,7 @@ export default function LetterFromFounders() {
                         sx={{
                           fontFamily: "'Dancing Script', 'Brush Script MT', cursive",
                           fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.75rem" },
-                          color: "#6B4E3D",
+                          color: "#8b7355",
                           mb: 0.5,
                           fontWeight: 600,
                         }}
@@ -267,7 +267,7 @@ export default function LetterFromFounders() {
                       <Typography
                         variant="body2"
                         sx={{
-                          color: "#6B4E3D",
+                          color: "#8b7355",
                           fontSize: { xs: "0.7rem", sm: "0.8rem", md: "1rem" },
                           fontWeight: 500,
                         }}
@@ -280,7 +280,7 @@ export default function LetterFromFounders() {
                         sx={{
                           fontFamily: "'Dancing Script', 'Brush Script MT', cursive",
                           fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.75rem" },
-                          color: "#6B4E3D",
+                          color: "#8b7355",
                           mb: 0.5,
                           fontWeight: 600,
                         }}
@@ -290,7 +290,7 @@ export default function LetterFromFounders() {
                       <Typography
                         variant="body2"
                         sx={{
-                          color: "#6B4E3D",
+                          color: "#8b7355",
                           fontSize: { xs: "0.7rem", sm: "0.8rem", md: "1rem" },
                           fontWeight: 500,
                         }}
@@ -303,7 +303,7 @@ export default function LetterFromFounders() {
                         sx={{
                           fontFamily: "'Dancing Script', 'Brush Script MT', cursive",
                           fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.75rem" },
-                          color: "#6B4E3D",
+                          color: "#8b7355",
                           mb: 0.5,
                           fontWeight: 600,
                         }}
@@ -313,7 +313,7 @@ export default function LetterFromFounders() {
                       <Typography
                         variant="body2"
                         sx={{
-                          color: "#6B4E3D",
+                          color: "#8b7355",
                           fontSize: { xs: "0.7rem", sm: "0.8rem", md: "1rem" },
                           fontWeight: 500,
                         }}
@@ -326,7 +326,7 @@ export default function LetterFromFounders() {
                     variant="body2"
                     sx={{
                       mt: { xs: 2, md: 1 },
-                      color: "#6B4E3D",
+                      color: "#8b7355",
                       fontSize: { xs: "0.875rem", md: "1rem" },
                       fontWeight: 600,
                       textAlign: { xs: "left", md: "center" },
@@ -380,11 +380,11 @@ export default function LetterFromFounders() {
                   width: "100%",
                   height: "100%",
                   background:
-                    "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.1) 100%)",
+                    "linear-gradient(135deg, rgba(200, 169, 126, 0.1) 0%, rgba(139, 115, 85, 0.1) 100%)",
                   alignItems: "center",
                   justifyContent: "center",
                   flexDirection: "column",
-                  color: "#6B4E3D",
+                  color: "#8b7355",
                 }}
               >
                 <Typography
@@ -392,7 +392,7 @@ export default function LetterFromFounders() {
                   sx={{
                     fontWeight: 700,
                     mb: 1,
-                    color: "#6B4E3D",
+                    color: "#8b7355",
                   }}
                 >
                   David, Hellene & Malyne
@@ -400,7 +400,7 @@ export default function LetterFromFounders() {
                 <Typography
                   variant="body1"
                   sx={{
-                    color: "#6B4E3D",
+                    color: "#8b7355",
                     fontStyle: "italic",
                   }}
                 >

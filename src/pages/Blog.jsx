@@ -131,9 +131,9 @@ export default function Blog() {
         pt: 1.5,
         pb: 1.5,
         px: 0,
-        bgcolor: "#F5F1E8",
+        bgcolor: "#f9f7f3",
         background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
         position: "relative",
         overflow: "hidden",
         minHeight: "100vh",
@@ -145,7 +145,7 @@ export default function Blog() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)",
+            "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)",
           zIndex: 0,
         },
       }}
@@ -171,7 +171,7 @@ export default function Blog() {
               px: { xs: 1.5, sm: 1.5, md: 1.5 },
               borderRadius: { xs: 3, md: 4 },
               background: "#FFFFFF",
-              border: "1px solid rgba(107, 78, 61, 0.2)",
+              border: "1px solid rgba(139, 115, 85, 0.2)",
               minHeight: "auto",
               height: "auto",
               overflow: "hidden",
@@ -185,11 +185,7 @@ export default function Blog() {
                   mb: 1,
                   fontWeight: 800,
                   fontSize: { xs: "2rem", sm: "2.5rem", md: "3.2rem" },
-                  background:
-                    "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  color: "#1a1a1a",
                   position: "relative",
                   "&::after": {
                     content: '""',
@@ -199,7 +195,7 @@ export default function Blog() {
                     transform: "translateX(-50%)",
                     width: { xs: "80px", sm: "100px", md: "120px" },
                     height: "4px",
-                    background: "linear-gradient(45deg, #6B4E3D, #B85C38)",
+                    background: "linear-gradient(45deg, #1a1a1a, #c8a97e)",
                     borderRadius: "2px",
                   },
                 }}
@@ -212,7 +208,7 @@ export default function Blog() {
                   mt: 3,
                   fontWeight: 500,
                   fontSize: { xs: "1.05rem", sm: "1.15rem", md: "1.25rem" },
-                  color: "text.secondary",
+                  color: "#666666",
                   maxWidth: "800px",
                   mx: "auto",
                   lineHeight: 1.7,
@@ -244,22 +240,22 @@ export default function Blog() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Search sx={{ color: "#6B4E3D" }} />
+                      <Search sx={{ color: "#8b7355" }} />
                     </InputAdornment>
                   ),
                 }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 2,
-                    backgroundColor: "#F5F1E8",
+                    backgroundColor: "#f9f7f3",
                     "& fieldset": {
-                      borderColor: "rgba(107, 78, 61, 0.3)",
+                      borderColor: "rgba(139, 115, 85, 0.3)",
                     },
                     "&:hover fieldset": {
-                      borderColor: "#6B4E3D",
+                      borderColor: "#8b7355",
                     },
                     "&.Mui-focused fieldset": {
-                      borderColor: "#6B4E3D",
+                      borderColor: "#8b7355",
                     },
                   },
                 }}
@@ -269,15 +265,15 @@ export default function Blog() {
                   minWidth: { xs: "100%", sm: "200px" },
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 2,
-                    backgroundColor: "#F5F1E8",
+                    backgroundColor: "#f9f7f3",
                     "& fieldset": {
-                      borderColor: "rgba(107, 78, 61, 0.3)",
+                      borderColor: "rgba(139, 115, 85, 0.3)",
                     },
                     "&:hover fieldset": {
-                      borderColor: "#6B4E3D",
+                      borderColor: "#8b7355",
                     },
                     "&.Mui-focused fieldset": {
-                      borderColor: "#6B4E3D",
+                      borderColor: "#8b7355",
                     },
                   },
                 }}
@@ -304,7 +300,7 @@ export default function Blog() {
             <Typography
               variant="body2"
               sx={{
-                color: "text.secondary",
+                color: "#666666",
                 mb: 2,
                 fontWeight: 600,
                 fontSize: { xs: "0.95rem", sm: "1rem", md: "1.05rem" },
@@ -327,7 +323,7 @@ export default function Blog() {
                 sx={{
                   mb: 2,
                   fontWeight: 700,
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   fontSize: { xs: "1.5rem", md: "1.7rem" },
                 }}
               >
@@ -383,10 +379,10 @@ export default function Blog() {
                             label={post.category}
                             size="small"
                             sx={{
-                              mb: 1.5,
-                              backgroundColor: "#B85C38",
-                              color: "white",
-                              fontWeight: 600,
+                            mb: 1.5,
+                            backgroundColor: "#c8a97e",
+                            color: "white",
+                            fontWeight: 600,
                               fontSize: "0.85rem",
                               alignSelf: "flex-start",
                             }}
@@ -396,7 +392,7 @@ export default function Blog() {
                             sx={{
                               fontWeight: 700,
                               mb: 1.5,
-                              color: "#3D2817",
+                              color: "#1a1a1a",
                               fontSize: { xs: "1.5rem", md: "1.7rem" },
                               lineHeight: 1.3,
                             }}
@@ -407,7 +403,7 @@ export default function Blog() {
                             variant="body2"
                             sx={{
                               mb: 2,
-                              color: "text.secondary",
+                              color: "#666666",
                               lineHeight: 1.6,
                               fontSize: { xs: "0.95rem", sm: "1rem", md: "1.05rem" },
                               display: "-webkit-box",
@@ -427,10 +423,10 @@ export default function Blog() {
                             }}
                           >
                             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                              <CalendarToday sx={{ fontSize: 18, color: "#6B4E3D" }} />
+                              <CalendarToday sx={{ fontSize: 18, color: "#8b7355" }} />
                               <Typography
                                 variant="caption"
-                                sx={{ color: "text.secondary", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
+                                sx={{ color: "#666666", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
                               >
                                 {new Date(post.publishDate).toLocaleDateString("en-US", {
                                   month: "short",
@@ -440,10 +436,10 @@ export default function Blog() {
                               </Typography>
                             </Box>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                              <AccessTime sx={{ fontSize: 18, color: "#6B4E3D" }} />
+                              <AccessTime sx={{ fontSize: 18, color: "#8b7355" }} />
                               <Typography
                                 variant="caption"
-                                sx={{ color: "text.secondary", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
+                                sx={{ color: "#666666", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
                               >
                                 {post.readTime}
                               </Typography>
@@ -452,13 +448,13 @@ export default function Blog() {
                           <Button
                             endIcon={<ArrowForward />}
                             sx={{
-                              color: "#6B4E3D",
+                              color: "#8b7355",
                               fontWeight: 600,
                               alignSelf: "flex-start",
                               "&:focus": { outline: "none", boxShadow: "none" },
                               "&:focus-visible": { outline: "none", boxShadow: "none" },
                               "&:hover": {
-                                backgroundColor: "rgba(107, 78, 61, 0.1)",
+                                backgroundColor: "rgba(139, 115, 85, 0.1)",
                               },
                             }}
                           >
@@ -507,7 +503,7 @@ export default function Blog() {
                 sx={{
                   mb: 2,
                   fontWeight: 700,
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   fontSize: { xs: "1.5rem", md: "1.7rem" },
                 }}
               >
@@ -558,7 +554,7 @@ export default function Blog() {
                               size="small"
                               sx={{
                                 mb: 1,
-                                backgroundColor: "#B85C38",
+                                backgroundColor: "#c8a97e",
                                 color: "white",
                                 fontWeight: 600,
                                 fontSize: "0.85rem",
@@ -571,7 +567,7 @@ export default function Blog() {
                             sx={{
                               fontWeight: 700,
                               mb: 1,
-                              color: "#3D2817",
+                              color: "#1a1a1a",
                               fontSize: { xs: "1.3rem", md: "1.4rem" },
                               lineHeight: 1.3,
                               display: "-webkit-box",
@@ -586,7 +582,7 @@ export default function Blog() {
                             variant="body2"
                             sx={{
                               mb: 2,
-                              color: "text.secondary",
+                              color: "#666666",
                               lineHeight: 1.6,
                               flexGrow: 1,
                               fontSize: { xs: "0.95rem", sm: "1rem", md: "1.05rem" },
@@ -620,10 +616,10 @@ export default function Blog() {
                               </Typography>
                             </Box>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                              <AccessTime sx={{ fontSize: 16, color: "#6B4E3D" }} />
+                              <AccessTime sx={{ fontSize: 16, color: "#8b7355" }} />
                               <Typography
                                 variant="caption"
-                                sx={{ color: "text.secondary", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
+                                sx={{ color: "#666666", fontWeight: 600, fontSize: { xs: "0.8rem", md: "0.85rem" } }}
                               >
                                 {post.readTime}
                               </Typography>
@@ -638,7 +634,7 @@ export default function Blog() {
                               flexWrap: "wrap",
                             }}
                           >
-                            <Tag sx={{ fontSize: 18, color: "#6B4E3D" }} />
+                            <Tag sx={{ fontSize: 18, color: "#8b7355" }} />
                             {post.tags.slice(0, 2).map((tag, idx) => (
                               <Chip
                                 key={idx}
@@ -648,8 +644,8 @@ export default function Blog() {
                                 sx={{
                                   fontSize: "0.9rem",
                                   height: "24px",
-                                  borderColor: "rgba(107, 78, 61, 0.3)",
-                                  color: "#6B4E3D",
+                                  borderColor: "rgba(139, 115, 85, 0.3)",
+                                  color: "#8b7355",
                                 }}
                               />
                             ))}
@@ -658,7 +654,7 @@ export default function Blog() {
                             endIcon={<ArrowForward />}
                             size="small"
                             sx={{
-                              color: "#6B4E3D",
+                              color: "#8b7355",
                               fontWeight: 600,
                               alignSelf: "flex-start",
                               "&:focus": { outline: "none", boxShadow: "none" },
@@ -667,7 +663,7 @@ export default function Blog() {
                               px: 0,
                               "&:hover": {
                                 backgroundColor: "transparent",
-                                color: "#B85C38",
+                                color: "#c8a97e",
                               },
                             }}
                           >
@@ -691,15 +687,15 @@ export default function Blog() {
                     size={isMobile ? "small" : "large"}
                     sx={{
                       "& .MuiPaginationItem-root": {
-                        color: "#6B4E3D",
+                        color: "#8b7355",
                         fontWeight: 600,
                         "&:focus": { outline: "none", boxShadow: "none" },
                         "&:focus-visible": { outline: "none", boxShadow: "none" },
                         "&.Mui-selected": {
-                          backgroundColor: "#6B4E3D",
+                          backgroundColor: "#c8a97e",
                           color: "white",
                           "&:hover": {
-                            backgroundColor: "#B85C38",
+                            backgroundColor: "#8b7355",
                           },
                           "&:focus": { outline: "none", boxShadow: "none" },
                           "&:focus-visible": { outline: "none", boxShadow: "none" },

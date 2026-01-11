@@ -55,15 +55,15 @@ const PackageCard = ({ package: pkg }) => {
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        border: "1px solid rgba(107, 78, 61, 0.15)",
+        border: "1px solid rgba(139, 115, 85, 0.15)",
         borderRadius: 3,
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
-        background: "linear-gradient(to bottom, #FFFFFF 0%, #F9F7F4 100%)",
-        boxShadow: "0 2px 8px rgba(61, 40, 23, 0.08)",
+        background: "linear-gradient(to bottom, #FFFFFF 0%, #f9f7f3 100%)",
+        boxShadow: "0 2px 8px rgba(26, 26, 26, 0.08)",
         "&:hover": {
           transform: "translateY(-8px)",
           boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
-          borderColor: "rgba(184, 92, 56, 0.3)",
+          borderColor: "rgba(200, 169, 126, 0.3)",
         },
       }}
     >
@@ -143,7 +143,7 @@ const PackageCard = ({ package: pkg }) => {
                 left: 0,
                 right: 0,
                 height: "60px",
-                background: "linear-gradient(to top, rgba(0,0,0,0.3), transparent)",
+                background: "linear-gradient(to top, rgba(26, 26, 26, 0.3), transparent)",
                 pointerEvents: "none",
               }}
             />
@@ -183,25 +183,25 @@ const PackageCard = ({ package: pkg }) => {
             label={pkg.destinationTitle}
             size="small"
             sx={{
-              mb: 0.5,
-              backgroundColor: "#6B4E3D",
-              color: "white",
-              fontWeight: 600,
-              fontSize: "0.75rem",
-            }}
-          />
-          <Typography
-            variant="caption"
-            sx={{
-              display: "block",
-              color: "#B85C38",
-              fontWeight: 600,
-              fontSize: "0.8rem",
-              fontStyle: "italic",
-            }}
-          >
-            {pkg.categoryName}
-          </Typography>
+            mb: 0.5,
+            backgroundColor: "#8b7355",
+            color: "white",
+            fontWeight: 600,
+            fontSize: "0.75rem",
+          }}
+        />
+        <Typography
+          variant="caption"
+          sx={{
+            display: "block",
+            color: "#c8a97e",
+            fontWeight: 600,
+            fontSize: "0.8rem",
+            fontStyle: "italic",
+          }}
+        >
+          {pkg.categoryName}
+        </Typography>
         </Box>
 
         {/* Package Title */}
@@ -211,7 +211,7 @@ const PackageCard = ({ package: pkg }) => {
             fontWeight: 600,
             fontSize: { xs: "1rem", md: "1.125rem" },
             mb: 1,
-            color: "text.primary",
+            color: "#1a1a1a",
             lineHeight: 1.3,
           }}
         >
@@ -222,7 +222,7 @@ const PackageCard = ({ package: pkg }) => {
         <Typography
           variant="body2"
           sx={{
-            color: "text.secondary",
+            color: "#666666",
             mb: 1.5,
             fontSize: { xs: "0.875rem", md: "0.95rem" },
             lineHeight: 1.6,
@@ -240,7 +240,7 @@ const PackageCard = ({ package: pkg }) => {
               sx={{
                 fontSize: "0.75rem",
                 fontWeight: 700,
-                color: "#5D4037",
+                color: "#8b7355",
                 mb: 0.75,
                 display: "block",
               }}
@@ -273,7 +273,7 @@ const PackageCard = ({ package: pkg }) => {
                       width: 4,
                       height: 4,
                       borderRadius: "50%",
-                      backgroundColor: "#B85C38",
+                      backgroundColor: "#c8a97e",
                       mt: 0.75,
                       flexShrink: 0,
                     }}
@@ -281,7 +281,7 @@ const PackageCard = ({ package: pkg }) => {
                   <Typography
                     variant="body2"
                     sx={{
-                      color: "text.secondary",
+                      color: "#666666",
                       lineHeight: 1.4,
                       fontSize: { xs: "0.8rem", md: "0.85rem" },
                       fontWeight: 500,
@@ -301,7 +301,7 @@ const PackageCard = ({ package: pkg }) => {
             sx={{
               mb: 1.5,
               pt: 1,
-              borderTop: "1px solid rgba(0,0,0,0.1)",
+              borderTop: "1px solid rgba(139, 115, 85, 0.1)",
             }}
           >
             <Typography
@@ -309,7 +309,7 @@ const PackageCard = ({ package: pkg }) => {
               sx={{
                 fontSize: "0.75rem",
                 fontWeight: 700,
-                color: "#5D4037",
+                color: "#8b7355",
                 mb: 0.75,
                 display: "block",
               }}
@@ -335,18 +335,18 @@ const PackageCard = ({ package: pkg }) => {
                   <AttachMoney
                     sx={{
                       fontSize: { xs: 14, md: 16 },
-                      color: "#6B4E3D",
+                      color: "#8b7355",
                     }}
                   />
                   <Typography
                     variant="caption"
                     sx={{
                       fontSize: { xs: "0.8rem", md: "0.85rem" },
-                      color: "text.secondary",
+                      color: "#666666",
                       fontWeight: 600,
                     }}
                   >
-                    <Box component="span" sx={{ color: "#B85C38", fontWeight: 700 }}>
+                    <Box component="span" sx={{ color: "#c8a97e", fontWeight: 700 }}>
                       {tier.tier}:
                     </Box>{" "}
                     {tier.price_range}
@@ -451,9 +451,9 @@ export default function AllPackages() {
         pt: 1.5,
         pb: 1.5,
         px: 0,
-        bgcolor: "#F5F1E8", // Light beige from palette
+        bgcolor: "#f9f7f3", // Warm White from palette
         background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
         position: "relative",
         overflow: "hidden",
         minHeight: "auto",
@@ -465,7 +465,7 @@ export default function AllPackages() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+            "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)", // Accent Gold and Secondary Brown
           zIndex: 0,
         },
       }}
@@ -491,7 +491,7 @@ export default function AllPackages() {
               px: { xs: 1.5, sm: 1.5, md: 1.5 },
               borderRadius: { xs: 3, md: 4 },
               background: "#FFFFFF",
-              border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
+              border: "1px solid rgba(139, 115, 85, 0.2)", // Secondary Brown border
               minHeight: "auto",
               height: "auto",
               overflow: "hidden",
@@ -505,12 +505,7 @@ export default function AllPackages() {
                   mb: 1,
                   fontWeight: 800,
                   fontSize: { xs: "1.5rem", sm: "1.8rem", md: "2.2rem" },
-                  background:
-                    "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)", // Medium brown, rust, dark brown
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  color: "#1a1a1a",
                   position: "relative",
                   "&::after": {
                     content: '""',
@@ -520,7 +515,7 @@ export default function AllPackages() {
                     transform: "translateX(-50%)",
                     width: { xs: "60px", sm: "70px", md: "80px" },
                     height: "4px",
-                    background: "linear-gradient(45deg, #6B4E3D, #B85C38)", // Medium brown to rust
+                    background: "linear-gradient(45deg, #1a1a1a, #c8a97e)",
                     borderRadius: "2px",
                   },
                 }}
@@ -537,7 +532,7 @@ export default function AllPackages() {
                   fontWeight: 500,
                   fontSize: { xs: "0.85rem", sm: "0.95rem", md: "1rem" },
                   lineHeight: 1.6,
-                  color: "#3D2817", // Dark brown from palette
+                  color: "#666666", // Neutral Gray
                 }}
               >
                 Explore our complete collection of safari packages across all destinations
@@ -566,7 +561,7 @@ export default function AllPackages() {
                     width: "100%",
                   }}
                 >
-                  <CircularProgress sx={{ color: "#B85C38" }} />
+                  <CircularProgress sx={{ color: "#c8a97e" }} />
                 </Grid>
               )}
               {!loading && allPackages.length === 0 && (
@@ -581,7 +576,7 @@ export default function AllPackages() {
                   >
                     <Typography
                       variant="h6"
-                      sx={{ color: "text.secondary", fontWeight: 600 }}
+                      sx={{ color: "#666666", fontWeight: 600 }}
                     >
                       No packages available yet.
                     </Typography>

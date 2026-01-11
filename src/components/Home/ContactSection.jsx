@@ -27,7 +27,7 @@ export default function ContactSection() {
           mx: { xs: 0.75, sm: 0.75, md: 0.75 },
           borderRadius: { xs: 3, md: 4 },
           background: "#FFFFFF",
-          border: "1px solid rgba(107, 78, 61, 0.2)",
+          border: "1px solid rgba(139, 115, 85, 0.2)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
           overflow: "hidden",
         }}
@@ -57,7 +57,7 @@ export default function ContactSection() {
                   variant="overline"
                   sx={{
                     letterSpacing: 2,
-                    color: "#6B7D47",
+                    color: "#c8a97e",
                     fontWeight: 700,
                   }}
                 >
@@ -67,7 +67,7 @@ export default function ContactSection() {
                   variant="h4"
                   sx={{
                     fontWeight: 800,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     lineHeight: 1.2,
                   }}
                 >
@@ -76,7 +76,7 @@ export default function ContactSection() {
                 <Typography
                   variant="body1"
                   sx={{
-                    color: "text.primary",
+                    color: "#1a1a1a",
                     lineHeight: 1.6,
                     maxWidth: 720,
                     fontSize: "1.3rem",
@@ -102,26 +102,26 @@ export default function ContactSection() {
                       icon: <Phone sx={{ fontSize: 18 }} />,
                       label: "Call us",
                       value: "+254 731 913293",
-                      color: "#6B4E3D",
+                      color: "#8b7355",
                     },
                     {
                       icon: <Email sx={{ fontSize: 18 }} />,
                       label: "Email",
                       value: "info@akirasafaris.co.ke",
-                      color: "#B85C38",
+                      color: "#c8a97e",
                     },
                     {
                       icon: <LocationOn sx={{ fontSize: 18 }} />,
                       label: "Postal Address:",
                       value: "P.O. Box 42886–00100\nNairobi, Kenya",
-                      color: "#6B7D47",
+                      color: "#8b7355",
                     },
                     {
                       icon: <Phone sx={{ fontSize: 18 }} />,
                       label: "Alternative Contacts:",
                       value:
                         "+254 721 913 293\n+254 726 913 872\n+254 739 611 948",
-                      color: "#8B6F47",
+                      color: "#8b7355",
                     },
                   ].map((item) => (
                     <Stack
@@ -168,7 +168,7 @@ export default function ContactSection() {
                           variant="subtitle2"
                           sx={{
                             fontWeight: 900,
-                            color: "text.primary",
+                            color: "#1a1a1a",
                             letterSpacing: 0.15,
                             textAlign: "center",
                             fontSize: "1.05rem",
@@ -179,7 +179,7 @@ export default function ContactSection() {
                         <Typography
                           variant="body2"
                           sx={{
-                            color: "text.primary",
+                            color: "#1a1a1a",
                             lineHeight: 1.3,
                             fontWeight: 700,
                             textAlign: "center",

@@ -134,7 +134,7 @@ export default function BackgroundImageSection() {
         pb: { xs: 0.5, sm: 0.75, md: 1 },
         position: "relative",
         zIndex: 1,
-        backgroundColor: "#F5F1E8", // Solid beige background to prevent rendering flicker
+        backgroundColor: "#f9f7f3", // Warm White background
       }}
     >
       <Card
@@ -142,7 +142,7 @@ export default function BackgroundImageSection() {
           mx: { xs: 0.75, sm: 0.75, md: 0.75 },
           borderRadius: { xs: 3, md: 4 },
           background: "#FFFFFF",
-          border: "1px solid rgba(107, 78, 61, 0.2)",
+          border: "1px solid rgba(139, 115, 85, 0.2)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
           position: "relative",
           overflow: "hidden",
@@ -190,7 +190,7 @@ export default function BackgroundImageSection() {
                 left: 0,
                 width: "100%",
                 height: "100%",
-                background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
+                background: "linear-gradient(135deg, #8b7355 0%, #c8a97e 100%)",
                 opacity: 0.8,
               }}
             />
@@ -226,7 +226,7 @@ export default function BackgroundImageSection() {
                 fontFamily: "'Brush Script MT', 'Lucida Handwriting', 'Dancing Script', cursive",
                 fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "3rem" },
                 fontWeight: 900,
-                color: "#6B4E3D", // Medium brown
+                color: "#1a1a1a", // Primary Black
                 letterSpacing: "0.03em",
                 lineHeight: 1.1,
                 display: "inline-block",
@@ -317,7 +317,7 @@ export default function BackgroundImageSection() {
                             size="medium"
                             sx={{
                               "& .MuiRating-iconFilled": {
-                                color: "#B85C38", // Burnt orange/rust
+                                color: "#c8a97e", // Accent Gold
                               },
                             }}
                           />
@@ -328,7 +328,7 @@ export default function BackgroundImageSection() {
                       <Typography
                         variant="body1"
                         sx={{
-                          color: "text.secondary",
+                          color: "#666666",
                           mb: 2.5,
                           fontSize: { xs: "1.4rem", md: "1.4rem" },
                           lineHeight: 1.7,
@@ -366,7 +366,7 @@ export default function BackgroundImageSection() {
                               variant="body2"
                               sx={{
                                 fontSize: { xs: "0.8125rem", md: "0.875rem" },
-                                color: "text.secondary",
+                                color: "#666666",
                                 fontWeight: 500,
                               }}
                             >
@@ -384,14 +384,14 @@ export default function BackgroundImageSection() {
                           <CalendarToday
                             sx={{
                               fontSize: { xs: 18, md: 20 },
-                              color: "text.secondary",
+                              color: "#666666",
                             }}
                           />
                           <Typography
                             variant="body2"
                             sx={{
                               fontSize: { xs: "0.8125rem", md: "0.875rem" },
-                              color: "text.secondary",
+                              color: "#666666",
                             }}
                           >
                             {formatDate(review.createdAt)}

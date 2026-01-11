@@ -90,9 +90,9 @@ export default function TeamMemberDetail() {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "60vh",
-          bgcolor: "#F5F1E8", // Light beige from palette
+          bgcolor: "#f9f7f3", // Warm White from palette
           background:
-            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+            "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
           "&::before": {
@@ -103,13 +103,13 @@ export default function TeamMemberDetail() {
             right: 0,
             bottom: 0,
             background:
-              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+              "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)", // Accent Gold and Secondary Brown
             zIndex: 0,
           },
         }}
       >
         <Box sx={{ position: "relative", zIndex: 1 }}>
-          <CircularProgress sx={{ color: "#B85C38" }} />
+          <CircularProgress sx={{ color: "#c8a97e" }} />
         </Box>
       </Box>
     );
@@ -122,9 +122,9 @@ export default function TeamMemberDetail() {
           pt: 0.75,
           pb: 0.75,
           px: 0,
-          bgcolor: "#F5F1E8", // Light beige from palette
+          bgcolor: "#f9f7f3", // Warm White from palette
           background:
-            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+            "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
           position: "relative",
           overflow: "hidden",
           minHeight: "auto",
@@ -136,7 +136,7 @@ export default function TeamMemberDetail() {
             right: 0,
             bottom: 0,
             background:
-              "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+              "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)", // Accent Gold and Secondary Brown
             zIndex: 0,
           },
         }}
@@ -169,9 +169,9 @@ export default function TeamMemberDetail() {
         pt: 0.75,
         pb: 0.75,
         px: 0,
-        bgcolor: "#F5F1E8", // Light beige from palette
+        bgcolor: "#f9f7f3", // Warm White from palette
         background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+          "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(249, 247, 243, 0.95) 100%)",
         position: "relative",
         overflow: "hidden",
         minHeight: "auto",
@@ -183,7 +183,7 @@ export default function TeamMemberDetail() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
+            "radial-gradient(circle at 20% 80%, rgba(200, 169, 126, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.08) 0%, transparent 50%)", // Accent Gold and Secondary Brown
           zIndex: 0,
         },
       }}
@@ -210,15 +210,15 @@ export default function TeamMemberDetail() {
                 sx={{ 
                   mt: 0.5,
                   mb: 0.5,
-                  background: "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)",
+                  background: "linear-gradient(45deg, #c8a97e 30%, #8b7355 90%)",
                   color: "white",
                   fontWeight: 600,
                   px: 2.25,
                   py: 0.6,
                   "&:hover": {
-                    background: "linear-gradient(45deg, #8B4225 30%, #B85C38 90%)",
+                    background: "linear-gradient(45deg, #8b7355 30%, #c8a97e 90%)",
                     transform: "translateY(-2px)",
-                    boxShadow: "0 8px 25px rgba(184, 92, 56, 0.3)",
+                    boxShadow: "0 8px 25px rgba(200, 169, 126, 0.3)",
                   },
                   "&:focus": {
                     outline: "none",
@@ -238,7 +238,7 @@ export default function TeamMemberDetail() {
                 p: { xs: 1.5, sm: 2, md: 2.5 },
                 borderRadius: { xs: 3, md: 4 },
                 background: "#FFFFFF",
-                border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
+                border: "1px solid rgba(139, 115, 85, 0.2)", // Secondary Brown border
               }}
             >
               {/* Header Section */}
@@ -259,7 +259,7 @@ export default function TeamMemberDetail() {
                         position: "absolute",
                         inset: "-3px",
                         borderRadius: { xs: 3, md: 4 },
-                        background: "linear-gradient(135deg, #667eea, #764ba2)",
+                        background: "linear-gradient(135deg, #c8a97e, #8b7355)",
                         zIndex: -1,
                       }
                     }}
@@ -291,7 +291,7 @@ export default function TeamMemberDetail() {
                         justifyContent: "center",
                         width: "100%",
                         height: "100%",
-                        background: "linear-gradient(135deg, #667eea, #764ba2)",
+                        background: "linear-gradient(135deg, #c8a97e, #8b7355)",
                         color: "white",
                       }}
                     >
@@ -311,10 +311,7 @@ export default function TeamMemberDetail() {
                     component="h1"
                     sx={{ 
                       fontWeight: 700,
-                      background: "linear-gradient(135deg, #667eea, #764ba2)",
-                      backgroundClip: "text",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
+                      color: "#1a1a1a",
                       fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.85rem" },
                       textAlign: "left",
                       mb: 0,
@@ -327,7 +324,7 @@ export default function TeamMemberDetail() {
                   <Typography
                     variant="h5"
                     sx={{
-                      color: "#4caf50",
+                      color: "#c8a97e",
                       fontSize: { xs: "0.75rem", sm: "0.85rem", md: "1rem" },
                       fontWeight: 600,
                       textAlign: "left",
@@ -377,7 +374,7 @@ export default function TeamMemberDetail() {
                   p: { xs: 1.5, sm: 2 }, 
                   borderRadius: { xs: 3, md: 4 },
                   background: "#FFFFFF",
-                  border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
+                  border: "1px solid rgba(139, 115, 85, 0.2)", // Secondary Brown border
                   textAlign: "center",
                 }}
               >
@@ -385,7 +382,7 @@ export default function TeamMemberDetail() {
                   variant="h5"
                   sx={{
                     fontWeight: 600,
-                    color: "#667eea",
+                    color: "#1a1a1a",
                     mb: 1.5,
                     display: "flex",
                     alignItems: "center",

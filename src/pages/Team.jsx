@@ -54,7 +54,7 @@ export default function Team() {
         "& .MuiTypography-root": { fontSize: "1.3rem" },
         "& .MuiButton-root": { fontSize: "1.3rem" },
         background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.9) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(232, 224, 209, 0.9) 100%)", // Beige tones
+          "linear-gradient(135deg, rgba(249, 247, 243, 0.9) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(249, 247, 243, 0.9) 100%)", // Warm White tones
       }}
     >
       <Container
@@ -69,7 +69,7 @@ export default function Team() {
             px: { xs: 1.5, sm: 1.5, md: 1.5 },
             borderRadius: { xs: 3, md: 4 },
             background: "#FFFFFF",
-            border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
+            border: "1px solid rgba(139, 115, 85, 0.2)", // Secondary Brown border
           }}
         >
           {/* Company Profile Section */}
@@ -83,7 +83,7 @@ export default function Team() {
                 sx={{
                   fontWeight: 700,
                   mb: 0.25,
-                  color: "#3D2817",
+                  color: "#1a1a1a",
                   fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
                   textAlign: "center",
                   minHeight: { xs: "2rem", sm: "2.5rem", md: "3rem" },
@@ -100,7 +100,7 @@ export default function Team() {
                       display: "inline-block",
                       width: "2px",
                       height: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
-                      backgroundColor: "#3D2817",
+                      backgroundColor: "#1a1a1a",
                       marginLeft: "2px",
                       animation: "blink 1s infinite",
                       "@keyframes blink": {
@@ -154,8 +154,8 @@ export default function Team() {
                     elevation={4}
                     sx={{
                       p: 2,
-                      background: "linear-gradient(135deg, rgba(184, 92, 56, 0.15) 0%, rgba(107, 78, 61, 0.1) 100%)",
-                      border: "2px solid rgba(184, 92, 56, 0.3)",
+                      background: "linear-gradient(135deg, rgba(200, 169, 126, 0.15) 0%, rgba(139, 115, 85, 0.1) 100%)",
+                      border: "2px solid rgba(200, 169, 126, 0.3)",
                       borderRadius: 3,
                       transform: { xs: "rotate(2deg)", md: "rotate(5deg)" },
                       transition: "transform 0.3s ease",
@@ -181,7 +181,7 @@ export default function Team() {
                       size="small"
                       sx={{
                         mt: 1,
-                        backgroundColor: "#B85C38",
+                        backgroundColor: "#c8a97e",
                         color: "#fff",
                         borderRadius: 2,
                         px: 1.5,
@@ -189,24 +189,24 @@ export default function Team() {
                         fontSize: { xs: "0.75rem", md: "0.75rem" },
                         textTransform: "none",
                         fontWeight: 600,
-                        boxShadow: "0 2px 8px rgba(184, 92, 56, 0.3)",
+                        boxShadow: "0 2px 8px rgba(200, 169, 126, 0.3)",
                         "&:hover": {
-                          backgroundColor: "#8B4225",
-                          boxShadow: "0 4px 12px rgba(184, 92, 56, 0.4)",
+                          backgroundColor: "#8b7355",
+                          boxShadow: "0 4px 12px rgba(200, 169, 126, 0.4)",
                           transform: "translateY(-2px)",
                         },
                         transition: "all 0.3s ease",
                         "&:focus": {
                           outline: "none",
-                          boxShadow: "0 2px 8px rgba(184, 92, 56, 0.3)",
+                          boxShadow: "0 2px 8px rgba(200, 169, 126, 0.3)",
                         },
                         "&:focus-visible": {
                           outline: "none",
-                          boxShadow: "0 2px 8px rgba(184, 92, 56, 0.3)",
+                          boxShadow: "0 2px 8px rgba(200, 169, 126, 0.3)",
                         },
                         "&:active": {
                           outline: "none",
-                          boxShadow: "0 2px 8px rgba(184, 92, 56, 0.3)",
+                          boxShadow: "0 2px 8px rgba(200, 169, 126, 0.3)",
                         },
                       }}
                     >
@@ -238,7 +238,7 @@ export default function Team() {
                   sx={{
                     fontWeight: 700,
                     mb: 0.75,
-                    color: "#B85C38",
+                    color: "#c8a97e",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                     textAlign: "center",
                   }}
@@ -268,8 +268,8 @@ export default function Team() {
                       elevation={4}
                       sx={{
                         p: 2,
-                        background: "linear-gradient(135deg, rgba(107, 125, 71, 0.15) 0%, rgba(123, 141, 87, 0.1) 100%)",
-                        border: "2px solid rgba(107, 125, 71, 0.3)",
+                        background: "linear-gradient(135deg, rgba(139, 115, 85, 0.15) 0%, rgba(200, 169, 126, 0.1) 100%)",
+                        border: "2px solid rgba(139, 115, 85, 0.3)",
                         borderRadius: 3,
                         transform: { xs: "rotate(-2deg)", md: "rotate(-5deg)" },
                         transition: "transform 0.3s ease",
@@ -295,7 +295,7 @@ export default function Team() {
                         size="small"
                         sx={{
                           mt: 1,
-                          backgroundColor: "#6B7D47",
+                          backgroundColor: "#c8a97e",
                           color: "#fff",
                           borderRadius: 2,
                           px: 1.5,
@@ -303,24 +303,24 @@ export default function Team() {
                           fontSize: { md: "0.75rem" },
                           textTransform: "none",
                           fontWeight: 600,
-                          boxShadow: "0 2px 8px rgba(107, 125, 71, 0.3)",
+                          boxShadow: "0 2px 8px rgba(200, 169, 126, 0.3)",
                           "&:hover": {
-                            backgroundColor: "#5A6B3A",
-                            boxShadow: "0 4px 12px rgba(107, 125, 71, 0.4)",
+                            backgroundColor: "#8b7355",
+                            boxShadow: "0 4px 12px rgba(200, 169, 126, 0.4)",
                             transform: "translateY(-2px)",
                           },
                           transition: "all 0.3s ease",
                           "&:focus": {
                             outline: "none",
-                            boxShadow: "0 2px 8px rgba(107, 125, 71, 0.3)",
+                            boxShadow: "0 2px 8px rgba(200, 169, 126, 0.3)",
                           },
                           "&:focus-visible": {
                             outline: "none",
-                            boxShadow: "0 2px 8px rgba(107, 125, 71, 0.3)",
+                            boxShadow: "0 2px 8px rgba(200, 169, 126, 0.3)",
                           },
                           "&:active": {
                             outline: "none",
-                            boxShadow: "0 2px 8px rgba(107, 125, 71, 0.3)",
+                            boxShadow: "0 2px 8px rgba(200, 169, 126, 0.3)",
                           },
                         }}
                       >
@@ -363,7 +363,7 @@ export default function Team() {
                   sx={{
                     fontWeight: 700,
                     mb: 0.75,
-                    color: "#B85C38",
+                    color: "#c8a97e",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                     textAlign: "center",
                   }}
@@ -408,7 +408,7 @@ export default function Team() {
                         padding: 0,
                         "&::before": {
                           content: '"•"',
-                          color: "#B85C38",
+                          color: "#c8a97e",
                           fontWeight: "bold",
                           display: "inline-block",
                           width: "1em",
@@ -433,7 +433,7 @@ export default function Team() {
                         padding: 0,
                         "&::before": {
                           content: '"•"',
-                          color: "#B85C38",
+                          color: "#c8a97e",
                           fontWeight: "bold",
                           display: "inline-block",
                           width: "1em",
@@ -457,7 +457,7 @@ export default function Team() {
                         padding: 0,
                         "&::before": {
                           content: '"•"',
-                          color: "#B85C38",
+                          color: "#c8a97e",
                           fontWeight: "bold",
                           display: "inline-block",
                           width: "1em",
@@ -485,8 +485,8 @@ export default function Team() {
                       elevation={4}
                       sx={{
                         p: 2,
-                        background: "linear-gradient(135deg, rgba(107, 78, 61, 0.15) 0%, rgba(184, 92, 56, 0.1) 100%)",
-                        border: "2px solid rgba(107, 78, 61, 0.3)",
+                        background: "linear-gradient(135deg, rgba(139, 115, 85, 0.15) 0%, rgba(200, 169, 126, 0.1) 100%)",
+                        border: "2px solid rgba(139, 115, 85, 0.3)",
                         borderRadius: 3,
                         transform: { xs: "rotate(2deg)", md: "rotate(5deg)" },
                         transition: "transform 0.3s ease",
@@ -512,7 +512,7 @@ export default function Team() {
                         size="small"
                         sx={{
                           mt: 1,
-                          backgroundColor: "#6B4E3D",
+                          backgroundColor: "#8b7355",
                           color: "#fff",
                           borderRadius: 2,
                           px: 1.5,
@@ -520,24 +520,24 @@ export default function Team() {
                           fontSize: { md: "0.75rem" },
                           textTransform: "none",
                           fontWeight: 600,
-                          boxShadow: "0 2px 8px rgba(107, 78, 61, 0.3)",
+                          boxShadow: "0 2px 8px rgba(139, 115, 85, 0.3)",
                           "&:hover": {
-                            backgroundColor: "#5A3E2D",
-                            boxShadow: "0 4px 12px rgba(107, 78, 61, 0.4)",
+                            backgroundColor: "#c8a97e",
+                            boxShadow: "0 4px 12px rgba(139, 115, 85, 0.4)",
                             transform: "translateY(-2px)",
                           },
                           transition: "all 0.3s ease",
                           "&:focus": {
                             outline: "none",
-                            boxShadow: "0 2px 8px rgba(107, 78, 61, 0.3)",
+                            boxShadow: "0 2px 8px rgba(139, 115, 85, 0.3)",
                           },
                           "&:focus-visible": {
                             outline: "none",
-                            boxShadow: "0 2px 8px rgba(107, 78, 61, 0.3)",
+                            boxShadow: "0 2px 8px rgba(139, 115, 85, 0.3)",
                           },
                           "&:active": {
                             outline: "none",
-                            boxShadow: "0 2px 8px rgba(107, 78, 61, 0.3)",
+                            boxShadow: "0 2px 8px rgba(139, 115, 85, 0.3)",
                           },
                         }}
                       >
@@ -572,9 +572,9 @@ export default function Team() {
                   mt: 1.25,
                   p: { xs: 0.5, sm: 0.625, md: 0.75 },
                   background:
-                    "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.05) 100%)",
+                    "linear-gradient(135deg, rgba(200, 169, 126, 0.1) 0%, rgba(139, 115, 85, 0.05) 100%)",
                   borderRadius: { xs: 2, md: 3 },
-                  border: "1px solid rgba(184, 92, 56, 0.2)",
+                  border: "1px solid rgba(200, 169, 126, 0.2)",
                   textAlign: "center",
                 }}
               >
@@ -583,7 +583,7 @@ export default function Team() {
                   sx={{
                     fontWeight: 700,
                     mb: 0.75,
-                    color: "#3D2817",
+                    color: "#1a1a1a",
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                   }}
                 >
@@ -613,30 +613,28 @@ export default function Team() {
                      fontSize: "1.1rem",
                      fontWeight: 600,
                      borderRadius: "50px",
-                     background:
-                       "linear-gradient(45deg, #B85C38 30%, #C97A5A 90%)", // Rust to light rust
-                     boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                     background: "#c8a97e",
+                     boxShadow: "0 8px 32px rgba(200, 169, 126, 0.3)",
                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                      "& .MuiButton-endIcon": {
                        marginLeft: 0.5,
                      },
                      "&:hover": {
                        transform: "translateY(-3px) scale(1.05)",
-                       boxShadow: "0 12px 40px rgba(184, 92, 56, 0.4)",
-                       background:
-                         "linear-gradient(45deg, #8B4225 30%, #B85C38 90%)", // Dark rust to rust
+                       boxShadow: "0 12px 40px rgba(200, 169, 126, 0.4)",
+                       background: "#8b7355",
                      },
                      "&:focus": {
                        outline: "none",
-                       boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                       boxShadow: "0 8px 32px rgba(200, 169, 126, 0.3)",
                      },
                      "&:focus-visible": {
                        outline: "none",
-                       boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                       boxShadow: "0 8px 32px rgba(200, 169, 126, 0.3)",
                      },
                      "&:active": {
                        outline: "none",
-                       boxShadow: "0 8px 32px rgba(184, 92, 56, 0.3)",
+                       boxShadow: "0 8px 32px rgba(200, 169, 126, 0.3)",
                      },
                    }}
                  >
