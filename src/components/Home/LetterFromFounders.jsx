@@ -47,10 +47,13 @@ export default function LetterFromFounders() {
         <Grid
           container
           spacing={{ xs: 2, md: 6 }}
-          justifyContent="center"
+          alignItems="flex-start"
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+          }}
         >
           {/* Letter Content */}
-          <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: 7 }}>
             <Paper
               elevation={0}
               sx={{
@@ -137,18 +140,19 @@ export default function LetterFromFounders() {
                   You seem ready for something different—something real that goes beyond the average safari experience. For more than 16 years, we've opened our home to travelers from around the world, and that experience taught us something important: people aren't just looking for a checklist of sights. They're looking for insight, trust, and a sense of belonging.
                 </Typography>
 
+                {/* Image inside letter - only visible on small screens */}
                 <Box
                   sx={{
+                    display: { xs: "block", md: "none" },
                     position: "relative",
                     width: "100%",
-                    height: { xs: "200px", sm: "250px", md: "300px" },
+                    height: { xs: "200px", sm: "250px" },
                     borderRadius: 2,
                     overflow: "hidden",
                     boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
                     backgroundColor: "#f5f5f5",
                     mb: 2,
                     mx: "auto",
-                    maxWidth: { xs: "100%", md: "400px" },
                   }}
                 >
                   <Box
@@ -333,6 +337,77 @@ export default function LetterFromFounders() {
                 </Box>
               </Box>
             </Paper>
+          </Grid>
+
+          {/* Image Frame - Right Side - only visible on large screens */}
+          <Grid 
+            size={{ xs: 12, md: 5 }}
+            sx={{
+              display: { xs: "none", md: "block" },
+            }}
+          >
+            <Box
+              sx={{
+                position: "relative",
+                width: "100%",
+                height: "500px",
+                borderRadius: 2,
+                overflow: "hidden",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
+                backgroundColor: "#f5f5f5",
+              }}
+            >
+              <Box
+                component="img"
+                src="/FB_IMG_1768133643797.jpg"
+                alt="David, Hellene & Malyne - Founders of Akira Safaris"
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                }}
+                onError={(e) => {
+                  e.target.style.display = "none";
+                  if (e.target.nextSibling) {
+                    e.target.nextSibling.style.display = "flex";
+                  }
+                }}
+              />
+              <Box
+                sx={{
+                  display: "none",
+                  width: "100%",
+                  height: "100%",
+                  background:
+                    "linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(107, 78, 61, 0.1) 100%)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  color: "#6B4E3D",
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontWeight: 700,
+                    mb: 1,
+                    color: "#6B4E3D",
+                  }}
+                >
+                  David, Hellene & Malyne
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#6B4E3D",
+                    fontStyle: "italic",
+                  }}
+                >
+                  Founders of Akira Safaris
+                </Typography>
+              </Box>
+            </Box>
           </Grid>
         </Grid>
         </Container>
