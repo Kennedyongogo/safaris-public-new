@@ -29,9 +29,14 @@ export default function LetterFromFounders() {
         sx={{
           mx: { xs: 0.75, sm: 0.75, md: 0.75 },
           borderRadius: { xs: 3, md: 4 },
-          background: "#FFFFFF",
           border: "1px solid rgba(139, 115, 85, 0.2)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+          position: "relative",
+          overflow: "visible",
+          backgroundImage: "url('/images/elephants-4275741_1280.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <Container
@@ -39,29 +44,41 @@ export default function LetterFromFounders() {
           sx={{
             position: "relative",
             zIndex: 1,
-            px: { xs: 0.75, sm: 0.75, md: 0.75 },
-            pt: { xs: 0.75, sm: 1, md: 1 },
-            pb: { xs: 0.75, sm: 1, md: 1 },
+            px: { xs: 0.5, sm: 0.5, md: 0.5 },
+            pt: { xs: 0.5, sm: 0.75, md: 0.75 },
+            pb: { xs: 0.5, sm: 0.75, md: 0.75 },
+            overflow: "visible",
           }}
         >
         <Grid
           container
-          spacing={{ xs: 2, md: 6 }}
+          spacing={{ xs: 1.5, md: 4 }}
           alignItems="flex-start"
           sx={{
             flexDirection: { xs: "column", md: "row" },
           }}
         >
           {/* Letter Content */}
-          <Grid size={{ xs: 12, md: 7 }}>
+          <Grid 
+            size={{ xs: 12, md: 7 }}
+            sx={{
+              p: { xs: 2, sm: 2.5, md: 3 },
+              overflow: "visible",
+            }}
+          >
             <Paper
               elevation={0}
               sx={{
-                p: { xs: 1.5, sm: 2, md: 2.5 },
-                background: "#F5F5F5",
+                p: { xs: 1, sm: 1.25, md: 1.5 },
+                background: "#FAF8F3", // Warmer, more realistic paper color
                 borderRadius: 2,
                 position: "relative",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+                boxShadow: `
+                  0 2px 8px rgba(0, 0, 0, 0.1),
+                  0 8px 24px rgba(0, 0, 0, 0.12),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                  inset 0 -1px 0 rgba(0, 0, 0, 0.05)
+                `,
                 transform: { xs: "rotate(-2deg)", md: "rotate(-3deg)" },
                 transition: "transform 0.3s ease",
                 width: "100%",
@@ -70,16 +87,32 @@ export default function LetterFromFounders() {
                 overflow: "visible",
                 "&:hover": {
                   transform: { xs: "rotate(-1deg)", md: "rotate(-2deg)" },
+                  boxShadow: `
+                    0 4px 12px rgba(0, 0, 0, 0.12),
+                    0 12px 32px rgba(0, 0, 0, 0.15),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                    inset 0 -1px 0 rgba(0, 0, 0, 0.05)
+                  `,
                 },
-                // Paper texture effect
+                // Realistic paper texture with multiple layers
                 backgroundImage: `
                   repeating-linear-gradient(
                     0deg,
                     transparent,
-                    transparent 2px,
-                    rgba(0, 0, 0, 0.02) 2px,
-                    rgba(0, 0, 0, 0.02) 4px
-                  )
+                    transparent 1px,
+                    rgba(0, 0, 0, 0.015) 1px,
+                    rgba(0, 0, 0, 0.015) 2px
+                  ),
+                  repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 1px,
+                    rgba(0, 0, 0, 0.01) 1px,
+                    rgba(0, 0, 0, 0.01) 2px
+                  ),
+                  radial-gradient(circle at 20% 30%, rgba(250, 248, 243, 0.8) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(245, 242, 235, 0.6) 0%, transparent 50%),
+                  linear-gradient(135deg, rgba(255, 253, 248, 0.4) 0%, rgba(250, 247, 240, 0.4) 100%)
                 `,
                 "&::before": {
                   content: '""',
@@ -88,17 +121,44 @@ export default function LetterFromFounders() {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  background: "radial-gradient(circle at 50% 50%, rgba(200, 200, 200, 0.2) 0%, transparent 70%)",
+                  background: `
+                    radial-gradient(circle at 30% 40%, rgba(200, 180, 150, 0.08) 0%, transparent 40%),
+                    radial-gradient(circle at 70% 60%, rgba(220, 200, 170, 0.06) 0%, transparent 40%),
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 20%, transparent 80%, rgba(240, 235, 225, 0.1) 100%)
+                  `,
                   pointerEvents: "none",
                   borderRadius: 2,
+                  opacity: 0.7,
                 },
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: `
+                    repeating-linear-gradient(
+                      45deg,
+                      transparent,
+                      transparent 10px,
+                      rgba(0, 0, 0, 0.008) 10px,
+                      rgba(0, 0, 0, 0.008) 11px
+                    )
+                  `,
+                  pointerEvents: "none",
+                  borderRadius: 2,
+                  opacity: 0.5,
+                },
+                // Subtle edge aging effect
+                border: "1px solid rgba(200, 180, 150, 0.15)",
               }}
             >
               <Typography
                 variant="h3"
                 sx={{
                   fontWeight: 700,
-                  mb: 2,
+                  mb: 1,
                   color: "#1a1a1a",
                   fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
                   letterSpacing: "0.02em",
@@ -108,6 +168,7 @@ export default function LetterFromFounders() {
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.05), 0 0.5px 1px rgba(0, 0, 0, 0.03)",
                 }}
               >
                 A Letter from Our Founders
@@ -117,11 +178,15 @@ export default function LetterFromFounders() {
                 <Typography
                   variant="body1"
                   sx={{
-                    mb: 1.5,
+                    mb: 1,
                     color: "#1a1a1a",
-                    fontSize: { xs: "1rem", md: "1.125rem" },
-                    lineHeight: 1.8,
+                    fontSize: { xs: "0.95rem", md: "1.05rem" },
+                    lineHeight: 1.6,
                     fontWeight: 500,
+                    position: "relative",
+                    zIndex: 1,
+                    textShadow: "0 0.5px 1px rgba(0, 0, 0, 0.03)",
+                    letterSpacing: "0.01em",
                   }}
                 >
                   Dear Traveler,
@@ -130,11 +195,15 @@ export default function LetterFromFounders() {
                 <Typography
                   variant="body1"
                   sx={{
-                    mb: 2,
+                    mb: 1.25,
                     color: "#1a1a1a",
-                    fontSize: { xs: "1rem", md: "1.125rem" },
-                    lineHeight: 1.8,
+                    fontSize: { xs: "0.95rem", md: "1.05rem" },
+                    lineHeight: 1.6,
                     fontWeight: 400,
+                    position: "relative",
+                    zIndex: 1,
+                    textShadow: "0 0.5px 1px rgba(0, 0, 0, 0.03)",
+                    letterSpacing: "0.01em",
                   }}
                 >
                   You seem ready for something different—something real that goes beyond the average safari experience. For more than 16 years, we've opened our home to travelers from around the world, and that experience taught us something important: people aren't just looking for a checklist of sights. They're looking for insight, trust, and a sense of belonging.
@@ -146,12 +215,12 @@ export default function LetterFromFounders() {
                     display: { xs: "block", md: "none" },
                     position: "relative",
                     width: "100%",
-                    height: { xs: "200px", sm: "250px" },
+                    height: { xs: "150px", sm: "180px" },
                     borderRadius: 2,
                     overflow: "hidden",
                     boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
                     backgroundColor: "#f5f5f5",
-                    mb: 2,
+                    mb: 1.25,
                     mx: "auto",
                   }}
                 >
@@ -210,11 +279,15 @@ export default function LetterFromFounders() {
                 <Typography
                   variant="body1"
                   sx={{
-                    mb: 2,
+                    mb: 1.25,
                     color: "#1a1a1a",
-                    fontSize: { xs: "1rem", md: "1.125rem" },
-                    lineHeight: 1.8,
+                    fontSize: { xs: "0.95rem", md: "1.05rem" },
+                    lineHeight: 1.6,
                     fontWeight: 400,
+                    position: "relative",
+                    zIndex: 1,
+                    textShadow: "0 0.5px 1px rgba(0, 0, 0, 0.03)",
+                    letterSpacing: "0.01em",
                   }}
                 >
                   We are David, Hellene, and Malyne—a family that co-founded Akira Safaris to extend our philosophy beyond our home. We design safaris that feel personal and seamless, from your first inquiry to the moment you return home. We go beyond guidebooks to reveal hidden gems—from vibrant local markets to quiet, off-the-beaten-path landscapes. You experience East Africa through the eyes of a friend, not a tourist.
@@ -223,12 +296,16 @@ export default function LetterFromFounders() {
                 <Typography
                   variant="body1"
                   sx={{
-                    mb: 3,
+                    mb: 1.5,
                     color: "#1a1a1a",
-                    fontSize: { xs: "1rem", md: "1.125rem" },
-                    lineHeight: 1.8,
+                    fontSize: { xs: "0.95rem", md: "1.05rem" },
+                    lineHeight: 1.6,
                     fontWeight: 500,
                     fontStyle: "italic",
+                    position: "relative",
+                    zIndex: 1,
+                    textShadow: "0 0.5px 1px rgba(0, 0, 0, 0.03)",
+                    letterSpacing: "0.01em",
                   }}
                 >
                   The wild is calling. Are you in?
@@ -237,8 +314,8 @@ export default function LetterFromFounders() {
                 {/* Signatures */}
                 <Box
                   sx={{
-                    mt: 2.5,
-                    pt: 2,
+                    mt: 1.5,
+                    pt: 1.25,
                     borderTop: "1px solid rgba(139, 115, 85, 0.2)",
                   }}
                 >
