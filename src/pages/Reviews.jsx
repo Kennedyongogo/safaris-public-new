@@ -22,7 +22,8 @@ import {
   useTheme,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { LocationOn, CalendarToday, Send } from "@mui/icons-material";
+import { LocationOn, CalendarToday, Send, ArrowBack } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const MotionBox = motion(Box);
@@ -30,6 +31,7 @@ const MotionBox = motion(Box);
 export default function Reviews() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const navigate = useNavigate();
   
   const [reviews, setReviews] = useState([]);
   const [formData, setFormData] = useState({
@@ -111,7 +113,7 @@ export default function Reviews() {
         icon: "success",
         title: "Thank you!",
         text: "Your review was submitted and is awaiting approval.",
-        confirmButtonColor: "#B85C38",
+        confirmButtonColor: "#c8a97e",
       });
 
       setFormData({
@@ -131,7 +133,7 @@ export default function Reviews() {
         icon: "error",
         title: "Submission failed",
         text: err.message || "Please try again.",
-        confirmButtonColor: "#B85C38",
+        confirmButtonColor: "#c8a97e",
       });
     } finally {
       setLoading(false);
@@ -144,23 +146,10 @@ export default function Reviews() {
         pt: 1.5,
         pb: 1.5,
         px: 0,
-        bgcolor: "#F5F1E8", // Light beige from palette
-        background:
-          "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
+        bgcolor: "#f9f7f3", // Warm White background
         position: "relative",
         overflow: "hidden",
         minHeight: "auto",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            "radial-gradient(circle at 20% 80%, rgba(184, 92, 56, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(107, 78, 61, 0.08) 0%, transparent 50%)", // Rust and medium brown
-          zIndex: 0,
-        },
       }}
     >
       <Container
@@ -177,6 +166,37 @@ export default function Reviews() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
+          {/* Back Button */}
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => {
+              navigate("/");
+              setTimeout(() => {
+                // Scroll to the reviews section (BackgroundImageSection)
+                const reviewsSection = document.getElementById("reviews-section");
+                if (reviewsSection) {
+                  reviewsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+              }, 100);
+            }}
+            sx={{
+              mt: 0.5,
+              mb: 0.5,
+              backgroundColor: "#c8a97e", // Accent Gold
+              color: "white",
+              fontWeight: 600,
+              outline: "none",
+              "&:focus": { outline: "none", boxShadow: "none" },
+              "&:focus-visible": { outline: "none", boxShadow: "none" },
+              "&:hover": {
+                backgroundColor: "#8b7355", // Secondary Brown
+                color: "white",
+              },
+            }}
+          >
+            Back to Reviews Section
+          </Button>
+
           <Paper
             elevation={3}
             sx={{
@@ -184,7 +204,7 @@ export default function Reviews() {
               px: { xs: 1.5, sm: 1.5, md: 1.5 },
               borderRadius: { xs: 3, md: 4 },
               background: "#FFFFFF",
-              border: "1px solid rgba(107, 78, 61, 0.2)", // Medium brown border
+              border: "1px solid rgba(139, 115, 85, 0.2)", // Secondary Brown border
               minHeight: "auto",
               height: "auto",
               overflow: "hidden",
@@ -198,12 +218,8 @@ export default function Reviews() {
                   mb: 1,
                   fontWeight: 800,
                   fontSize: { xs: "1.5rem", sm: "1.8rem", md: "2.2rem" },
-                  background:
-                    "linear-gradient(45deg, #6B4E3D, #B85C38, #3D2817)", // Medium brown, rust, dark brown
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  color: "#1a1a1a", // Primary Black
+                  fontWeight: 800,
                   position: "relative",
                   "&::after": {
                     content: '""',
@@ -213,7 +229,7 @@ export default function Reviews() {
                     transform: "translateX(-50%)",
                     width: { xs: "60px", sm: "70px", md: "80px" },
                     height: "4px",
-                    background: "linear-gradient(45deg, #6B4E3D, #B85C38)", // Medium brown to rust
+                    background: "linear-gradient(45deg, #8b7355, #c8a97e)", // Secondary Brown to Accent Gold
                     borderRadius: "2px",
                   },
                 }}
@@ -230,7 +246,7 @@ export default function Reviews() {
                   fontWeight: 500,
                   fontSize: { xs: "0.85rem", sm: "0.95rem", md: "1rem" },
                   lineHeight: 1.6,
-                  color: "#3D2817", // Dark brown from palette
+                  color: "#666666", // Secondary text color
                 }}
               >
                 Read what our guests have to say about their safari experiences
@@ -253,7 +269,7 @@ export default function Reviews() {
                       py: 6,
                     }}
                   >
-                    <CircularProgress sx={{ color: "#B85C38" }} />
+                    <CircularProgress sx={{ color: "#c8a97e" }} />
                   </Box>
                 </Grid>
               )}
@@ -338,7 +354,7 @@ export default function Reviews() {
                             size="small"
                             sx={{
                             "& .MuiRating-iconFilled": {
-                                color: "#B85C38", // Burnt orange/rust
+                                color: "#c8a97e", // Accent Gold
                             },
                             }}
                           />
@@ -384,7 +400,7 @@ export default function Reviews() {
                             <LocationOn
                               sx={{
                                 fontSize: { xs: 16, md: 18 },
-                                color: "#6B4E3D", // Medium brown
+                                color: "#c8a97e", // Accent Gold
                               }}
                             />
                             <Typography
@@ -437,8 +453,8 @@ export default function Reviews() {
                 sx={{
                   p: { xs: 2, sm: 3, md: 4 },
                   borderRadius: { xs: 3, md: 4 },
-                  background: "linear-gradient(135deg, rgba(255, 250, 240, 0.98) 0%, rgba(255, 255, 255, 1) 100%)",
-                  border: "1px solid #e0e0e0",
+                  background: "#FFFFFF",
+                  border: "1px solid rgba(139, 115, 85, 0.2)", // Secondary Brown border
                 }}
               >
                 <Typography
@@ -447,7 +463,7 @@ export default function Reviews() {
                     mb: 1,
                     fontWeight: 700,
                     fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
-                    color: "#3D2817", // Dark brown from palette
+                    color: "#1a1a1a", // Primary Black
                     textAlign: "center",
                   }}
                 >
@@ -597,9 +613,9 @@ export default function Reviews() {
                             checked={formData.recommend}
                             onChange={(e) => handleInputChange("recommend", e.target.checked)}
                             sx={{
-                            color: "#B85C38", // Burnt orange/rust
+                            color: "#c8a97e", // Accent Gold
                             "&.Mui-checked": {
-                              color: "#B85C38",
+                              color: "#c8a97e",
                             },
                             }}
                           />
@@ -628,7 +644,7 @@ export default function Reviews() {
                           endIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Send />}
                           disabled={loading || !formData.name || !formData.email || !formData.comment || formData.rating === 0}
                           sx={{
-                            backgroundColor: "#B85C38", // Burnt orange/rust
+                            backgroundColor: "#c8a97e", // Accent Gold
                             color: "white",
                             px: { xs: 4, sm: 5, md: 6 },
                             py: { xs: 1.25, sm: 1.5 },
@@ -636,10 +652,10 @@ export default function Reviews() {
                             fontSize: { xs: "0.875rem", md: "1rem" },
                             fontWeight: 600,
                             textTransform: "none",
-                            boxShadow: "0 4px 12px rgba(184, 92, 56, 0.3)",
+                            boxShadow: "0 4px 12px rgba(200, 169, 126, 0.3)",
                             "&:hover": {
-                              backgroundColor: "#8B4225", // Dark rust
-                              boxShadow: "0 6px 16px rgba(184, 92, 56, 0.4)",
+                              backgroundColor: "#8b7355", // Secondary Brown
+                              boxShadow: "0 6px 16px rgba(139, 115, 85, 0.4)",
                               transform: "translateY(-2px)",
                             },
                             "&:disabled": {
