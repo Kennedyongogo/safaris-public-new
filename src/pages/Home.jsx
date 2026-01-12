@@ -7,6 +7,7 @@ import ImageCarouselSection from "../components/Home/ImageCarouselSection";
 import BackgroundImageSection from "../components/Home/BackgroundImageSection";
 import LetterFromFounders from "../components/Home/LetterFromFounders";
 import ContactSection from "../components/Home/ContactSection";
+import AccreditationsSection from "../components/Home/AccreditationsSection";
 import Footer from "../components/Footer/Footer";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
       <ImageCarouselSection />
       <BackgroundImageSection />
       <ContactSection />
+      <AccreditationsSection />
 
       <Footer />
     </Box>

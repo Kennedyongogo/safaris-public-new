@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 export default function AgentApplicationDialog({ open, onClose }) {
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -29,27 +30,54 @@ export default function AgentApplicationDialog({ open, onClose }) {
   const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
 
   const handleNext = () => {
-    if (validateStep(activeStep)) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    const isValid = validateStep(activeStep);
+    if (!isValid) {
+      // Close dialog first (without resetting form), then show alert
+      handleClose(false);
+      setTimeout(() => {
+        Swal.fire({
+          icon: "warning",
+          title: "Please Complete Required Fields",
+          text: "Please fill in all required fields before proceeding. Reopen the form to see which fields need attention.",
+          confirmButtonColor: "#c8a97e",
+          zIndex: 10000,
+          didOpen: () => {
+            const confirmButton = document.querySelector(".swal2-confirm");
+            if (confirmButton) {
+              confirmButton.style.outline = "none";
+              confirmButton.style.boxShadow = "none";
+              confirmButton.addEventListener("focus", (e) => {
+                e.target.style.outline = "none";
+                e.target.style.boxShadow = "none";
+              });
+            }
+          },
+        });
+      }, 300);
+      return;
     }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleClose = () => {
-    setActiveStep(0);
-    setFormData({
-      full_name: "",
-      email: "",
-      phone: "",
-      company_name: "",
-      business_type: "",
-      years_of_experience: "",
-      motivation: "",
-      target_market: "",
-    });
+  const handleClose = (resetForm = true) => {
+    if (resetForm) {
+      setActiveStep(0);
+      setErrors({});
+      setFormData({
+        full_name: "",
+        email: "",
+        phone: "",
+        company_name: "",
+        business_type: "",
+        years_of_experience: "",
+        motivation: "",
+        target_market: "",
+      });
+    }
     onClose();
   };
 
@@ -58,93 +86,39 @@ export default function AgentApplicationDialog({ open, onClose }) {
       ...prev,
       [field]: value,
     }));
+    // Clear error for this field when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   const validateStep = (step) => {
+    const newErrors = {};
+    
     switch (step) {
       case 0:
         if (!formData.full_name.trim()) {
-          Swal.fire({
-            icon: "warning",
-            title: "Validation Error",
-            text: "Please enter your full name",
-            confirmButtonColor: "#B85C38",
-            didOpen: () => {
-              const confirmButton = document.querySelector(".swal2-confirm");
-              if (confirmButton) {
-                confirmButton.style.outline = "none";
-                confirmButton.style.boxShadow = "none";
-                confirmButton.addEventListener("focus", (e) => {
-                  e.target.style.outline = "none";
-                  e.target.style.boxShadow = "none";
-                });
-              }
-            },
-          });
-          return false;
+          newErrors.full_name = "Full name is required";
         }
         if (!formData.email.trim()) {
-          Swal.fire({
-            icon: "warning",
-            title: "Validation Error",
-            text: "Please enter your email",
-            confirmButtonColor: "#B85C38",
-            didOpen: () => {
-              const confirmButton = document.querySelector(".swal2-confirm");
-              if (confirmButton) {
-                confirmButton.style.outline = "none";
-                confirmButton.style.boxShadow = "none";
-                confirmButton.addEventListener("focus", (e) => {
-                  e.target.style.outline = "none";
-                  e.target.style.boxShadow = "none";
-                });
-              }
-            },
-          });
-          return false;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-          Swal.fire({
-            icon: "warning",
-            title: "Validation Error",
-            text: "Please enter a valid email address",
-            confirmButtonColor: "#B85C38",
-            didOpen: () => {
-              const confirmButton = document.querySelector(".swal2-confirm");
-              if (confirmButton) {
-                confirmButton.style.outline = "none";
-                confirmButton.style.boxShadow = "none";
-                confirmButton.addEventListener("focus", (e) => {
-                  e.target.style.outline = "none";
-                  e.target.style.boxShadow = "none";
-                });
-              }
-            },
-          });
-          return false;
+          newErrors.email = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+          newErrors.email = "Please enter a valid email address";
         }
         if (!formData.phone.trim()) {
-          Swal.fire({
-            icon: "warning",
-            title: "Validation Error",
-            text: "Please enter your phone number",
-            confirmButtonColor: "#B85C38",
-            didOpen: () => {
-              const confirmButton = document.querySelector(".swal2-confirm");
-              if (confirmButton) {
-                confirmButton.style.outline = "none";
-                confirmButton.style.boxShadow = "none";
-                confirmButton.addEventListener("focus", (e) => {
-                  e.target.style.outline = "none";
-                  e.target.style.boxShadow = "none";
-                });
-              }
-            },
-          });
-          return false;
+          newErrors.phone = "Phone number is required";
         }
-        return true;
+        
+        setErrors(newErrors);
+        
+        // Return validation result (don't show alert here, it will be shown in handleNext)
+        return Object.keys(newErrors).length === 0;
       default:
+        setErrors({});
         return true;
     }
   };
@@ -197,9 +171,9 @@ export default function AgentApplicationDialog({ open, onClose }) {
                 Our team will get back to you within 2-3 business days.
               </p>
             `,
-            confirmButtonColor: "#B85C38",
+            confirmButtonColor: "#c8a97e",
             confirmButtonText: "OK",
-            zIndex: 9999,
+            zIndex: 10000,
             didOpen: () => {
               const confirmButton = document.querySelector(".swal2-confirm");
               if (confirmButton) {
@@ -217,7 +191,6 @@ export default function AgentApplicationDialog({ open, onClose }) {
         throw new Error(data.message || "Failed to submit application");
       }
     } catch (error) {
-      console.error("Error submitting application:", error);
       // Close dialog first, then show error message
       handleClose();
       
@@ -227,9 +200,9 @@ export default function AgentApplicationDialog({ open, onClose }) {
           icon: "error",
           title: "Submission Failed",
           text: error.message || "An error occurred while submitting your application. Please try again later.",
-          confirmButtonColor: "#B85C38",
-          confirmButtonText: "OK",
-          zIndex: 9999,
+            confirmButtonColor: "#c8a97e",
+            confirmButtonText: "OK",
+            zIndex: 10000,
           didOpen: () => {
             const confirmButton = document.querySelector(".swal2-confirm");
             if (confirmButton) {
@@ -253,15 +226,15 @@ export default function AgentApplicationDialog({ open, onClose }) {
       "& .MuiOutlinedInput-root": {
         borderRadius: 2,
         "&:hover fieldset": {
-          borderColor: "#B85C38",
+          borderColor: "#c8a97e",
         },
         "&.Mui-focused fieldset": {
-          borderColor: "#B85C38",
+          borderColor: "#c8a97e",
           borderWidth: 2,
         },
       },
       "& .MuiInputLabel-root.Mui-focused": {
-        color: "#B85C38",
+        color: "#c8a97e",
       },
     };
 
@@ -274,7 +247,7 @@ export default function AgentApplicationDialog({ open, onClose }) {
               sx={{
                 mb: 3,
                 fontWeight: 600,
-                color: "#3D2817",
+                color: "#1a1a1a",
                 fontSize: { xs: "1.1rem", md: "1.25rem" },
               }}
             >
@@ -288,6 +261,8 @@ export default function AgentApplicationDialog({ open, onClose }) {
               value={formData.full_name}
               onChange={(e) => handleInputChange("full_name", e.target.value)}
               required
+              error={!!errors.full_name}
+              helperText={errors.full_name}
               sx={textFieldStyles}
             />
             <TextField
@@ -299,6 +274,8 @@ export default function AgentApplicationDialog({ open, onClose }) {
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
               required
+              error={!!errors.email}
+              helperText={errors.email}
               sx={textFieldStyles}
             />
             <TextField
@@ -309,6 +286,8 @@ export default function AgentApplicationDialog({ open, onClose }) {
               value={formData.phone}
               onChange={(e) => handleInputChange("phone", e.target.value)}
               required
+              error={!!errors.phone}
+              helperText={errors.phone}
               sx={textFieldStyles}
             />
           </Box>
@@ -321,7 +300,7 @@ export default function AgentApplicationDialog({ open, onClose }) {
               sx={{
                 mb: 3,
                 fontWeight: 600,
-                color: "#3D2817",
+                color: "#1a1a1a",
                 fontSize: { xs: "1.1rem", md: "1.25rem" },
               }}
             >
@@ -366,7 +345,7 @@ export default function AgentApplicationDialog({ open, onClose }) {
               sx={{
                 mb: 3,
                 fontWeight: 600,
-                color: "#3D2817",
+                color: "#1a1a1a",
                 fontSize: { xs: "1.1rem", md: "1.25rem" },
               }}
             >
@@ -407,7 +386,7 @@ export default function AgentApplicationDialog({ open, onClose }) {
               sx={{
                 mb: 2,
                 fontWeight: 600,
-                color: "#3D2817",
+                color: "#1a1a1a",
                 fontSize: { xs: "1.1rem", md: "1.25rem" },
               }}
             >
@@ -486,21 +465,17 @@ export default function AgentApplicationDialog({ open, onClose }) {
           textAlign: "center",
           py: { xs: 2, md: 3 },
           px: { xs: 2, md: 4 },
-          background: "linear-gradient(135deg, rgba(184, 92, 56, 0.05) 0%, rgba(107, 78, 61, 0.03) 100%)",
-          borderBottom: "1px solid rgba(107, 78, 61, 0.1)",
+          background: "linear-gradient(135deg, rgba(200, 169, 126, 0.05) 0%, rgba(139, 115, 85, 0.03) 100%)",
+          borderBottom: "1px solid rgba(139, 115, 85, 0.1)",
         }}
       >
         <Typography
           variant="h5"
           sx={{
             fontWeight: 700,
-            color: "#3D2817",
+            color: "#1a1a1a",
             mb: 1,
             fontSize: { xs: "1.5rem", md: "1.75rem" },
-            background: "linear-gradient(45deg, #6B4E3D, #B85C38)",
-            backgroundClip: "text",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
           }}
         >
           Agent Application
@@ -508,7 +483,7 @@ export default function AgentApplicationDialog({ open, onClose }) {
         <Typography
           variant="body1"
           sx={{
-            color: "#6B4E3D",
+            color: "#666666",
             fontWeight: 600,
             fontSize: { xs: "0.9rem", md: "1rem" },
           }}
@@ -535,8 +510,8 @@ export default function AgentApplicationDialog({ open, onClose }) {
         sx={{
           px: { xs: 2, sm: 3, md: 4 },
           py: { xs: 2, md: 3 },
-          borderTop: "1px solid rgba(107, 78, 61, 0.1)",
-          background: "rgba(245, 241, 232, 0.3)",
+          borderTop: "1px solid rgba(139, 115, 85, 0.1)",
+          background: "#f9f7f3",
         }}
       >
         <Button
@@ -567,9 +542,9 @@ export default function AgentApplicationDialog({ open, onClose }) {
               py: { xs: 1, md: 1.25 },
               fontSize: { xs: "0.9rem", md: "1rem" },
               fontWeight: 500,
-              color: "#6B4E3D",
+              color: "#8b7355",
               "&:hover": {
-                backgroundColor: "rgba(107, 78, 61, 0.08)",
+                backgroundColor: "rgba(139, 115, 85, 0.08)",
               },
               "&:focus": {
                 outline: "none",
@@ -592,12 +567,13 @@ export default function AgentApplicationDialog({ open, onClose }) {
               fontSize: { xs: "0.95rem", md: "1.05rem" },
               fontWeight: 600,
               borderRadius: "50px",
-              background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
-              boxShadow: "0 4px 15px rgba(184, 92, 56, 0.3)",
+              backgroundColor: "#c8a97e",
+              color: "white",
+              boxShadow: "0 4px 15px rgba(200, 169, 126, 0.3)",
               transition: "all 0.3s ease",
               "&:hover": {
-                background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
-                boxShadow: "0 6px 20px rgba(184, 92, 56, 0.4)",
+                backgroundColor: "#8b7355",
+                boxShadow: "0 6px 20px rgba(139, 115, 85, 0.4)",
                 transform: "translateY(-2px)",
               },
               "&:focus": {
@@ -621,16 +597,17 @@ export default function AgentApplicationDialog({ open, onClose }) {
               fontSize: { xs: "0.95rem", md: "1.05rem" },
               fontWeight: 600,
               borderRadius: "50px",
-              background: "linear-gradient(135deg, #6B4E3D 0%, #B85C38 100%)",
-              boxShadow: "0 4px 15px rgba(184, 92, 56, 0.3)",
+              backgroundColor: "#c8a97e",
+              color: "white",
+              boxShadow: "0 4px 15px rgba(200, 169, 126, 0.3)",
               transition: "all 0.3s ease",
               "&:hover": {
-                background: "linear-gradient(135deg, #8B4225 0%, #6B4E3D 100%)",
-                boxShadow: "0 6px 20px rgba(184, 92, 56, 0.4)",
+                backgroundColor: "#8b7355",
+                boxShadow: "0 6px 20px rgba(139, 115, 85, 0.4)",
                 transform: "translateY(-2px)",
               },
               "&:disabled": {
-                background: "rgba(184, 92, 56, 0.5)",
+                backgroundColor: "rgba(200, 169, 126, 0.5)",
                 cursor: "not-allowed",
               },
               "&:focus": {

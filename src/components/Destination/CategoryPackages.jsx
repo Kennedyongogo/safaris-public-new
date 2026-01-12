@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -13,6 +13,7 @@ import {
   DialogContent,
   DialogActions,
   Alert,
+  Paper,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -22,11 +23,25 @@ import { motion } from "framer-motion";
 const MotionBox = motion(Box);
 
 // Package Card Component with Image Transitions - Compact & Beautiful Design
-const PackageCard = ({ package: pkg, categoryName, onClick }) => {
+const PackageCard = ({ package: pkg, categoryName, onClick, onInquire, destination, isHighlighted }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const cardRef = useRef(null);
 
   const images = pkg.gallery || [];
   const hasMultipleImages = images.length > 1;
+
+  // Scroll into view and highlight when component mounts if highlighted
+  useEffect(() => {
+    if (isHighlighted && cardRef.current) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        cardRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
+    }
+  }, [isHighlighted]);
 
   // Auto-transition images if there are multiple
   useEffect(() => {
@@ -41,18 +56,34 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
 
   return (
     <Card
+      ref={cardRef}
       sx={{
         overflow: "hidden",
-        border: "1px solid rgba(139, 115, 85, 0.15)",
+        border: isHighlighted 
+          ? "3px solid #c8a97e" 
+          : "1px solid rgba(139, 115, 85, 0.15)",
         borderRadius: 3,
         cursor: "pointer",
         transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        background: "linear-gradient(to bottom, #FFFFFF 0%, #f9f7f3 100%)",
-        boxShadow: "0 2px 8px rgba(26, 26, 26, 0.08)",
+        background: isHighlighted
+          ? "linear-gradient(to bottom, #fff9f0 0%, #f9f7f3 100%)"
+          : "linear-gradient(to bottom, #FFFFFF 0%, #f9f7f3 100%)",
+        boxShadow: isHighlighted
+          ? "0 8px 24px rgba(200, 169, 126, 0.25)"
+          : "0 2px 8px rgba(26, 26, 26, 0.08)",
+        animation: isHighlighted ? "highlightPulse 2s ease-in-out" : "none",
         "&:hover": {
           transform: "translateY(-6px)",
           boxShadow: "0 12px 32px rgba(26, 26, 26, 0.15)",
           borderColor: "rgba(200, 169, 126, 0.3)",
+        },
+        "@keyframes highlightPulse": {
+          "0%, 100%": {
+            boxShadow: "0 8px 24px rgba(200, 169, 126, 0.25)",
+          },
+          "50%": {
+            boxShadow: "0 12px 32px rgba(200, 169, 126, 0.4)",
+          },
         },
       }}
       onClick={() => onClick(pkg)}
@@ -88,7 +119,6 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
                     transition: "opacity 0.6s ease-in-out",
                   }}
                   onError={(e) => {
-                    console.error(`Failed to load package image: ${image}`);
                     e.target.src = "/IMG-20251210-WA0070.jpg";
                   }}
                 />
@@ -279,7 +309,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
           </Box>
         )}
 
-        {/* View Details Hint */}
+        {/* View Details and Inquire Buttons */}
         <Box
           sx={{
             mt: 1.25,
@@ -288,6 +318,7 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 1,
           }}
         >
           <Typography
@@ -298,36 +329,52 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
               fontWeight: 600,
               textTransform: "uppercase",
               letterSpacing: "0.5px",
+              cursor: "pointer",
+              "&:hover": {
+                color: "#8b7355",
+              },
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick(pkg);
             }}
           >
             View Details
           </Typography>
-          <Box
+          <Button
+            variant="contained"
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onInquire) {
+                onInquire(pkg);
+              }
+            }}
             sx={{
-              width: 20,
-              height: 20,
-              borderRadius: "50%",
               backgroundColor: "#c8a97e",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "transform 0.3s ease",
+              color: "white",
+              fontSize: { xs: "0.7rem", sm: "0.75rem" },
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              px: { xs: 1.5, sm: 2 },
+              py: 0.5,
+              minWidth: "auto",
               "&:hover": {
-                transform: "scale(1.1)",
+                backgroundColor: "#8b7355",
+              },
+              "&:focus": {
+                outline: "none",
+                boxShadow: "none",
+              },
+              "&:focus-visible": {
+                outline: "none",
+                boxShadow: "none",
               },
             }}
           >
-            <Box
-              sx={{
-                width: 0,
-                height: 0,
-                borderLeft: "6px solid white",
-                borderTop: "4px solid transparent",
-                borderBottom: "4px solid transparent",
-                ml: 0.5,
-              }}
-            />
-          </Box>
+            Inquire
+          </Button>
         </Box>
       </CardContent>
     </Card>
@@ -343,10 +390,24 @@ export default function CategoryPackages() {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [packageDialogOpen, setPackageDialogOpen] = useState(false);
   const [dialogImageIndex, setDialogImageIndex] = useState(0);
+  const [highlightedPackageId, setHighlightedPackageId] = useState(null);
 
   // Get category and destination data from location state
   const category = location.state?.category;
   const destination = location.state?.destination;
+
+  // Check if we're returning from package inquiry and should highlight a package
+  useEffect(() => {
+    const state = location.state;
+    if (state?.highlightPackageId) {
+      setHighlightedPackageId(state.highlightPackageId);
+      // Remove highlight after 3 seconds
+      const timer = setTimeout(() => {
+        setHighlightedPackageId(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
   const destinationId = location.state?.destinationId;
 
   // Auto-transition images in dialog if there are multiple
@@ -374,6 +435,24 @@ export default function CategoryPackages() {
     setDialogImageIndex(0);
   };
 
+  const handleInquire = (pkg) => {
+    // Create unique identifier for the package
+    const packageId = `${category?.category_name || 'unknown'}-${pkg.number || 'unknown'}`;
+    
+    // Navigate to dedicated package inquiry page with package details
+    navigate("/package-inquiry", { 
+      state: { 
+        package: pkg,
+        destination: destination,
+        category: category, // Pass the full category object, not just the name
+        categoryName: category?.category_name, // Also pass name for convenience
+        packageId: packageId, // Pass the unique ID
+        returnPath: location.pathname, // Store the return path
+        destinationId: destinationId, // Pass destination ID
+      } 
+    });
+  };
+
   const handleBackToCategories = () => {
     // Navigate back to destination details page
     if (destinationId) {
@@ -383,16 +462,23 @@ export default function CategoryPackages() {
     }
   };
 
-  if (!category) {
+  // Check if category is valid (must have packages array)
+  if (!category || !category.packages || !Array.isArray(category.packages)) {
     return (
       <Container maxWidth="md" sx={{ py: 8 }}>
         <Alert severity="error" sx={{ mb: 3 }}>
-          Category not found
+          Category not found or invalid. Please navigate from a destination page.
         </Alert>
         <Button
           startIcon={<ArrowBack />}
           onClick={handleBackToCategories}
           variant="contained"
+          sx={{
+            backgroundColor: "#c8a97e",
+            "&:hover": {
+              backgroundColor: "#8b7355",
+            },
+          }}
         >
           Back to Destination
         </Button>
@@ -445,7 +531,7 @@ export default function CategoryPackages() {
             onClick={handleBackToCategories}
             sx={{
               mt: 0.5,
-              mb: 2,
+              mb: 0.5,
               backgroundColor: "#c8a97e",
               color: "white",
               fontWeight: 600,
@@ -460,54 +546,71 @@ export default function CategoryPackages() {
             Back to Categories
           </Button>
 
-          {/* Category Header */}
-          <Box sx={{ mb: 3 }}>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: 700,
-                mb: 1,
-                color: "#1a1a1a",
-                fontSize: { xs: "1rem", sm: "2.2rem", md: "2.6rem" },
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-              {category.category_name}
-            </Typography>
-            {category.packages && category.packages.length > 0 && (
+          {/* Main Card Container - Like PackageInquiry */}
+          <Paper
+            elevation={3}
+            sx={{
+              py: { xs: 0.75, sm: 1, md: 1.25 },
+              px: { xs: 1.5, sm: 1.5, md: 1.5 },
+              borderRadius: { xs: 3, md: 4 },
+              background: "#FFFFFF",
+              border: "1px solid rgba(139, 115, 85, 0.2)",
+              overflow: "hidden",
+            }}
+          >
+            {/* Category Header */}
+            <Box sx={{ mb: 3 }}>
               <Typography
-                variant="body1"
+                variant="h3"
                 sx={{
-                  color: "#666666",
-                  fontSize: { xs: "1rem", sm: "1.1rem" },
-                  fontWeight: 500,
+                  fontWeight: 700,
+                  mb: 1,
+                  color: "#1a1a1a",
+                  fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
                 }}
               >
-                {category.packages.length} {category.packages.length === 1 ? "Package" : "Packages"} Available
+                {category.category_name}
               </Typography>
-            )}
-          </Box>
+              {category.packages && category.packages.length > 0 && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#666666",
+                    fontSize: { xs: "1rem", sm: "1.1rem" },
+                    fontWeight: 500,
+                  }}
+                >
+                  {category.packages.length} {category.packages.length === 1 ? "Package" : "Packages"} Available
+                </Typography>
+              )}
+            </Box>
 
-          {/* Packages Grid */}
-          {category.packages && category.packages.length > 0 ? (
-            <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-              {category.packages.map((pkg, pkgIndex) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={pkgIndex}>
-                  <PackageCard
-                    package={pkg}
-                    categoryName={category.category_name}
-                    onClick={handlePackageClick}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <Alert severity="info">
-              No packages available in this category.
-            </Alert>
-          )}
+            {/* Packages Grid */}
+            {category.packages && category.packages.length > 0 ? (
+              <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
+                {category.packages.map((pkg, pkgIndex) => {
+                  const packageId = `${category.category_name}-${pkg.number || pkgIndex}`;
+                  const isHighlighted = highlightedPackageId === packageId;
+                  return (
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={pkgIndex}>
+                      <PackageCard
+                        package={pkg}
+                        categoryName={category.category_name}
+                        onClick={handlePackageClick}
+                        onInquire={handleInquire}
+                        destination={destination}
+                        isHighlighted={isHighlighted}
+                      />
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            ) : (
+              <Alert severity="info">
+                No packages available in this category.
+              </Alert>
+            )}
+          </Paper>
         </MotionBox>
       </Container>
 
