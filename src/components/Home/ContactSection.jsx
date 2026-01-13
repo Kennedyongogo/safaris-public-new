@@ -88,7 +88,7 @@ export default function ContactSection() {
                   safari that matches your travel style, group size, and dates.
                 </Typography>
 
-                <Grid container spacing={1.5}>
+                <Grid container spacing={1.5} sx={{ width: "100%" }}>
                   {[
                     {
                       icon: <Phone sx={{ fontSize: 18 }} />,
@@ -116,19 +116,20 @@ export default function ContactSection() {
                       color: "#8b7355",
                     },
                   ].map((item) => (
-                    <Grid size={{ xs: 6, md: 3 }} key={item.label}>
+                    <Grid size={{ xs: 6, md: 3 }} key={item.label} sx={{ display: "flex" }}>
                       <Stack
                         direction="column"
-                        spacing={0.75}
+                        spacing={{ xs: 0.75, md: 0.5 }}
                         alignItems="center"
                         justifyContent="center"
                         sx={{
-                          p: { xs: 0.5, sm: 0.75 },
+                          p: { xs: 0.5, sm: 0.75, md: 0.75 },
                           borderRadius: 3,
                           background: `linear-gradient(135deg, ${item.color}12, ${item.color}28)`,
                           border: `1px solid ${item.color}33`,
                           boxShadow: "0 12px 30px rgba(0,0,0,0.12)",
                           transition: "all 0.35s ease",
+                          width: "100%",
                           height: "100%",
                           boxSizing: "border-box",
                           "&:hover": {
