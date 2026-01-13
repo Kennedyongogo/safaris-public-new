@@ -96,22 +96,22 @@ export default function PublicHeader() {
       const { isVisible, scrollY } = event.detail;
       setIsHeroVisible(isVisible);
       setIsAtTop(isVisible);
-      
-      console.log('📡 Header received hero visibility event:', {
+
+      console.log("📡 Header received hero visibility event:", {
         isVisible,
         scrollY,
-        isAtTop: isVisible
+        isAtTop: isVisible,
       });
     };
 
-    window.addEventListener('heroVisibilityChange', handleHeroVisibility);
+    window.addEventListener("heroVisibilityChange", handleHeroVisibility);
 
     // Set initial state
     setIsHeroVisible(false);
     setIsAtTop(false);
 
     return () => {
-      window.removeEventListener('heroVisibilityChange', handleHeroVisibility);
+      window.removeEventListener("heroVisibilityChange", handleHeroVisibility);
     };
   }, [location.pathname]);
 
@@ -119,29 +119,46 @@ export default function PublicHeader() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const newScrolled = scrollY > 0;
-      
+
       // Track if user has scrolled at least once
       if (scrollY > 0 && !hasScrolled) {
         setHasScrolled(true);
       }
-      
+
       // Update scrolled state
       setScrolled(newScrolled);
-      
-      // Update isAtTop based on hero visibility and scroll position
+
+      // Update isAtTop based on scroll position
+      // On small screens, when scrolling back up, ensure header becomes transparent at top
       if (location.pathname === "/") {
         const isAtVeryTop = scrollY <= 20;
-        const newIsAtTop = isHeroVisible && isAtVeryTop;
+
+        // Check if hero section is actually visible in viewport
+        const heroElement = document.getElementById("hero-section");
+        let heroIsVisibleInViewport = false;
+        if (heroElement) {
+          const rect = heroElement.getBoundingClientRect();
+          // Hero is visible if it's in the viewport
+          heroIsVisibleInViewport =
+            rect.top < window.innerHeight && rect.bottom > 0;
+        }
+
+        // Priority: if at very top, always transparent
+        // Otherwise, check if hero is visible (either from state or viewport check)
+        const newIsAtTop = isAtVeryTop
+          ? true
+          : (isHeroVisible || heroIsVisibleInViewport) && scrollY <= 50;
         setIsAtTop(newIsAtTop);
-        
-        console.log('🔍 Scroll Debug:', {
+
+        console.log("🔍 Scroll Debug:", {
           scrollY,
           newScrolled,
           isHeroVisible,
+          heroIsVisibleInViewport,
           isAtVeryTop,
           newIsAtTop,
           hasScrolled,
-          location: location.pathname
+          location: location.pathname,
         });
       }
 
@@ -209,28 +226,39 @@ export default function PublicHeader() {
 
   // Split nav items for centered layout on home page
   const isHomePage = location.pathname === "/";
-  const leftNavItems = isHomePage ? navItems.slice(0, Math.floor(navItems.length / 2)) : [];
-  const rightNavItems = isHomePage ? navItems.slice(Math.floor(navItems.length / 2)) : navItems;
-  
+  const leftNavItems = isHomePage
+    ? navItems.slice(0, Math.floor(navItems.length / 2))
+    : [];
+  const rightNavItems = isHomePage
+    ? navItems.slice(Math.floor(navItems.length / 2))
+    : navItems;
+
   // Check if header is transparent (only on home page when at absolute top)
   const isHeaderTransparent = isHomePage && isAtTop;
-  
+
   // Debug logging for font size conditions
   useEffect(() => {
-    console.log('📊 Header State Debug:', {
+    console.log("📊 Header State Debug:", {
       isHomePage,
       isAtTop,
       isHeaderTransparent,
       isHeaderVisible,
       scrolled,
       shouldBeLarge: isHeaderTransparent && isHeaderVisible,
-      location: location.pathname
+      location: location.pathname,
     });
-  }, [isHomePage, isAtTop, isHeaderTransparent, isHeaderVisible, scrolled, location.pathname]);
+  }, [
+    isHomePage,
+    isAtTop,
+    isHeaderTransparent,
+    isHeaderVisible,
+    scrolled,
+    location.pathname,
+  ]);
 
   const handleNavigateToSection = (item) => {
     setMobileMenuOpen(false);
-    
+
     // If item has a route, navigate to that route
     if (item.route) {
       navigate(item.route);
@@ -278,23 +306,29 @@ export default function PublicHeader() {
         position="fixed"
         elevation={0}
         sx={{
-          backgroundColor: (location.pathname === "/" && isAtTop)
-            ? "transparent" // Transparent only when at absolute top on home page
-            : "rgba(249, 247, 243, 0.95)", // Warm White with transparency otherwise
-          backdropFilter: (location.pathname === "/" && isAtTop) ? "none" : "blur(20px)",
-          boxShadow: (location.pathname === "/" && isAtTop)
-            ? "none"
-            : "0 8px 32px rgba(26, 26, 26, 0.12)",
+          backgroundColor:
+            location.pathname === "/" && isAtTop
+              ? "transparent" // Transparent only when at absolute top on home page
+              : "rgba(249, 247, 243, 0.95)", // Warm White with transparency otherwise
+          backdropFilter:
+            location.pathname === "/" && isAtTop ? "none" : "blur(20px)",
+          boxShadow:
+            location.pathname === "/" && isAtTop
+              ? "none"
+              : "0 8px 32px rgba(26, 26, 26, 0.12)",
           transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-          borderBottom: (location.pathname === "/" && isAtTop)
-            ? "none"
-            : "1px solid rgba(139, 115, 85, 0.2)",
+          borderBottom:
+            location.pathname === "/" && isAtTop
+              ? "none"
+              : "1px solid rgba(139, 115, 85, 0.2)",
           // Hide header when scrolling past hero section on home page
-          transform: location.pathname === "/" && !isHeaderVisible 
-            ? "translateY(-100%)" 
-            : "translateY(0)",
+          transform:
+            location.pathname === "/" && !isHeaderVisible
+              ? "translateY(-100%)"
+              : "translateY(0)",
           opacity: location.pathname === "/" && !isHeaderVisible ? 0 : 1,
-          pointerEvents: location.pathname === "/" && !isHeaderVisible ? "none" : "auto",
+          pointerEvents:
+            location.pathname === "/" && !isHeaderVisible ? "none" : "auto",
           // Hide active underline when any nav button is hovered
           "&:has(button:hover) button[data-active='true']::after": {
             opacity: 0,
@@ -320,14 +354,15 @@ export default function PublicHeader() {
                   alignItems: "center",
                   flex: isHeaderTransparent && isHeaderVisible ? "0 0 auto" : 1,
                   justifyContent: "flex-start",
-                  maxWidth: isHeaderTransparent && isHeaderVisible ? "auto" : "none",
+                  maxWidth:
+                    isHeaderTransparent && isHeaderVisible ? "auto" : "none",
                 }}
               >
                 {leftNavItems.map((item, index) => {
-                  const isActiveItem =
-                    item.route
-                      ? location.pathname === item.route
-                      : activeSection === item.sectionId && location.pathname === "/";
+                  const isActiveItem = item.route
+                    ? location.pathname === item.route
+                    : activeSection === item.sectionId &&
+                      location.pathname === "/";
                   return (
                     <Slide
                       direction="down"
@@ -341,17 +376,21 @@ export default function PublicHeader() {
                         disableRipple
                         data-active={isActiveItem}
                         sx={{
-                          color: isActiveItem && location.pathname !== "/"
-                            ? item.color
-                            : (scrolled || location.pathname !== "/")
-                              ? "text.primary"
-                              : "white",
+                          color:
+                            isActiveItem && location.pathname !== "/"
+                              ? item.color
+                              : scrolled || location.pathname !== "/"
+                                ? "text.primary"
+                                : "white",
                           fontSize: {
                             md: "0.875rem",
                             lg: "0.925rem",
                             xl: "0.975rem",
                           },
-                          fontWeight: isActiveItem && location.pathname !== "/" ? 700 : 600,
+                          fontWeight:
+                            isActiveItem && location.pathname !== "/"
+                              ? 700
+                              : 600,
                           px: { md: 2, lg: 1.5, xl: 2 },
                           py: { md: 1.2, lg: 1, xl: 1.2 },
                           borderRadius: "25px",
@@ -360,18 +399,20 @@ export default function PublicHeader() {
                           position: "relative",
                           overflow: "hidden",
                           whiteSpace: "nowrap",
-                          backgroundColor: isActiveItem && location.pathname !== "/"
-                            ? (scrolled || location.pathname !== "/")
-                              ? `${item.color}20`
-                              : `${item.color}30`
-                            : "transparent",
-                          "&:focus": {
-                            outline: "none",
-                            backgroundColor: isActiveItem && location.pathname !== "/"
-                              ? (scrolled || location.pathname !== "/")
+                          backgroundColor:
+                            isActiveItem && location.pathname !== "/"
+                              ? scrolled || location.pathname !== "/"
                                 ? `${item.color}20`
                                 : `${item.color}30`
                               : "transparent",
+                          "&:focus": {
+                            outline: "none",
+                            backgroundColor:
+                              isActiveItem && location.pathname !== "/"
+                                ? scrolled || location.pathname !== "/"
+                                  ? `${item.color}20`
+                                  : `${item.color}30`
+                                : "transparent",
                           },
                           "&:focus-visible": {
                             outline: "none",
@@ -384,7 +425,10 @@ export default function PublicHeader() {
                                 lg: "1rem",
                                 xl: "1.1rem",
                               },
-                              color: isActiveItem && location.pathname !== "/" ? item.color : "inherit",
+                              color:
+                                isActiveItem && location.pathname !== "/"
+                                  ? item.color
+                                  : "inherit",
                             },
                           },
                           "&:hover": {
@@ -403,45 +447,48 @@ export default function PublicHeader() {
                             transform: "translateX(-50%)",
                             width: "60%",
                             height: "3px",
-                            backgroundColor: location.pathname === "/" ? "white" : item.color,
+                            backgroundColor:
+                              location.pathname === "/" ? "white" : item.color,
                             borderRadius: "2px 2px 0 0",
                             transition: "all 0.3s ease-out",
                             zIndex: 1,
                           },
-                          "&::after": isActiveItem && location.pathname === "/"
-                            ? {
-                                content: '""',
-                                position: "absolute",
-                                bottom: 0,
-                                left: "50%",
-                                transform: "translateX(-50%)",
-                                width: "60%",
-                                height: "3px",
-                                backgroundColor: "white",
-                                borderRadius: "2px 2px 0 0",
-                                transition: "opacity 0.3s ease-out",
-                                opacity: 1,
-                              }
-                            : isActiveItem && location.pathname !== "/"
-                            ? {
-                                content: '""',
-                                position: "absolute",
-                                bottom: 0,
-                                left: "50%",
-                                transform: "translateX(-50%)",
-                                width: "60%",
-                                height: "3px",
-                                backgroundColor: item.color,
-                                borderRadius: "2px 2px 0 0",
-                              }
-                            : {},
+                          "&::after":
+                            isActiveItem && location.pathname === "/"
+                              ? {
+                                  content: '""',
+                                  position: "absolute",
+                                  bottom: 0,
+                                  left: "50%",
+                                  transform: "translateX(-50%)",
+                                  width: "60%",
+                                  height: "3px",
+                                  backgroundColor: "white",
+                                  borderRadius: "2px 2px 0 0",
+                                  transition: "opacity 0.3s ease-out",
+                                  opacity: 1,
+                                }
+                              : isActiveItem && location.pathname !== "/"
+                                ? {
+                                    content: '""',
+                                    position: "absolute",
+                                    bottom: 0,
+                                    left: "50%",
+                                    transform: "translateX(-50%)",
+                                    width: "60%",
+                                    height: "3px",
+                                    backgroundColor: item.color,
+                                    borderRadius: "2px 2px 0 0",
+                                  }
+                                : {},
                           "& .icon": {
                             transition: "all 0.4s ease",
-                            color: isActiveItem && location.pathname !== "/"
-                              ? item.color
-                              : (scrolled || location.pathname !== "/")
+                            color:
+                              isActiveItem && location.pathname !== "/"
                                 ? item.color
-                                : "white",
+                                : scrolled || location.pathname !== "/"
+                                  ? item.color
+                                  : "white",
                           },
                         }}
                       >
@@ -462,20 +509,27 @@ export default function PublicHeader() {
                   cursor: "pointer",
                   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
-                    transform: isHeaderTransparent && isHeaderVisible
-                      ? "translateX(-50%) translateY(40px) scale(1.05)" 
-                      : "scale(1.05) translateY(-2px)",
+                    transform:
+                      isHeaderTransparent && isHeaderVisible
+                        ? "translateX(-50%) translateY(40px) scale(1.05)"
+                        : "scale(1.05) translateY(-2px)",
                   },
                   position: isHomePage ? "absolute" : "relative",
                   left: isHomePage ? "50%" : "auto",
-                  transform: isHomePage 
+                  transform: isHomePage
                     ? isHeaderTransparent && isHeaderVisible
-                      ? "translateX(-50%) translateY(40px)" 
+                      ? "translateX(-50%) translateY(40px)"
                       : "translateX(-50%)"
                     : "none",
                   zIndex: isHeaderTransparent && isHeaderVisible ? 1000 : 2, // Higher z-index to float over hero
-                  mb: isHeaderTransparent && isHeaderVisible ? { xs: -2, md: -4 } : 0, // Extend into hero section
-                  animation: isHeaderTransparent && isHeaderVisible ? "floatHeader 3s ease-in-out infinite" : "none",
+                  mb:
+                    isHeaderTransparent && isHeaderVisible
+                      ? { xs: -2, md: -4 }
+                      : 0, // Extend into hero section
+                  animation:
+                    isHeaderTransparent && isHeaderVisible
+                      ? "floatHeader 3s ease-in-out infinite"
+                      : "none",
                 }}
                 onClick={() => navigate("/")}
               >
@@ -484,13 +538,15 @@ export default function PublicHeader() {
                     src="/images/WhatsApp_Image_2025-12-14_at_10.56.47_AM-removebg-preview%20(1).png"
                     alt="Akira Safaris Logo"
                     style={{
-                      height: (scrolled || location.pathname !== "/") ? "64px" : "72px",
+                      height:
+                        scrolled || location.pathname !== "/" ? "64px" : "72px",
                       maxHeight: "72px",
                       width: "auto",
                       transition: "all 0.4s ease",
-                      filter: (scrolled || location.pathname !== "/")
-                        ? "none"
-                        : "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
+                      filter:
+                        scrolled || location.pathname !== "/"
+                          ? "none"
+                          : "drop-shadow(0 4px 8px rgba(0,0,0,0.3))",
                     }}
                   />
                 )}
@@ -502,36 +558,57 @@ export default function PublicHeader() {
                 >
                   <Typography
                     sx={{
-                      fontWeight: isHeaderTransparent && isHeaderVisible ? 900 : 700,
-                      fontSize: isHeaderTransparent && isHeaderVisible
-                        ? {
-                            xs: "1.2rem", // Reduced for small screens to fit in one row
-                            sm: "2rem",
-                            md: "3rem",
-                            lg: "3.6rem",
-                            xl: "4.2rem",
-                          }
-                        : { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
+                      fontWeight:
+                        isHeaderTransparent && isHeaderVisible ? 900 : 700,
+                      fontSize:
+                        isHeaderTransparent && isHeaderVisible
+                          ? {
+                              xs: "1.2rem", // Reduced for small screens to fit in one row
+                              sm: "2rem",
+                              md: "3rem",
+                              lg: "3.6rem",
+                              xl: "4.2rem",
+                            }
+                          : { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
                       // Black when header has background, gradient when transparent/floating
-                      color: isHeaderTransparent && isHeaderVisible 
-                        ? "transparent" // Will use gradient
-                        : "#000000", // Black when inside header
+                      color:
+                        isHeaderTransparent && isHeaderVisible
+                          ? "transparent" // Will use gradient
+                          : "#000000", // Black when inside header
                       lineHeight: 1.1,
                       // Exclude fontSize from transition to prevent visible resize - fontSize changes instantly
-                      transition: "color 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s cubic-bezier(0.4, 0, 0.2, 1), textShadow 0.5s cubic-bezier(0.4, 0, 0.2, 1), letterSpacing 0.5s cubic-bezier(0.4, 0, 0.2, 1), fontWeight 0.3s ease",
-                      textShadow: isHeaderTransparent && isHeaderVisible
-                        ? "4px 4px 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4), 0 0 60px rgba(224, 216, 192, 0.3)"
-                        : "none",
+                      transition:
+                        "color 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s cubic-bezier(0.4, 0, 0.2, 1), textShadow 0.5s cubic-bezier(0.4, 0, 0.2, 1), letterSpacing 0.5s cubic-bezier(0.4, 0, 0.2, 1), fontWeight 0.3s ease",
+                      textShadow:
+                        isHeaderTransparent && isHeaderVisible
+                          ? "4px 4px 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.4), 0 0 60px rgba(224, 216, 192, 0.3)"
+                          : "none",
                       // Only use gradient when transparent/floating, otherwise solid black
-                      background: isHeaderTransparent && isHeaderVisible
-                        ? "linear-gradient(135deg, #c8a97e 0%, #f9f7f3 20%, #ffffff 40%, #f9f7f3 60%, #8b7355 80%, #1a1a1a 100%)"
-                        : "none",
-                      backgroundClip: isHeaderTransparent && isHeaderVisible ? "text" : "unset",
-                      WebkitBackgroundClip: isHeaderTransparent && isHeaderVisible ? "text" : "unset",
-                      WebkitTextFillColor: isHeaderTransparent && isHeaderVisible ? "transparent" : "#000000",
-                      letterSpacing: isHeaderTransparent && isHeaderVisible
-                        ? { xs: "0.02em", sm: "0.05em", md: "0.08em", lg: "0.1em" } 
-                        : "0.02em",
+                      background:
+                        isHeaderTransparent && isHeaderVisible
+                          ? "linear-gradient(135deg, #c8a97e 0%, #f9f7f3 20%, #ffffff 40%, #f9f7f3 60%, #8b7355 80%, #1a1a1a 100%)"
+                          : "none",
+                      backgroundClip:
+                        isHeaderTransparent && isHeaderVisible
+                          ? "text"
+                          : "unset",
+                      WebkitBackgroundClip:
+                        isHeaderTransparent && isHeaderVisible
+                          ? "text"
+                          : "unset",
+                      WebkitTextFillColor:
+                        isHeaderTransparent && isHeaderVisible
+                          ? "transparent"
+                          : "#000000",
+                      letterSpacing:
+                        isHeaderTransparent && isHeaderVisible
+                          ? {
+                              xs: "0.02em",
+                              sm: "0.05em",
+                              md: "0.08em",
+                              lg: "0.1em",
+                            }
+                          : "0.02em",
                       textTransform: "uppercase",
                       whiteSpace: "nowrap", // Prevent text wrapping
                     }}
@@ -551,16 +628,19 @@ export default function PublicHeader() {
                 flex: isHeaderTransparent && isHeaderVisible ? "0 0 auto" : 1,
                 justifyContent: isHomePage ? "flex-end" : "flex-end",
                 marginLeft: isHomePage ? 0 : "auto",
-                maxWidth: isHeaderTransparent && isHeaderVisible ? "auto" : "none",
+                maxWidth:
+                  isHeaderTransparent && isHeaderVisible ? "auto" : "none",
               }}
             >
               {rightNavItems.map((item, index) => {
-                const isActiveItem =
-                  item.route
-                    ? location.pathname === item.route
-                    : activeSection === item.sectionId && location.pathname === "/";
+                const isActiveItem = item.route
+                  ? location.pathname === item.route
+                  : activeSection === item.sectionId &&
+                    location.pathname === "/";
                 // Adjust timeout to account for left nav items on home page
-                const adjustedIndex = isHomePage ? leftNavItems.length + index : index;
+                const adjustedIndex = isHomePage
+                  ? leftNavItems.length + index
+                  : index;
                 return (
                   <Slide
                     direction="down"
@@ -574,17 +654,19 @@ export default function PublicHeader() {
                       disableRipple
                       data-active={isActiveItem}
                       sx={{
-                        color: isActiveItem && location.pathname !== "/"
-                          ? item.color
-                          : (scrolled || location.pathname !== "/")
-                            ? "text.primary"
-                            : "white",
+                        color:
+                          isActiveItem && location.pathname !== "/"
+                            ? item.color
+                            : scrolled || location.pathname !== "/"
+                              ? "text.primary"
+                              : "white",
                         fontSize: {
                           md: "0.875rem",
                           lg: "0.925rem",
                           xl: "0.975rem",
                         },
-                        fontWeight: isActiveItem && location.pathname !== "/" ? 700 : 600,
+                        fontWeight:
+                          isActiveItem && location.pathname !== "/" ? 700 : 600,
                         px: { md: 2, lg: 1.5, xl: 2 },
                         py: { md: 1.2, lg: 1, xl: 1.2 },
                         borderRadius: "25px",
@@ -593,18 +675,20 @@ export default function PublicHeader() {
                         position: "relative",
                         overflow: "hidden",
                         whiteSpace: "nowrap",
-                        backgroundColor: isActiveItem && location.pathname !== "/"
-                          ? (scrolled || location.pathname !== "/")
-                            ? `${item.color}20`
-                            : `${item.color}30`
-                          : "transparent",
-                        "&:focus": {
-                          outline: "none",
-                          backgroundColor: isActiveItem && location.pathname !== "/"
-                            ? (scrolled || location.pathname !== "/")
+                        backgroundColor:
+                          isActiveItem && location.pathname !== "/"
+                            ? scrolled || location.pathname !== "/"
                               ? `${item.color}20`
                               : `${item.color}30`
                             : "transparent",
+                        "&:focus": {
+                          outline: "none",
+                          backgroundColor:
+                            isActiveItem && location.pathname !== "/"
+                              ? scrolled || location.pathname !== "/"
+                                ? `${item.color}20`
+                                : `${item.color}30`
+                              : "transparent",
                         },
                         "&:focus-visible": {
                           outline: "none",
@@ -617,7 +701,10 @@ export default function PublicHeader() {
                               lg: "1rem",
                               xl: "1.1rem",
                             },
-                            color: isActiveItem && location.pathname !== "/" ? item.color : "inherit",
+                            color:
+                              isActiveItem && location.pathname !== "/"
+                                ? item.color
+                                : "inherit",
                           },
                         },
                         "&:hover": {
@@ -636,45 +723,48 @@ export default function PublicHeader() {
                           transform: "translateX(-50%)",
                           width: "60%",
                           height: "3px",
-                          backgroundColor: location.pathname === "/" ? "white" : item.color,
+                          backgroundColor:
+                            location.pathname === "/" ? "white" : item.color,
                           borderRadius: "2px 2px 0 0",
                           transition: "all 0.3s ease-out",
                           zIndex: 1,
                         },
-                        "&::after": isActiveItem && location.pathname === "/"
-                          ? {
-                              content: '""',
-                              position: "absolute",
-                              bottom: 0,
-                              left: "50%",
-                              transform: "translateX(-50%)",
-                              width: "60%",
-                              height: "3px",
-                              backgroundColor: "white",
-                              borderRadius: "2px 2px 0 0",
-                              transition: "opacity 0.3s ease-out",
-                              opacity: 1,
-                            }
-                          : isActiveItem && location.pathname !== "/"
-                          ? {
-                              content: '""',
-                              position: "absolute",
-                              bottom: 0,
-                              left: "50%",
-                              transform: "translateX(-50%)",
-                              width: "60%",
-                              height: "3px",
-                              backgroundColor: item.color,
-                              borderRadius: "2px 2px 0 0",
-                            }
-                          : {},
+                        "&::after":
+                          isActiveItem && location.pathname === "/"
+                            ? {
+                                content: '""',
+                                position: "absolute",
+                                bottom: 0,
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                width: "60%",
+                                height: "3px",
+                                backgroundColor: "white",
+                                borderRadius: "2px 2px 0 0",
+                                transition: "opacity 0.3s ease-out",
+                                opacity: 1,
+                              }
+                            : isActiveItem && location.pathname !== "/"
+                              ? {
+                                  content: '""',
+                                  position: "absolute",
+                                  bottom: 0,
+                                  left: "50%",
+                                  transform: "translateX(-50%)",
+                                  width: "60%",
+                                  height: "3px",
+                                  backgroundColor: item.color,
+                                  borderRadius: "2px 2px 0 0",
+                                }
+                              : {},
                         "& .icon": {
                           transition: "all 0.4s ease",
-                        color: isActiveItem && location.pathname !== "/"
-                          ? item.color
-                          : (scrolled || location.pathname !== "/")
-                            ? item.color
-                            : "white",
+                          color:
+                            isActiveItem && location.pathname !== "/"
+                              ? item.color
+                              : scrolled || location.pathname !== "/"
+                                ? item.color
+                                : "white",
                         },
                       }}
                     >
@@ -694,20 +784,20 @@ export default function PublicHeader() {
                   marginLeft: "auto",
                   color: mobileMenuOpen
                     ? "#8b7355" // Secondary Brown
-                    : (scrolled || location.pathname !== "/")
+                    : scrolled || location.pathname !== "/"
                       ? "#1a1a1a"
                       : "white",
                   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   borderRadius: "12px",
                   backgroundColor: mobileMenuOpen
-                    ? (scrolled || location.pathname !== "/")
+                    ? scrolled || location.pathname !== "/"
                       ? "rgba(139, 115, 85, 0.2)" // Secondary Brown with transparency
                       : "rgba(139, 115, 85, 0.3)"
                     : "transparent",
                   "&:focus": {
                     outline: "none",
                     backgroundColor: mobileMenuOpen
-                      ? (scrolled || location.pathname !== "/")
+                      ? scrolled || location.pathname !== "/"
                         ? "rgba(139, 115, 85, 0.2)"
                         : "rgba(139, 115, 85, 0.3)"
                       : "transparent",
@@ -718,18 +808,19 @@ export default function PublicHeader() {
                   },
                   "&:hover": {
                     backgroundColor: mobileMenuOpen
-                      ? (scrolled || location.pathname !== "/")
+                      ? scrolled || location.pathname !== "/"
                         ? "rgba(139, 115, 85, 0.25)"
                         : "rgba(139, 115, 85, 0.35)"
-                      : (scrolled || location.pathname !== "/")
+                      : scrolled || location.pathname !== "/"
                         ? "rgba(139, 115, 85, 0.1)"
                         : "rgba(255, 255, 255, 0.15)",
                     transform: mobileMenuOpen
                       ? "scale(1.05)"
                       : "rotate(90deg) scale(1.1)",
-                    boxShadow: (scrolled || location.pathname !== "/")
-                      ? "0 8px 25px rgba(139, 115, 85, 0.3)"
-                      : "0 8px 25px rgba(255, 255, 255, 0.2)",
+                    boxShadow:
+                      scrolled || location.pathname !== "/"
+                        ? "0 8px 25px rgba(139, 115, 85, 0.3)"
+                        : "0 8px 25px rgba(255, 255, 255, 0.2)",
                   },
                 }}
                 onClick={() => setMobileMenuOpen(true)}
@@ -791,27 +882,29 @@ export default function PublicHeader() {
             <IconButton
               onClick={() => setMobileMenuOpen(false)}
               size="small"
-                sx={{
-                  transition: "all 0.3s ease",
-                  borderRadius: "8px",
-                  "&:focus": { outline: "none" },
-                  "&:focus-visible": { outline: "none", boxShadow: "none" },
-                  "&:hover": {
-                    transform: "rotate(90deg)",
-                    backgroundColor: "rgba(139, 115, 85, 0.1)", // Secondary Brown
-                  },
-                }}
+              sx={{
+                transition: "all 0.3s ease",
+                borderRadius: "8px",
+                "&:focus": { outline: "none" },
+                "&:focus-visible": { outline: "none", boxShadow: "none" },
+                "&:hover": {
+                  transform: "rotate(90deg)",
+                  backgroundColor: "rgba(139, 115, 85, 0.1)", // Secondary Brown
+                },
+              }}
             >
               <Close fontSize="small" />
             </IconButton>
           </Box>
           <Divider sx={{ mb: 1.5, borderColor: "rgba(139, 115, 85, 0.2)" }} />
-          <List dense sx={{ py: 0, gap: 0.5, display: "flex", flexDirection: "column" }}>
+          <List
+            dense
+            sx={{ py: 0, gap: 0.5, display: "flex", flexDirection: "column" }}
+          >
             {navItems.map((item, index) => {
-              const isActiveItem =
-                item.route
-                  ? location.pathname === item.route
-                  : activeSection === item.sectionId && location.pathname === "/";
+              const isActiveItem = item.route
+                ? location.pathname === item.route
+                : activeSection === item.sectionId && location.pathname === "/";
               return (
                 <ListItem
                   dense
@@ -870,7 +963,7 @@ export default function PublicHeader() {
                   <ListItemText
                     primary={item.label}
                     primaryTypographyProps={{
-                        fontSize: { xs: "0.9rem", sm: "1rem" },
+                      fontSize: { xs: "0.9rem", sm: "1rem" },
                       fontWeight: isActiveItem ? 700 : 600,
                       color: isActiveItem ? item.color : "text.primary",
                     }}
@@ -884,7 +977,7 @@ export default function PublicHeader() {
 
       <Toolbar
         sx={{
-          height: (scrolled || location.pathname !== "/") ? "72px" : "80px",
+          height: scrolled || location.pathname !== "/" ? "72px" : "80px",
           transition: "height 0.4s ease",
         }}
       />

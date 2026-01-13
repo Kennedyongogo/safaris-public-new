@@ -69,6 +69,8 @@ export default function ContactSection() {
                     fontWeight: 800,
                     color: "#1a1a1a",
                     lineHeight: 1.2,
+                    whiteSpace: "nowrap",
+                    fontSize: { xs: "1.25rem", sm: "1.5rem", md: "2.125rem" },
                   }}
                 >
                   Plan your next adventure with us
@@ -86,17 +88,7 @@ export default function ContactSection() {
                   safari that matches your travel style, group size, and dates.
                 </Typography>
 
-                <Stack
-                  spacing={1.5}
-                  direction={{ xs: "column", md: "row" }}
-                  sx={{
-                    width: "100%",
-                    maxWidth: "100%",
-                    mx: 0,
-                    px: 0,
-                    boxSizing: "border-box",
-                  }}
-                >
+                <Grid container spacing={1.5}>
                   {[
                     {
                       icon: <Phone sx={{ fontSize: 18 }} />,
@@ -124,30 +116,28 @@ export default function ContactSection() {
                       color: "#8b7355",
                     },
                   ].map((item) => (
-                    <Stack
-                      key={item.label}
-                      direction="column"
-                      spacing={0.75}
-                      alignItems="center"
-                      justifyContent="center"
-                      sx={{
-                        p: { xs: 0.5, sm: 0.75 },
-                        borderRadius: 3,
-                        background: `linear-gradient(135deg, ${item.color}12, ${item.color}28)`,
-                        border: `1px solid ${item.color}33`,
-                        boxShadow: "0 12px 30px rgba(0,0,0,0.12)",
-                        transition: "all 0.35s ease",
-                        flex: { md: "1 1 0%" },
-                        width: { xs: "100%", md: 0 },
-                        maxWidth: { xs: "100%", md: "none" },
-                        boxSizing: "border-box",
-                        "&:hover": {
-                          transform: "translateY(-4px) scale(1.01)",
-                          boxShadow: "0 16px 34px rgba(0,0,0,0.16)",
-                          borderColor: `${item.color}66`,
-                        },
-                      }}
-                    >
+                    <Grid size={{ xs: 6, md: 3 }} key={item.label}>
+                      <Stack
+                        direction="column"
+                        spacing={0.75}
+                        alignItems="center"
+                        justifyContent="center"
+                        sx={{
+                          p: { xs: 0.5, sm: 0.75 },
+                          borderRadius: 3,
+                          background: `linear-gradient(135deg, ${item.color}12, ${item.color}28)`,
+                          border: `1px solid ${item.color}33`,
+                          boxShadow: "0 12px 30px rgba(0,0,0,0.12)",
+                          transition: "all 0.35s ease",
+                          height: "100%",
+                          boxSizing: "border-box",
+                          "&:hover": {
+                            transform: "translateY(-4px) scale(1.01)",
+                            boxShadow: "0 16px 34px rgba(0,0,0,0.16)",
+                            borderColor: `${item.color}66`,
+                          },
+                        }}
+                      >
                       <Box
                         sx={{
                           width: 32,
@@ -191,8 +181,9 @@ export default function ContactSection() {
                         </Typography>
                       </Box>
                     </Stack>
+                    </Grid>
                   ))}
-                </Stack>
+                </Grid>
               </Stack>
             </Stack>
           </Box>

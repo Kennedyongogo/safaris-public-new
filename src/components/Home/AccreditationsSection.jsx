@@ -86,7 +86,8 @@ export default function AccreditationsSection() {
                   fontWeight: 700,
                   mb: 2,
                   color: "#1a1a1a",
-                  fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
+                  fontSize: { xs: "0.9rem", sm: "1.2rem", md: "1.75rem" },
+                  whiteSpace: "nowrap",
                 }}
               >
                 OUR ACCREDITATIONS & BOOKING SECURITY
