@@ -624,7 +624,8 @@ export default function DestinationDetails() {
                       pricing_tiers: Array.isArray(pkg.pricing_tiers) ? pkg.pricing_tiers : [],
                       gallery: Array.isArray(pkg.gallery)
                         ? pkg.gallery.map(img => buildFullImageUrl(img))
-                        : []
+                        : [],
+                      itinerary: Array.isArray(pkg.itinerary) ? pkg.itinerary : []
                     }))
                   : []
               }))

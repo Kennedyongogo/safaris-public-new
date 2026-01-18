@@ -24,6 +24,7 @@ const Plan = lazy(() => import("./pages/Plan"));
 const DestinationDetails = lazy(() => import("./pages/DestinationDetails"));
 const CategoryDetails = lazy(() => import("./pages/CategoryDetails"));
 const CategoryPackages = lazy(() => import("./components/Destination/CategoryPackages"));
+const PackageDetail = lazy(() => import("./pages/PackageDetail"));
 const PackageInquiry = lazy(() => import("./pages/PackageInquiry"));
 const Destinations = lazy(() => import("./pages/Destinations"));
 const CampLodges = lazy(() => import("./pages/CampLodges"));
@@ -263,6 +264,15 @@ function App() {
               element={
                 <>
                   <CategoryPackages />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/package-detail"
+              element={
+                <>
+                  <PackageDetail />
                   <Footer />
                 </>
               }

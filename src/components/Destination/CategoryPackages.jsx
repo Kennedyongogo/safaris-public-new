@@ -424,9 +424,16 @@ export default function CategoryPackages() {
   }, [packageDialogOpen, selectedPackage]);
 
   const handlePackageClick = (pkg) => {
-    setSelectedPackage(pkg);
-    setDialogImageIndex(0);
-    setPackageDialogOpen(true);
+    // Navigate to PackageDetail page instead of opening dialog
+    navigate("/package-detail", {
+      state: {
+        package: pkg,
+        category: category,
+        destination: destination,
+        destinationId: destinationId,
+        returnPath: location.pathname,
+      },
+    });
   };
 
   const handleClosePackageDialog = () => {

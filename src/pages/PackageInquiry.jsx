@@ -118,16 +118,27 @@ export default function PackageInquiry() {
       const navCategory = location.state?.category;
       const navDestination = location.state?.destination;
       const navDestinationId = location.state?.destinationId;
+      const navPackageData = location.state?.package;
 
       // Function to handle navigation
       const navigateBack = () => {
         if (returnPath && returnPath !== -1) {
+          const isPackageDetail = returnPath === "/package-detail" || returnPath?.includes("/package-detail");
+          
+          const navigationState = {
+            category: navCategory,
+            destination: navDestination,
+            destinationId: navDestinationId,
+          };
+          
+          // If returning to PackageDetail, include package data
+          if (isPackageDetail && navPackageData) {
+            navigationState.package = navPackageData;
+            navigationState.returnPath = "/category-packages"; // Set return path for PackageDetail
+          }
+          
           navigate(returnPath, {
-            state: {
-              category: navCategory,
-              destination: navDestination,
-              destinationId: navDestinationId,
-            },
+            state: navigationState,
             replace: false,
           });
         } else {
@@ -232,19 +243,28 @@ export default function PackageInquiry() {
           <Button
             startIcon={<ArrowBack />}
             onClick={() => {
-              // Navigate back with highlight package ID
+              // Navigate back with all necessary state
               const returnPath = location.state?.returnPath || -1;
               const packageId = location.state?.packageId;
               const category = location.state?.category;
               const destination = location.state?.destination;
               const destinationId = location.state?.destinationId;
+              const packageData = location.state?.package;
               
-              // Always preserve the full category object when navigating back
+              // Check if returnPath is PackageDetail - pass package data
+              const isPackageDetail = returnPath === "/package-detail" || returnPath?.includes("/package-detail");
+              
               const navigationState = {
                 category: category, // Full category object with packages
                 destination: destination,
                 destinationId: destinationId,
               };
+              
+              // If returning to PackageDetail, include package data
+              if (isPackageDetail && packageData) {
+                navigationState.package = packageData;
+                navigationState.returnPath = "/category-packages"; // Set return path for PackageDetail
+              }
               
               if (packageId) {
                 navigationState.highlightPackageId = packageId;
