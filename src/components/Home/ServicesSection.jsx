@@ -814,7 +814,7 @@ export default function ServicesSection() {
                   }}
                 >
                   <Chip
-                    label="Destinations"
+                    label="By Destination"
                     onClick={() => setActiveTab(0)}
                     sx={{
                       background: activeTab === 0 ? "#8b7355" : "#c8a97e",
