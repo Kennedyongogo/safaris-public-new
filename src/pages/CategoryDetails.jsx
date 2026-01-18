@@ -522,12 +522,6 @@ const DestinationCard = ({ destination, onClick, isMobile }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageError, setImageError] = useState(false);
 
-  const buildFullImageUrl = (imagePath) => {
-    if (!imagePath) return "";
-    if (imagePath.startsWith("http")) return imagePath;
-    return `/${imagePath}`;
-  };
-
   // Combine hero image with gallery images for transitions
   const getAllImages = () => {
     const images = [];
@@ -586,7 +580,7 @@ const DestinationCard = ({ destination, onClick, isMobile }) => {
               <Box
                 key={imgIndex}
                 component="img"
-                src={buildFullImageUrl(imageUrl)}
+                src={imageUrl}
                 alt={`${destination.title} - Image ${imgIndex + 1}`}
                 sx={{
                   position: "absolute",
