@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -467,6 +467,7 @@ export default function ServicesSection() {
   const [interestLoading, setInterestLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
+  const isInitialMount = useRef(true);
   // Commented out dialog-related state
   // const [currentIndex, setCurrentIndex] = useState(0);
   // const [selectedMission, setSelectedMission] = useState(null);
@@ -484,32 +485,31 @@ export default function ServicesSection() {
 
   useEffect(() => {
     setIsVisible(true);
-    fetchDestinations();
-    fetchTravellerItems();
-    fetchInterestItems();
+    // Load all three endpoints simultaneously on mount to prevent loading on tab switch
+    Promise.all([
+      fetchDestinations(),
+      fetchTravellerItems(),
+      fetchInterestItems()
+    ]).catch(err => {
+      console.error("Error loading initial data:", err);
+    });
   }, []);
 
   // Separate effect to handle tab state from navigation
   useEffect(() => {
-    // Check if we're returning from CategoryDetails and need to set active tab
-    if (location.state?.activeTab !== undefined) {
-      setActiveTab(location.state.activeTab);
-    } else {
-      // On refresh or direct visit (no state), default to tab 0 (Destinations)
+    // On initial mount (page load/refresh), always default to tab 0
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
       setActiveTab(0);
+      return;
     }
-  }, [location.state]);
 
-  // Refetch data when switching to By Traveller or By Interest tabs to get latest data
-  useEffect(() => {
-    if (activeTab === 1) {
-      // Refetch traveller items when switching to By Traveller tab
-      fetchTravellerItems();
-    } else if (activeTab === 2) {
-      // Refetch interest items when switching to By Interest tab
-      fetchInterestItems();
+    // Only after initial mount, check for navigation state
+    // This ensures refresh always starts with tab 0, but navigation can set the tab
+    if (location.pathname === "/" && location.state?.activeTab !== undefined && location.state?.activeTab !== null) {
+      setActiveTab(location.state.activeTab);
     }
-  }, [activeTab]);
+  }, [location.pathname, location.state]);
 
   const fetchDestinations = async () => {
     try {
