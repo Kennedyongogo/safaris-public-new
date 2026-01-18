@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -16,6 +16,7 @@ import {
   useTheme,
   Button,
   Container,
+  Tooltip,
 } from "@mui/material";
 import {
   School,
@@ -456,10 +457,16 @@ const MissionCard = ({
 
 export default function ServicesSection() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isVisible, setIsVisible] = useState(false);
   const [destinations, setDestinations] = useState([]);
+  const [travellerItems, setTravellerItems] = useState([]);
+  const [interestItems, setInterestItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [travellerLoading, setTravellerLoading] = useState(true);
+  const [interestLoading, setInterestLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
   // Commented out dialog-related state
   // const [currentIndex, setCurrentIndex] = useState(0);
   // const [selectedMission, setSelectedMission] = useState(null);
@@ -478,7 +485,14 @@ export default function ServicesSection() {
   useEffect(() => {
     setIsVisible(true);
     fetchDestinations();
-  }, []);
+    fetchTravellerItems();
+    fetchInterestItems();
+    
+    // Check if we're returning from CategoryDetails and need to set active tab
+    if (location.state?.activeTab !== undefined) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location.state]);
 
   const fetchDestinations = async () => {
     try {
@@ -557,6 +571,86 @@ export default function ServicesSection() {
   //   return missionCategories.slice(currentIndex, currentIndex + cardsToShow);
   // };
 
+  const fetchTravellerItems = async () => {
+    try {
+      setTravellerLoading(true);
+      const response = await fetch("/api/traveller-gallery/public?limit=12");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const buildFullImageUrl = (imagePath) => {
+          if (!imagePath) return "";
+          if (imagePath.startsWith("http")) return imagePath;
+          return `/${imagePath}`;
+        };
+
+        const mappedItems = (result.data.items || result.data).map(item => ({
+          id: item.id,
+          title: item.title,
+          description: item.description || "",
+          category: item.category,
+          image: buildFullImageUrl(item.filePath),
+          type: item.type,
+          tags: Array.isArray(item.tags) ? item.tags : [],
+        }));
+
+        setTravellerItems(mappedItems);
+      } else {
+        throw new Error(result.message || "Failed to fetch traveller gallery items");
+      }
+    } catch (err) {
+      console.error("Error fetching traveller items:", err);
+      setTravellerItems([]);
+    } finally {
+      setTravellerLoading(false);
+    }
+  };
+
+  const fetchInterestItems = async () => {
+    try {
+      setInterestLoading(true);
+      const response = await fetch("/api/interest-gallery/public?limit=12");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const buildFullImageUrl = (imagePath) => {
+          if (!imagePath) return "";
+          if (imagePath.startsWith("http")) return imagePath;
+          return `/${imagePath}`;
+        };
+
+        const mappedItems = (result.data.items || result.data).map(item => ({
+          id: item.id,
+          title: item.title,
+          description: item.description || "",
+          category: item.category,
+          image: buildFullImageUrl(item.filePath),
+          type: item.type,
+          tags: Array.isArray(item.tags) ? item.tags : [],
+        }));
+
+        setInterestItems(mappedItems);
+      } else {
+        throw new Error(result.message || "Failed to fetch interest gallery items");
+      }
+    } catch (err) {
+      console.error("Error fetching interest items:", err);
+      setInterestItems([]);
+    } finally {
+      setInterestLoading(false);
+    }
+  };
+
   const handleViewMore = async (destination) => {
     try {
       // Fetch destination details from backend
@@ -581,6 +675,10 @@ export default function ServicesSection() {
       // Still navigate even if fetch fails, let the destination page handle it
       navigate(`/destination/${destination.id}`);
     }
+  };
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
   };
 
   // Commented out dialog handlers - using page navigation instead
@@ -665,7 +763,7 @@ export default function ServicesSection() {
                   color: "#666666",
                 }}
               >
-                Discover the breathtaking beauty of Kenya's wildlife and
+                Discover the breathtaking beauty of East Africa's wildlife and
                 landscapes through our curated safari destinations, offering
                 unforgettable adventures and authentic cultural experiences.
               </Typography>
@@ -675,94 +773,254 @@ export default function ServicesSection() {
                   justifyContent: "center",
                   gap: { xs: 1, sm: 1.5, md: 2 },
                   flexWrap: "wrap",
-                  mb: 1.5,
+                  mb: 3,
                   px: { xs: 1, sm: 0 },
                 }}
               >
-                <Chip
-                  label="Wildlife Adventures"
-                  sx={{
-                    background: "#8b7355",
-                    color: "white",
-                    fontWeight: 600,
-                    px: { xs: 1.5, sm: 2 },
-                    py: 1,
-                    fontSize: { xs: "0.8rem", sm: "0.85rem", md: "0.9rem" },
+                <Tooltip
+                  title="Safari destinations across East Africa"
+                  arrow
+                  placement="top"
+                  PopperProps={{
+                    sx: {
+                      "& .MuiTooltip-tooltip": {
+                        bgcolor: "#8b7355",
+                        fontSize: "0.875rem",
+                        maxWidth: 300,
+                        p: 1.5,
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                      },
+                      "& .MuiTooltip-arrow": {
+                        color: "#8b7355",
+                      },
+                    },
                   }}
-                />
-                <Chip
-                  label="Nature Exploration"
-                  sx={{
-                    background: "#c8a97e",
-                    color: "white",
-                    fontWeight: 600,
-                    px: { xs: 1.5, sm: 2 },
-                    py: 1,
-                    fontSize: { xs: "0.8rem", sm: "0.85rem", md: "0.9rem" },
+                >
+                  <Chip
+                    label="Destinations"
+                    onClick={() => setActiveTab(0)}
+                    sx={{
+                      background: activeTab === 0 ? "#8b7355" : "#c8a97e",
+                      color: "white",
+                      fontWeight: 600,
+                      px: { xs: 1.5, sm: 2 },
+                      py: 1,
+                      fontSize: { xs: "0.8rem", sm: "0.85rem", md: "0.9rem" },
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                      transform: activeTab === 0 ? "scale(1.05)" : "scale(1)",
+                      boxShadow: activeTab === 0 ? "0 4px 12px rgba(139, 115, 85, 0.4)" : "0 2px 6px rgba(0, 0, 0, 0.1)",
+                      "&:hover": {
+                        background: "#8b7355",
+                        transform: "scale(1.05)",
+                        boxShadow: "0 4px 12px rgba(139, 115, 85, 0.4)",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip
+                  title="Tailored by travel group"
+                  arrow
+                  placement="top"
+                  PopperProps={{
+                    sx: {
+                      "& .MuiTooltip-tooltip": {
+                        bgcolor: "#8b7355",
+                        fontSize: "0.875rem",
+                        maxWidth: 300,
+                        p: 1.5,
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                      },
+                      "& .MuiTooltip-arrow": {
+                        color: "#8b7355",
+                      },
+                    },
                   }}
-                />
-                <Chip
-                  label="Cultural Experiences"
-                  sx={{
-                    background: "#8b7355",
-                    color: "white",
-                    fontWeight: 600,
-                    px: { xs: 1.5, sm: 2 },
-                    py: 1,
-                    fontSize: { xs: "0.8rem", sm: "0.85rem", md: "0.9rem" },
+                >
+                  <Chip
+                    label="By Traveller"
+                    onClick={() => setActiveTab(1)}
+                    sx={{
+                      background: activeTab === 1 ? "#8b7355" : "#c8a97e",
+                      color: "white",
+                      fontWeight: 600,
+                      px: { xs: 1.5, sm: 2 },
+                      py: 1,
+                      fontSize: { xs: "0.8rem", sm: "0.85rem", md: "0.9rem" },
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                      transform: activeTab === 1 ? "scale(1.05)" : "scale(1)",
+                      boxShadow: activeTab === 1 ? "0 4px 12px rgba(139, 115, 85, 0.4)" : "0 2px 6px rgba(0, 0, 0, 0.1)",
+                      "&:hover": {
+                        background: "#8b7355",
+                        transform: "scale(1.05)",
+                        boxShadow: "0 4px 12px rgba(139, 115, 85, 0.4)",
+                      },
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip
+                  title="Organized by special interests"
+                  arrow
+                  placement="top"
+                  PopperProps={{
+                    sx: {
+                      "& .MuiTooltip-tooltip": {
+                        bgcolor: "#8b7355",
+                        fontSize: "0.875rem",
+                        maxWidth: 300,
+                        p: 1.5,
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                      },
+                      "& .MuiTooltip-arrow": {
+                        color: "#8b7355",
+                      },
+                    },
                   }}
-                />
+                >
+                  <Chip
+                    label="By Interest"
+                    onClick={() => setActiveTab(2)}
+                    sx={{
+                      background: activeTab === 2 ? "#8b7355" : "#c8a97e",
+                      color: "white",
+                      fontWeight: 600,
+                      px: { xs: 1.5, sm: 2 },
+                      py: 1,
+                      fontSize: { xs: "0.8rem", sm: "0.85rem", md: "0.9rem" },
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                      transform: activeTab === 2 ? "scale(1.05)" : "scale(1)",
+                      boxShadow: activeTab === 2 ? "0 4px 12px rgba(139, 115, 85, 0.4)" : "0 2px 6px rgba(0, 0, 0, 0.1)",
+                      "&:hover": {
+                        background: "#8b7355",
+                        transform: "scale(1.05)",
+                        boxShadow: "0 4px 12px rgba(139, 115, 85, 0.4)",
+                      },
+                    }}
+                  />
+                </Tooltip>
               </Box>
             </Box>
           </Fade>
 
           <Box sx={{ position: "relative" }}>
-            {loading ? (
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                py={8}
-              >
-                <CircularProgress />
-              </Box>
-            ) : error ? (
-              <Box textAlign="center" py={4}>
-                <Typography color="error" variant="body1">
-                  {error}
-                </Typography>
-              </Box>
-            ) : destinations.length === 0 ? (
-              <Box textAlign="center" py={4}>
-                <Typography sx={{ color: "#666666" }} variant="body1">
-                  No destinations available at the moment.
-                </Typography>
-              </Box>
-            ) : (
-              <Box>
-                {/* Destination Cards Grid - Project Style */}
-                <Grid
-                  container
-                  spacing={{ xs: 2, sm: 2.5, md: 3 }}
-                  justifyContent="center"
-                >
-                  {destinations.map((destination, index) => (
+            {/* Destinations Tab */}
+            {activeTab === 0 && (
+              <>
+                {loading ? (
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    py={8}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : error ? (
+                  <Box textAlign="center" py={4}>
+                    <Typography color="error" variant="body1">
+                      {error}
+                    </Typography>
+                  </Box>
+                ) : destinations.length === 0 ? (
+                  <Box textAlign="center" py={4}>
+                    <Typography sx={{ color: "#666666" }} variant="body1">
+                      No destinations available at the moment.
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box>
                     <Grid
-                      size={{
-                        xs: 12,
-                        sm: 6,
-                        md: 3,
-                      }}
-                      key={destination.id}
+                      container
+                      spacing={{ xs: 2, sm: 2.5, md: 3 }}
+                      justifyContent="center"
                     >
+                      {destinations.map((destination, index) => (
+                        <Grid
+                          size={{
+                            xs: 12,
+                            sm: 6,
+                            md: 3,
+                          }}
+                          key={destination.id}
+                        >
+                          <Slide
+                            direction="up"
+                            in={isVisible}
+                            timeout={800 + index * 200}
+                          >
+                            <Card
+                              sx={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                overflow: "hidden",
+                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                "&:hover": {
+                                  transform: "translateY(-8px)",
+                                  boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+                                },
+                              }}
+                            >
+                              <DestinationCard 
+                                destination={destination} 
+                                isMobile={isMobile}
+                                onClick={() => handleViewMore(destination)}
+                              />
+                            </Card>
+                          </Slide>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
+                )}
+              </>
+            )}
+
+            {/* By Traveller Tab */}
+            {activeTab === 1 && (
+              <>
+                {travellerLoading ? (
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    py={8}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : travellerItems.length === 0 ? (
+                  <Box textAlign="center" py={4}>
+                    <Typography sx={{ color: "#666666" }} variant="body1">
+                      No traveller gallery items available at the moment.
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: {
+                        xs: "1fr",
+                        sm: "repeat(2, 1fr)",
+                        md: "repeat(3, 1fr)",
+                        lg: "repeat(5, 1fr)",
+                      },
+                      gap: { xs: 2, sm: 2.5, md: 3, lg: 3 },
+                      width: "100%",
+                    }}
+                  >
+                    {travellerItems.map((item, index) => (
                       <Slide
                         direction="up"
                         in={isVisible}
                         timeout={800 + index * 200}
+                        key={item.id}
                       >
                         <Card
                           sx={{
                             height: "100%",
+                            width: "100%",
                             display: "flex",
                             flexDirection: "column",
                             overflow: "hidden",
@@ -774,16 +1032,92 @@ export default function ServicesSection() {
                           }}
                         >
                           <DestinationCard 
-                            destination={destination} 
+                            destination={{
+                              ...item,
+                              title: item.title,
+                              image: item.image,
+                              gallery_images: [],
+                            }} 
                             isMobile={isMobile}
-                            onClick={() => handleViewMore(destination)}
+                            onClick={() => navigate("/category-details", { state: { from: "traveller", itemId: item.id } })}
                           />
                         </Card>
                       </Slide>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
+                    ))}
+                  </Box>
+                )}
+              </>
+            )}
+
+            {/* By Interest Tab */}
+            {activeTab === 2 && (
+              <>
+                {interestLoading ? (
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    py={8}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : interestItems.length === 0 ? (
+                  <Box textAlign="center" py={4}>
+                    <Typography sx={{ color: "#666666" }} variant="body1">
+                      No interest gallery items available at the moment.
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: {
+                        xs: "1fr",
+                        sm: "repeat(2, 1fr)",
+                        md: "repeat(3, 1fr)",
+                        lg: "repeat(5, 1fr)",
+                      },
+                      gap: { xs: 2, sm: 2.5, md: 3, lg: 3 },
+                      width: "100%",
+                    }}
+                  >
+                    {interestItems.map((item, index) => (
+                      <Slide
+                        direction="up"
+                        in={isVisible}
+                        timeout={800 + index * 200}
+                        key={item.id}
+                      >
+                        <Card
+                          sx={{
+                            height: "100%",
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                            overflow: "hidden",
+                            transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                            "&:hover": {
+                              transform: "translateY(-8px)",
+                              boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+                            },
+                          }}
+                        >
+                          <DestinationCard 
+                            destination={{
+                              ...item,
+                              title: item.title,
+                              image: item.image,
+                              gallery_images: [],
+                            }} 
+                            isMobile={isMobile}
+                            onClick={() => navigate("/category-details", { state: { from: "interest", itemId: item.id } })}
+                          />
+                        </Card>
+                      </Slide>
+                    ))}
+                  </Box>
+                )}
+              </>
             )}
           </Box>
         </Box>
