@@ -487,12 +487,29 @@ export default function ServicesSection() {
     fetchDestinations();
     fetchTravellerItems();
     fetchInterestItems();
-    
+  }, []);
+
+  // Separate effect to handle tab state from navigation
+  useEffect(() => {
     // Check if we're returning from CategoryDetails and need to set active tab
     if (location.state?.activeTab !== undefined) {
       setActiveTab(location.state.activeTab);
+    } else {
+      // On refresh or direct visit (no state), default to tab 0 (Destinations)
+      setActiveTab(0);
     }
   }, [location.state]);
+
+  // Refetch data when switching to By Traveller or By Interest tabs to get latest data
+  useEffect(() => {
+    if (activeTab === 1) {
+      // Refetch traveller items when switching to By Traveller tab
+      fetchTravellerItems();
+    } else if (activeTab === 2) {
+      // Refetch interest items when switching to By Interest tab
+      fetchInterestItems();
+    }
+  }, [activeTab]);
 
   const fetchDestinations = async () => {
     try {
