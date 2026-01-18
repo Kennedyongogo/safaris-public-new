@@ -37,6 +37,49 @@ const createDayMarker = (dayNumber) => {
   });
 };
 
+// Arrow icon for showing route direction
+const createArrowIcon = (bearing) => {
+  const rotation = bearing || 0;
+  return L.divIcon({
+    className: "direction-arrow",
+    html: `<div style="
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 12px solid #6B4E3D;
+      transform: rotate(${rotation}deg);
+      transform-origin: center bottom;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      opacity: 0.8;
+    "></div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+  });
+};
+
+// Calculate bearing (direction) between two points in degrees
+const calculateBearing = (lat1, lon1, lat2, lon2) => {
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const lat1Rad = lat1 * (Math.PI / 180);
+  const lat2Rad = lat2 * (Math.PI / 180);
+  
+  const y = Math.sin(dLon) * Math.cos(lat2Rad);
+  const x =
+    Math.cos(lat1Rad) * Math.sin(lat2Rad) -
+    Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(dLon);
+  
+  const bearing = Math.atan2(y, x) * (180 / Math.PI);
+  return (bearing + 360) % 360; // Normalize to 0-360
+};
+
+// Get a point along a line at a given percentage (0-1)
+const getPointAlongLine = (start, end, percentage) => {
+  const lat = start[0] + (end[0] - start[0]) * percentage;
+  const lng = start[1] + (end[1] - start[1]) * percentage;
+  return [lat, lng];
+};
+
 // Component to fit map bounds
 function MapBounds({ bounds, boundsKey }) {
   const map = useMap();
@@ -342,17 +385,39 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
       >
         <DynamicTileLayer mapType={mapType} />
 
-        {/* Draw route segments */}
-        {routeSegments.map((segment, idx) => (
-          <Polyline
-            key={`route-${idx}`}
-            positions={segment.coordinates}
-            color="#6B4E3D"
-            weight={3}
-            opacity={0.7}
-            dashArray={segment.isDayRoute ? "" : "5, 5"}
-          />
-        ))}
+        {/* Draw route segments with direction arrows */}
+        {routeSegments.map((segment, idx) => {
+          const [start, end] = segment.coordinates;
+          const bearing = calculateBearing(start[0], start[1], end[0], end[1]);
+          
+          // Calculate points along the route for arrows (at 25%, 50%, 75%)
+          const arrowPositions = [0.25, 0.5, 0.75].map((percent) => ({
+            position: getPointAlongLine(start, end, percent),
+            bearing: bearing,
+          }));
+
+          return (
+            <React.Fragment key={`route-${idx}`}>
+              <Polyline
+                positions={segment.coordinates}
+                color="#6B4E3D"
+                weight={3}
+                opacity={0.7}
+                dashArray={segment.isDayRoute ? "" : "5, 5"}
+              />
+              {/* Add directional arrows along the route */}
+              {arrowPositions.map((arrow, arrowIdx) => (
+                <Marker
+                  key={`arrow-${idx}-${arrowIdx}`}
+                  position={arrow.position}
+                  icon={createArrowIcon(arrow.bearing)}
+                  interactive={false}
+                  zIndexOffset={500}
+                />
+              ))}
+            </React.Fragment>
+          );
+        })}
 
         {/* Add markers for each day */}
         {markers.map((marker, idx) => {
