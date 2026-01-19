@@ -27,7 +27,7 @@ export default function LetterFromFounders() {
     >
       <Card
         sx={{
-          mx: { xs: 0.75, sm: 0.75, md: 0.75 },
+          mx: { xs: 0.5, sm: 0.5, md: 0.5 },
           borderRadius: { xs: 3, md: 4 },
           border: "1px solid rgba(139, 115, 85, 0.2)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
@@ -40,19 +40,20 @@ export default function LetterFromFounders() {
         }}
       >
         <Container
-          maxWidth="lg"
+          maxWidth={false}
           sx={{
             position: "relative",
             zIndex: 1,
-            px: { xs: 0.5, sm: 0.5, md: 0.5 },
+            px: { xs: 0.5, sm: 0.5, md: 0.25 },
             pt: { xs: 0.5, sm: 0.75, md: 0.75 },
             pb: { xs: 0.5, sm: 0.75, md: 0.75 },
             overflow: "visible",
+            width: "100%",
           }}
         >
         <Grid
           container
-          spacing={{ xs: 1.5, md: 4 }}
+          spacing={{ xs: 1.5, md: 2 }}
           alignItems="flex-start"
           sx={{
             flexDirection: { xs: "column", md: "row" },
@@ -60,9 +61,9 @@ export default function LetterFromFounders() {
         >
           {/* Letter Content */}
           <Grid 
-            size={{ xs: 12, md: 7 }}
+            size={{ xs: 12, md: 6 }}
             sx={{
-              p: { xs: 2, sm: 2.5, md: 3 },
+              p: { xs: 2, sm: 2.5, md: 2 },
               overflow: "visible",
             }}
           >
@@ -206,7 +207,7 @@ export default function LetterFromFounders() {
                     letterSpacing: "0.01em",
                   }}
                 >
-                  You seem ready for something different—something real that goes beyond the average safari experience. For more than 16 years, we've opened our home to travelers from around the world, and that experience taught us something important: people aren't just looking for a checklist of sights. They're looking for insight, trust, and a sense of belonging.
+                  You might be ready for something a little different. Something real. The kind of journey that goes beyond ticking boxes on a safari checklist. For more than 16 years, we've opened our home to travelers from all over the world, and along the way we learned something simple but important. People aren't just looking for sights. They're looking for trust, insight, and a sense of belonging.
                 </Typography>
 
                 {/* Image inside letter - only visible on small screens */}
@@ -227,12 +228,13 @@ export default function LetterFromFounders() {
                   <Box
                     component="img"
                     src="/FB_IMG_1768133643797.jpg"
-                    alt="David, Hellene & Malyne - Founders of Akira Safaris"
+                    alt="David & Hellene - Founders of Akira Safaris"
                     sx={{
                       width: "100%",
                       height: "100%",
                       objectFit: "cover",
                       objectPosition: "center",
+                      display: "block",
                     }}
                     onError={(e) => {
                       e.target.style.display = "none";
@@ -262,7 +264,7 @@ export default function LetterFromFounders() {
                         color: "#8b7355",
                       }}
                     >
-                      David, Hellene & Malyne
+                      David & Hellene
                     </Typography>
                     <Typography
                       variant="body1"
@@ -290,7 +292,7 @@ export default function LetterFromFounders() {
                     letterSpacing: "0.01em",
                   }}
                 >
-                  We are David, Hellene, and Malyne—a family that co-founded Akira Safaris to extend our philosophy beyond our home. We design safaris that feel personal and seamless, from your first inquiry to the moment you return home. We go beyond guidebooks to reveal hidden gems—from vibrant local markets to quiet, off-the-beaten-path landscapes. You experience East Africa through the eyes of a friend, not a tourist.
+                  We are David and Hellene, a family who co-founded Akira Safaris to extend that same spirit beyond our home. We design safaris that feel personal and seamless, from your first inquiry to the moment you return home. We go beyond guidebooks to uncover hidden gems, from vibrant local markets to quiet, off-the-beaten-path landscapes. You experience East Africa through the eyes of a friend, not as a tourist.
                 </Typography>
 
                 <Typography
@@ -327,9 +329,10 @@ export default function LetterFromFounders() {
                       alignItems: "flex-end",
                       mb: 0,
                       flexWrap: "wrap",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <Box sx={{ flex: { xs: "1 1 auto", md: "1 1 auto" }, minWidth: { xs: "80px", md: "auto" } }}>
+                    <Box sx={{ minWidth: { xs: "80px", md: "auto" } }}>
                       <Typography
                         sx={{
                           fontFamily: "'Dancing Script', 'Brush Script MT', cursive",
@@ -352,7 +355,7 @@ export default function LetterFromFounders() {
                         David
                       </Typography>
                     </Box>
-                    <Box sx={{ flex: { xs: "1 1 auto", md: "1 1 auto" }, minWidth: { xs: "80px", md: "auto" } }}>
+                    <Box sx={{ minWidth: { xs: "80px", md: "auto" } }}>
                       <Typography
                         sx={{
                           fontFamily: "'Dancing Script', 'Brush Script MT', cursive",
@@ -375,29 +378,6 @@ export default function LetterFromFounders() {
                         Hellene A.
                       </Typography>
                     </Box>
-                    <Box sx={{ flex: { xs: "1 1 auto", md: "1 1 auto" }, minWidth: { xs: "80px", md: "auto" } }}>
-                      <Typography
-                        sx={{
-                          fontFamily: "'Dancing Script', 'Brush Script MT', cursive",
-                          fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.75rem" },
-                          color: "#8b7355",
-                          mb: 0.5,
-                          fontWeight: 600,
-                        }}
-                      >
-                        Malyne
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "#8b7355",
-                          fontSize: { xs: "0.7rem", sm: "0.8rem", md: "1rem" },
-                          fontWeight: 500,
-                        }}
-                      >
-                        Malyne Abigael
-                      </Typography>
-                    </Box>
                   </Box>
                   <Typography
                     variant="body2"
@@ -406,10 +386,10 @@ export default function LetterFromFounders() {
                       color: "#8b7355",
                       fontSize: { xs: "0.875rem", md: "1rem" },
                       fontWeight: 600,
-                      textAlign: { xs: "left", md: "center" },
+                      textAlign: "center",
                     }}
                   >
-                    David, Hellene & Malyne
+                    David & Hellene
                   </Typography>
                 </Box>
               </Box>
@@ -418,9 +398,10 @@ export default function LetterFromFounders() {
 
           {/* Image Frame - Right Side - only visible on large screens */}
           <Grid 
-            size={{ xs: 12, md: 5 }}
+            size={{ xs: 12, md: 6 }}
             sx={{
               display: { xs: "none", md: "block" },
+              p: { xs: 2, sm: 2.5, md: 2 },
             }}
           >
             <Box
@@ -437,12 +418,13 @@ export default function LetterFromFounders() {
               <Box
                 component="img"
                 src="/FB_IMG_1768133643797.jpg"
-                alt="David, Hellene & Malyne - Founders of Akira Safaris"
+                alt="David & Hellene - Founders of Akira Safaris"
                 sx={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
                   objectPosition: "center",
+                  display: "block",
                 }}
                 onError={(e) => {
                   e.target.style.display = "none";
@@ -472,7 +454,7 @@ export default function LetterFromFounders() {
                     color: "#8b7355",
                   }}
                 >
-                  David, Hellene & Malyne
+                  David & Hellene
                 </Typography>
                 <Typography
                   variant="body1"
