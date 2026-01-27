@@ -226,11 +226,15 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
         );
       }
 
+      const title = day.title != null && String(day.title).trim() ? String(day.title).trim() : "";
+      const description = day.description != null && String(day.description).trim() ? String(day.description).trim() : "";
+
       // Add marker at START location with day number
       marks.push({
         position: startCoord,
         day: day.day,
-        description: day.description,
+        title,
+        description,
         isStart: true,
         distance: distance,
       });
@@ -240,7 +244,8 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
         marks.push({
           position: endCoord,
           day: day.day,
-          description: day.description,
+          title,
+          description,
           isStart: false,
           distance: distance,
         });
@@ -422,6 +427,9 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
         {/* Add markers for each day */}
         {markers.map((marker, idx) => {
           const locationType = marker.isStart ? "Start" : "End";
+          const titleLine = marker.title
+            ? `Day ${marker.day}: ${marker.title}`
+            : `Day ${marker.day}`;
           
           return (
             <Marker 
@@ -432,7 +440,7 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
               <Popup>
                 <Box>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-                    Day {marker.day} ({locationType})
+                    {titleLine} ({locationType})
                   </Typography>
                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {marker.description || "No description"}

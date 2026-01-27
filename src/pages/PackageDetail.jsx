@@ -336,25 +336,46 @@ export default function PackageDetail() {
                     >
                       Day-by-Day Itinerary
                     </Typography>
-                    <Box component="ul" sx={{ pl: 2.5 }}>
+                    <Box component="ul" sx={{ pl: 2.5, listStyle: "none" }}>
                       {selectedPackage.itinerary.map((day, dayIdx) => (
-                        <Typography
+                        <Box
                           key={dayIdx}
                           component="li"
-                          variant="body2"
                           sx={{
-                            mb: 1.5,
+                            mb: 2,
                             color: "#666666",
                             lineHeight: 1.8,
                             fontSize: { xs: "1rem", md: "1.05rem" },
-                            fontWeight: 500,
                           }}
                         >
-                          <Box component="span" sx={{ fontWeight: 700, color: "#8b7355", mr: 1 }}>
-                            Day {day.day}:
-                          </Box>
-                          {day.description || "No description"}
-                        </Typography>
+                          <Typography
+                            component="span"
+                            sx={{
+                              fontWeight: 700,
+                              color: "#8b7355",
+                              display: "block",
+                              mb: 0.5,
+                              fontSize: { xs: "1rem", md: "1.05rem" },
+                            }}
+                          >
+                            {day.title && String(day.title).trim()
+                              ? `Day ${day.day}: ${String(day.title).trim()}`
+                              : `Day ${day.day}`}
+                          </Typography>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            sx={{
+                              color: "#666666",
+                              fontWeight: 500,
+                              display: "block",
+                            }}
+                          >
+                            {day.description != null && String(day.description).trim()
+                              ? String(day.description).trim()
+                              : "No description"}
+                          </Typography>
+                        </Box>
                       ))}
                     </Box>
                   </Box>

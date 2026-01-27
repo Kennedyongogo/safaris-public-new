@@ -625,7 +625,15 @@ export default function DestinationDetails() {
                       gallery: Array.isArray(pkg.gallery)
                         ? pkg.gallery.map(img => buildFullImageUrl(img))
                         : [],
-                      itinerary: Array.isArray(pkg.itinerary) ? pkg.itinerary : []
+                      itinerary: Array.isArray(pkg.itinerary)
+                        ? pkg.itinerary.map((d) => ({
+                            day: d.day,
+                            title: d.title != null ? String(d.title) : "",
+                            description: d.description != null ? String(d.description) : "",
+                            start_location: d.start_location,
+                            end_location: d.end_location,
+                          }))
+                        : []
                     }))
                   : []
               }))
