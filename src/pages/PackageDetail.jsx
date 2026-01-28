@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -20,7 +20,9 @@ export default function PackageDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const [imageIndex, setImageIndex] = useState(0);
-  
+  const [activeDayIndex, setActiveDayIndex] = useState(null);
+  const dayRefs = useRef([]);
+
   // Get package data from location state
   const selectedPackage = location.state?.package;
   const category = location.state?.category;
@@ -30,7 +32,11 @@ export default function PackageDetail() {
 
   // Auto-transition images if there are multiple
   useEffect(() => {
-    if (!selectedPackage || !selectedPackage.gallery || selectedPackage.gallery.length <= 1) {
+    if (
+      !selectedPackage ||
+      !selectedPackage.gallery ||
+      selectedPackage.gallery.length <= 1
+    ) {
       return;
     }
 
@@ -56,10 +62,10 @@ export default function PackageDetail() {
   };
 
   const handleInquire = () => {
-    const packageId = `${category?.category_name || 'unknown'}-${selectedPackage?.number || 'unknown'}`;
-    
-    navigate("/package-inquiry", { 
-      state: { 
+    const packageId = `${category?.category_name || "unknown"}-${selectedPackage?.number || "unknown"}`;
+
+    navigate("/package-inquiry", {
+      state: {
         package: selectedPackage,
         destination: destination,
         category: category,
@@ -67,7 +73,7 @@ export default function PackageDetail() {
         packageId: packageId,
         returnPath: location.pathname,
         destinationId: destinationId,
-      } 
+      },
     });
   };
 
@@ -149,9 +155,18 @@ export default function PackageDetail() {
               color: "white",
               fontWeight: 600,
               outline: "none !important",
-              "&:focus": { outline: "none !important", boxShadow: "none !important" },
-              "&:focus-visible": { outline: "none !important", boxShadow: "none !important" },
-              "&:active": { outline: "none !important", boxShadow: "none !important" },
+              "&:focus": {
+                outline: "none !important",
+                boxShadow: "none !important",
+              },
+              "&:focus-visible": {
+                outline: "none !important",
+                boxShadow: "none !important",
+              },
+              "&:active": {
+                outline: "none !important",
+                boxShadow: "none !important",
+              },
               "&:hover": {
                 backgroundColor: "#8b7355",
               },
@@ -176,12 +191,21 @@ export default function PackageDetail() {
             <Box
               sx={{
                 pb: 1,
-                background: "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
+                background:
+                  "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
                 borderBottom: "1px solid rgba(139, 115, 85, 0.1)",
                 mb: 2,
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1, flexWrap: "wrap" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  mb: 1,
+                  flexWrap: "wrap",
+                }}
+              >
                 {destination && (
                   <Chip
                     label={destination.title}
@@ -308,167 +332,319 @@ export default function PackageDetail() {
               </Typography>
 
               {/* Itinerary Map Section */}
-              {selectedPackage.itinerary && Array.isArray(selectedPackage.itinerary) && selectedPackage.itinerary.length > 0 && (
-                <Box sx={{ mb: 3 }}>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      fontWeight: 700,
-                      color: "#8b7355",
-                      mb: 2,
-                      fontSize: { xs: "1rem", md: "1.1rem" },
-                    }}
-                  >
-                    Itinerary Route Map
-                  </Typography>
-                  <ItineraryMap itinerary={selectedPackage.itinerary} height={400} />
-                  
-                  {/* Day-by-Day Itinerary List */}
-                  <Box sx={{ mt: 2 }}>
+              {selectedPackage.itinerary &&
+                Array.isArray(selectedPackage.itinerary) &&
+                selectedPackage.itinerary.length > 0 && (
+                  <Box sx={{ mb: 3 }}>
                     <Typography
-                      variant="subtitle2"
+                      variant="subtitle1"
                       sx={{
-                        fontWeight: 600,
+                        fontWeight: 700,
                         color: "#8b7355",
-                        mb: 1.5,
-                        fontSize: { xs: "0.95rem", md: "1rem" },
+                        mb: 2,
+                        fontSize: { xs: "1rem", md: "1.1rem" },
                       }}
                     >
-                      Day-by-Day Itinerary
+                      Itinerary Route Map
                     </Typography>
-                    <Box component="ul" sx={{ pl: 2.5, listStyle: "none" }}>
-                      {selectedPackage.itinerary.map((day, dayIdx) => (
-                        <Box
-                          key={dayIdx}
+                    <ItineraryMap
+                      itinerary={selectedPackage.itinerary}
+                      height={400}
+                    />
+
+                    {/* Day-by-Day Itinerary: Stepper + Timeline + Cards */}
+                    <Box sx={{ mt: 3 }}>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: 600,
+                          color: "#8b7355",
+                          mb: 1.5,
+                          fontSize: { xs: "0.95rem", md: "1rem" },
+                        }}
+                      >
+                        Day-by-Day Itinerary
+                      </Typography>
+                      {/* Day stepper: jump to day */}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: 1,
+                          mb: 2,
+                          pb: 1,
+                          overflowX: "auto",
+                          scrollbarWidth: "none",
+                          "&::-webkit-scrollbar": { display: "none" },
+                        }}
+                      >
+                        {selectedPackage.itinerary.map((day, dayIdx) => {
+                          const isRange =
+                            day.day_end != null && day.day_end > day.day;
+                          const label = isRange
+                            ? `Days ${day.day}–${day.day_end}`
+                            : `Day ${day.day}`;
+                          const isActive = activeDayIndex === dayIdx;
+                          return (
+                            <Chip
+                              key={dayIdx}
+                              label={label}
+                              onClick={() => {
+                                setActiveDayIndex(dayIdx);
+                                dayRefs.current[dayIdx]?.scrollIntoView({
+                                  behavior: "smooth",
+                                  block: "center",
+                                });
+                              }}
+                              sx={{
+                                fontWeight: 600,
+                                fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                                backgroundColor: isActive
+                                  ? "#8b7355"
+                                  : "#f5f0e8",
+                                color: isActive ? "white" : "#6B4E3D",
+                                border: `1px solid ${isActive ? "#8b7355" : "#c8a97e"}`,
+                                "&:hover": {
+                                  backgroundColor: isActive
+                                    ? "#6B4E3D"
+                                    : "#e8dfd0",
+                                  borderColor: "#8b7355",
+                                  color: isActive ? "white" : "#8b7355",
+                                },
+                              }}
+                            />
+                          );
+                        })}
+                      </Box>
+                      {/* Timeline + cards */}
+                      <Box sx={{ position: "relative" }}>
+                        {selectedPackage.itinerary.map((day, dayIdx) => {
+                          const isRange =
+                            day.day_end != null && day.day_end > day.day;
+                          const dayLabel = isRange
+                            ? `Days ${day.day}–${day.day_end}`
+                            : `Day ${day.day}`;
+                          const title = day.title?.trim() || "";
+                          const heading = title
+                            ? `${dayLabel}: ${title}`
+                            : dayLabel;
+                          const description =
+                            day.description?.trim() || "No description";
+                          const isLast =
+                            dayIdx === selectedPackage.itinerary.length - 1;
+                          const isActive = activeDayIndex === dayIdx;
+
+                          return (
+                            <Box
+                              key={dayIdx}
+                              ref={(el) => {
+                                dayRefs.current[dayIdx] = el;
+                              }}
+                              sx={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: 2,
+                                mb: isLast ? 0 : 2,
+                                scrollMarginTop: 24,
+                                scrollMarginBottom: 24,
+                              }}
+                            >
+                              {/* Timeline: badge + connecting line */}
+                              <Box
+                                sx={{
+                                  flexShrink: 0,
+                                  width: 48,
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: "50%",
+                                    backgroundColor: "#8b7355",
+                                    color: "white",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontWeight: 700,
+                                    fontSize: "0.75rem",
+                                    flexShrink: 0,
+                                    border: "3px solid #f5f0e8",
+                                    boxShadow:
+                                      "0 2px 8px rgba(139, 115, 85, 0.3)",
+                                  }}
+                                >
+                                  {isRange
+                                    ? `${day.day}–${day.day_end}`
+                                    : day.day}
+                                </Box>
+                                {!isLast && (
+                                  <Box
+                                    sx={{
+                                      width: 2,
+                                      minHeight: 32,
+                                      backgroundColor: "#c8a97e",
+                                      opacity: 0.5,
+                                      mt: 0.5,
+                                    }}
+                                  />
+                                )}
+                              </Box>
+                              {/* Card */}
+                              <Paper
+                                elevation={0}
+                                sx={{
+                                  flex: 1,
+                                  minWidth: 0,
+                                  p: 2,
+                                  borderRadius: 2,
+                                  border: isActive
+                                    ? "2px solid #8b7355"
+                                    : "1px solid #e8dfd0",
+                                  backgroundColor: isActive
+                                    ? "#faf6f0"
+                                    : "#fdfcfa",
+                                  boxShadow: isActive
+                                    ? "0 4px 20px rgba(139, 115, 85, 0.2)"
+                                    : "none",
+                                  "&:hover": {
+                                    borderColor: isActive
+                                      ? "#8b7355"
+                                      : "#c8a97e",
+                                    backgroundColor: isActive
+                                      ? "#faf6f0"
+                                      : "#faf8f4",
+                                  },
+                                  transition:
+                                    "border-color 0.2s, background-color 0.2s, box-shadow 0.2s",
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontWeight: 700,
+                                    color: "#6B4E3D",
+                                    fontSize: { xs: "1rem", md: "1.05rem" },
+                                    mb: 1,
+                                  }}
+                                >
+                                  {heading}
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    color: "#555",
+                                    lineHeight: 1.75,
+                                    fontSize: { xs: "0.95rem", md: "1rem" },
+                                  }}
+                                >
+                                  {description}
+                                </Typography>
+                              </Paper>
+                            </Box>
+                          );
+                        })}
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+
+              <Divider sx={{ my: 3 }} />
+
+              {/* Highlights */}
+              {selectedPackage.highlights &&
+                selectedPackage.highlights.length > 0 && (
+                  <Box sx={{ mb: 3 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: 700,
+                        color: "#8b7355",
+                        mb: 1.5,
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                      }}
+                    >
+                      Highlights:
+                    </Typography>
+                    <Box component="ul" sx={{ pl: 2.5 }}>
+                      {selectedPackage.highlights.map((highlight, idx) => (
+                        <Typography
+                          key={idx}
                           component="li"
+                          variant="body2"
                           sx={{
-                            mb: 2,
+                            mb: 0.75,
                             color: "#666666",
-                            lineHeight: 1.8,
+                            lineHeight: 1.6,
                             fontSize: { xs: "1rem", md: "1.05rem" },
+                            fontWeight: 500,
                           }}
                         >
-                          <Typography
-                            component="span"
+                          {highlight}
+                        </Typography>
+                      ))}
+                    </Box>
+                  </Box>
+                )}
+
+              <Divider sx={{ my: 3 }} />
+
+              {/* Pricing */}
+              {selectedPackage.pricing_tiers &&
+                selectedPackage.pricing_tiers.length > 0 && (
+                  <Box sx={{ mb: 3 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: 700,
+                        color: "#8b7355",
+                        mb: 1.5,
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                      }}
+                    >
+                      Indicative Pricing (2026 Rates):
+                    </Typography>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
+                      {selectedPackage.pricing_tiers.map((tier, idx) => (
+                        <Box
+                          key={idx}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <AttachMoney
                             sx={{
-                              fontWeight: 700,
+                              fontSize: { xs: 18, md: 20 },
                               color: "#8b7355",
-                              display: "block",
-                              mb: 0.5,
-                              fontSize: { xs: "1rem", md: "1.05rem" },
                             }}
-                          >
-                            {day.title && String(day.title).trim()
-                              ? `Day ${day.day}: ${String(day.title).trim()}`
-                              : `Day ${day.day}`}
-                          </Typography>
+                          />
                           <Typography
-                            component="span"
-                            variant="body2"
+                            variant="body1"
                             sx={{
-                              color: "#666666",
-                              fontWeight: 500,
-                              display: "block",
+                              color: "#1a1a1a",
+                              fontSize: { xs: "1rem", md: "1.05rem" },
+                              fontWeight: 600,
                             }}
                           >
-                            {day.description != null && String(day.description).trim()
-                              ? String(day.description).trim()
-                              : "No description"}
+                            <Box
+                              component="span"
+                              sx={{ color: "#c8a97e", fontWeight: 700 }}
+                            >
+                              {tier.tier}:
+                            </Box>{" "}
+                            {tier.price_range}
                           </Typography>
                         </Box>
                       ))}
                     </Box>
                   </Box>
-                </Box>
-              )}
-
-              <Divider sx={{ my: 3 }} />
-
-              {/* Highlights */}
-              {selectedPackage.highlights && selectedPackage.highlights.length > 0 && (
-                <Box sx={{ mb: 3 }}>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      fontWeight: 700,
-                      color: "#8b7355",
-                      mb: 1.5,
-                      fontSize: { xs: "1rem", md: "1.1rem" },
-                    }}
-                  >
-                    Highlights:
-                  </Typography>
-                  <Box component="ul" sx={{ pl: 2.5 }}>
-                    {selectedPackage.highlights.map((highlight, idx) => (
-                      <Typography
-                        key={idx}
-                        component="li"
-                        variant="body2"
-                        sx={{
-                          mb: 0.75,
-                          color: "#666666",
-                          lineHeight: 1.6,
-                          fontSize: { xs: "1rem", md: "1.05rem" },
-                          fontWeight: 500,
-                        }}
-                      >
-                        {highlight}
-                      </Typography>
-                    ))}
-                  </Box>
-                </Box>
-              )}
-
-              <Divider sx={{ my: 3 }} />
-
-              {/* Pricing */}
-              {selectedPackage.pricing_tiers && selectedPackage.pricing_tiers.length > 0 && (
-                <Box sx={{ mb: 3 }}>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      fontWeight: 700,
-                      color: "#8b7355",
-                      mb: 1.5,
-                      fontSize: { xs: "1rem", md: "1.1rem" },
-                    }}
-                  >
-                    Indicative Pricing (2026 Rates):
-                  </Typography>
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                    {selectedPackage.pricing_tiers.map((tier, idx) => (
-                      <Box
-                        key={idx}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                        }}
-                      >
-                        <AttachMoney
-                          sx={{
-                            fontSize: { xs: 18, md: 20 },
-                            color: "#8b7355",
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: "#1a1a1a",
-                            fontSize: { xs: "1rem", md: "1.05rem" },
-                            fontWeight: 600,
-                          }}
-                        >
-                          <Box component="span" sx={{ color: "#c8a97e", fontWeight: 700 }}>
-                            {tier.tier}:
-                          </Box>{" "}
-                          {tier.price_range}
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
-              )}
+                )}
 
               <Divider sx={{ my: 3 }} />
 
@@ -488,9 +664,18 @@ export default function PackageDetail() {
                     borderColor: "#8b7355",
                     color: "#8b7355",
                     outline: "none !important",
-                    "&:focus": { outline: "none !important", boxShadow: "none !important" },
-                    "&:focus-visible": { outline: "none !important", boxShadow: "none !important" },
-                    "&:active": { outline: "none !important", boxShadow: "none !important" },
+                    "&:focus": {
+                      outline: "none !important",
+                      boxShadow: "none !important",
+                    },
+                    "&:focus-visible": {
+                      outline: "none !important",
+                      boxShadow: "none !important",
+                    },
+                    "&:active": {
+                      outline: "none !important",
+                      boxShadow: "none !important",
+                    },
                     "&:hover": {
                       borderColor: "#c8a97e",
                       backgroundColor: "#8b7355",
@@ -508,9 +693,18 @@ export default function PackageDetail() {
                     color: "white",
                     fontWeight: 600,
                     outline: "none !important",
-                    "&:focus": { outline: "none !important", boxShadow: "none !important" },
-                    "&:focus-visible": { outline: "none !important", boxShadow: "none !important" },
-                    "&:active": { outline: "none !important", boxShadow: "none !important" },
+                    "&:focus": {
+                      outline: "none !important",
+                      boxShadow: "none !important",
+                    },
+                    "&:focus-visible": {
+                      outline: "none !important",
+                      boxShadow: "none !important",
+                    },
+                    "&:active": {
+                      outline: "none !important",
+                      boxShadow: "none !important",
+                    },
                     "&:hover": {
                       backgroundColor: "#8b7355",
                     },

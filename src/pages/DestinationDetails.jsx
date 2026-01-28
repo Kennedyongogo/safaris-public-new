@@ -38,9 +38,13 @@ const MotionBox = motion(Box);
 // Category Card Component
 const CategoryCard = ({ category, onClick }) => {
   // Get first image from first package in category for preview
-  const previewImage = category.packages && category.packages.length > 0 && category.packages[0].gallery && category.packages[0].gallery.length > 0
-    ? category.packages[0].gallery[0]
-    : null;
+  const previewImage =
+    category.packages &&
+    category.packages.length > 0 &&
+    category.packages[0].gallery &&
+    category.packages[0].gallery.length > 0
+      ? category.packages[0].gallery[0]
+      : null;
   const packageCount = category.packages ? category.packages.length : 0;
 
   return (
@@ -135,7 +139,14 @@ const CategoryCard = ({ category, onClick }) => {
       </Box>
 
       {/* Content Section */}
-      <CardContent sx={{ p: { xs: 2, sm: 2.5 }, flexGrow: 1, display: "flex", flexDirection: "column" }}>
+      <CardContent
+        sx={{
+          p: { xs: 2, sm: 2.5 },
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Typography
           variant="h5"
           sx={{
@@ -315,7 +326,8 @@ const PackageCard = ({ package: pkg, categoryName, onClick }) => {
                 left: 0,
                 right: 0,
                 height: "60px",
-                background: "linear-gradient(to top, rgba(0,0,0,0.3), transparent)",
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,0.3), transparent)",
                 pointerEvents: "none",
               }}
             />
@@ -532,7 +544,8 @@ export default function DestinationDetails() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Determine where user came from based on location state or referrer
-  const cameFrom = location.state?.from || 
+  const cameFrom =
+    location.state?.from ||
     (document.referrer.includes("/destinations") ? "/destinations" : "/");
   const cameFromDestinations = cameFrom === "/destinations";
   const cameFromHero = cameFrom === "hero";
@@ -563,12 +576,19 @@ export default function DestinationDetails() {
 
   // Auto-transition images in dialog if there are multiple
   useEffect(() => {
-    if (!packageDialogOpen || !selectedPackage || !selectedPackage.gallery || selectedPackage.gallery.length <= 1) {
+    if (
+      !packageDialogOpen ||
+      !selectedPackage ||
+      !selectedPackage.gallery ||
+      selectedPackage.gallery.length <= 1
+    ) {
       return;
     }
 
     const interval = setInterval(() => {
-      setDialogImageIndex((prev) => (prev + 1) % selectedPackage.gallery.length);
+      setDialogImageIndex(
+        (prev) => (prev + 1) % selectedPackage.gallery.length,
+      );
     }, 3000); // Change image every 3 seconds
 
     return () => clearInterval(interval);
@@ -606,42 +626,56 @@ export default function DestinationDetails() {
           subtitle: data.data.subtitle || "",
           description: data.data.brief_description || "", // Use brief_description
           image: buildFullImageUrl(data.data.hero_image), // Convert to full URL
-          imageAlt: data.data.hero_image_alt || `${data.data.title} destination`,
+          imageAlt:
+            data.data.hero_image_alt || `${data.data.title} destination`,
           location: data.data.location,
           gallery_images: Array.isArray(data.data.gallery_images)
-            ? data.data.gallery_images.map(img => buildFullImageUrl(img))
+            ? data.data.gallery_images.map((img) => buildFullImageUrl(img))
             : [],
           packages: Array.isArray(data.data.packages)
-            ? data.data.packages.map(category => ({
+            ? data.data.packages.map((category) => ({
                 category_name: category.category_name || "",
                 category_order: category.category_order || 0,
                 packages: Array.isArray(category.packages)
-                  ? category.packages.map(pkg => ({
+                  ? category.packages.map((pkg) => ({
                       number: pkg.number || 0,
                       title: pkg.title || "",
                       short_description: pkg.short_description || "",
-                      highlights: Array.isArray(pkg.highlights) ? pkg.highlights : [],
-                      pricing_tiers: Array.isArray(pkg.pricing_tiers) ? pkg.pricing_tiers : [],
+                      highlights: Array.isArray(pkg.highlights)
+                        ? pkg.highlights
+                        : [],
+                      pricing_tiers: Array.isArray(pkg.pricing_tiers)
+                        ? pkg.pricing_tiers
+                        : [],
                       gallery: Array.isArray(pkg.gallery)
-                        ? pkg.gallery.map(img => buildFullImageUrl(img))
+                        ? pkg.gallery.map((img) => buildFullImageUrl(img))
                         : [],
                       itinerary: Array.isArray(pkg.itinerary)
                         ? pkg.itinerary.map((d) => ({
                             day: d.day,
+                            day_end:
+                              d.day_end != null &&
+                              typeof d.day_end === "number" &&
+                              d.day_end > d.day
+                                ? d.day_end
+                                : undefined,
                             title: d.title != null ? String(d.title) : "",
-                            description: d.description != null ? String(d.description) : "",
+                            description:
+                              d.description != null
+                                ? String(d.description)
+                                : "",
                             start_location: d.start_location,
                             end_location: d.end_location,
                           }))
-                        : []
+                        : [],
                     }))
-                  : []
+                  : [],
               }))
             : [],
           is_active: data.data.is_active,
           sort_order: data.data.sort_order,
           createdAt: data.data.createdAt,
-          updatedAt: data.data.updatedAt
+          updatedAt: data.data.updatedAt,
         };
         setDestination(mappedDestination);
       } else {
@@ -705,7 +739,6 @@ export default function DestinationDetails() {
     );
   }
 
-
   return (
     <Box
       sx={{
@@ -764,7 +797,10 @@ export default function DestinationDetails() {
                 setTimeout(() => {
                   const section = document.getElementById("mission-section");
                   if (section) {
-                    section.scrollIntoView({ behavior: "smooth", block: "start" });
+                    section.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
                   }
                 }, 100);
               }
@@ -942,68 +978,68 @@ export default function DestinationDetails() {
                 {destination.description}
               </Typography>
 
-
               {/* Gallery Images Section */}
-              {Array.isArray(destination.gallery_images) && destination.gallery_images.length > 0 && (
-                <Box sx={{ mt: 3, mx: { xs: 1.5, sm: 1.5, md: 1.5 } }}>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: 700,
-                      mb: 3,
-                      color: "#1a1a1a",
-                      fontSize: { xs: "1.5rem", md: "1.75rem" },
-                      textAlign: "center",
-                    }}
-                  >
-                    Gallery Images
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: {
-                        xs: "repeat(1, 1fr)",
-                        sm: "repeat(2, 1fr)",
-                        md: "repeat(3, 1fr)",
-                        lg: "repeat(4, 1fr)",
-                      },
-                      gap: { xs: 1, sm: 1.5, md: 2 },
-                      width: "100%",
-                    }}
-                  >
-                    {destination.gallery_images.map((image, index) => (
-                      <Card
-                        key={index}
-                        sx={{
-                          height: 250,
-                          borderRadius: 2,
-                          border: "1px solid rgba(139, 115, 85, 0.2)",
-                          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                          overflow: "hidden",
-                          width: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <Box
-                          component="img"
-                          src={image}
-                          alt={`Gallery ${index + 1}`}
+              {Array.isArray(destination.gallery_images) &&
+                destination.gallery_images.length > 0 && (
+                  <Box sx={{ mt: 3, mx: { xs: 1.5, sm: 1.5, md: 1.5 } }}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontWeight: 700,
+                        mb: 3,
+                        color: "#1a1a1a",
+                        fontSize: { xs: "1.5rem", md: "1.75rem" },
+                        textAlign: "center",
+                      }}
+                    >
+                      Gallery Images
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: {
+                          xs: "repeat(1, 1fr)",
+                          sm: "repeat(2, 1fr)",
+                          md: "repeat(3, 1fr)",
+                          lg: "repeat(4, 1fr)",
+                        },
+                        gap: { xs: 1, sm: 1.5, md: 2 },
+                        width: "100%",
+                      }}
+                    >
+                      {destination.gallery_images.map((image, index) => (
+                        <Card
+                          key={index}
                           sx={{
+                            height: 250,
+                            borderRadius: 2,
+                            border: "1px solid rgba(139, 115, 85, 0.2)",
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                            overflow: "hidden",
                             width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            flex: 1,
+                            display: "flex",
+                            flexDirection: "column",
                           }}
-                          onError={(e) => {
-                            e.target.src = "/IMG-20251210-WA0070.jpg";
-                          }}
-                        />
-                      </Card>
-                    ))}
+                        >
+                          <Box
+                            component="img"
+                            src={image}
+                            alt={`Gallery ${index + 1}`}
+                            sx={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              flex: 1,
+                            }}
+                            onError={(e) => {
+                              e.target.src = "/IMG-20251210-WA0070.jpg";
+                            }}
+                          />
+                        </Card>
+                      ))}
+                    </Box>
                   </Box>
-                </Box>
-              )}
+                )}
 
               {/* Packages Section - Categories Only */}
               {destination.packages && destination.packages.length > 0 && (
@@ -1032,7 +1068,10 @@ export default function DestinationDetails() {
                   </Typography>
                   <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
                     {destination.packages
-                      .sort((a, b) => (a.category_order || 0) - (b.category_order || 0))
+                      .sort(
+                        (a, b) =>
+                          (a.category_order || 0) - (b.category_order || 0),
+                      )
                       .map((category, catIndex) => (
                         <Grid size={{ xs: 12, sm: 6, md: 4 }} key={catIndex}>
                           <CategoryCard
@@ -1069,7 +1108,14 @@ export default function DestinationDetails() {
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={() => navigate("/plan", { state: { from: "destination-detail", destinationId: destination.id } })}
+                  onClick={() =>
+                    navigate("/plan", {
+                      state: {
+                        from: "destination-detail",
+                        destinationId: destination.id,
+                      },
+                    })
+                  }
                   sx={{
                     backgroundColor: "white",
                     color: "#1a1a1a", // Primary Black
@@ -1120,7 +1166,8 @@ export default function DestinationDetails() {
             <DialogTitle
               sx={{
                 pb: 1,
-                background: "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
+                background:
+                  "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
                 borderBottom: "1px solid rgba(139, 115, 85, 0.1)",
               }}
             >
@@ -1139,78 +1186,81 @@ export default function DestinationDetails() {
             <DialogContent sx={{ p: 0 }}>
               <Box sx={{ p: { xs: 2, md: 3 } }}>
                 {/* Main Image with Transitions */}
-                {selectedPackage.gallery && selectedPackage.gallery.length > 0 && (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      height: { xs: "250px", md: "350px" },
-                      borderRadius: 2,
-                      border: "1px solid rgba(139, 115, 85, 0.2)",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                      overflow: "hidden",
-                      mb: 3,
-                      position: "relative",
-                    }}
-                  >
-                    {selectedPackage.gallery.map((image, imgIndex) => {
-                      const isActive = imgIndex === dialogImageIndex;
-                      return (
-                        <Box
-                          key={imgIndex}
-                          component="img"
-                          src={image}
-                          alt={`${selectedPackage.title} - Image ${imgIndex + 1}`}
-                          sx={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            opacity: isActive ? 1 : 0,
-                            transition: "opacity 0.5s ease-in-out",
-                            display: "block",
-                          }}
-                          onError={(e) => {
-                            console.error(`Failed to load package image: ${image}`);
-                            e.target.src = "/IMG-20251210-WA0070.jpg";
-                          }}
-                        />
-                      );
-                    })}
-
-                    {/* Image Indicators */}
-                    {selectedPackage.gallery.length > 1 && (
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          bottom: 12,
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          display: "flex",
-                          gap: 0.5,
-                          zIndex: 3,
-                        }}
-                      >
-                        {selectedPackage.gallery.map((_, idx) => (
+                {selectedPackage.gallery &&
+                  selectedPackage.gallery.length > 0 && (
+                    <Box
+                      sx={{
+                        width: "100%",
+                        height: { xs: "250px", md: "350px" },
+                        borderRadius: 2,
+                        border: "1px solid rgba(139, 115, 85, 0.2)",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                        overflow: "hidden",
+                        mb: 3,
+                        position: "relative",
+                      }}
+                    >
+                      {selectedPackage.gallery.map((image, imgIndex) => {
+                        const isActive = imgIndex === dialogImageIndex;
+                        return (
                           <Box
-                            key={idx}
+                            key={imgIndex}
+                            component="img"
+                            src={image}
+                            alt={`${selectedPackage.title} - Image ${imgIndex + 1}`}
                             sx={{
-                              width: dialogImageIndex === idx ? 20 : 6,
-                              height: 6,
-                              borderRadius: "3px",
-                              backgroundColor:
-                                dialogImageIndex === idx
-                                  ? "white"
-                                  : "rgba(255, 255, 255, 0.5)",
-                              transition: "all 0.3s ease",
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              opacity: isActive ? 1 : 0,
+                              transition: "opacity 0.5s ease-in-out",
+                              display: "block",
+                            }}
+                            onError={(e) => {
+                              console.error(
+                                `Failed to load package image: ${image}`,
+                              );
+                              e.target.src = "/IMG-20251210-WA0070.jpg";
                             }}
                           />
-                        ))}
-                      </Box>
-                    )}
-                  </Box>
-                )}
+                        );
+                      })}
+
+                      {/* Image Indicators */}
+                      {selectedPackage.gallery.length > 1 && (
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 12,
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            display: "flex",
+                            gap: 0.5,
+                            zIndex: 3,
+                          }}
+                        >
+                          {selectedPackage.gallery.map((_, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                width: dialogImageIndex === idx ? 20 : 6,
+                                height: 6,
+                                borderRadius: "3px",
+                                backgroundColor:
+                                  dialogImageIndex === idx
+                                    ? "white"
+                                    : "rgba(255, 255, 255, 0.5)",
+                                transition: "all 0.3s ease",
+                              }}
+                            />
+                          ))}
+                        </Box>
+                      )}
+                    </Box>
+                  )}
 
                 {/* Description */}
                 <Typography
@@ -1227,70 +1277,72 @@ export default function DestinationDetails() {
                 </Typography>
 
                 {/* Highlights */}
-                {selectedPackage.highlights && selectedPackage.highlights.length > 0 && (
-                  <Box sx={{ mb: 2 }}>
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        fontWeight: 700,
-                        color: "#8b7355",
-                        mb: 1,
-                        fontSize: { xs: "1rem", md: "1.1rem" },
-                      }}
-                    >
-                      Highlights:
-                    </Typography>
-                    <Box component="ul" sx={{ pl: 2 }}>
-                      {selectedPackage.highlights.map((highlight, idx) => (
+                {selectedPackage.highlights &&
+                  selectedPackage.highlights.length > 0 && (
+                    <Box sx={{ mb: 2 }}>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          fontWeight: 700,
+                          color: "#8b7355",
+                          mb: 1,
+                          fontSize: { xs: "1rem", md: "1.1rem" },
+                        }}
+                      >
+                        Highlights:
+                      </Typography>
+                      <Box component="ul" sx={{ pl: 2 }}>
+                        {selectedPackage.highlights.map((highlight, idx) => (
+                          <Typography
+                            key={idx}
+                            component="li"
+                            variant="body2"
+                            sx={{
+                              mb: 0.5,
+                              color: "#666666",
+                              lineHeight: 1.6,
+                              fontSize: { xs: "1rem", md: "1.05rem" },
+                              fontWeight: 500,
+                            }}
+                          >
+                            {highlight}
+                          </Typography>
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
+
+                {/* Pricing */}
+                {selectedPackage.pricing_tiers &&
+                  selectedPackage.pricing_tiers.length > 0 && (
+                    <Box>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          fontWeight: 700,
+                          color: "#8b7355",
+                          mb: 1,
+                          fontSize: { xs: "1rem", md: "1.1rem" },
+                        }}
+                      >
+                        Indicative Pricing (2026 Rates):
+                      </Typography>
+                      {selectedPackage.pricing_tiers.map((tier, idx) => (
                         <Typography
                           key={idx}
-                          component="li"
-                          variant="body2"
+                          variant="body1"
                           sx={{
-                            mb: 0.5,
-                            color: "#666666",
-                            lineHeight: 1.6,
+                            mb: 0.75,
+                            color: "text.primary",
                             fontSize: { xs: "1rem", md: "1.05rem" },
-                            fontWeight: 500,
+                            fontWeight: 600,
                           }}
                         >
-                          {highlight}
+                          <strong>{tier.tier}:</strong> {tier.price_range}
                         </Typography>
                       ))}
                     </Box>
-                  </Box>
-                )}
-
-                {/* Pricing */}
-                {selectedPackage.pricing_tiers && selectedPackage.pricing_tiers.length > 0 && (
-                  <Box>
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        fontWeight: 700,
-                        color: "#8b7355",
-                        mb: 1,
-                        fontSize: { xs: "1rem", md: "1.1rem" },
-                      }}
-                    >
-                      Indicative Pricing (2026 Rates):
-                    </Typography>
-                    {selectedPackage.pricing_tiers.map((tier, idx) => (
-                      <Typography
-                        key={idx}
-                        variant="body1"
-                        sx={{
-                          mb: 0.75,
-                          color: "text.primary",
-                          fontSize: { xs: "1rem", md: "1.05rem" },
-                          fontWeight: 600,
-                        }}
-                      >
-                        <strong>{tier.tier}:</strong> {tier.price_range}
-                      </Typography>
-                    ))}
-                  </Box>
-                )}
+                  )}
               </Box>
             </DialogContent>
 
@@ -1298,7 +1350,8 @@ export default function DestinationDetails() {
               sx={{
                 p: { xs: 2, md: 3 },
                 pt: 0,
-                background: "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
+                background:
+                  "linear-gradient(135deg, rgba(249, 247, 243, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)",
                 borderTop: "1px solid rgba(139, 115, 85, 0.1)",
               }}
             >
@@ -1332,4 +1385,3 @@ export default function DestinationDetails() {
     </Box>
   );
 }
-

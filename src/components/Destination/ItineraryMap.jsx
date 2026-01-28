@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, useMap, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Polyline,
+  useMap,
+  Popup,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Box, Typography, IconButton, Paper } from "@mui/material";
@@ -8,9 +15,12 @@ import { Map as MapIcon, SatelliteAlt, Terrain } from "@mui/icons-material";
 // Fix for default marker icon in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+  iconRetinaUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
 
 // Custom marker icon with day number
@@ -63,12 +73,12 @@ const calculateBearing = (lat1, lon1, lat2, lon2) => {
   const dLon = (lon2 - lon1) * (Math.PI / 180);
   const lat1Rad = lat1 * (Math.PI / 180);
   const lat2Rad = lat2 * (Math.PI / 180);
-  
+
   const y = Math.sin(dLon) * Math.cos(lat2Rad);
   const x =
     Math.cos(lat1Rad) * Math.sin(lat2Rad) -
     Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(dLon);
-  
+
   const bearing = Math.atan2(y, x) * (180 / Math.PI);
   return (bearing + 360) % 360; // Normalize to 0-360
 };
@@ -122,22 +132,33 @@ function DynamicTileLayer({ mapType }) {
 
     // Create new tile layer based on mapType
     let tileLayer;
-    
+
     if (mapType === "satellite") {
-      tileLayer = L.tileLayer("https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
-        maxZoom: 20,
-        attribution: "© Google Maps",
-      });
+      tileLayer = L.tileLayer(
+        "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          attribution: "© Google Maps",
+        },
+      );
     } else if (mapType === "terrain") {
-      tileLayer = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
-        maxZoom: 17,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
-      });
+      tileLayer = L.tileLayer(
+        "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        {
+          maxZoom: 17,
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
+        },
+      );
     } else {
       // OSM (default)
-      tileLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      });
+      tileLayer = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        },
+      );
     }
 
     tileLayer.addTo(map);
@@ -191,12 +212,19 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
     const marks = [];
 
     itinerary.forEach((day, index) => {
-      if (!day.start_location || !day.start_location.latitude || !day.start_location.longitude) {
+      if (
+        !day.start_location ||
+        !day.start_location.latitude ||
+        !day.start_location.longitude
+      ) {
         return; // Skip if no start location
       }
 
-      const startCoord = [day.start_location.latitude, day.start_location.longitude];
-      
+      const startCoord = [
+        day.start_location.latitude,
+        day.start_location.longitude,
+      ];
+
       // Check if day has end location that's different from start
       const hasEndLocation =
         day.end_location &&
@@ -222,28 +250,40 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
           startCoord[0],
           startCoord[1],
           endCoord[0],
-          endCoord[1]
+          endCoord[1],
         );
       }
 
-      const title = day.title != null && String(day.title).trim() ? String(day.title).trim() : "";
-      const description = day.description != null && String(day.description).trim() ? String(day.description).trim() : "";
+      const title =
+        day.title != null && String(day.title).trim()
+          ? String(day.title).trim()
+          : "";
+      const description =
+        day.description != null && String(day.description).trim()
+          ? String(day.description).trim()
+          : "";
+      const dayLabel =
+        day.day_end != null && day.day_end > day.day
+          ? `${day.day}–${day.day_end}`
+          : String(day.day);
 
-      // Add marker at START location with day number
+      // Add marker at START location with day label
       marks.push({
         position: startCoord,
         day: day.day,
+        dayLabel,
         title,
         description,
         isStart: true,
         distance: distance,
       });
 
-      // Add marker at END location with same day number (if end exists and is different)
+      // Add marker at END location with same day label (if end exists and is different)
       if (hasEndLocation && endCoord) {
         marks.push({
           position: endCoord,
           day: day.day,
+          dayLabel,
           title,
           description,
           isStart: false,
@@ -254,6 +294,7 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
         segments.push({
           coordinates: [startCoord, endCoord],
           day: day.day,
+          dayLabel,
           isDayRoute: true,
         });
       }
@@ -266,14 +307,18 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
           nextDay.start_location.latitude &&
           nextDay.start_location.longitude
         ) {
+          const nextDayLabel =
+            nextDay.day_end != null && nextDay.day_end > nextDay.day
+              ? `${nextDay.day}–${nextDay.day_end}`
+              : String(nextDay.day);
           const nextStartCoord = [
             nextDay.start_location.latitude,
             nextDay.start_location.longitude,
           ];
-          
+
           // Use end location if exists, otherwise use start location
           const currentDayEnd = endCoord || startCoord;
-          
+
           // Only draw connecting line if next day's start is different from current day's end/start
           if (
             nextStartCoord[0] !== currentDayEnd[0] ||
@@ -281,7 +326,7 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
           ) {
             segments.push({
               coordinates: [currentDayEnd, nextStartCoord],
-              day: `Day ${day.day} to ${nextDay.day}`,
+              day: `Day ${dayLabel} to ${nextDayLabel}`,
               isDayRoute: false,
             });
           }
@@ -300,7 +345,16 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
       : defaultCenter;
 
   return (
-    <Box sx={{ width: "100%", height, borderRadius: 1, overflow: "hidden", border: "1px solid #e0e0e0", position: "relative" }}>
+    <Box
+      sx={{
+        width: "100%",
+        height,
+        borderRadius: 1,
+        overflow: "hidden",
+        border: "1px solid #e0e0e0",
+        position: "relative",
+      }}
+    >
       {/* Map type switcher */}
       <Paper
         sx={{
@@ -327,11 +381,18 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
             height: 40,
             borderRadius: 2,
             outline: "none !important",
-            "&:focus": { outline: "none !important", boxShadow: "none !important" },
-            "&:focus-visible": { outline: "none !important", boxShadow: "none !important" },
+            "&:focus": {
+              outline: "none !important",
+              boxShadow: "none !important",
+            },
+            "&:focus-visible": {
+              outline: "none !important",
+              boxShadow: "none !important",
+            },
             "&:active": { outline: "none !important" },
             "&:hover": {
-              backgroundColor: mapType === "osm" ? "#B85C38" : "rgba(107, 78, 61, 0.1)",
+              backgroundColor:
+                mapType === "osm" ? "#B85C38" : "rgba(107, 78, 61, 0.1)",
             },
           }}
           title="Standard Map"
@@ -342,17 +403,25 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
           size="small"
           onClick={() => setMapType("satellite")}
           sx={{
-            backgroundColor: mapType === "satellite" ? "#6B4E3D" : "transparent",
+            backgroundColor:
+              mapType === "satellite" ? "#6B4E3D" : "transparent",
             color: mapType === "satellite" ? "white" : "#6B4E3D",
             width: 40,
             height: 40,
             borderRadius: 2,
             outline: "none !important",
-            "&:focus": { outline: "none !important", boxShadow: "none !important" },
-            "&:focus-visible": { outline: "none !important", boxShadow: "none !important" },
+            "&:focus": {
+              outline: "none !important",
+              boxShadow: "none !important",
+            },
+            "&:focus-visible": {
+              outline: "none !important",
+              boxShadow: "none !important",
+            },
             "&:active": { outline: "none !important" },
             "&:hover": {
-              backgroundColor: mapType === "satellite" ? "#B85C38" : "rgba(107, 78, 61, 0.1)",
+              backgroundColor:
+                mapType === "satellite" ? "#B85C38" : "rgba(107, 78, 61, 0.1)",
             },
           }}
           title="Satellite View"
@@ -369,11 +438,18 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
             height: 40,
             borderRadius: 2,
             outline: "none !important",
-            "&:focus": { outline: "none !important", boxShadow: "none !important" },
-            "&:focus-visible": { outline: "none !important", boxShadow: "none !important" },
+            "&:focus": {
+              outline: "none !important",
+              boxShadow: "none !important",
+            },
+            "&:focus-visible": {
+              outline: "none !important",
+              boxShadow: "none !important",
+            },
             "&:active": { outline: "none !important" },
             "&:hover": {
-              backgroundColor: mapType === "terrain" ? "#B85C38" : "rgba(107, 78, 61, 0.1)",
+              backgroundColor:
+                mapType === "terrain" ? "#B85C38" : "rgba(107, 78, 61, 0.1)",
             },
           }}
           title="Terrain View"
@@ -394,7 +470,7 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
         {routeSegments.map((segment, idx) => {
           const [start, end] = segment.coordinates;
           const bearing = calculateBearing(start[0], start[1], end[0], end[1]);
-          
+
           // Calculate points along the route for arrows (at 25%, 50%, 75%)
           const arrowPositions = [0.25, 0.5, 0.75].map((percent) => ({
             position: getPointAlongLine(start, end, percent),
@@ -427,31 +503,44 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
         {/* Add markers for each day */}
         {markers.map((marker, idx) => {
           const locationType = marker.isStart ? "Start" : "End";
+          const dayLabel =
+            marker.dayLabel != null ? marker.dayLabel : String(marker.day);
           const titleLine = marker.title
-            ? `Day ${marker.day}: ${marker.title}`
-            : `Day ${marker.day}`;
-          
+            ? `Day ${dayLabel}: ${marker.title}`
+            : `Day ${dayLabel}`;
+
           return (
-            <Marker 
-              key={`marker-${idx}`} 
-              position={marker.position} 
-              icon={createDayMarker(marker.day)}
+            <Marker
+              key={`marker-${idx}`}
+              position={marker.position}
+              icon={createDayMarker(dayLabel)}
             >
               <Popup>
                 <Box>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ fontWeight: 700, mb: 0.5 }}
+                  >
                     {titleLine} ({locationType})
                   </Typography>
                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {marker.description || "No description"}
                   </Typography>
-                  {marker.distance !== null && marker.distance !== undefined && (
-                    <Typography variant="body2" sx={{ color: "#6B4E3D", fontWeight: 600, mt: 0.5 }}>
-                      📍 Distance: {formatDistance(marker.distance)}
-                    </Typography>
-                  )}
-                  <Typography variant="caption" sx={{ color: "text.secondary", mt: 0.5, display: "block" }}>
-                    {marker.position[0].toFixed(6)}, {marker.position[1].toFixed(6)}
+                  {marker.distance !== null &&
+                    marker.distance !== undefined && (
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#6B4E3D", fontWeight: 600, mt: 0.5 }}
+                      >
+                        📍 Distance: {formatDistance(marker.distance)}
+                      </Typography>
+                    )}
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "text.secondary", mt: 0.5, display: "block" }}
+                  >
+                    {marker.position[0].toFixed(6)},{" "}
+                    {marker.position[1].toFixed(6)}
                   </Typography>
                 </Box>
               </Popup>
@@ -460,7 +549,12 @@ const ItineraryMap = ({ itinerary, height = 300 }) => {
         })}
 
         {/* Fit bounds to show all markers - only once on initial mount */}
-        {allCoordinates.length > 0 && <MapBounds bounds={allCoordinates} boundsKey={JSON.stringify(allCoordinates)} />}
+        {allCoordinates.length > 0 && (
+          <MapBounds
+            bounds={allCoordinates}
+            boundsKey={JSON.stringify(allCoordinates)}
+          />
+        )}
       </MapContainer>
     </Box>
   );
