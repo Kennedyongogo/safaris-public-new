@@ -44,6 +44,12 @@ export default function AccreditationsSection() {
       url: "https://amref.org",
       alt: "Amref Flying Doctors - Medical Emergency Services",
     },
+    {
+      name: "Travel Monk",
+      image: "/acredited/Screenshot_2026-01-30_103331-removebg-preview.png",
+      url: "https://www.thetravelmonk.com/",
+      alt: "Travel Monk - Adventure Travel Planning",
+    },
   ];
 
   return (
@@ -102,9 +108,9 @@ export default function AccreditationsSection() {
                   lineHeight: 1.7,
                 }}
               >
-                Akira Safaris is licensed by the Kenya Tourism
-                Regulatory Authority (TRA) and is also affiliated with multiple
-                booking platforms.
+                Akira Safaris is licensed by the Kenya Tourism Regulatory
+                Authority (TRA) and is also affiliated with multiple booking
+                platforms.
               </Typography>
             </Box>
 
@@ -133,8 +139,16 @@ export default function AccreditationsSection() {
                     alignItems: "center",
                     flex: { xs: "0 0 calc(50% - 4px)", sm: "0 0 auto" },
                     width: { xs: "calc(50% - 4px)", sm: "auto" },
-                    minWidth: { xs: "calc(50% - 4px)", sm: "120px", md: "140px" },
-                    maxWidth: { xs: "calc(50% - 4px)", sm: "150px", md: "180px" },
+                    minWidth: {
+                      xs: "calc(50% - 4px)",
+                      sm: "120px",
+                      md: "140px",
+                    },
+                    maxWidth: {
+                      xs: "calc(50% - 4px)",
+                      sm: "150px",
+                      md: "180px",
+                    },
                     height: { xs: "60px", sm: "80px", md: "100px" },
                     padding: { xs: 0.5, sm: 1, md: 1.5 },
                     boxSizing: "border-box",
@@ -178,4 +192,3 @@ export default function AccreditationsSection() {
     </Box>
   );
 }
-

@@ -49,39 +49,43 @@ export default function Plan() {
 
     const { depends_on_field, show_when_value, hide_when_value } =
       field.conditional_logic;
-    
+
     // Find the actual field name in the form (handle case sensitivity and slight variations)
     // First try exact match
     let actualFieldName = selectedForm?.fields?.find(
-      (f) => f.field_name === depends_on_field
+      (f) => f.field_name === depends_on_field,
     )?.field_name;
-    
+
     // If not found, try case-insensitive match
     if (!actualFieldName) {
       actualFieldName = selectedForm?.fields?.find(
-        (f) => f.field_name?.toLowerCase() === depends_on_field?.toLowerCase()
+        (f) => f.field_name?.toLowerCase() === depends_on_field?.toLowerCase(),
       )?.field_name;
     }
-    
+
     // If still not found, try partial match (for cases like "visit" vs "travel")
     if (!actualFieldName && depends_on_field) {
-      const keyWords = depends_on_field.split('_').filter(w => w.length > 3);
+      const keyWords = depends_on_field.split("_").filter((w) => w.length > 3);
       actualFieldName = selectedForm?.fields?.find((f) => {
         if (!f.field_name) return false;
-        const fieldWords = f.field_name.split('_').filter(w => w.length > 3);
+        const fieldWords = f.field_name.split("_").filter((w) => w.length > 3);
         // Check if most key words match
-        const matchingWords = keyWords.filter(kw => 
-          fieldWords.some(fw => fw.toLowerCase().includes(kw.toLowerCase()) || kw.toLowerCase().includes(fw.toLowerCase()))
+        const matchingWords = keyWords.filter((kw) =>
+          fieldWords.some(
+            (fw) =>
+              fw.toLowerCase().includes(kw.toLowerCase()) ||
+              kw.toLowerCase().includes(fw.toLowerCase()),
+          ),
         );
         return matchingWords.length >= Math.min(2, keyWords.length);
       })?.field_name;
     }
-    
+
     if (!actualFieldName && depends_on_field) {
       // If the dependent field doesn't exist, show the field by default
       return true;
     }
-    
+
     const fieldNameToUse = actualFieldName || depends_on_field;
     const dependentValue = formData[fieldNameToUse];
 
@@ -119,12 +123,15 @@ export default function Plan() {
       // If visible fields changed, maintain position based on current field
       let newStep = currentStep;
       if (visibleFieldIds !== currentVisibleIds) {
-        const previousCurrentField = previousVisibleFieldsRef.current[previousCurrentStepRef.current];
-        
+        const previousCurrentField =
+          previousVisibleFieldsRef.current[previousCurrentStepRef.current];
+
         if (previousCurrentField) {
           // Find the previous current field's position in the new visible fields array
-          const newIndex = visible.findIndex((f) => f.id === previousCurrentField.id);
-          
+          const newIndex = visible.findIndex(
+            (f) => f.id === previousCurrentField.id,
+          );
+
           if (newIndex !== -1) {
             // Field still exists in new array, maintain position
             newStep = newIndex;
@@ -133,9 +140,9 @@ export default function Plan() {
             // Find the next field in display_order sequence
             const currentDisplayOrder = previousCurrentField.display_order || 0;
             const nextField = visible.find(
-              (f) => (f.display_order || 0) > currentDisplayOrder
+              (f) => (f.display_order || 0) > currentDisplayOrder,
             );
-            
+
             if (nextField) {
               const nextIndex = visible.findIndex((f) => f.id === nextField.id);
               newStep = nextIndex;
@@ -307,7 +314,7 @@ export default function Plan() {
       setLoading(true);
       await axios.post(
         `/api/forms/public/${selectedForm.slug}/submit`,
-        formData
+        formData,
       );
       // Handle success - show SweetAlert success message
       Swal.fire({
@@ -319,6 +326,9 @@ export default function Plan() {
       setSelectedForm(null);
       setCurrentStep(0);
       setFormData({});
+      setVisibleFields([]);
+      previousVisibleFieldsRef.current = [];
+      previousCurrentStepRef.current = 0;
     } catch (error) {
       console.error("Form submission error:", error);
       Swal.fire({
@@ -586,7 +596,7 @@ export default function Plan() {
                             onChange={(e) =>
                               handleInputChange(
                                 currentField.field_name,
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             sx={{
@@ -619,7 +629,7 @@ export default function Plan() {
                             onChange={(e) =>
                               handleInputChange(
                                 currentField.field_name,
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             sx={{
@@ -651,7 +661,7 @@ export default function Plan() {
                               onChange={(e) =>
                                 handleInputChange(
                                   currentField.field_name,
-                                  e.target.value
+                                  e.target.value,
                                 )
                               }
                               sx={{
@@ -691,7 +701,7 @@ export default function Plan() {
                               onChange={(e) =>
                                 handleInputChange(
                                   currentField.field_name,
-                                  e.target.value
+                                  e.target.value,
                                 )
                               }
                             >
@@ -700,14 +710,14 @@ export default function Plan() {
                                   key={option.id}
                                   value={option.option_value}
                                   control={
-                                      <Radio
-                                        sx={{
-                                          color: "rgba(139, 115, 85, 0.3)",
-                                          "&.Mui-checked": {
-                                            color: "#c8a97e",
-                                          },
-                                        }}
-                                      />
+                                    <Radio
+                                      sx={{
+                                        color: "rgba(139, 115, 85, 0.3)",
+                                        "&.Mui-checked": {
+                                          color: "#c8a97e",
+                                        },
+                                      }}
+                                    />
                                   }
                                   label={option.option_label}
                                 />
@@ -725,7 +735,7 @@ export default function Plan() {
                                 onChange={(e) =>
                                   handleInputChange(
                                     currentField.field_name,
-                                    e.target.checked
+                                    e.target.checked,
                                   )
                                 }
                                 sx={{
@@ -773,12 +783,13 @@ export default function Plan() {
                                           ];
                                         } else {
                                           newValues = currentValues.filter(
-                                            (val) => val !== option.option_value
+                                            (val) =>
+                                              val !== option.option_value,
                                           );
                                         }
                                         handleInputChange(
                                           currentField.field_name,
-                                          newValues
+                                          newValues,
                                         );
                                       }}
                                       sx={{
@@ -805,7 +816,7 @@ export default function Plan() {
                             onChange={(e) =>
                               handleInputChange(
                                 currentField.field_name,
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             sx={{
@@ -850,7 +861,7 @@ export default function Plan() {
                                         onChange={(e) =>
                                           handleInputChange(
                                             subField.field_name,
-                                            e.target.value
+                                            e.target.value,
                                           )
                                         }
                                         sx={{
@@ -882,7 +893,7 @@ export default function Plan() {
                                         onChange={(e) =>
                                           handleInputChange(
                                             subField.field_name,
-                                            e.target.value
+                                            e.target.value,
                                           )
                                         }
                                         sx={{
@@ -914,7 +925,7 @@ export default function Plan() {
                                         onChange={(e) =>
                                           handleInputChange(
                                             subField.field_name,
-                                            e.target.value
+                                            e.target.value,
                                           )
                                         }
                                         sx={{
@@ -935,7 +946,7 @@ export default function Plan() {
                                       />
                                     )}
                                   </Box>
-                                )
+                                ),
                               )}
                             </Stack>
                           </Box>
@@ -989,7 +1000,7 @@ export default function Plan() {
                             onChange={(e) =>
                               handleInputChange(
                                 "newsletter_optin",
-                                e.target.checked
+                                e.target.checked,
                               )
                             }
                             sx={{
@@ -1503,7 +1514,7 @@ export default function Plan() {
                                                 {option.option_label}
                                               </Typography>
                                             </Box>
-                                          )
+                                          ),
                                         )}
                                       </Box>
                                     ) : field.field_type === "checkbox" ? (
@@ -1579,7 +1590,10 @@ export default function Plan() {
                                     ) : (
                                       <Typography
                                         variant="caption"
-                                        sx={{ color: "#666666", fontStyle: "italic" }}
+                                        sx={{
+                                          color: "#666666",
+                                          fontStyle: "italic",
+                                        }}
                                       >
                                         {field.field_type} field
                                       </Typography>

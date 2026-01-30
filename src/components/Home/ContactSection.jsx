@@ -99,7 +99,7 @@ export default function ContactSection() {
                     {
                       icon: <Email sx={{ fontSize: 18 }} />,
                       label: "Email",
-                      value: "info@akirasafaris.co.ke",
+                      value: "info@akirasafaris.com",
                       color: "#c8a97e",
                     },
                     {
@@ -116,7 +116,11 @@ export default function ContactSection() {
                       color: "#8b7355",
                     },
                   ].map((item) => (
-                    <Grid size={{ xs: 6, md: 3 }} key={item.label} sx={{ display: "flex" }}>
+                    <Grid
+                      size={{ xs: 6, md: 3 }}
+                      key={item.label}
+                      sx={{ display: "flex" }}
+                    >
                       <Stack
                         direction="column"
                         spacing={{ xs: 0.75, md: 0.5 }}
@@ -139,49 +143,49 @@ export default function ContactSection() {
                           },
                         }}
                       >
-                      <Box
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: "12px",
-                          background: "rgba(255,255,255,0.85)",
-                          color: item.color,
-                          boxShadow: `0 6px 18px ${item.color}33`,
-                        }}
-                      >
-                        {item.icon}
-                      </Box>
-                      <Box sx={{ textAlign: "center", width: "100%" }}>
-                        <Typography
-                          variant="subtitle2"
+                        <Box
                           sx={{
-                            fontWeight: 900,
-                            color: "#1a1a1a",
-                            letterSpacing: 0.15,
-                            textAlign: "center",
-                            fontSize: "1.05rem",
+                            width: 32,
+                            height: 32,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "12px",
+                            background: "rgba(255,255,255,0.85)",
+                            color: item.color,
+                            boxShadow: `0 6px 18px ${item.color}33`,
                           }}
                         >
-                          {item.label}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: "#1a1a1a",
-                            lineHeight: 1.3,
-                            fontWeight: 700,
-                            textAlign: "center",
-                            whiteSpace: "pre-line",
-                            fontSize: "1rem",
-                          }}
-                        >
-                          {item.value}
-                        </Typography>
-                      </Box>
-                    </Stack>
+                          {item.icon}
+                        </Box>
+                        <Box sx={{ textAlign: "center", width: "100%" }}>
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontWeight: 900,
+                              color: "#1a1a1a",
+                              letterSpacing: 0.15,
+                              textAlign: "center",
+                              fontSize: "1.05rem",
+                            }}
+                          >
+                            {item.label}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: "#1a1a1a",
+                              lineHeight: 1.3,
+                              fontWeight: 700,
+                              textAlign: "center",
+                              whiteSpace: "pre-line",
+                              fontSize: "1rem",
+                            }}
+                          >
+                            {item.value}
+                          </Typography>
+                        </Box>
+                      </Stack>
                     </Grid>
                   ))}
                 </Grid>
