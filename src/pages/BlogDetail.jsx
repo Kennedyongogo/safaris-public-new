@@ -1031,7 +1031,7 @@ export default function BlogDetail() {
                 <Box
                   sx={{
                     display: "flex",
-                    flexWrap: "wrap",
+                    flexDirection: { xs: "column", sm: "row" },
                     gap: 1.5,
                     justifyContent: "center",
                   }}
@@ -1040,6 +1040,7 @@ export default function BlogDetail() {
                     variant="contained"
                     size="large"
                     onClick={() => navigate("/plan")}
+                    fullWidth
                     sx={{
                       backgroundColor: "white",
                       color: "#1a1a1a",
@@ -1061,6 +1062,7 @@ export default function BlogDetail() {
                     variant="outlined"
                     size="large"
                     onClick={() => navigate("/east-africa-safaris")}
+                    fullWidth
                     sx={{
                       borderColor: "white",
                       color: "white",
@@ -1082,6 +1084,7 @@ export default function BlogDetail() {
                     variant="outlined"
                     size="large"
                     onClick={() => navigate("/destinations")}
+                    fullWidth
                     sx={{
                       borderColor: "white",
                       color: "white",
