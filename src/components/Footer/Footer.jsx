@@ -20,6 +20,7 @@ import {
   Email,
   Phone,
 } from "@mui/icons-material";
+import { Link as RouterLink } from "react-router-dom";
 
 // Custom X icon for Twitter/X rebrand
 const XIcon = ({ sx, ...props }) => (
@@ -351,6 +352,60 @@ export default function Footer() {
                             </IconButton>
                           ))}
                         </Box>
+                      </Box>
+                    </Box>
+                  </Slide>
+                </Grid>
+
+                <Grid item xs={12} sm={12} md={4}>
+                  <Slide direction="up" in timeout={1400}>
+                    <Box sx={{ textAlign: { xs: "left", md: "center" } }}>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          fontWeight: 700,
+                          background:
+                            "linear-gradient(45deg, #8b7355, #1a1a1a)",
+                          backgroundClip: "text",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          fontSize: { xs: "1.1rem", sm: "1.4rem" },
+                          mb: { xs: 0.75, sm: 1 },
+                        }}
+                      >
+                        Quick Links
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.5,
+                          alignItems: { xs: "flex-start", md: "center" },
+                        }}
+                      >
+                        {[
+                          { label: "Home", path: "/" },
+                          { label: "About Us", path: "/about-us" },
+                          { label: "Safari Packages", path: "/east-africa-safaris" },
+                          { label: "Destinations", path: "/destinations" },
+                          { label: "Blog", path: "/blog" },
+                          { label: "Contact Us", path: "/contact-us" },
+                        ].map((item) => (
+                          <Link
+                            key={item.path}
+                            component={RouterLink}
+                            to={item.path}
+                            underline="none"
+                            sx={{
+                              fontWeight: 600,
+                              color: "#1a1a1a",
+                              fontSize: { xs: "0.95rem", sm: "1.05rem" },
+                              "&:hover": { color: "#8b7355" },
+                            }}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
                       </Box>
                     </Box>
                   </Slide>

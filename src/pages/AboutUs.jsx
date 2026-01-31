@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -9,7 +10,7 @@ import {
 } from "@mui/material";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 
-export default function Team() {
+export default function AboutUs() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -57,6 +58,13 @@ export default function Team() {
           "linear-gradient(135deg, rgba(249, 247, 243, 0.9) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(249, 247, 243, 0.9) 100%)", // Warm White tones
       }}
     >
+      <Helmet>
+        <title>About Akira Safaris | Trusted Kenya Safari Experts</title>
+        <meta
+          name="description"
+          content="Learn about Akira Safaris, a Kenya-based team crafting authentic East Africa journeys with local expertise, care, and trusted safari planning."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{ px: { xs: 1.5, sm: 1.5, md: 1.5 }, mt: 0.75, mb: 0.75 }}

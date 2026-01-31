@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -110,6 +111,13 @@ export default function Staff() {
         },
       }}
     >
+      <Helmet>
+        <title>Our Team | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Meet the Akira Safaris team of guides and travel specialists dedicated to creating exceptional safari experiences."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

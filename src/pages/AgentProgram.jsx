@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import AgentApplicationDialog from "../components/AgentApplicationDialog";
 import {
   Box,
@@ -139,6 +140,13 @@ export default function AgentProgram() {
         },
       }}
     >
+      <Helmet>
+        <title>Agent Partnership | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Join the Akira Safaris agent program and partner with us to deliver exceptional East Africa safari experiences."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

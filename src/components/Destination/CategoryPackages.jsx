@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -409,6 +410,7 @@ export default function CategoryPackages() {
     }
   }, [location.state]);
   const destinationId = location.state?.destinationId;
+  const returnFrom = location.state?.from;
 
   // Auto-transition images in dialog if there are multiple
   useEffect(() => {
@@ -463,7 +465,9 @@ export default function CategoryPackages() {
   const handleBackToCategories = () => {
     // Navigate back to destination details page
     if (destinationId) {
-      navigate(`/destination/${destinationId}`);
+      navigate(`/destination/${destinationId}`, {
+        state: { from: returnFrom || "/destinations" },
+      });
     } else {
       navigate(-1);
     }
@@ -518,6 +522,20 @@ export default function CategoryPackages() {
         },
       }}
     >
+      <Helmet>
+        <title>
+          {category?.category_name && destination?.title
+            ? `${category.category_name} | ${destination.title} | Akira Safaris`
+            : "Safari Packages | Akira Safaris"}
+        </title>
+        <meta
+          name="description"
+          content={
+            destination?.brief_description ||
+            "Browse safari packages by destination and category with Akira Safaris."
+          }
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -164,7 +165,7 @@ export default function TeamMemberDetail() {
   }
 
   return (
-    <Box 
+    <Box
       sx={{ 
         pt: 0.75,
         pb: 0.75,
@@ -188,6 +189,21 @@ export default function TeamMemberDetail() {
         },
       }}
     >
+      <Helmet>
+        <title>
+          {member?.name
+            ? `${member.name} | Akira Safaris`
+            : "Team Member | Akira Safaris"}
+        </title>
+        <meta
+          name="description"
+          content={
+            member?.bio
+              ? member.bio
+              : "Learn more about the Akira Safaris team and the people who guide your safari experience."
+          }
+        />
+      </Helmet>
         <Container 
           maxWidth="xl" 
           sx={{ 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -151,6 +152,20 @@ export default function CampLodgeDetail() {
           "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
       }}
     >
+      <Helmet>
+        <title>
+          {lodge?.name
+            ? `${lodge.name} | Akira Safaris`
+            : "Camp &amp; Lodge | Akira Safaris"}
+        </title>
+        <meta
+          name="description"
+          content={
+            lodge?.description ||
+            "View detailed information about safari camps and lodges with Akira Safaris."
+          }
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

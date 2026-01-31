@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -150,6 +151,13 @@ export default function Blog() {
         },
       }}
     >
+      <Helmet>
+        <title>Safari Blog &amp; Guides | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Read Akira Safaris blog for wildlife stories, travel tips, conservation insights, and safari guides to help plan your journey."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

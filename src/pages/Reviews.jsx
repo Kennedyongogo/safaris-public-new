@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -152,6 +153,13 @@ export default function Reviews() {
         minHeight: "auto",
       }}
     >
+      <Helmet>
+        <title>Guest Reviews | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Read guest reviews of Akira Safaris and share your safari experience with our team."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

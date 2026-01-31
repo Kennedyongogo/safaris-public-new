@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Container,
@@ -225,6 +226,13 @@ export default function PackageInquiry() {
         },
       }}
     >
+      <Helmet>
+        <title>Safari Package Inquiry | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Send an inquiry for your chosen safari package. Akira Safaris will help customize dates, lodges, and travel details."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

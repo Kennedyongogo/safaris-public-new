@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 
 // Image Carousel Component
@@ -573,6 +574,13 @@ export default function CampLodges() {
         },
       }}
     >
+      <Helmet>
+        <title>Camp &amp; Lodge Collection | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Explore Akira Safaris camp and lodge options across East Africa, with locations, amenities, and curated stays."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

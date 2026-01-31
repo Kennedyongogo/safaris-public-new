@@ -6,14 +6,18 @@ import {
   Grid,
   Card,
   CardContent,
-  Chip,
   Paper,
   CircularProgress,
   useMediaQuery,
   useTheme,
+  Tabs,
+  Tab,
+  Tooltip,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { AttachMoney, Image as ImageIcon } from "@mui/icons-material";
+import { Image as ImageIcon } from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const MotionBox = motion(Box);
 
@@ -25,7 +29,7 @@ const buildImageUrl = (imagePath) => {
 };
 
 // Package Card Component with Image Transitions - Similar to DestinationDetails
-const PackageCard = ({ package: pkg }) => {
+const PackageCard = ({ package: pkg, onViewDetails }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Get all images from package gallery - images are already processed in fetchAllPackages
@@ -48,25 +52,49 @@ const PackageCard = ({ package: pkg }) => {
   }, [hasMultipleImages, images.length]);
 
   return (
-    <Card
-      sx={{
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        border: "1px solid rgba(139, 115, 85, 0.15)",
-        borderRadius: 3,
-        transition: "transform 0.3s ease, box-shadow 0.3s ease",
-        background: "linear-gradient(to bottom, #FFFFFF 0%, #f9f7f3 100%)",
-        boxShadow: "0 2px 8px rgba(26, 26, 26, 0.08)",
-        "&:hover": {
-          transform: "translateY(-8px)",
-          boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
-          borderColor: "rgba(200, 169, 126, 0.3)",
+    <Tooltip
+      title={`View ${pkg.title} Details`}
+      placement="top"
+      arrow
+      componentsProps={{
+        tooltip: {
+          sx: {
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            textAlign: "center",
+            px: 1.5,
+            py: 0.75,
+            bgcolor: "#1a1a1a",
+          },
+        },
+        arrow: {
+          sx: {
+            color: "#1a1a1a",
+          },
         },
       }}
     >
+      <Card
+        sx={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          border: "1px solid rgba(139, 115, 85, 0.15)",
+          borderRadius: 3,
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          background: "linear-gradient(to bottom, #FFFFFF 0%, #f9f7f3 100%)",
+          boxShadow: "0 2px 8px rgba(26, 26, 26, 0.08)",
+          cursor: "pointer",
+          "&:hover": {
+            transform: "translateY(-8px)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+            borderColor: "rgba(200, 169, 126, 0.3)",
+          },
+        }}
+        onClick={() => onViewDetails(pkg)}
+      >
       {/* Image Section with Transitions */}
       <Box
         sx={{
@@ -169,205 +197,38 @@ const PackageCard = ({ package: pkg }) => {
           flexGrow: 1,
           p: { xs: 2, sm: 2.5, md: 3 },
           display: "flex",
-          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
           minHeight: 0,
+          textAlign: "center",
         }}
       >
-        {/* Destination & Category */}
-        <Box
-          sx={{
-            mb: 1.5,
-          }}
-        >
-          <Chip
-            label={pkg.destinationTitle}
-            size="small"
-            sx={{
-            mb: 0.5,
-            backgroundColor: "#8b7355",
-            color: "white",
-            fontWeight: 600,
-            fontSize: "0.75rem",
-          }}
-        />
-        <Typography
-          variant="caption"
-          sx={{
-            display: "block",
-            color: "#c8a97e",
-            fontWeight: 600,
-            fontSize: "0.8rem",
-            fontStyle: "italic",
-          }}
-        >
-          {pkg.categoryName}
-        </Typography>
-        </Box>
-
-        {/* Package Title */}
         <Typography
           variant="h6"
           sx={{
-            fontWeight: 600,
+            fontWeight: 700,
             fontSize: { xs: "1rem", md: "1.125rem" },
-            mb: 1,
             color: "#1a1a1a",
             lineHeight: 1.3,
           }}
         >
           {pkg.title}
         </Typography>
-
-        {/* Description */}
-        <Typography
-          variant="body2"
-          sx={{
-            color: "#666666",
-            mb: 1.5,
-            fontSize: { xs: "0.875rem", md: "0.95rem" },
-            lineHeight: 1.6,
-            fontWeight: 500,
-          }}
-        >
-          {pkg.short_description}
-        </Typography>
-
-        {/* Highlights - Show All */}
-        {pkg.highlights && pkg.highlights.length > 0 && (
-          <Box sx={{ mb: 1.5 }}>
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: "#8b7355",
-                mb: 0.75,
-                display: "block",
-              }}
-            >
-              Highlights:
-            </Typography>
-            <Box
-              component="ul"
-              sx={{
-                pl: 0,
-                mb: 0,
-                listStyle: "none",
-                display: "flex",
-                flexDirection: "column",
-                gap: 0.5,
-              }}
-            >
-              {pkg.highlights.map((highlight, idx) => (
-                <Box
-                  key={idx}
-                  component="li"
-                  sx={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 0.75,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 4,
-                      height: 4,
-                      borderRadius: "50%",
-                      backgroundColor: "#c8a97e",
-                      mt: 0.75,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "#666666",
-                      lineHeight: 1.4,
-                      fontSize: { xs: "0.8rem", md: "0.85rem" },
-                      fontWeight: 500,
-                    }}
-                  >
-                    {highlight}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
-
-        {/* Pricing - Show All Tiers */}
-        {pkg.pricing_tiers && pkg.pricing_tiers.length > 0 && (
-          <Box
-            sx={{
-              mb: 1.5,
-              pt: 1,
-              borderTop: "1px solid rgba(139, 115, 85, 0.1)",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: "#8b7355",
-                mb: 0.75,
-                display: "block",
-              }}
-            >
-              Pricing (2026 Rates):
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 0.5,
-              }}
-            >
-              {pkg.pricing_tiers.map((tier, idx) => (
-                <Box
-                  key={idx}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                  }}
-                >
-                  <AttachMoney
-                    sx={{
-                      fontSize: { xs: 14, md: 16 },
-                      color: "#8b7355",
-                    }}
-                  />
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontSize: { xs: "0.8rem", md: "0.85rem" },
-                      color: "#666666",
-                      fontWeight: 600,
-                    }}
-                  >
-                    <Box component="span" sx={{ color: "#c8a97e", fontWeight: 700 }}>
-                      {tier.tier}:
-                    </Box>{" "}
-                    {tier.price_range}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
-
       </CardContent>
-    </Card>
+      </Card>
+    </Tooltip>
   );
 };
 
 export default function AllPackages() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   
   const [allPackages, setAllPackages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("Kenya");
 
   useEffect(() => {
     fetchAllPackages();
@@ -444,6 +305,33 @@ export default function AllPackages() {
     }
   };
 
+  const handleViewDetails = (pkg) => {
+    navigate("/package-detail", {
+      state: {
+        package: pkg,
+        category: { category_name: pkg.categoryName },
+        destination: {
+          id: pkg.destinationId,
+          title: pkg.destinationTitle,
+          slug: pkg.destinationSlug,
+        },
+        destinationId: pkg.destinationId,
+        returnPath: location.pathname,
+      },
+    });
+  };
+
+  const tabs = [
+    { label: "Kenya Safari Packages", value: "Kenya" },
+    { label: "Uganda Safari Packages", value: "Uganda" },
+    { label: "Tanzania Safari Packages", value: "Tanzania" },
+    { label: "Rwanda Safari Packages", value: "Rwanda" },
+  ];
+
+  const filteredPackages = allPackages.filter(
+    (pkg) => pkg.destinationTitle === activeTab
+  );
+
 
   return (
     <Box
@@ -470,6 +358,13 @@ export default function AllPackages() {
         },
       }}
     >
+      <Helmet>
+        <title>East Africa Safari Packages | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Browse East Africa safari packages from Akira Safaris across Kenya, Uganda, Tanzania, and Rwanda. Choose a trip that fits your travel style."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{
@@ -539,6 +434,44 @@ export default function AllPackages() {
               </Typography>
             </Box>
 
+            <Box sx={{ mb: 3, display: "flex", justifyContent: "center" }}>
+              <Tabs
+                value={activeTab}
+                onChange={(event, value) => setActiveTab(value)}
+                variant="scrollable"
+                scrollButtons="auto"
+                allowScrollButtonsMobile
+                sx={{
+                  "& .MuiTabs-indicator": {
+                    backgroundColor: "#8b7355",
+                  },
+                }}
+              >
+                {tabs.map((tab) => (
+                  <Tab
+                    key={tab.value}
+                    label={tab.label}
+                    value={tab.value}
+                    sx={{
+                      fontWeight: 700,
+                      textTransform: "none",
+                      color: "#6B4E3D",
+                      "&:focus": {
+                        outline: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "none",
+                        boxShadow: "none",
+                      },
+                      "&.Mui-selected": {
+                        color: "#8b7355",
+                      },
+                    }}
+                  />
+                ))}
+              </Tabs>
+            </Box>
+
             {/* Packages Grid - 4 cards per row */}
             <Grid
               container
@@ -564,7 +497,7 @@ export default function AllPackages() {
                   <CircularProgress sx={{ color: "#c8a97e" }} />
                 </Grid>
               )}
-              {!loading && allPackages.length === 0 && (
+              {!loading && filteredPackages.length === 0 && (
                 <Grid size={{ xs: 12 }}>
                   <Box
                     sx={{
@@ -578,13 +511,13 @@ export default function AllPackages() {
                       variant="h6"
                       sx={{ color: "#666666", fontWeight: 600 }}
                     >
-                      No packages available yet.
+                      No packages available for this destination yet.
                     </Typography>
                   </Box>
                 </Grid>
               )}
               {!loading &&
-                allPackages.map((pkg, index) => (
+                filteredPackages.map((pkg, index) => (
                 <Grid
                   size={{
                     xs: 12,
@@ -604,6 +537,7 @@ export default function AllPackages() {
                   >
                     <PackageCard
                       package={pkg}
+                      onViewDetails={handleViewDetails}
                     />
                   </MotionBox>
                 </Grid>

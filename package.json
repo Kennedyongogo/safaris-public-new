@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "vite --host",
-    "build": "vite build",
+    "build": "node scripts/generate-sitemap.js && vite build",
+    "sitemap": "node scripts/generate-sitemap.js",
     "serve": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage --watch=false"

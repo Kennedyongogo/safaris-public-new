@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Container,
@@ -1284,6 +1285,13 @@ export default function Plan() {
         },
       }}
     >
+      <Helmet>
+        <title>Plan Your Safari | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Plan your safari with Akira Safaris. Share your travel preferences and get a tailored East Africa itinerary."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

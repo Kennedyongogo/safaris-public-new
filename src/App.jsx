@@ -17,9 +17,9 @@ import Chatbot from "./components/Chatbot/Chatbot";
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
 const TeamMemberDetail = lazy(() => import("./pages/TeamMemberDetail"));
-const Team = lazy(() => import("./pages/Team"));
 const Staff = lazy(() => import("./pages/Staff"));
 const Reviews = lazy(() => import("./pages/Reviews"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
 const Plan = lazy(() => import("./pages/Plan"));
 const DestinationDetails = lazy(() => import("./pages/DestinationDetails"));
 const CategoryDetails = lazy(() => import("./pages/CategoryDetails"));
@@ -27,12 +27,14 @@ const CategoryPackages = lazy(() => import("./components/Destination/CategoryPac
 const PackageDetail = lazy(() => import("./pages/PackageDetail"));
 const PackageInquiry = lazy(() => import("./pages/PackageInquiry"));
 const Destinations = lazy(() => import("./pages/Destinations"));
+const AllPackages = lazy(() => import("./pages/AllPackages"));
 const CampLodges = lazy(() => import("./pages/CampLodges"));
 const CampLodgeDetail = lazy(() => import("./pages/CampLodgeDetail"));
 const Tour = lazy(() => import("./pages/Tour"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const AgentProgram = lazy(() => import("./pages/AgentProgram"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -191,7 +193,7 @@ function App() {
               path="/team"
               element={
                 <>
-                  <Team />
+                  <AboutUs />
                   <Footer />
                 </>
               }
@@ -242,6 +244,33 @@ function App() {
               }
             />
             <Route
+              path="/about-us"
+              element={
+                <>
+                  <AboutUs />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/east-africa-safaris"
+              element={
+                <>
+                  <AllPackages />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/contact-us"
+              element={
+                <>
+                  <ContactUs />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
               path="/destination/:id"
               element={
                 <>
@@ -270,6 +299,15 @@ function App() {
             />
             <Route
               path="/package-detail"
+              element={
+                <>
+                  <PackageDetail />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/package/:id"
               element={
                 <>
                   <PackageDetail />

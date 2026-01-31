@@ -17,22 +17,14 @@ import {
   Slide,
 } from "@mui/material";
 import {
-  Construction,
   Home,
   Menu as MenuIcon,
   Close,
-  VolunteerActivism,
-  Psychology,
-  Favorite,
-  School,
-  LocalHospital,
   Groups,
-  RateReview,
   Explore,
-  Cabin,
-  Hotel,
   Article,
-  BusinessCenter,
+  LocationOn,
+  Email,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -51,28 +43,40 @@ export default function PublicHeader() {
   const navItems = useMemo(
     () => [
       {
-        label: "Explore",
-        icon: <Explore />,
-        sectionId: "hero-section",
+        label: "Home",
+        icon: <Home />,
+        route: "/",
         color: "#8b7355", // Secondary Brown
       },
       {
-        label: "About Akira",
+        label: "About Us",
         icon: <Groups />,
-        route: "/team",
+        route: "/about-us",
         color: "#c8a97e", // Accent Gold
       },
       {
-        label: "Agent Partnership",
-        icon: <BusinessCenter />,
-        route: "/agent-program",
+        label: "Safari Packages",
+        icon: <Explore />,
+        route: "/east-africa-safaris",
         color: "#8b7355", // Secondary Brown
+      },
+      {
+        label: "Destinations",
+        icon: <LocationOn />,
+        route: "/destinations",
+        color: "#c8a97e", // Accent Gold
       },
       {
         label: "Blog",
         icon: <Article />,
         route: "/blog",
         color: "#c8a97e", // Accent Gold
+      },
+      {
+        label: "Contact Us",
+        icon: <Email />,
+        route: "/contact-us",
+        color: "#8b7355", // Secondary Brown
       },
     ],
     []

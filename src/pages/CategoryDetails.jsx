@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -866,6 +867,13 @@ export default function CategoryDetails() {
         },
       }}
     >
+      <Helmet>
+        <title>Safari Category | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Explore safari categories and featured experiences curated by Akira Safaris."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

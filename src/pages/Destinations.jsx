@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -19,108 +20,314 @@ import { LocationOn, ArrowForward } from "@mui/icons-material";
 
 const MotionBox = motion(Box);
 
-// Dummy destination data - same as in ServicesSection
-const dummyDestinations = [
-  {
-    id: 1,
-    title: "Kenya",
-    description:
-      "Experience the world-famous Great Migration in Maasai Mara, witness the Big Five, and explore diverse landscapes from savannah plains to snow-capped mountains. Kenya offers unparalleled wildlife viewing and rich cultural experiences.",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    location: "East Africa",
-    duration: "5-14 Days",
-    bestTime: "July - October, January - March",
-    wildlife: "Big Five, Great Migration, Wildebeest, Elephants",
-    highlights: ["Maasai Mara", "Amboseli", "Samburu", "Tsavo"],
-  },
-  {
-    id: 2,
-    title: "Uganda",
-    description:
-      "Discover the Pearl of Africa with mountain gorilla trekking in Bwindi, chimpanzee encounters, and diverse ecosystems. Home to half of the world's remaining mountain gorillas and the source of the Nile.",
-    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    location: "East Africa",
-    duration: "7-14 Days",
-    bestTime: "June - September, December - February",
-    wildlife: "Mountain Gorillas, Chimpanzees, Big Five, Primates",
-    highlights: ["Bwindi Impenetrable", "Queen Elizabeth", "Murchison Falls"],
-  },
-  {
-    id: 3,
-    title: "Tanzania",
-    description:
-      "Home to the Serengeti's Great Migration, Ngorongoro Crater, and Mount Kilimanjaro. Experience vast wilderness areas, incredible wildlife concentrations, and pristine beaches of Zanzibar.",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    location: "East Africa",
-    duration: "7-14 Days",
-    bestTime: "June - October, December - March",
-    wildlife: "Big Five, Great Migration, Wildebeest, Zebras",
-    highlights: ["Serengeti", "Ngorongoro", "Kilimanjaro", "Zanzibar"],
-  },
-  {
-    id: 4,
-    title: "Rwanda",
-    description:
-      "The Land of a Thousand Hills offers intimate gorilla trekking experiences, golden monkey encounters, and rich cultural heritage. Experience one of Africa's most successful conservation stories.",
-    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    location: "East Africa",
-    duration: "4-10 Days",
-    bestTime: "June - September, December - February",
-    wildlife: "Mountain Gorillas, Golden Monkeys, Big Five",
-    highlights: ["Volcanoes National Park", "Nyungwe Forest", "Akagera"],
-  },
-];
+const DestinationCard = ({ destination, isMobile, handleViewDetails }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageError, setImageError] = useState(false);
+
+  const images = useMemo(() => {
+    const list = [];
+    if (destination.image) {
+      list.push(destination.image);
+    }
+    if (Array.isArray(destination.gallery_images)) {
+      list.push(...destination.gallery_images.filter((img) => img));
+    }
+    return list;
+  }, [destination]);
+
+  const hasMultipleImages = images.length > 1;
+  const currentImageUrl = images.length > 0 ? images[currentImageIndex] : null;
+
+  useEffect(() => {
+    if (!hasMultipleImages) return;
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [hasMultipleImages, images.length]);
+
+  return (
+    <Card
+      sx={{
+        height: { xs: "430px", sm: "470px" },
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "translateY(-8px)",
+          boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+        },
+      }}
+    >
+      {/* Image Section */}
+      <Box
+        sx={{
+          position: "relative",
+          height: "50%",
+          flex: "0 0 50%",
+          width: "100%",
+          overflow: "hidden",
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        {currentImageUrl && !imageError ? (
+          <Box
+            component="img"
+            src={currentImageUrl}
+            alt={destination.title}
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <Box
+            component="img"
+            src="/IMG-20251210-WA0070.jpg"
+            alt={destination.title}
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        )}
+      </Box>
+
+      <CardContent
+        sx={{
+          flex: "1 1 50%",
+          height: "50%",
+          p: { xs: 1, sm: 1.25 },
+          pb: { xs: 1.5, sm: 1.75 },
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box sx={{ mb: { xs: 1, sm: 2 } }}>
+          <Chip
+            label="Safari Destination"
+            color="primary"
+            size="small"
+            sx={{
+              mb: { xs: 0.5, sm: 0.75 },
+              backgroundColor: "#B85C38", // Burnt orange/rust
+              color: "white",
+            }}
+          />
+          <Typography
+            variant="h6"
+            component="h3"
+            sx={{
+              fontWeight: 600,
+              mb: { xs: 0.25, sm: 0.35 },
+              color: "text.primary",
+              fontSize: { xs: "0.95rem", sm: "1.1rem" },
+            }}
+          >
+            {destination.title}
+          </Typography>
+        </Box>
+
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            mb: { xs: 1, sm: 1.5 },
+            overflow: "hidden",
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2,
+            lineClamp: 2,
+            textOverflow: "ellipsis",
+            lineHeight: 1.3,
+            maxHeight: { xs: "2.6rem", sm: "2.6rem" },
+            minHeight: { xs: "2.6rem", sm: "2.6rem" }, // keep card height stable
+            flexGrow: 1,
+            fontSize: { xs: "0.95rem", sm: "1rem" },
+            fontWeight: 700,
+          }}
+        >
+          {destination.description}
+        </Typography>
+
+        <Box sx={{ mb: { xs: 0.25, sm: 0.5 }, mt: { xs: 0.2, sm: 0.4 } }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+              mb: { xs: 0.2, sm: 0.35 },
+            }}
+          >
+            <LocationOn
+              sx={{
+                fontSize: { xs: 12, sm: 14 },
+                color: "#6B4E3D", // Medium brown
+              }}
+            />
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                fontSize: { xs: "0.85rem", sm: "0.95rem" },
+                fontWeight: 700,
+              }}
+            >
+              {destination.location}
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ mt: "auto", pt: { xs: 0.5, sm: 1 } }}>
+          <Button
+            variant="outlined"
+            size="small"
+            fullWidth
+            endIcon={<ArrowForward />}
+            onClick={() => handleViewDetails(destination.id)}
+            sx={{
+              borderColor: "#6B4E3D", // Medium brown
+              color: "#6B4E3D",
+              fontSize: "0.85rem",
+              py: 0.75,
+              mb: 0.25,
+              "&:focus": {
+                outline: "none",
+              },
+              "&:focus-visible": {
+                outline: "none",
+                boxShadow: "none",
+              },
+              "&:hover": {
+                borderColor: "#B85C38", // Rust
+                backgroundColor: "#6B4E3D",
+                color: "white",
+              },
+            }}
+          >
+            View Details
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default function Destinations() {
   const navigate = useNavigate();
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    // Using dummy data for now
-    setDestinations(dummyDestinations);
-    setLoading(false);
-
-    // Commented out API call - using dummy data
-    // fetchDestinations();
+    fetchDestinations();
   }, []);
 
-  // Commented out API fetch logic
-  // const fetchDestinations = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await fetch("/api/destinations");
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch destinations");
-  //     }
-  //     const data = await response.json();
-  //     if (data.success && data.data) {
-  //       setDestinations(data.data);
-  //     } else {
-  //       setDestinations([]);
-  //     }
-  //   } catch (err) {
-  //     console.error("Error fetching destinations:", err);
-  //     setDestinations([]);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchDestinations = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch("/api/destinations/public");
 
-  const handleViewDetails = (destinationId) => {
-    navigate(`/destination/${destinationId}`, {
-      state: { from: "/destinations" },
-    });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const buildFullImageUrl = (imagePath) => {
+          if (!imagePath) return "";
+          if (imagePath.startsWith("http")) return imagePath;
+          return `/${imagePath}`;
+        };
+
+        const mappedDestinations = result.data.map((destination) => {
+          let highlights = [];
+          if (Array.isArray(destination.packages) && destination.packages.length > 0) {
+            const firstCategory = destination.packages[0];
+            if (firstCategory.packages && firstCategory.packages.length > 0) {
+              const firstPackage = firstCategory.packages[0];
+              highlights = Array.isArray(firstPackage.highlights)
+                ? firstPackage.highlights.slice(0, 3)
+                : [];
+            }
+          }
+
+          return {
+            id: destination.id,
+            slug: destination.slug,
+            title: destination.title,
+            subtitle: destination.subtitle || "",
+            description: destination.brief_description || "",
+            image: buildFullImageUrl(destination.hero_image),
+            gallery_images: Array.isArray(destination.gallery_images)
+              ? destination.gallery_images.map((img) => buildFullImageUrl(img))
+              : [],
+            location: destination.location || "East Africa",
+            duration: "Multiple packages available",
+            highlights: highlights,
+            packages: Array.isArray(destination.packages) ? destination.packages : [],
+          };
+        });
+        setDestinations(mappedDestinations);
+      } else {
+        throw new Error(result.message || "Failed to fetch destinations");
+      }
+    } catch (err) {
+      console.error("Error fetching destinations:", err);
+      setError(err.message || "Failed to load destinations");
+      setDestinations([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleViewDetails = async (destinationId) => {
+    try {
+      const response = await fetch(`/api/destinations/public/id/${destinationId}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        navigate(`/destination/${destinationId}`, {
+          state: { destination: result.data, from: "/destinations" },
+        });
+      } else {
+        throw new Error(result.message || "Failed to fetch destination details");
+      }
+    } catch (error) {
+      console.error("Error fetching destination details:", error);
+      navigate(`/destination/${destinationId}`);
+    }
   };
 
   if (loading) {
     return (
       <Box
         sx={{
+          pt: 1.5,
+          pb: 1.5,
+          px: 0,
+          bgcolor: "#F5F1E8",
+          background:
+            "linear-gradient(135deg, rgba(245, 241, 232, 0.95) 0%, rgba(255, 255, 255, 0.98) 50%, rgba(232, 224, 209, 0.95) 100%)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -157,6 +364,13 @@ export default function Destinations() {
         },
       }}
     >
+      <Helmet>
+        <title>Safari Destinations in Kenya &amp; East Africa | Akira Safaris</title>
+        <meta
+          name="description"
+          content="Discover safari destinations across Kenya, Uganda, Tanzania, and Rwanda with Akira Safaris. Find wildlife highlights and trip ideas."
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{
@@ -232,7 +446,13 @@ export default function Destinations() {
             </Box>
 
             {/* Destinations Grid */}
-            {destinations.length === 0 ? (
+            {error ? (
+              <Box textAlign="center" py={4}>
+                <Typography color="text.secondary" variant="body1">
+                  {error}
+                </Typography>
+              </Box>
+            ) : destinations.length === 0 ? (
               <Box textAlign="center" py={4}>
                 <Typography color="text.secondary" variant="body1">
                   No destinations available at the moment.
@@ -249,7 +469,7 @@ export default function Destinations() {
                     size={{
                       xs: 12,
                       sm: 6,
-                      md: 4,
+                      md: 3,
                     }}
                     key={destination.id}
                   >
@@ -258,159 +478,11 @@ export default function Destinations() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                     >
-                      <Card
-                        sx={{
-                          height: { xs: "480px", sm: "520px" },
-                          width: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                          transition:
-                            "transform 0.3s ease, box-shadow 0.3s ease",
-                          "&:hover": {
-                            transform: "translateY(-8px)",
-                            boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
-                          },
-                        }}
-                      >
-                        {/* Image Section */}
-                        <Box
-                          sx={{
-                            position: "relative",
-                            height: isMobile ? "180px" : "220px",
-                            width: "100%",
-                            overflow: "hidden",
-                            backgroundColor: "#f5f5f5",
-                          }}
-                        >
-                          <Box
-                            component="img"
-                            src={destination.image}
-                            alt={destination.title}
-                            sx={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                              display: "block",
-                            }}
-                            onError={(e) => {
-                              e.target.src = "/IMG-20251210-WA0070.jpg";
-                            }}
-                          />
-                        </Box>
-
-                        <CardContent
-                          sx={{
-                            flexGrow: 1,
-                            p: { xs: 2, sm: 3 },
-                            display: "flex",
-                            flexDirection: "column",
-                            minHeight: { xs: "260px", sm: "300px" },
-                          }}
-                        >
-                          <Box sx={{ mb: { xs: 1, sm: 2 } }}>
-                            <Chip
-                              label="Safari Destination"
-                              color="primary"
-                              size="small"
-                              sx={{
-                                mb: { xs: 1, sm: 1.5 },
-                                backgroundColor: "#B85C38", // Burnt orange/rust
-                                color: "white",
-                              }}
-                            />
-                            <Typography
-                              variant="h6"
-                              component="h3"
-                              sx={{
-                                fontWeight: 600,
-                                mb: { xs: 0.5, sm: 1 },
-                                color: "text.primary",
-                                fontSize: { xs: "1rem", sm: "1.25rem" },
-                              }}
-                            >
-                              {destination.title}
-                            </Typography>
-                          </Box>
-
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{
-                              mb: { xs: 1, sm: 1.5 },
-                              overflow: "hidden",
-                              display: "-webkit-box",
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: "vertical",
-                              textOverflow: "ellipsis",
-                              lineHeight: 1.5,
-                              minHeight: { xs: "3.6rem", sm: "4.5rem" }, // keep card height stable
-                              flexGrow: 1,
-                              fontSize: { xs: "0.95rem", sm: "1.05rem" },
-                              fontWeight: 700,
-                            }}
-                          >
-                            {destination.description}
-                          </Typography>
-
-                          <Box sx={{ mb: { xs: 0.5, sm: 1 }, mt: { xs: 0.25, sm: 0.5 } }}>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 0.5,
-                                mb: { xs: 0.25, sm: 0.5 },
-                              }}
-                            >
-                              <LocationOn
-                                sx={{
-                                  fontSize: { xs: 12, sm: 14 },
-                                  color: "#6B4E3D", // Medium brown
-                                }}
-                              />
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                sx={{
-                                  fontSize: { xs: "0.85rem", sm: "0.95rem" },
-                                  fontWeight: 700,
-                                }}
-                              >
-                                {destination.location}
-                              </Typography>
-                            </Box>
-                          </Box>
-
-                          <Box sx={{ mt: "auto", pt: { xs: 0.5, sm: 1 } }}>
-                            <Button
-                              variant="outlined"
-                              size="small"
-                              fullWidth
-                              endIcon={<ArrowForward />}
-                              onClick={() => handleViewDetails(destination.id)}
-                              sx={{
-                                borderColor: "#6B4E3D", // Medium brown
-                                color: "#6B4E3D",
-                                fontSize: "0.875rem",
-                                py: 1,
-                                "&:focus": {
-                                  outline: "none",
-                                },
-                                "&:focus-visible": {
-                                  outline: "none",
-                                  boxShadow: "none",
-                                },
-                                "&:hover": {
-                                  borderColor: "#B85C38", // Rust
-                                  backgroundColor: "#6B4E3D",
-                                  color: "white",
-                                },
-                              }}
-                            >
-                              View Details
-                            </Button>
-                          </Box>
-                        </CardContent>
-                      </Card>
+                      <DestinationCard
+                        destination={destination}
+                        isMobile={isMobile}
+                        handleViewDetails={handleViewDetails}
+                      />
                     </MotionBox>
                   </Grid>
                 ))}

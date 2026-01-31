@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -558,6 +559,7 @@ export default function DestinationDetails() {
         category: category,
         destination: destination,
         destinationId: id,
+        from: location.state?.from || null,
       },
     });
   };
@@ -764,6 +766,21 @@ export default function DestinationDetails() {
         },
       }}
     >
+      <Helmet>
+        <title>
+          {destination
+            ? `${destination.title} Safari | Akira Safaris`
+            : "Safari Destination | Akira Safaris"}
+        </title>
+        <meta
+          name="description"
+          content={
+            destination?.description
+              ? destination.description
+              : "Explore safari destinations with Akira Safaris. Discover wildlife highlights, best times to visit, and tailored itineraries."
+          }
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{

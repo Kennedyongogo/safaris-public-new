@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Typography,
@@ -19,12 +20,14 @@ const MotionBox = motion(Box);
 export default function PackageDetail() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams();
   const [imageIndex, setImageIndex] = useState(0);
   const [activeDayIndex, setActiveDayIndex] = useState(null);
   const dayRefs = useRef([]);
 
-  // Get package data from location state
-  const selectedPackage = location.state?.package;
+  // Get package data from location state (or load by ID)
+  const [loadedPackage, setLoadedPackage] = useState(null);
+  const selectedPackage = location.state?.package || loadedPackage;
   const category = location.state?.category;
   const destination = location.state?.destination;
   const returnPath = location.state?.returnPath || "/category-packages";
@@ -46,6 +49,26 @@ export default function PackageDetail() {
 
     return () => clearInterval(interval);
   }, [selectedPackage]);
+
+  useEffect(() => {
+    const fetchPackage = async () => {
+      if (!id || selectedPackage) return;
+      try {
+        const response = await fetch(`/api/packages/public/${id}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        if (result.success && result.data) {
+          setLoadedPackage(result.data);
+        }
+      } catch (err) {
+        console.error("Error fetching package details:", err);
+      }
+    };
+
+    fetchPackage();
+  }, [id, selectedPackage]);
 
   const handleBackToPackages = () => {
     if (returnPath) {
@@ -76,6 +99,17 @@ export default function PackageDetail() {
       },
     });
   };
+
+  // If we have an ID, wait for fetch
+  if (!selectedPackage && id) {
+    return (
+      <Container maxWidth="md" sx={{ py: 8 }}>
+        <Typography variant="h6" sx={{ color: "text.secondary" }}>
+          Loading package details...
+        </Typography>
+      </Container>
+    );
+  }
 
   // Check if package data is valid
   if (!selectedPackage) {
@@ -129,6 +163,21 @@ export default function PackageDetail() {
         },
       }}
     >
+      <Helmet>
+        <title>
+          {selectedPackage?.title
+            ? `${selectedPackage.title} | Akira Safaris`
+            : "Safari Package | Akira Safaris"}
+        </title>
+        <meta
+          name="description"
+          content={
+            selectedPackage?.short_description
+              ? selectedPackage.short_description
+              : "View detailed safari package itineraries, highlights, and pricing with Akira Safaris."
+          }
+        />
+      </Helmet>
       <Container
         maxWidth="xl"
         sx={{
