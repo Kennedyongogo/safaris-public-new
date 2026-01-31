@@ -1028,27 +1028,78 @@ export default function BlogDetail() {
                 >
                   Ready to Experience Your Own Safari Adventure?
                 </Typography>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => navigate("/plan")}
+                <Box
                   sx={{
-                    backgroundColor: "white",
-                    color: "#1a1a1a",
-                    fontWeight: 700,
-                    px: 4,
-                    py: 1.5,
-                    outline: "none",
-                    "&:focus": { outline: "none", boxShadow: "none" },
-                    "&:focus-visible": { outline: "none", boxShadow: "none" },
-                    "&:hover": {
-                      backgroundColor: "#f9f7f3",
-                      color: "#1a1a1a",
-                    },
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 1.5,
+                    justifyContent: "center",
                   }}
                 >
-                  Plan Your Safari
-                </Button>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => navigate("/plan")}
+                    sx={{
+                      backgroundColor: "white",
+                      color: "#1a1a1a",
+                      fontWeight: 700,
+                      px: 4,
+                      py: 1.5,
+                      outline: "none",
+                      "&:focus": { outline: "none", boxShadow: "none" },
+                      "&:focus-visible": { outline: "none", boxShadow: "none" },
+                      "&:hover": {
+                        backgroundColor: "#f9f7f3",
+                        color: "#1a1a1a",
+                      },
+                    }}
+                  >
+                    Plan Your Safari
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    onClick={() => navigate("/east-africa-safaris")}
+                    sx={{
+                      borderColor: "white",
+                      color: "white",
+                      fontWeight: 700,
+                      px: 4,
+                      py: 1.5,
+                      outline: "none",
+                      "&:focus": { outline: "none", boxShadow: "none" },
+                      "&:focus-visible": { outline: "none", boxShadow: "none" },
+                      "&:hover": {
+                        backgroundColor: "rgba(255,255,255,0.15)",
+                        borderColor: "white",
+                      },
+                    }}
+                  >
+                    Safari Packages
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    onClick={() => navigate("/destinations")}
+                    sx={{
+                      borderColor: "white",
+                      color: "white",
+                      fontWeight: 700,
+                      px: 4,
+                      py: 1.5,
+                      outline: "none",
+                      "&:focus": { outline: "none", boxShadow: "none" },
+                      "&:focus-visible": { outline: "none", boxShadow: "none" },
+                      "&:hover": {
+                        backgroundColor: "rgba(255,255,255,0.15)",
+                        borderColor: "white",
+                      },
+                    }}
+                  >
+                    Destinations
+                  </Button>
+                </Box>
               </Box>
             </Box>
           </Paper>

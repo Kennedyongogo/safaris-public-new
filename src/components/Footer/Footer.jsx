@@ -378,9 +378,13 @@ export default function Footer() {
                       <Box
                         sx={{
                           display: "flex",
-                          flexDirection: "column",
-                          gap: 0.5,
-                          alignItems: { xs: "flex-start", md: "center" },
+                          flexDirection: { xs: "row", md: "column" },
+                          flexWrap: { xs: "wrap", md: "nowrap" },
+                          gap: { xs: 0.75, sm: 0.5 },
+                          alignItems: { xs: "center", md: "center" },
+                          justifyContent: { xs: "flex-start", md: "center" },
+                          overflowX: { xs: "visible", md: "visible" },
+                          whiteSpace: { xs: "normal", md: "normal" },
                         }}
                       >
                         {[
