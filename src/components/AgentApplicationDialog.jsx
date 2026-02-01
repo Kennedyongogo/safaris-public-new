@@ -512,16 +512,25 @@ export default function AgentApplicationDialog({ open, onClose }) {
           py: { xs: 2, md: 3 },
           borderTop: "1px solid rgba(139, 115, 85, 0.1)",
           background: "#f9f7f3",
+          position: "sticky",
+          bottom: 0,
+          zIndex: 1,
         }}
       >
         <Button
           onClick={handleClose}
-          color="inherit"
+          variant="outlined"
           sx={{
             px: { xs: 2, md: 3 },
             py: { xs: 1, md: 1.25 },
             fontSize: { xs: "0.9rem", md: "1rem" },
             fontWeight: 500,
+            borderColor: "#c8a97e",
+            color: "#8b7355",
+            "&:hover": {
+              borderColor: "#8b7355",
+              backgroundColor: "rgba(139, 115, 85, 0.08)",
+            },
             "&:focus": {
               outline: "none",
             },

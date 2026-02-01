@@ -488,57 +488,103 @@ export default function HeroSection() {
             >
               east africa Explore africa FROM EVERY PERSPECTIVE.
             </Typography>
-            <Button
-              variant="contained"
-              endIcon={<ArrowForward />}
-              onClick={() => {
-                const element = document.getElementById("mission-section");
-                if (element) {
-                  element.scrollIntoView({ behavior: "smooth", block: "start" });
-                } else {
-                  // Fallback: navigate to home and then scroll
-                  navigate("/");
-                  setTimeout(() => {
-                    const el = document.getElementById("mission-section");
-                    if (el) {
-                      el.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }
-                  }, 100);
-                }
-              }}
+            <Box
               sx={{
                 mt: 1,
-                px: { xs: 3, sm: 4, md: 5 },
-                py: { xs: 1.2, sm: 1.5, md: 1.8 },
-                fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
-                fontWeight: 700,
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
-                borderRadius: "50px",
-                background: "rgba(255, 255, 255, 0.15)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                color: "#E0D8C0",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                "&:focus": {
-                  outline: "none",
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-                },
-                "&:focus-visible": {
-                  outline: "none",
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-                },
-                "&:hover": {
-                  background: "rgba(255, 255, 255, 0.25)",
-                  transform: "translateY(-3px) scale(1.05)",
-                  boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
-                  borderColor: "rgba(184, 92, 56, 0.6)",
-                },
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: "center",
+                justifyContent: "center",
+                gap: { xs: 1.5, sm: 2 },
               }}
             >
-              explore east africa
-            </Button>
+              <Button
+                variant="contained"
+                endIcon={<ArrowForward />}
+                onClick={() => {
+                  const element = document.getElementById("mission-section");
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth", block: "start" });
+                  } else {
+                    // Fallback: navigate to home and then scroll
+                    navigate("/");
+                    setTimeout(() => {
+                      const el = document.getElementById("mission-section");
+                      if (el) {
+                        el.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }
+                    }, 100);
+                  }
+                }}
+                sx={{
+                  px: { xs: 3, sm: 4, md: 5 },
+                  py: { xs: 1.2, sm: 1.5, md: 1.8 },
+                  fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  borderRadius: "50px",
+                  background: "#D39A3A",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid #D39A3A",
+                  color: "#3D2817",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                  "&:focus": {
+                    outline: "none",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                  },
+                  "&:focus-visible": {
+                    outline: "none",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                  },
+                  "&:hover": {
+                    background: "#C58F35",
+                    transform: "translateY(-3px) scale(1.05)",
+                    boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+                    borderColor: "#C58F35",
+                  },
+                }}
+              >
+                explore east africa
+              </Button>
+              <Button
+                variant="contained"
+                endIcon={<ArrowForward />}
+                onClick={() => navigate("/agent-program")}
+                sx={{
+                  px: { xs: 3, sm: 4, md: 5 },
+                  py: { xs: 1.2, sm: 1.5, md: 1.8 },
+                  fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  borderRadius: "50px",
+                  background: "#D39A3A",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid #D39A3A",
+                  color: "#3D2817",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                  "&:focus": {
+                    outline: "none",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                  },
+                  "&:focus-visible": {
+                    outline: "none",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                  },
+                  "&:hover": {
+                    background: "#C58F35",
+                    transform: "translateY(-3px) scale(1.05)",
+                    boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+                    borderColor: "#C58F35",
+                  },
+                }}
+              >
+                agent partnership
+              </Button>
+            </Box>
 
           </Box>
         </Fade>
