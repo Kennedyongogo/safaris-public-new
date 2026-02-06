@@ -16,6 +16,9 @@ export default defineConfig({
       workbox: {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB limit
         cleanupOutdatedCaches: true,
+        // Don't serve index.html for /api or /uploads — let them hit the network (backend).
+        // Without this, the iframe requesting the PDF gets the SPA → black screen + double header.
+        navigateFallbackDenylist: [/^\/api\//, /^\/uploads\//],
       },
       includeAssets: ["favicon.ico"],
       manifest: {

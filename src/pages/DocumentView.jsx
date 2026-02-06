@@ -18,7 +18,7 @@ export default function DocumentView() {
     <Box
       sx={{
         position: "fixed",
-        top: { xs: 56, sm: 64 }, // Below app header
+        top: 0,
         left: 0,
         right: 0,
         bottom: 0,

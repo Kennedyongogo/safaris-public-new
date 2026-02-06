@@ -54,6 +54,13 @@ function PrivateRoute({ user, children }) {
   return children;
 }
 
+// Show header on all routes except document view (avoids double header when iframe loads; full-height PDF).
+function AppHeader() {
+  const { pathname } = useLocation();
+  if (pathname.startsWith("/document/view/")) return null;
+  return <PublicHeader />;
+}
+
 function App() {
   const [user, setUser] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(true); // Drawer open by default
@@ -63,7 +70,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router style={{ margin: 0, padding: 0 }}>
           <ScrollToTop />
-          <PublicHeader />
+          <AppHeader />
         <Suspense
           fallback={
             <Box
