@@ -29,7 +29,7 @@ export default function AccreditationsSection() {
     {
       name: "TRA - Tourism Regulatory Authority",
       image: "/acredited/tra-removebg-preview.png",
-      url: "https://akirasafaris.com/api/documents/public/slug/tra-license/view",
+      url: "/document/view/tra-license",
       alt: "Tourism Regulatory Authority - Licensed Operator",
     },
     {
