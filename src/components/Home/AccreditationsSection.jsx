@@ -46,7 +46,7 @@ export default function AccreditationsSection() {
     },
     {
       name: "Travel Monk",
-      image: "/acredited/Screenshot_2026-01-30_103331-removebg-preview.png",
+      image: "/acredited/Screenshot_2026-02-07_181555-removebg-preview.png",
       url: "https://www.thetravelmonk.com/",
       alt: "Travel Monk - Adventure Travel Planning",
     },
